@@ -1,4 +1,4 @@
-export function slugify(text: string): string {
+export function slugify(text: string, p0?: { lower: boolean; }): string {
   return text
     .toLowerCase()
     .normalize('NFD') // bỏ dấu tiếng Việt

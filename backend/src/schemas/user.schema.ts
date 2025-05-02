@@ -14,6 +14,9 @@ export class User extends Document {
 
   @Prop({ type: Types.ObjectId, ref: 'Role' })
   role: Types.ObjectId;
+
+  @Prop()
+  refreshToken?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
