@@ -15,6 +15,9 @@ export class Story extends Document {
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Category' }] })
   categories: Types.ObjectId[];
 
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Tag' }] })
+  tags: Types.ObjectId[];
+
   @Prop()
   description: string;
 
@@ -26,6 +29,15 @@ export class Story extends Document {
 
   @Prop()
   url: string;
+
+  @Prop({ default: 0 })
+  views: number;
+
+  @Prop({ default: 0 })
+  likes: number;
+
+  @Prop({ default: 0 })
+  recommends: number;
 }
 
 export const StorySchema = SchemaFactory.createForClass(Story);
