@@ -13,6 +13,7 @@ import { CurrentUser } from './decorators/current-user.decorator';
 import { ForgotPasswordDto } from "./dto/forgot-password.dto";
 import { RegisterDto } from "./dto/register.dto";
 import { ResetPasswordDto } from "./dto/reset-password.dto";
+import { Throttle } from "@nestjs/throttler";
 
 @Controller('auth')
 export class AuthController {
@@ -54,6 +55,7 @@ export class AuthController {
 
   @Public()
   @Post('register')
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   register(@Body() dto: RegisterDto) {
     return this.authService.register(dto.email, dto.name, dto.password);
   }

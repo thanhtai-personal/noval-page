@@ -6,6 +6,7 @@ import { User, UserSchema } from '@/schemas/user.schema';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from "./jwt.stragety";
+import { Role, RoleSchema } from "@/schemas/role.schema";
 
 @Module({
   imports: [
@@ -14,7 +15,10 @@ import { JwtStrategy } from "./jwt.stragety";
       secret: process.env.JWT_SECRET || 'secret123',
       signOptions: { expiresIn: '7d' },
     }),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: Role.name, schema: RoleSchema },
+    ]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

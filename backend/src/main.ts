@@ -23,7 +23,6 @@ async function bootstrap() {
   app.useGlobalGuards(
     new JwtAuthGuard(reflector),
     new RolesGuard(reflector),
-    app.get(ThrottlerGuard),
   );
 
 

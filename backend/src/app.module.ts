@@ -26,7 +26,8 @@ import { AuthModule } from "./modules/auth/auth.module";
 
 // Middleware
 import { LoggerMiddleware } from '@/common/middlewares/logger.middleware';
-import { ThrottlerModule } from "@nestjs/throttler";
+import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
+import { APP_GUARD } from "@nestjs/core";
 
 @Module({
   imports: [
@@ -34,10 +35,23 @@ import { ThrottlerModule } from "@nestjs/throttler";
       isGlobal: true,
     }),
     ThrottlerModule.forRoot({
-      throttlers: [{
-        ttl: 60,     // 60 giây
-        limit: 10,   // tối đa 10 request trong khoảng đó
-      }],
+      throttlers: [
+        {
+          name: 'short',
+          ttl: 1000,
+          limit: 3,
+        },
+        {
+          name: 'medium',
+          ttl: 10000,
+          limit: 20
+        },
+        {
+          name: 'long',
+          ttl: 60000,
+          limit: 100
+        }
+      ],
     }),
     MongooseModule.forRoot(process.env.NODE_ENV === 'docker' ? process.env.MONGO_URI! : 'mongodb://localhost:27017/truyen'),
     MongooseModule.forFeature([
@@ -60,6 +74,12 @@ import { ThrottlerModule } from "@nestjs/throttler";
     CategoryModule,
     TagModule,
     AuthModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
 })
   
