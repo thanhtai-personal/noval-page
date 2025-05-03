@@ -5,6 +5,7 @@ import { Public } from "../auth/decorators/public.decorator";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { CurrentUser } from "../auth/decorators/current-user.decorator";
 import { CreateStoryDto } from "./dto/create-story.dto";
+import { RoleSlug } from "@/constants/role.enum";
 
 @Controller('stories')
 export class StoryController {
@@ -24,7 +25,8 @@ export class StoryController {
     return story;
   }
 
-  @Roles('admin')
+  
+  @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
   @Post()
   createStory(
     @Body() dto: CreateStoryDto,

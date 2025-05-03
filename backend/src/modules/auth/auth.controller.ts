@@ -14,6 +14,8 @@ import { ForgotPasswordDto } from "./dto/forgot-password.dto";
 import { RegisterDto } from "./dto/register.dto";
 import { ResetPasswordDto } from "./dto/reset-password.dto";
 import { Throttle } from "@nestjs/throttler";
+import { Roles } from "./decorators/roles.decorator";
+import { RoleSlug } from "@/constants/role.enum";
 
 @Controller('auth')
 export class AuthController {
@@ -43,12 +45,14 @@ export class AuthController {
 
   // 🚪 LOGOUT
   @Post('logout')
+  @Roles(RoleSlug.READER, RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
   logout(@CurrentUser('userId') userId: string) {
     return this.authService.logout(userId);
   }
 
   // 👤 LẤY THÔNG TIN USER
   @Get('me')
+  @Roles(RoleSlug.READER, RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
   me(@CurrentUser() user: any) {
     return user;
   }
@@ -66,7 +70,7 @@ export class AuthController {
     return this.authService.forgotPassword(dto.email);
   }
 
-  @Public()
+  @Roles(RoleSlug.READER, RoleSlug.ADMIN)
   @Post('reset-password')
   resetPassword(@Body() dto: ResetPasswordDto) {
     return this.authService.resetPassword(dto.token, dto.newPassword);

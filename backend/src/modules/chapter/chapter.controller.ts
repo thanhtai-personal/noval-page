@@ -1,11 +1,13 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ChapterService } from './chapter.service';
 import { GetChapterListDto } from './dto/get-chapter-list.dto';
+import { Public } from "../auth/decorators/public.decorator";
 
 @Controller('stories/:slug/chapters')
 export class ChapterController {
   constructor(private readonly chapterService: ChapterService) {}
 
+  @Public()
   @Get()
   async getChapterList(
     @Param('slug') slug: string,
@@ -14,6 +16,7 @@ export class ChapterController {
     return this.chapterService.getChapterList(slug, query);
   }
 
+  @Public()
   @Get(':chapterSlug')
   async getChapterDetail(
     @Param('slug') slug: string,

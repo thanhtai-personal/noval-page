@@ -38,18 +38,18 @@ import { APP_GUARD } from "@nestjs/core";
       throttlers: [
         {
           name: 'short',
-          ttl: 1000,
-          limit: 3,
+          ttl: 60,
+          limit: 10,
         },
         {
           name: 'medium',
-          ttl: 10000,
-          limit: 20
+          ttl: 600,
+          limit: 50
         },
         {
           name: 'long',
-          ttl: 60000,
-          limit: 100
+          ttl: 6000,
+          limit: 250
         }
       ],
     }),
