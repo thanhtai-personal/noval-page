@@ -1,7 +1,9 @@
+// src/modules/auth/guards/role.guard.ts
+import { RoleSlug } from "@/constants/role.enum";
 import {
+  Injectable,
   CanActivate,
   ExecutionContext,
-  Injectable,
   ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -11,13 +13,16 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.get<string[]>('roles', context.getHandler());
+    const requiredRoles = this.reflector.getAllAndOverride<string[]>(
+      'role',
+      [context.getHandler(), context.getClass()],
+    );
+
     if (!requiredRoles) return true;
 
     const { user } = context.switchToHttp().getRequest();
-    if (!requiredRoles.includes(user.role)) {
-      throw new ForbiddenException('Bạn không có quyền truy cập');
-    }
-    return true;
+    if (!user?.role) throw new ForbiddenException('No role attached');
+
+    return requiredRoles.includes(user.role);
   }
 }

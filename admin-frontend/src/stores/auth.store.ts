@@ -1,5 +1,5 @@
-import { makeAutoObservable } from 'mobx';
-import axios from 'axios';
+import { makeAutoObservable, runInAction } from 'mobx';
+import { api } from "@/services/api";
 
 class AuthStore {
   isAuthenticated = false;
@@ -17,21 +17,44 @@ class AuthStore {
     if (token) {
       this.accessToken = token;
       this.isAuthenticated = true;
+      this.fetchUser(); // Tự động gọi me nếu có token
     }
   }
 
   async login(email: string, password: string) {
     this.loading = true;
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, { email, password });
-      this.accessToken = res.data.accessToken;
-      this.user = res.data.user || null;
-      this.isAuthenticated = true;
+      const res = await api.post(`/auth/login`, {
+        email,
+        password,
+      });
 
-      localStorage.setItem('accessToken', this.accessToken || '');
-      localStorage.setItem('refreshToken', res.data.refreshToken);
+      runInAction(() => {
+        this.accessToken = res.data.access_token;
+        this.user = res.data.user;
+        this.isAuthenticated = true;
+      });
+      localStorage.setItem('accessToken', res.data.access_token || '');
+      localStorage.setItem('refreshToken', res.data.refresh_token);
     } finally {
-      this.loading = false;
+      runInAction(() => {
+        this.loading = false;
+      });
+    }
+  }
+
+  async fetchUser() {
+    try {
+      const res = await api.get(`/auth/me`, {
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+      runInAction(() => {
+        this.user = res.data;
+      });
+    } catch (error) {
+      this.logout(); // Nếu token sai
     }
   }
 

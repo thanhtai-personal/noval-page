@@ -1,24 +1,12 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LoginPage from '@/pages/LoginPage';
-import CrawlerPage from '@/pages/CrawlerPage';
-import RequireAuth from '@/components/RequireAuth';
+// src/App.tsx
+import { BrowserRouter } from 'react-router-dom';
+import { AppRouter } from '@/routes/router';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route
-          path="/dashboard"
-          element={
-            <RequireAuth>
-              <CrawlerPage />
-            </RequireAuth>
-          }
-        />
-      </Routes>
-    </Router>
+    <BrowserRouter>
+      <AppRouter />
+    </BrowserRouter>
   );
 }
-
 export default App;

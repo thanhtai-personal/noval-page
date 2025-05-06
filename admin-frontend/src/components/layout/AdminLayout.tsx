@@ -9,11 +9,11 @@ interface AdminLayoutProps {
 
 export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   return (
-    <div className="flex h-screen bg-background text-foreground">
+    <div className="flex w-screen h-screen bg-background text-foreground overflow-auto overflow-x-hidden">
       <Sidebar />
-      <div className="flex flex-col flex-1">
+      <div className="w-full flex flex-col flex-1">
         <Header />
-        <main className="p-4 overflow-y-auto flex-1">{children}</main>
+        <main className="w-full p-4 overflow-y-auto flex-1">{children}</main>
       </div>
     </div>
   );

@@ -21,21 +21,21 @@ import { RoleSlug } from "@/constants/role.enum";
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // 🔐 LOGIN THƯỜNG
+  // 🔐 Đăng nhập bằng email + mật khẩu
   @Public()
   @Post('login')
   login(@Body() dto: LoginDto) {
     return this.authService.login(dto.email, dto.password);
   }
 
-  // 🔗 GOOGLE LOGIN
+  // 🔗 Đăng nhập bằng Google
   @Public()
   @Post('google')
   googleLogin(@Body() dto: GoogleLoginDto) {
     return this.authService.loginWithGoogle(dto.idToken);
   }
 
-  // 🔁 REFRESH TOKEN
+  // 🔁 Refresh token
   @Public()
   @Post('refresh')
   refresh(@Body('refresh_token') rt: string) {
@@ -43,34 +43,37 @@ export class AuthController {
     return this.authService.refreshToken(rt);
   }
 
-  // 🚪 LOGOUT
+  // 🚪 Logout
   @Post('logout')
-  @Roles(RoleSlug.READER, RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
+  @Roles(RoleSlug.READER, RoleSlug.ADMIN, RoleSlug.SUPER_ADMIN)
   logout(@CurrentUser('userId') userId: string) {
     return this.authService.logout(userId);
   }
 
-  // 👤 LẤY THÔNG TIN USER
+  // 👤 Lấy thông tin người dùng hiện tại
   @Get('me')
-  @Roles(RoleSlug.READER, RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
+  @Roles(RoleSlug.READER, RoleSlug.ADMIN, RoleSlug.SUPER_ADMIN)
   me(@CurrentUser() user: any) {
     return user;
   }
 
+  // 📝 Đăng ký tài khoản
   @Public()
-  @Post('register')
   @Throttle({ default: { limit: 3, ttl: 60000 } })
+  @Post('register')
   register(@Body() dto: RegisterDto) {
     return this.authService.register(dto.email, dto.name, dto.password);
   }
 
+  // 📩 Gửi email khôi phục mật khẩu
   @Public()
   @Post('forgot-password')
   forgotPassword(@Body() dto: ForgotPasswordDto) {
     return this.authService.forgotPassword(dto.email);
   }
 
-  @Roles(RoleSlug.READER, RoleSlug.ADMIN)
+  // 🔑 Đặt lại mật khẩu
+  @Public()
   @Post('reset-password')
   resetPassword(@Body() dto: ResetPasswordDto) {
     return this.authService.resetPassword(dto.token, dto.newPassword);

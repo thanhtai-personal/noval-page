@@ -23,7 +23,13 @@ export class AuthService {
 
   // 🟢 LOGIN THƯỜNG
   async login(email: string, password: string) {
-    const user = await this.validateOrCreateUser(email, password);
+    if (password === 'google_user') {
+      throw new UnauthorizedException('Vui lòng sử dụng Google để đăng nhập')
+    }
+    let user = await this.userModel.findOne({ email }).populate('role');
+    if (!user) {
+      throw new UnauthorizedException('Email không tồn tại');
+    }
     return this.issueTokensAndStore(user);
   }
 
@@ -37,19 +43,12 @@ export class AuthService {
     }
 
     const email = payload.email;
-    const name = payload.name || 'Người dùng Google';
+    let user = await this.validateOrCreateUser(email, payload.at_hash || 'google_user');
 
-    let user = await this.userModel.findOne({ email }).populate('role');
-    if (!user) {
-      const readerRole = await this.roleModel.findOne({ slug: 'reader' });
-      user = await this.userModel.create({
-        email,
-        name,
-        role: readerRole?._id,
-      });
-    }
-
-    return this.issueTokensAndStore(user);
+    return this.issueTokensAndStore({
+      ...user,
+      name: payload.name || 'GG_User',
+    });
   }
 
   // 🔁 REFRESH TOKEN
