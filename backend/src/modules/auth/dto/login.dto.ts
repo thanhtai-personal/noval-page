@@ -5,5 +5,5 @@ export class LoginDto {
   email: string;
 
   @IsNotEmpty()
-  name: string; // chỉ tạm dùng, sau có thể thay bằng mật khẩu
+  password: string;
 }

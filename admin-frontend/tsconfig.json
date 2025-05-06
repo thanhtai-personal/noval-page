@@ -1,5 +1,12 @@
 {
   "files": [],
+  "compilerOptions": {
+    // alias import
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"]
+    },
+  },
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }

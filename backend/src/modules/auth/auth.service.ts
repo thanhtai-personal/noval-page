@@ -22,8 +22,8 @@ export class AuthService {
   ) {}
 
   // 🟢 LOGIN THƯỜNG
-  async login(email: string, name: string) {
-    const user = await this.validateOrCreateUser(email, name);
+  async login(email: string, password: string) {
+    const user = await this.validateOrCreateUser(email, password);
     return this.issueTokensAndStore(user);
   }
 
@@ -90,13 +90,13 @@ export class AuthService {
   }
 
   // 📦 HÀM PHỤ TRỢ – Tạo user nếu chưa có
-  async validateOrCreateUser(email: string, name: string) {
+  async validateOrCreateUser(email: string, password: string) {
     let user = await this.userModel.findOne({ email }).populate('role');
     if (!user) {
       const readerRole = await this.roleModel.findOne({ slug: 'reader' });
       user = await this.userModel.create({
         email,
-        name,
+        password: await bcrypt.hash(password, 10),
         role: readerRole?._id,
       });
     }

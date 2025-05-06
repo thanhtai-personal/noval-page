@@ -25,7 +25,7 @@ export class AuthController {
   @Public()
   @Post('login')
   login(@Body() dto: LoginDto) {
-    return this.authService.login(dto.email, dto.name);
+    return this.authService.login(dto.email, dto.password);
   }
 
   // 🔗 GOOGLE LOGIN

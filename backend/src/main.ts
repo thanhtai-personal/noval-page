@@ -3,10 +3,14 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { JwtAuthGuard } from "./modules/auth/guards/jwt-auth.guard";
 import { RolesGuard } from "./modules/auth/guards/role.guard";
-import { ThrottlerGuard } from "@nestjs/throttler";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: ['http://localhost:5173', 'http://localhost:3001', 'http://localhost:3000'],
+    credentials: true,
+  });
 
   // Swagger config
   const config = new DocumentBuilder()

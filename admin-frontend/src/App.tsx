@@ -1,13 +1,24 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LoginPage from '@/pages/LoginPage';
 import CrawlerPage from '@/pages/CrawlerPage';
+import RequireAuth from '@/components/RequireAuth';
 
-export default function App() {
+function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        <Route path="/" element={<CrawlerPage />} />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/" element={<LoginPage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <RequireAuth>
+              <CrawlerPage />
+            </RequireAuth>
+          }
+        />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
+
+export default App;
