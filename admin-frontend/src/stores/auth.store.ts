@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { api } from "@/services/api";
+import { api, setAccessToken } from "@/services/api";
 
 class AuthStore {
   isAuthenticated = false;
@@ -37,6 +37,7 @@ class AuthStore {
       });
       localStorage.setItem('accessToken', res.data.access_token || '');
       localStorage.setItem('refreshToken', res.data.refresh_token);
+      setAccessToken(res.data.access_token);
     } finally {
       runInAction(() => {
         this.loading = false;
@@ -52,8 +53,10 @@ class AuthStore {
           Authorization: `Bearer ${this.accessToken}`,
         },
       });
+      const token = this.accessToken || '';
       runInAction(() => {
         this.user = res.data;
+        setAccessToken(token);
       });
     } catch (error) {
       this.logout(); // Nếu token sai

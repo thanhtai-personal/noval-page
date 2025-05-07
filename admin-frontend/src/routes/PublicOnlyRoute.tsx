@@ -29,7 +29,7 @@ const PublicOnlyRoute = ({ children }: Props) => {
 
   if (checking) return null;
   if (authStore.isAuthenticated || valid) {
-    return <Navigate to="/admin" replace />;
+    return <Navigate to="/crawl" replace />;
   }
   return <>{children}</>;
 };
