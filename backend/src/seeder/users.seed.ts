@@ -1,3 +1,5 @@
+// users.seed.ts
+
 import { User } from '@/schemas/user.schema';
 import { Role } from '@/schemas/role.schema';
 import { RoleSlug } from '@/constants/role.enum';

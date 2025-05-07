@@ -11,6 +11,7 @@ import { Tag, TagSchema } from '@/schemas/tag.schema';
 import { User, UserSchema } from '@/schemas/user.schema';
 import { Role, RoleSchema } from '@/schemas/role.schema';
 import { Comment, CommentSchema } from '@/schemas/comment.schema';
+import { Source, SourceSchema } from "./schemas/source.schema";
 
 // Modules
 import { CrawlerModule } from '@/modules/crawler/crawler.module';
@@ -23,6 +24,7 @@ import { CommentModule } from "./modules/comment/comment.module";
 import { CategoryModule } from "./modules/category/category.module";
 import { TagModule } from "./modules/tag/tag.module";
 import { AuthModule } from "./modules/auth/auth.module";
+import { SourceModule } from "./modules/source/source.module";
 
 // Middleware
 import { LoggerMiddleware } from '@/common/middlewares/logger.middleware';
@@ -63,6 +65,7 @@ import { APP_GUARD } from "@nestjs/core";
       { name: User.name, schema: UserSchema },
       { name: Role.name, schema: RoleSchema },
       { name: Comment.name, schema: CommentSchema },
+      { name: Source.name, schema: SourceSchema },
     ]),
     CrawlerModule,
     StoryModule,
@@ -74,6 +77,7 @@ import { APP_GUARD } from "@nestjs/core";
     CategoryModule,
     TagModule,
     AuthModule,
+    SourceModule
   ],
   providers: [
     {

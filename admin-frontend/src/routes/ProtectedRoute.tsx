@@ -8,15 +8,19 @@ type Props = {
 };
 
 const ProtectedRoute = ({ children }: Props) => {
-  const { isAuthenticated, user } = authStore;
+  const { isAuthenticated, user, loadingAuth } = authStore;
+  const role = user?.role;
 
   // ❌ Chưa đăng nhập
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-
+  
+  if (loadingAuth) {
+    return <div className="w-full h-screen flex items-center justify-center">Loading...</div>;
+  }
+  
   // ❌ Không có quyền truy cập
-  const role = user?.role;
   if (role !== RoleSlug.ADMIN && role !== RoleSlug.SUPER_ADMIN) {
     return <Navigate to="/403" replace />;
   }

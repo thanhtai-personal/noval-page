@@ -6,6 +6,7 @@ class AuthStore {
   loading = false;
   accessToken: string | null = null;
   user: any = null;
+  loadingAuth = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -45,6 +46,7 @@ class AuthStore {
 
   async fetchUser() {
     try {
+      this.loadingAuth = true;
       const res = await api.get(`/auth/me`, {
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
@@ -55,6 +57,8 @@ class AuthStore {
       });
     } catch (error) {
       this.logout(); // Nếu token sai
+    } finally {
+      this.loadingAuth = false;
     }
   }
 

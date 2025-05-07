@@ -5,7 +5,7 @@ import { authStore } from '@/stores/auth.store';
 
 const RequireAuth = observer(({ children }: { children: React.JSX.Element }) => {
   if (!authStore.isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" replace />;
   }
   return children;
 });
