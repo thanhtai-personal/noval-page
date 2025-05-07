@@ -98,6 +98,12 @@ Tạo 3 tài khoản mặc định:
 
 ---
 
+Seed on docker
+```bash
+  docker exec -it webtruyen-backend npm run seed
+```
+
+
 ## ✅ Kiểm tra dữ liệu seed
 
 ```bash
@@ -108,6 +114,11 @@ npm run check
 - In kết quả rõ ràng ra terminal
 
 ---
+
+Check on docker
+```bash
+docker exec -it webtruyen-mongo mongosh
+```
 
 ## 📎 Phân quyền
 
