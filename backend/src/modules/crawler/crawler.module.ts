@@ -1,12 +1,19 @@
+// src/modules/crawler/crawler.module.ts
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+
 import { CrawlerController } from './crawler.controller';
 import { CrawlerService } from './crawler.service';
+import { CrawlerScheduler } from './crawler.scheduler';
+
 import { TangthuvienCrawler } from './sites/tangthuvien.crawler';
 import { VtruyenCrawler } from './sites/vtruyen.crawler';
-import { Author, AuthorSchema } from "@/schemas/author.schema";
-import { Chapter, ChapterSchema } from "@/schemas/chapter.schema";
-import { Story, StorySchema } from "@/schemas/story.schema";
-import { MongooseModule } from "@nestjs/mongoose";
+
+import { Story, StorySchema } from '@/schemas/story.schema';
+import { Chapter, ChapterSchema } from '@/schemas/chapter.schema';
+import { Author, AuthorSchema } from '@/schemas/author.schema';
+import { Category, CategorySchema } from '@/schemas/category.schema';
+import { Tag, TagSchema } from '@/schemas/tag.schema';
 
 @Module({
   imports: [
@@ -14,9 +21,16 @@ import { MongooseModule } from "@nestjs/mongoose";
       { name: Story.name, schema: StorySchema },
       { name: Chapter.name, schema: ChapterSchema },
       { name: Author.name, schema: AuthorSchema },
+      { name: Category.name, schema: CategorySchema },
+      { name: Tag.name, schema: TagSchema },
     ]),
   ],
   controllers: [CrawlerController],
-  providers: [CrawlerService, TangthuvienCrawler, VtruyenCrawler],
+  providers: [
+    CrawlerService,
+    CrawlerScheduler,
+    TangthuvienCrawler,
+    VtruyenCrawler,
+  ],
 })
 export class CrawlerModule {}
