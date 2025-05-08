@@ -3,6 +3,17 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { JwtAuthGuard } from "./modules/auth/guards/jwt-auth.guard";
 import { RolesGuard } from "./modules/auth/guards/role.guard";
+import * as crypto from 'crypto';
+
+// 🛡 Gán globalThis.crypto.randomUUID nếu chưa có (Node < 19)
+if (
+  typeof globalThis.crypto === 'undefined' ||
+  typeof globalThis.crypto.randomUUID !== 'function'
+) {
+  (globalThis as any).crypto = {
+    randomUUID: () => crypto.randomUUID(),
+  };
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -28,7 +39,6 @@ async function bootstrap() {
     new JwtAuthGuard(reflector),
     new RolesGuard(reflector),
   );
-
 
   await app.listen(process.env.PORT || 5000);
 }

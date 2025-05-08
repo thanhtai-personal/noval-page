@@ -6,7 +6,9 @@ import { AdminLayout } from '@/components/layout/AdminLayout';
 
 // 👇 Lazy-loaded pages
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
+const AdminUserPage = lazy(() => import('@/pages/UserPage'));
 const CrawlerPage = lazy(() => import('@/pages/CrawlerPage'));
+const StoryPage = lazy(() => import('@/pages/StoryPage'));
 const ForbiddenPage = lazy(() => import('@/pages/ForbiddenPage'));
 
 export function AppRouter() {
@@ -31,10 +33,13 @@ export function AppRouter() {
               <AdminLayout>
                 <Outlet />
               </AdminLayout>
+
             </ProtectedRoute>
           }
         >
           <Route path="crawl" element={<CrawlerPage />} />
+          <Route path="stories" element={<StoryPage />} />
+          <Route path="users" element={<AdminUserPage />} />
           {/* Thêm các route con khác ở đây */}
         </Route>
 
