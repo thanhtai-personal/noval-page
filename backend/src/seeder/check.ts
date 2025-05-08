@@ -8,6 +8,16 @@ import { Source } from '@/schemas/source.schema';
 import { checkRoles } from './roles.check';
 import { checkUsers } from './users.check';
 import { checkSources } from './sources.check';
+import * as crypto from 'crypto';
+
+if (
+  typeof globalThis.crypto === 'undefined' ||
+  typeof globalThis.crypto.randomUUID !== 'function'
+) {
+  (globalThis as any).crypto = {
+    randomUUID: () => crypto.randomUUID(),
+  };
+}
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);

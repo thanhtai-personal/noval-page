@@ -12,7 +12,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     <div className="flex w-screen h-screen bg-background text-foreground overflow-auto overflow-x-hidden">
       <div className="w-full flex flex-col flex-1">
         <Header />
-        <main className="w-full p-4 overflow-y-auto flex-1">
+        <main className="w-full overflow-y-auto flex-1">
           <div className="w-full flex min-h-[calc(100vh-100px)]">
             <Sidebar />
             {children}

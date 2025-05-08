@@ -31,7 +31,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     let page = 1;
     let hasMore = true;
 
-    while (hasMore && page <= 100) { // giới hạn để tránh infinite loop
+    while (hasMore && page <= 500) { // giới hạn để tránh infinite loop
       const chapterUrl = `https://truyen.tangthuvien.vn/doc-truyen/${storyId}/chuong-${page}`;
       try {
         const { data: pageData } = await axios.get(chapterUrl);
@@ -83,9 +83,50 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       return '';
     }
   }
-  
-  getAllStoryUrls(): Promise<string[]> {
-    throw new Error("Method not implemented.");
+
+  async getAllStoryUrls(): Promise<string[]> {
+    const baseUrl = 'https://truyen.tangthuvien.vn/danh-sach?page=';
+    const urls: string[] = [];
+
+    let page = 1;
+    const maxPages = 1000;
+
+    console.log('🚀 Bắt đầu thu thập URL truyện từ Tangthuvien...');
+
+    while (page <= maxPages) {
+      const url = `${baseUrl}${page}`;
+      console.log(`📄 Đang xử lý trang ${page}: ${url}`);
+
+      try {
+        const res = await axios.get(url);
+        const $ = cheerio.load(res.data);
+
+        const links = $('.book-img-text a.name')
+          .map((_, el) => $(el).attr('href'))
+          .get()
+          .filter(Boolean);
+
+        if (links.length === 0) {
+          console.log('✅ Không còn truyện nào, dừng tại trang', page);
+          break;
+        }
+
+        for (const link of links) {
+          const fullUrl = `https://truyen.tangthuvien.vn${link}`;
+          urls.push(fullUrl);
+        }
+
+        console.log(`➕ Đã thu thập ${links.length} truyện (tổng: ${urls.length})`);
+
+        page++;
+      } catch (err) {
+        console.warn(`❌ Lỗi khi crawl trang ${page}: ${err.message}`);
+        break;
+      }
+    }
+
+    console.log(`🏁 Hoàn tất. Tổng số truyện thu được: ${urls.length}`);
+    return urls;
   }
-  
+
 }

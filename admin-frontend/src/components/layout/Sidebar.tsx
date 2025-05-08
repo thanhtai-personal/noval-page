@@ -1,10 +1,10 @@
-// src/components/layout/Sidebar.tsx
 import { Link, useLocation } from 'react-router-dom';
 import {
   NavigationMenu,
   NavigationMenuList,
   NavigationMenuItem,
 } from '@/components/ui/navigation-menu';
+import { cn } from '@/lib/utils'; // dùng để gộp className
 
 export const Sidebar = () => {
   const location = useLocation();
@@ -16,22 +16,27 @@ export const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-[250px] border-r border-border bg-background p-4">
+    <aside className="w-64 min-h-screen border-r bg-background p-4">
       <NavigationMenu orientation="vertical" className="w-full">
-        <NavigationMenuList className="w-full flex flex-col gap-2">
-          {links.map((item) => (
-            <NavigationMenuItem
-              className={`w-full block rounded px-3 py-2 font-medium transition-colors ${location.pathname.startsWith(item.to)
-                  ? 'bg-muted text-primary'
-                  : 'hover:bg-accent hover:text-accent-foreground'
-                }`} key={item.to}>
-              <Link
-                to={item.to}
-              >
-                {item.label}
-              </Link>
-            </NavigationMenuItem>
-          ))}
+        <NavigationMenuList className="w-full flex flex-col gap-1">
+          {links.map((item) => {
+            const isActive = location.pathname.startsWith(item.to);
+            return (
+              <NavigationMenuItem key={item.to} className="w-full justify-start items-start">
+                <Link
+                  to={item.to}
+                  className={cn(
+                    'block rounded px-3 py-2 text-sm font-medium transition-colors',
+                    isActive
+                      ? 'bg-muted text-primary'
+                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                  )}
+                >
+                  {item.label}
+                </Link>
+              </NavigationMenuItem>
+            );
+          })}
         </NavigationMenuList>
       </NavigationMenu>
     </aside>
