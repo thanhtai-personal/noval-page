@@ -20,6 +20,21 @@ export class Source {
 
   @Prop()
   currentInfo?: string;
+
+  @Prop()
+  currentPage?: number;
+
+  @Prop()
+  totalPages?: number;
+
+  @Prop()
+  currentStory?: string;
+
+  @Prop()
+  state?: string;
+
+  @Prop({ type: [String], default: [] }) // 🆕 để lưu slug các truyện đã crawl
+  processedStorySlugs: string[];
 }
 
 export const SourceSchema = SchemaFactory.createForClass(Source);

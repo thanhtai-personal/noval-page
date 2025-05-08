@@ -2,15 +2,8 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/services/api';
 import { Button } from '@/components/ui/button';
-import { SourceCard } from '@/components/SourceCard';
-
-interface Source {
-  _id: string;
-  name: string;
-  status: 'idle' | 'crawling';
-  lastCrawledUrl?: string;
-  currentInfo?: string;
-}
+import { Source, SourceCard } from '@/components/SourceCard';
+import { SourceCardSkeleton } from "@/components/SourceCardSkeleton";
 
 export default function CrawlerPage() {
   const [sources, setSources] = useState<Source[]>([]);
@@ -31,15 +24,15 @@ export default function CrawlerPage() {
   const handleCrawl = async (id: string) => {
     setLoadingMap((prev) => ({ ...prev, [id]: true }));
     try {
-      await api.post(`/source/${id}/crawl`);
+      await api.post(`/crawler/source/${id}/crawl`);
       await fetchSources();
     } finally {
       setLoadingMap((prev) => ({ ...prev, [id]: false }));
     }
   };
-
+  
   const handleCancel = async (id: string) => {
-    await api.post(`/source/${id}/cancel`);
+    await api.post(`/crawler/source/${id}/cancel`);
     await fetchSources();
   };
 
@@ -59,18 +52,21 @@ export default function CrawlerPage() {
           {refreshing ? 'Đang tải...' : '🔄 Refresh'}
         </Button>
       </div>
-
-      {sources.map((src) => (
-        <SourceCard
-          key={src._id}
-          source={src}
-          isExpanded={expanded === src._id}
-          isLoading={loadingMap[src._id]}
-          onCrawl={() => handleCrawl(src._id)}
-          onCancel={() => handleCancel(src._id)}
-          onToggleExpand={() => toggleExpand(src._id)}
-        />
-      ))}
+  
+      {refreshing
+        ? Array.from({ length: 2 }).map((_, i) => <SourceCardSkeleton key={i} />)
+        : sources.map((src) => (
+            <SourceCard
+              key={src._id}
+              source={src}
+              isExpanded={expanded === src._id}
+              isLoading={loadingMap[src._id]}
+              onCrawl={() => handleCrawl(src._id)}
+              onCancel={() => handleCancel(src._id)}
+              onToggleExpand={() => toggleExpand(src._id)}
+            />
+          ))}
     </div>
   );
+  
 }

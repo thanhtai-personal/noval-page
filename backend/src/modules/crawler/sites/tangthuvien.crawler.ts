@@ -3,9 +3,24 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { ICrawlerAdapter } from './interfaces/crawler-adapter.interface';
 import { slugify } from '@/utils/slugify';
+import { Source } from '@/schemas/source.schema';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { Category } from '@/schemas/category.schema';
+import { Story } from '@/schemas/story.schema';
+import { Author } from '@/schemas/author.schema';
+import { Tag } from '@/schemas/tag.schema';
 
 @Injectable()
 export class TangthuvienCrawler implements ICrawlerAdapter {
+  constructor(
+    @InjectModel(Source.name) private sourceModel: Model<Source>,
+    @InjectModel(Story.name) private storyModel: Model<Story>,
+    @InjectModel(Category.name) private categoryModel: Model<Category>,
+    @InjectModel(Author.name) private authorModel: Model<Author>,
+    @InjectModel(Tag.name) private tagModel: Model<Tag>,
+  ) {}
+
   async crawlStory(url: string) {
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
@@ -16,7 +31,6 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     const cover = $('.book img').attr('src') || '';
     const slug = slugify(title);
 
-    // Crawl danh sách chương từ trang chương (pagination)
     const storyIdMatch = url.match(/\/(\d+)$/);
     const storyId = storyIdMatch ? storyIdMatch[1] : null;
     if (!storyId) throw new Error('Không lấy được ID truyện');
@@ -31,7 +45,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     let page = 1;
     let hasMore = true;
 
-    while (hasMore && page <= 500) { // giới hạn để tránh infinite loop
+    while (hasMore && page <= 500) {
       const chapterUrl = `https://truyen.tangthuvien.vn/doc-truyen/${storyId}/chuong-${page}`;
       try {
         const { data: pageData } = await axios.get(chapterUrl);
@@ -84,49 +98,135 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     }
   }
 
-  async getAllStoryUrls(): Promise<string[]> {
-    const baseUrl = 'https://truyen.tangthuvien.vn/danh-sach?page=';
-    const urls: string[] = [];
+  async getAllStoryUrls(): Promise<void> {
+    const source = await this.sourceModel.findOne({ name: 'Tangthuvien' });
+    if (!source) throw new Error('Source not found');
+    console.log(`🔍 Bắt đầu crawl site: ${source.baseUrl}`);
 
-    let page = 1;
-    const maxPages = 1000;
+    let currentPage = source.currentPage || 1;
+    let totalPages = source.totalPages || 0;
+    const processedSlugs = new Set(source.processedStorySlugs || []);
 
-    console.log('🚀 Bắt đầu thu thập URL truyện từ Tangthuvien...');
+    try {
+      const { data } = await axios.get(`${source.baseUrl}/ket-qua-tim-kiem?page=1`);
+      const $ = cheerio.load(data);
+      totalPages = Number($('.pagination li').length - 2);
+      await this.sourceModel.updateOne({ _id: source._id }, { totalPages });
+    } catch (err) {
+      console.error(`❌ Lỗi khi lấy tổng số trang: ${err.message}`);
+    }
+    console.log("totalPages", totalPages);
 
-    while (page <= maxPages) {
-      const url = `${baseUrl}${page}`;
-      console.log(`📄 Đang xử lý trang ${page}: ${url}`);
-
+    for (let page = currentPage; page <= totalPages; page++) {
+      console.log(`📄 Đang xử lý trang ${page}`);
       try {
-        const res = await axios.get(url);
-        const $ = cheerio.load(res.data);
+        const { data: searchData } = await axios.get(`${source.baseUrl}/ket-qua-tim-kiem?page=${page}`);
+        const $ = cheerio.load(searchData);
 
-        const links = $('.book-img-text a.name')
-          .map((_, el) => $(el).attr('href'))
+        const stories = $('#rank-view-list .book-img-text ul li')
+          .map((_, el) => {
+            const anchor = $(el).find('a').first();
+            const href = anchor.attr('href');
+            const title = anchor.text().trim();
+
+            return {
+              url: href?.startsWith('http') ? href : `${source.baseUrl}${href}`,
+              title,
+              slug: slugify(title),
+              author: $(el).find('.author').text().trim(),
+              cover: $(el).find('img').attr('src'),
+              intro: $(el).find('.desc').text().trim(),
+            };
+          })
           .get()
-          .filter(Boolean);
+          .filter(s => s.url && s.title);
 
-        if (links.length === 0) {
+        if (stories.length === 0) {
           console.log('✅ Không còn truyện nào, dừng tại trang', page);
           break;
         }
 
-        for (const link of links) {
-          const fullUrl = `https://truyen.tangthuvien.vn${link}`;
-          urls.push(fullUrl);
+        for (const s of stories) {
+          if (processedSlugs.has(s.slug)) continue;
+
+          // Tác giả
+          let authorDoc: any = null;
+          if (s.author) {
+            const authorSlug = slugify(s.author);
+            authorDoc = await this.authorModel.findOneAndUpdate(
+              { slug: authorSlug },
+              { name: s.author },
+              { upsert: true, new: true }
+            );
+          }
+
+          // Crawl chi tiết để lấy category, tag
+          const { data: detailHtml } = await axios.get(s.url);
+          const $detail = cheerio.load(detailHtml);
+
+          const rawCategories = $detail('.info a[href*="/the-loai/"]')
+            .map((_, el) => $detail(el).text().trim())
+            .get();
+
+          const rawTags = $detail('.info a[href*="/tu-khoa/"]')
+            .map((_, el) => $detail(el).text().trim())
+            .get();
+
+          const categoryIds = await Promise.all(
+            rawCategories.map(async (name) => {
+              const slug = slugify(name);
+              const cat = await this.categoryModel.findOneAndUpdate(
+                { slug },
+                { name },
+                { upsert: true, new: true }
+              );
+              return cat._id;
+            })
+          );
+
+          const tagIds = await Promise.all(
+            rawTags.map(async (name) => {
+              const slug = slugify(name);
+              const tag = await this.tagModel.findOneAndUpdate(
+                { slug },
+                { name },
+                { upsert: true, new: true }
+              );
+              return tag._id;
+            })
+          );
+
+          await this.storyModel.create({
+            title: s.title,
+            slug: s.slug,
+            url: s.url,
+            description: s.intro,
+            cover: s.cover,
+            author: authorDoc?._id,
+            source: source.name,
+            categories: categoryIds,
+            tags: tagIds,
+          });
+
+          processedSlugs.add(s.slug);
+          await this.sourceModel.updateOne(
+            { _id: source._id },
+            {
+              currentPage: page,
+              lastCrawledUrl: s.url,
+              currentStory: s.title,
+              $addToSet: { processedStorySlugs: s.slug },
+            }
+          );
+
+          console.log(`✅ Lưu truyện: ${s.title}`);
         }
-
-        console.log(`➕ Đã thu thập ${links.length} truyện (tổng: ${urls.length})`);
-
-        page++;
       } catch (err) {
         console.warn(`❌ Lỗi khi crawl trang ${page}: ${err.message}`);
         break;
       }
     }
 
-    console.log(`🏁 Hoàn tất. Tổng số truyện thu được: ${urls.length}`);
-    return urls;
+    console.log('🏁 Crawl site Tangthuvien hoàn tất.');
   }
-
 }

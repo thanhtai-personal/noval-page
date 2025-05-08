@@ -84,7 +84,7 @@ export class VtruyenCrawler implements ICrawlerAdapter {
     }
   }
   
-  getAllStoryUrls(): Promise<string[]> {
+  getAllStoryUrls(): Promise<void> {
     throw new Error("Method not implemented.");
   }
   

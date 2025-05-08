@@ -28,7 +28,7 @@ export class CrawlerController {
   /**
    * API: Bắt đầu crawl toàn bộ site
    */
-  @Roles(RoleSlug.SUPER_ADMIN)
+  @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
   @Post('site/start')
   async startSiteCrawl(@Body() body: { source: string }) {
     return this.crawlerService.startCrawlSite(body.source);
@@ -37,9 +37,21 @@ export class CrawlerController {
   /**
    * API: Hủy crawl site đang chạy
    */
-  @Roles(RoleSlug.SUPER_ADMIN)
+  @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
   @Post('site/cancel')
   async cancelSiteCrawl(@Body() body: { source: string }) {
     return this.crawlerService.cancelCrawlSite(body.source);
+  }
+
+  @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
+  @Post('source/:id/crawl')
+  async startSourceCrawl(@Param('id') id: string) {
+    return this.crawlerService.startCrawlSite(id);
+  }
+
+  @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
+  @Post('source/:id/cancel')
+  async cancelSourceCrawl(@Param('id') id: string) {
+    return this.crawlerService.cancelCrawlSite(id);
   }
 }
