@@ -4,12 +4,42 @@ import { api } from '@/services/api';
 import { Button } from '@/components/ui/button';
 import { Source, SourceCard } from '@/components/SourceCard';
 import { SourceCardSkeleton } from "@/components/SourceCardSkeleton";
+import { io } from 'socket.io-client';
+
+const socket = io(import.meta.env.VITE_API_WS_URL || 'http://localhost:5000');
 
 export default function CrawlerPage() {
   const [sources, setSources] = useState<Source[]>([]);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [loadingMap, setLoadingMap] = useState<{ [id: string]: boolean }>({});
   const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    sources.forEach((source) => {
+      socket.on(`crawl:${source._id}`, (msg) => {
+        setSources((prev) =>
+          prev.map((s) =>
+            s._id === source._id ? { ...s, currentInfo: msg } : s
+          )
+        );
+      });
+  
+      socket.on(`crawl:status:${source._id}`, (status) => {
+        setSources((prev) =>
+          prev.map((s) =>
+            s._id === source._id ? { ...s, status } : s
+          )
+        );
+      });
+    });
+  
+    return () => {
+      sources.forEach((source) => {
+        socket.off(`crawl:${source._id}`);
+        socket.off(`crawl:status:${source._id}`);
+      });
+    };
+  }, [sources]);
 
   const fetchSources = async () => {
     setRefreshing(true);

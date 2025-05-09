@@ -15,6 +15,7 @@ import { Author, AuthorSchema } from '@/schemas/author.schema';
 import { Category, CategorySchema } from '@/schemas/category.schema';
 import { Tag, TagSchema } from '@/schemas/tag.schema';
 import { Source, SourceSchema } from "@/schemas/source.schema";
+import { CrawlerGateway } from "./crawler.gateway";
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { Source, SourceSchema } from "@/schemas/source.schema";
     CrawlerScheduler,
     TangthuvienCrawler,
     VtruyenCrawler,
+    CrawlerGateway
   ],
 })
 export class CrawlerModule {}

@@ -31,6 +31,7 @@ import { LoggerMiddleware } from '@/common/middlewares/logger.middleware';
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { APP_GUARD } from "@nestjs/core";
 import { ScheduleModule } from "@nestjs/schedule";
+import { CrawlerGateway } from "./modules/crawler/crawler.gateway";
 
 @Module({
   imports: [
@@ -86,6 +87,7 @@ import { ScheduleModule } from "@nestjs/schedule";
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
+    CrawlerGateway
   ],
 })
   

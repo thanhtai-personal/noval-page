@@ -9,6 +9,7 @@ import { TangthuvienCrawler } from './sites/tangthuvien.crawler';
 import { VtruyenCrawler } from './sites/vtruyen.crawler';
 import { ICrawlerAdapter } from './sites/interfaces/crawler-adapter.interface';
 import { Source } from "@/schemas/source.schema";
+import { CrawlerGateway } from "./crawler.gateway";
 
 @Injectable()
 export class CrawlerService {
@@ -18,6 +19,7 @@ export class CrawlerService {
   constructor(
     private readonly tangthuvien: TangthuvienCrawler,
     private readonly vtruyen: VtruyenCrawler,
+    private readonly gateway: CrawlerGateway,
     @InjectModel(Story.name) private storyModel: Model<Story>,
     @InjectModel(Chapter.name) private chapterModel: Model<Chapter>,
     @InjectModel(Source.name) private sourceModel: Model<Source>,
