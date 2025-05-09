@@ -87,17 +87,6 @@ export default function StoryDetailPage() {
         </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Mô tả</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground whitespace-pre-line">
-            {story.description || 'Chưa có mô tả'}
-          </p>
-        </CardContent>
-      </Card>
-
       {story.intro && (
         <Card>
           <CardHeader>
@@ -110,6 +99,17 @@ export default function StoryDetailPage() {
           </CardContent>
         </Card>
       )}
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Mô tả</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground whitespace-pre-line">
+            {story.description || 'Chưa có mô tả'}
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }

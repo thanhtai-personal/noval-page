@@ -45,7 +45,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
 
       const title = $('h1').first().text().trim();
       const description = $('.desc-text').text().trim();
-      const author = $('.book-mid-info a.name').text().trim();
+      const author = $('.info a[href*="/tac-gia/"]').text().trim();
       const cover = $('.book img').attr('src') || '';
       const slug = slugify(title);
 
@@ -207,7 +207,8 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
               url: href?.startsWith('http') ? href : `${this.source.baseUrl}${href}`,
               title,
               slug: slugify(title),
-              author: $(el).find('.author').text().trim(),
+              author: $(el).find('.author a.name').text().trim(),
+              category: $(el).find('.author a[href*="/the-loai/"]').text().trim(),
               cover: $(el).find('img').attr('src'),
               intro: $(el).find('.intro').text().trim(),
             };
@@ -229,6 +230,17 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             );
           }
 
+          // Thể loại
+          let categoryDoc: any = null;
+          if (s.category) {
+            const categorySlug = slugify(s.category);
+            categoryDoc = await this.categoryModel.findOneAndUpdate(
+              { slug: categorySlug },
+              { name: s.category },
+              { upsert: true, new: true }
+            );
+          }
+
           await this.storyModel.create({
             title: s.title,
             slug: s.slug,
@@ -236,6 +248,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             intro: s.intro,
             cover: s.cover,
             author: authorDoc?._id,
+            category: categoryDoc?._id,
             source: this.source.name,
           });
 
