@@ -53,6 +53,7 @@ export class StoryService {
       .populate('author', 'name slug')
       .populate('tags', 'name slug')
       .populate('categories', 'name slug');
+    
   }
 
   async createStory(dto: CreateStoryDto, userId: string) {

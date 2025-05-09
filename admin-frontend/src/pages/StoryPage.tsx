@@ -8,14 +8,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue }
   from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import {
-  Pagination, PaginationContent, PaginationItem
-  , PaginationNext, PaginationPrevious
+  Pagination, PaginationContent, PaginationItem,
+  PaginationNext, PaginationPrevious,
 } from '@/components/ui/pagination';
+import { Link } from "react-router-dom";
+
+const LIMIT = 20;
 
 export default function AdminStoryPage() {
   const [stories, setStories] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
 
   const [filters, setFilters] = useState({
     search: '',
@@ -24,7 +28,7 @@ export default function AdminStoryPage() {
     page: 1,
   });
 
-  const [totalPages, setTotalPages] = useState(1);
+  const [gotoPage, setGotoPage] = useState('');
 
   const fetchFilters = async () => {
     const [authorRes, catRes] = await Promise.all([
@@ -42,16 +46,23 @@ export default function AdminStoryPage() {
         author: filters.author,
         category: filters.category,
         page: filters.page,
-        limit: 10,
+        limit: LIMIT,
       },
     });
     setStories(res.data.data || []);
-    setTotalPages(res.data.totalPages);
+    setTotalPages(Math.ceil(Number(res.data.total) / LIMIT));
   };
 
   const handleCrawl = async (id: string) => {
     await api.post(`/crawler/stories/${id}`);
     alert('✅ Đã gửi yêu cầu crawl chương mới');
+  };
+
+  const handleGoto = () => {
+    const page = parseInt(gotoPage);
+    if (!isNaN(page) && page >= 1 && page <= totalPages) {
+      setFilters({ ...filters, page });
+    }
   };
 
   useEffect(() => {
@@ -61,6 +72,19 @@ export default function AdminStoryPage() {
   useEffect(() => {
     fetchStories();
   }, [filters]);
+
+  const getPageRange = () => {
+    const current = filters.page;
+    const range = [];
+
+    const start = Math.max(1, current - 1);
+    const end = Math.min(totalPages, current + 1);
+
+    for (let i = start; i <= end; i++) {
+      range.push(i);
+    }
+    return range;
+  };
 
   return (
     <div className="p-6 space-y-6 max-w-6xl">
@@ -76,7 +100,7 @@ export default function AdminStoryPage() {
         />
 
         <Select
-          onValueChange={(value: any) => setFilters({ ...filters, author: value, page: 1 })}
+          onValueChange={(value) => setFilters({ ...filters, author: value === 'all' ? '' : value, page: 1 })}
           defaultValue={filters.author}
         >
           <SelectTrigger className="w-48">
@@ -91,7 +115,7 @@ export default function AdminStoryPage() {
         </Select>
 
         <Select
-          onValueChange={(value: any) => setFilters({ ...filters, category: value, page: 1 })}
+          onValueChange={(value) => setFilters({ ...filters, category: value === 'all' ? '' : value, page: 1 })}
           defaultValue={filters.category}
         >
           <SelectTrigger className="w-48">
@@ -110,6 +134,7 @@ export default function AdminStoryPage() {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead>#</TableHead>
             <TableHead>Tên truyện</TableHead>
             <TableHead>Tác giả</TableHead>
             <TableHead>Thể loại</TableHead>
@@ -119,8 +144,9 @@ export default function AdminStoryPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {(stories || []).map((s: any) => (
-            <TableRow key={s._id}>
+          {(stories || []).map((s: any, idx: number) => (
+            <TableRow key={s.slug}>
+              <TableCell>{(filters.page - 1) * LIMIT + idx + 1}</TableCell>
               <TableCell>{s.title}</TableCell>
               <TableCell>{s.author?.name || '—'}</TableCell>
               <TableCell>
@@ -129,7 +155,12 @@ export default function AdminStoryPage() {
               <TableCell className="text-center">{s.chapterCount || s.chapters?.length || 0}</TableCell>
               <TableCell>{s.source}</TableCell>
               <TableCell>
-                <Button size="sm" onClick={() => handleCrawl(s._id)}>Crawl</Button>
+                <div className="flex gap-2 w-full justify-end items-center">
+                  <Button size="sm" onClick={() => handleCrawl(s._id)}>Crawl</Button>
+                  <Link to={`/stories/${s.slug}`}>
+                    <Button size="sm" variant="outline">Xem chi tiết</Button>
+                  </Link>
+                </div>
               </TableCell>
             </TableRow>
           ))}
@@ -137,28 +168,53 @@ export default function AdminStoryPage() {
       </Table>
 
       {/* Pagination */}
-      <Pagination className="mt-4 justify-end">
-        <PaginationContent>
+      <Pagination className="mt-4 justify-between items-center">
+        <PaginationContent className="gap-2">
           <PaginationItem>
-            {filters.page > 1 ? (
-              <PaginationPrevious
-                onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
-              />
-            ) : (
-              <span className="opacity-50 cursor-not-allowed">Previous</span>
-            )}
+            <PaginationPrevious
+              onClick={() => setFilters({ ...filters, page: Math.max(1, filters.page - 1) })}
+            />
           </PaginationItem>
-          <span className="px-2 mt-1 text-sm">Trang {filters.page} / {totalPages}</span>
+
+          {getPageRange().map((p) => (
+            <PaginationItem key={p}>
+              <Button
+                variant={p === filters.page ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setFilters({ ...filters, page: p })}
+              >
+                {p}
+              </Button>
+            </PaginationItem>
+          ))}
+          <span>...</span>
+          <PaginationItem key={totalPages}>
+              <Button
+                variant={totalPages === filters.page ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setFilters({ ...filters, page: totalPages })}
+              >
+                {totalPages}
+              </Button>
+            </PaginationItem>
+
           <PaginationItem>
-            {filters.page < totalPages ? (
-              <PaginationNext
-                onClick={() => setFilters({ ...filters, page: filters.page + 1 })}
-              />
-            ) : (
-              <span className="opacity-50 cursor-not-allowed">Next</span>
-            )}
+            <PaginationNext
+              onClick={() => setFilters({ ...filters, page: Math.min(totalPages, filters.page + 1) })}
+            />
           </PaginationItem>
         </PaginationContent>
+
+        {/* Goto input */}
+        <div className="flex items-center gap-2">
+          <Input
+            placeholder="Trang..."
+            value={gotoPage}
+            onChange={(e) => setGotoPage(e.target.value)}
+            className="w-20"
+          />
+          <Button size="sm" onClick={handleGoto}>Go</Button>
+        </div>
       </Pagination>
     </div>
   );

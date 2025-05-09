@@ -9,6 +9,7 @@ const LoginPage = lazy(() => import('@/pages/LoginPage'));
 const AdminUserPage = lazy(() => import('@/pages/UserPage'));
 const CrawlerPage = lazy(() => import('@/pages/CrawlerPage'));
 const StoryPage = lazy(() => import('@/pages/StoryPage'));
+const StoryDetailPage = lazy(() => import('@/pages/StoryDetailPage'));
 const ForbiddenPage = lazy(() => import('@/pages/ForbiddenPage'));
 
 export function AppRouter() {
@@ -39,6 +40,7 @@ export function AppRouter() {
         >
           <Route path="crawl" element={<CrawlerPage />} />
           <Route path="stories" element={<StoryPage />} />
+          <Route path="/stories/:id" element={<StoryDetailPage />} />
           <Route path="users" element={<AdminUserPage />} />
           {/* Thêm các route con khác ở đây */}
         </Route>
