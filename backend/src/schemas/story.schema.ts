@@ -42,6 +42,9 @@ export class Story extends Document {
   @Prop({ default: 0 })
   recommends: number;
 
+  @Prop({ default: 0 })
+  votes: number;
+
   @Prop({ default: false })
   isDetailCrawled: boolean;
 

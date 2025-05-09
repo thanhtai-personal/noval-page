@@ -248,7 +248,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             intro: s.intro,
             cover: s.cover,
             author: authorDoc?._id,
-            category: categoryDoc?._id,
+            categories: [categoryDoc?._id],
             source: this.source.name,
           });
 
@@ -285,7 +285,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       const { data } = await axiosInstance.get(story.url);
       const $ = cheerio.load(data);
 
-      const description = $('.desc-text').text().trim();
+      const description = $('.book-intro').html()?.trim() || '';
 
       const categories = $('.info a[href*="/the-loai/"]').map((_, el) => $(el).text().trim()).get();
       const tags = $('.info a[href*="/tu-khoa/"]').map((_, el) => $(el).text().trim()).get();
@@ -302,14 +302,30 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         return tag._id;
       }));
 
-      await this.storyModel.updateOne({ _id: story._id }, {
+      const likes = parseInt($('.book-info span[class*="-like"]').text().trim()) || 0;
+      const views = parseInt($('.book-info span[class*="-view"]').text().trim()) || 0;
+      const recommends = parseInt($('.book-info span[class*="-follow"]').text().trim()) || 0;
+      const votes = parseInt($('.book-info span[class*="-nomi"]').text().trim()) || 0;
+
+      const updatedData = {
         description,
         categories: categoryIds,
         tags: tagIds,
         isDetailCrawled: true,
-      });
+        likes,
+        views,
+        recommends,
+        votes,
+      }
+      await this.storyModel.updateOne({ _id: story._id }, updatedData);
       this.gateway.sendCrawlInfo(this.source._id.toString(), `📝 Cập nhật chi tiết: ${story.title}`);
       console.log(`📝 Cập nhật chi tiết: ${story.title}`);
+      console.log(`likes: ${likes}`);
+      console.log(`views: ${views}`);
+      console.log(`recommends: ${recommends}`);
+      console.log(`votes: ${votes}`);
+      console.log(`description: ${description}`);
+      
     } catch (err) {
       console.warn(`❌ Lỗi khi crawl chi tiết truyện: ${slug}`);
       this.gateway.sendCrawlInfo(this.source._id.toString(), `❌ Lỗi khi crawl chi tiết truyện: ${slug}`);
