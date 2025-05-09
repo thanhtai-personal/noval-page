@@ -187,8 +187,6 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     } catch (err) {
       console.error(`❌ Lỗi khi lấy tổng số trang: ${err.message}`);
     }
-    console.log("totalPages", totalPages);
-
     for (let page = currentPage; page <= totalPages; page++) {
       console.log(`📄 Đang xử lý trang ${page}/${totalPages}`);
       this.gateway.sendCrawlInfo(this.source._id.toString(), `📄 Đang xử lý trang ${page}/${totalPages}`);
@@ -318,14 +316,9 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         votes,
       }
       await this.storyModel.updateOne({ _id: story._id }, updatedData);
-      this.gateway.sendCrawlInfo(this.source._id.toString(), `📝 Cập nhật chi tiết: ${story.title}`);
-      console.log(`📝 Cập nhật chi tiết: ${story.title}`);
-      console.log(`likes: ${likes}`);
-      console.log(`views: ${views}`);
-      console.log(`recommends: ${recommends}`);
-      console.log(`votes: ${votes}`);
-      console.log(`description: ${description}`);
-      
+      this.gateway.sendCrawlInfo(this.source._id.toString(), `📝 Cập nhật chi tiết: ${story.title} - likes: ${likes} - views: ${views} - recommends: ${recommends} - votes: ${votes}`);
+      console.log(`📝 Cập nhật chi tiết: ${story.title} - likes: ${likes} - views: ${views} - recommends: ${recommends} - votes: ${votes}`);
+
     } catch (err) {
       console.warn(`❌ Lỗi khi crawl chi tiết truyện: ${slug}`);
       this.gateway.sendCrawlInfo(this.source._id.toString(), `❌ Lỗi khi crawl chi tiết truyện: ${slug}`);
