@@ -30,11 +30,6 @@ export default function CrawlerPage() {
       setLoadingMap((prev) => ({ ...prev, [id]: false }));
     }
   };
-  
-  const handleCancel = async (id: string) => {
-    await api.post(`/crawler/source/${id}/cancel`);
-    await fetchSources();
-  };
 
   const toggleExpand = (id: string) => {
     setExpanded((prev) => (prev === id ? null : id));
@@ -62,7 +57,6 @@ export default function CrawlerPage() {
               isExpanded={expanded === src._id}
               isLoading={loadingMap[src._id]}
               onCrawl={() => handleCrawl(src._id)}
-              onCancel={() => handleCancel(src._id)}
               onToggleExpand={() => toggleExpand(src._id)}
             />
           ))}

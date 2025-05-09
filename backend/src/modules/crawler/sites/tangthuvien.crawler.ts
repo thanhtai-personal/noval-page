@@ -6,18 +6,20 @@ import { slugify } from '@/utils/slugify';
 import { Source } from '@/schemas/source.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Category } from '@/schemas/category.schema';
 import { Story } from '@/schemas/story.schema';
 import { Author } from '@/schemas/author.schema';
-import { Tag } from '@/schemas/tag.schema';
+import { Chapter } from "@/schemas/chapter.schema";
+import { Category } from "@/schemas/category.schema";
+import { Tag } from "@/schemas/tag.schema";
 
 @Injectable()
 export class TangthuvienCrawler implements ICrawlerAdapter {
   constructor(
     @InjectModel(Source.name) private sourceModel: Model<Source>,
     @InjectModel(Story.name) private storyModel: Model<Story>,
-    @InjectModel(Category.name) private categoryModel: Model<Category>,
     @InjectModel(Author.name) private authorModel: Model<Author>,
+    @InjectModel(Chapter.name) private chapterModel: Model<Chapter>,
+    @InjectModel(Category.name) private categoryModel: Model<Category>,
     @InjectModel(Tag.name) private tagModel: Model<Tag>,
   ) {}
 
@@ -98,7 +100,33 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     }
   }
 
-  async getAllStoryUrls(): Promise<void> {
+  async crawlAllStoryUrls(successCallback?: () => void): Promise<void> {
+    // Giai đoạn 1: Crawl danh sách sơ bộ
+    await this.crawlStoryUrls();
+  
+    // Giai đoạn 2: Crawl chi tiết các truyện chưa crawl
+    const storiesToDetail = await this.storyModel.find({ isDetailCrawled: { $ne: true } });
+    for (const story of storiesToDetail) {
+      await this.crawlStoryDetailBySlug(story.slug);
+      await new Promise(resolve => setTimeout(resolve, 1000)); 
+    }
+  
+    // Giai đoạn 3: Crawl chương cho các truyện đã crawl chi tiết
+    const storiesToChapter = await this.storyModel.find({
+      isDetailCrawled: true,
+      isChapterCrawled: { $ne: true },
+    });
+  
+    for (const story of storiesToChapter) {
+      await this.crawlAllChaptersForStory(story._id as string);
+      await new Promise(resolve => setTimeout(resolve, 1000)); 
+    }
+  
+    successCallback?.();
+    console.log('🏁 Crawl site Tangthuvien hoàn tất.');
+  }
+
+  async crawlStoryUrls(): Promise<void> {
     const source = await this.sourceModel.findOne({ name: 'Tangthuvien' });
     if (!source) throw new Error('Source not found');
     console.log(`🔍 Bắt đầu crawl site: ${source.baseUrl}`);
@@ -110,7 +138,9 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     try {
       const { data } = await axios.get(`${source.baseUrl}/ket-qua-tim-kiem?page=1`);
       const $ = cheerio.load(data);
-      totalPages = Number($('.pagination li').length - 2);
+      const pages = $('.pagination li');
+      const totalPagesText = pages.last().prev().text();
+      totalPages = parseInt(totalPagesText, 10);
       await this.sourceModel.updateOne({ _id: source._id }, { totalPages });
     } catch (err) {
       console.error(`❌ Lỗi khi lấy tổng số trang: ${err.message}`);
@@ -125,9 +155,10 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
 
         const stories = $('#rank-view-list .book-img-text ul li')
           .map((_, el) => {
-            const anchor = $(el).find('a').first();
+            const anchor = $(el).find('.book-mid-info a').first();
             const href = anchor.attr('href');
             const title = anchor.text().trim();
+            console.log('crawl:', title);
 
             return {
               url: href?.startsWith('http') ? href : `${source.baseUrl}${href}`,
@@ -135,16 +166,11 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
               slug: slugify(title),
               author: $(el).find('.author').text().trim(),
               cover: $(el).find('img').attr('src'),
-              intro: $(el).find('.desc').text().trim(),
+              intro: $(el).find('.intro').text().trim(),
             };
           })
           .get()
           .filter(s => s.url && s.title);
-
-        if (stories.length === 0) {
-          console.log('✅ Không còn truyện nào, dừng tại trang', page);
-          break;
-        }
 
         for (const s of stories) {
           if (processedSlugs.has(s.slug)) continue;
@@ -160,52 +186,14 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             );
           }
 
-          // Crawl chi tiết để lấy category, tag
-          const { data: detailHtml } = await axios.get(s.url);
-          const $detail = cheerio.load(detailHtml);
-
-          const rawCategories = $detail('.info a[href*="/the-loai/"]')
-            .map((_, el) => $detail(el).text().trim())
-            .get();
-
-          const rawTags = $detail('.info a[href*="/tu-khoa/"]')
-            .map((_, el) => $detail(el).text().trim())
-            .get();
-
-          const categoryIds = await Promise.all(
-            rawCategories.map(async (name) => {
-              const slug = slugify(name);
-              const cat = await this.categoryModel.findOneAndUpdate(
-                { slug },
-                { name },
-                { upsert: true, new: true }
-              );
-              return cat._id;
-            })
-          );
-
-          const tagIds = await Promise.all(
-            rawTags.map(async (name) => {
-              const slug = slugify(name);
-              const tag = await this.tagModel.findOneAndUpdate(
-                { slug },
-                { name },
-                { upsert: true, new: true }
-              );
-              return tag._id;
-            })
-          );
-
           await this.storyModel.create({
             title: s.title,
             slug: s.slug,
             url: s.url,
-            description: s.intro,
+            intro: s.intro,
             cover: s.cover,
             author: authorDoc?._id,
             source: source.name,
-            categories: categoryIds,
-            tags: tagIds,
           });
 
           processedSlugs.add(s.slug);
@@ -216,6 +204,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
               lastCrawledUrl: s.url,
               currentStory: s.title,
               $addToSet: { processedStorySlugs: s.slug },
+              status: 'idle'
             }
           );
 
@@ -226,7 +215,71 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         break;
       }
     }
-
-    console.log('🏁 Crawl site Tangthuvien hoàn tất.');
   }
+
+  async crawlStoryDetailBySlug(slug: string): Promise<void> {
+    const story = await this.storyModel.findOne({ slug });
+    if (!story || story.isDetailCrawled) return;
+  
+    const { data } = await axios.get(story.url);
+    const $ = cheerio.load(data);
+  
+    const description = $('.desc-text').text().trim();
+  
+    const categories = $('.info a[href*="/the-loai/"]').map((_, el) => $(el).text().trim()).get();
+    const tags = $('.info a[href*="/tu-khoa/"]').map((_, el) => $(el).text().trim()).get();
+  
+    const categoryIds = await Promise.all(categories.map(async (name) => {
+      const slug = slugify(name);
+      const cat = await this.categoryModel.findOneAndUpdate({ slug }, { name }, { upsert: true, new: true });
+      return cat._id;
+    }));
+  
+    const tagIds = await Promise.all(tags.map(async (name) => {
+      const slug = slugify(name);
+      const tag = await this.tagModel.findOneAndUpdate({ slug }, { name }, { upsert: true, new: true });
+      return tag._id;
+    }));
+  
+    await this.storyModel.updateOne({ _id: story._id }, {
+      description,
+      categories: categoryIds,
+      tags: tagIds,
+      isDetailCrawled: true,
+    });
+  
+    console.log(`📝 Cập nhật chi tiết: ${story.title}`);
+  }
+
+  async crawlAllChaptersForStory(storyId: string): Promise<void> {
+    const story = await this.storyModel.findById(storyId);
+    if (!story || story.isChapterCrawled) return;
+  
+    const data = await this.crawlStory(story.url); // sử dụng lại logic crawlStory của bạn
+    if (!data.chapters?.length) return;
+  
+    const existingChaps = await this.chapterModel.find({ story: story._id });
+    const existingUrls = new Set(existingChaps.map(c => c.url));
+  
+    for (const ch of data.chapters) {
+      if (existingUrls.has(ch.url)) continue;
+  
+      const content = await this.crawlChapterContent(ch.url);
+  
+      await this.chapterModel.create({
+        title: ch.title,
+        slug: ch.slug,
+        url: ch.url,
+        chapterNumber: ch.chapterNumber,
+        story: story._id,
+        content,
+      });
+  
+      console.log(`📖 Lưu chương: ${ch.title}`);
+    }
+  
+    await this.storyModel.updateOne({ _id: story._id }, { isChapterCrawled: true });
+    console.log(`✅ Crawl chương xong: ${story.title}`);
+  }
+  
 }

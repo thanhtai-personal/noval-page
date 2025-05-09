@@ -22,6 +22,9 @@ export class Story extends Document {
   description: string;
 
   @Prop()
+  intro: string;
+
+  @Prop()
   cover: string;
 
   @Prop()
@@ -38,6 +41,12 @@ export class Story extends Document {
 
   @Prop({ default: 0 })
   recommends: number;
+
+  @Prop({ default: false })
+  isDetailCrawled: boolean;
+
+  @Prop({ default: false })
+  isChapterCrawled: boolean;
 }
 
 export const StorySchema = SchemaFactory.createForClass(Story);

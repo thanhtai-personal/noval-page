@@ -28,5 +28,14 @@ export interface ICrawlerAdapter {
   /**
    * Trả về danh sách tất cả các URL truyện từ trang chính.
    */
-  getAllStoryUrls(): Promise<void>; // 🆕 Dùng cho crawl site
+  crawlAllStoryUrls(successCallback?: () => void): Promise<void>; // 🆕 Dùng cho crawl site
+
+  crawlStoryUrls(): Promise<void>;
+
+  /**
+   * Crawl nội dung chương theo URL chương.
+   */
+  crawlStoryDetailBySlug(slug: string): Promise<void>;
+
+  crawlAllChaptersForStory(storyId: string): Promise<void>;
 }

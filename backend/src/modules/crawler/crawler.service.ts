@@ -4,14 +4,10 @@ import { Model } from 'mongoose';
 
 import { Story } from '@/schemas/story.schema';
 import { Chapter } from '@/schemas/chapter.schema';
-import { Author } from '@/schemas/author.schema';
-import { Category } from '@/schemas/category.schema';
-import { Tag } from '@/schemas/tag.schema';
 
 import { TangthuvienCrawler } from './sites/tangthuvien.crawler';
 import { VtruyenCrawler } from './sites/vtruyen.crawler';
 import { ICrawlerAdapter } from './sites/interfaces/crawler-adapter.interface';
-import { slugify } from '@/utils/slugify';
 import { Source } from "@/schemas/source.schema";
 
 @Injectable()
@@ -25,8 +21,6 @@ export class CrawlerService {
     @InjectModel(Story.name) private storyModel: Model<Story>,
     @InjectModel(Chapter.name) private chapterModel: Model<Chapter>,
     @InjectModel(Source.name) private sourceModel: Model<Source>,
-    @InjectModel(Category.name) private categoryModel: Model<Category>,
-    @InjectModel(Tag.name) private tagModel: Model<Tag>,
   ) {}
 
   private getAdapter(source: string): ICrawlerAdapter {
@@ -52,23 +46,12 @@ export class CrawlerService {
     await this.sourceModel.updateOne({ _id: sourceId }, { status: 'crawling' });
   
     try {
-      await adapter.getAllStoryUrls();
+      adapter.crawlAllStoryUrls(() => {
+        this.activeCrawlMap.set(source.name, false);
+      }); // let it run without await
     } catch (err) {
       this.logger.error(`❌ Crawl lỗi: ${err.message}`);
     }
-  
-    await this.sourceModel.updateOne({ _id: sourceId }, { status: 'idle' });
-    this.activeCrawlMap.set(source.name, false);
-  }
-
-  cancelCrawlSite(sourceId: string) {
-    this.sourceModel.findById(sourceId).then(source => {
-      if (source) {
-        this.logger.warn(`⛔ Hủy crawl: ${source.name}`);
-        this.activeCrawlMap.set(source.name, false);
-        this.sourceModel.updateOne({ _id: source._id }, { status: 'idle' }).exec();
-      }
-    });
   }
 
   async crawlStoryById(storyId: string) {
@@ -98,4 +81,37 @@ export class CrawlerService {
     this.logger.log(`✅ Crawl thêm chương mới cho "${story.title}"`);
     return { message: 'Crawl thành công', added: (data.chapters?.length || 0) - existingChapters.length };
   }
+
+  async crawlNewStoriesOnly(sourceName: string) {
+    const source = await this.sourceModel.findOne({ name: sourceName.toLowerCase() });
+    if (!source) throw new Error('Source not found');
+  
+    const adapter = this.getAdapter(sourceName);
+    this.logger.log(`🔎 Bắt đầu crawl các truyện mới cho "${sourceName}"`);
+  
+    // Gọi trực tiếp adapter để chỉ crawl list, không crawl chương
+    await adapter.crawlStoryUrls();
+  
+    const storiesToDetail = await this.storyModel.find({
+      source: source.name,
+      isDetailCrawled: { $ne: true },
+    });
+  
+    for (const story of storiesToDetail) {
+      await adapter.crawlStoryDetailBySlug?.(story.slug); // nếu hàm này không có, cần refactor lại crawler adapter
+    }
+  
+    const storiesToChapter = await this.storyModel.find({
+      source: source.name,
+      isDetailCrawled: true,
+      isChapterCrawled: { $ne: true },
+    });
+  
+    for (const story of storiesToChapter) {
+      await adapter.crawlAllChaptersForStory?.(story._id as string); // như trên
+    }
+  
+    this.logger.log(`✅ Crawl mới cho "${sourceName}" xong.`);
+  }
+  
 }

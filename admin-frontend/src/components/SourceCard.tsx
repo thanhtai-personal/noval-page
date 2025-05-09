@@ -21,7 +21,6 @@ interface SourceCardProps {
   isExpanded: boolean;
   isLoading: boolean;
   onCrawl: () => void;
-  onCancel: () => void;
   onToggleExpand: () => void;
 }
 
@@ -30,7 +29,6 @@ export const SourceCard = ({
   isExpanded,
   isLoading,
   onCrawl,
-  onCancel,
   onToggleExpand,
 }: SourceCardProps) => {
   const statusColor =
@@ -55,16 +53,9 @@ export const SourceCard = ({
         </div>
 
         <div className="flex items-center gap-2 ml-8">
-          {source.status === 'idle' && (
-            <Button variant="default" onClick={onCrawl} disabled={isLoading}>
-              {isLoading ? 'Đang gửi...' : '🚀 Crawl All'}
-            </Button>
-          )}
-          {source.status === 'crawling' && (
-            <Button variant="destructive" onClick={onCancel}>
-              ⛔ Cancel
-            </Button>
-          )}
+          <Button variant="default" onClick={onCrawl} disabled={isLoading || source.status !== 'idle'}>
+            {isLoading ? 'Đang gửi...' : '🚀 Crawl All'}
+          </Button>
           <Button variant="outline" onClick={onToggleExpand}>
             {isExpanded ? 'Ẩn' : 'Xem thêm'}
           </Button>

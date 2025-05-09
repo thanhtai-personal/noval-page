@@ -6,6 +6,15 @@ import { slugify } from '@/utils/slugify';
 
 @Injectable()
 export class VtruyenCrawler implements ICrawlerAdapter {
+  crawlStoryUrls(): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+  crawlStoryDetailBySlug(slug: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+  crawlAllChaptersForStory(storyId: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
   async crawlStory(url: string) {
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
@@ -84,7 +93,7 @@ export class VtruyenCrawler implements ICrawlerAdapter {
     }
   }
   
-  getAllStoryUrls(): Promise<void> {
+  crawlAllStoryUrls(): Promise<void> {
     throw new Error("Method not implemented.");
   }
   
