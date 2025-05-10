@@ -18,6 +18,9 @@ export class Story extends Document {
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Tag' }] })
   tags: Types.ObjectId[];
 
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Chapter' }] })
+  chapters: Types.ObjectId[];
+
   @Prop()
   description: string;
 

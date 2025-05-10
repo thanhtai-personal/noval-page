@@ -53,7 +53,7 @@ export const SourceCard = ({
         </div>
 
         <div className="flex items-center gap-2 ml-8">
-          <Button variant="default" onClick={onCrawl} disabled={isLoading || source.status !== 'idle'}>
+          <Button variant="default" onClick={onCrawl} disabled={isLoading}>
             {isLoading ? 'Đang gửi...' : '🚀 Crawl All'}
           </Button>
           <Button variant="outline" onClick={onToggleExpand}>

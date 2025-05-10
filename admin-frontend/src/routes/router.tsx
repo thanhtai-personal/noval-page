@@ -3,6 +3,7 @@ import { Suspense, lazy } from 'react';
 import ProtectedRoute from './ProtectedRoute';
 import PublicOnlyRoute from './PublicOnlyRoute';
 import { AdminLayout } from '@/components/layout/AdminLayout';
+import { AppLoader } from "@/components/AppLoader";
 
 // 👇 Lazy-loaded pages
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
@@ -10,11 +11,13 @@ const AdminUserPage = lazy(() => import('@/pages/UserPage'));
 const CrawlerPage = lazy(() => import('@/pages/CrawlerPage'));
 const StoryPage = lazy(() => import('@/pages/StoryPage'));
 const StoryDetailPage = lazy(() => import('@/pages/StoryDetailPage'));
+const AdminChapterPage = lazy(() => import('@/pages/ChapterPage'));
+const ChapterDetailPage = lazy(() => import('@/pages/ChapterDetailPage'));
 const ForbiddenPage = lazy(() => import('@/pages/ForbiddenPage'));
 
 export function AppRouter() {
   return (
-    <Suspense fallback={<div className="text-center p-4">Đang tải trang...</div>}>
+    <Suspense fallback={<AppLoader />}>
       <Routes>
         {/* Public routes */}
         <Route
@@ -38,10 +41,13 @@ export function AppRouter() {
             </ProtectedRoute>
           }
         >
+          <Route path="/" element={<CrawlerPage />} />
           <Route path="crawl" element={<CrawlerPage />} />
           <Route path="stories" element={<StoryPage />} />
-          <Route path="/stories/:id" element={<StoryDetailPage />} />
+          <Route path="stories/:id" element={<StoryDetailPage />} />
           <Route path="users" element={<AdminUserPage />} />
+          <Route path="chapters" element={<AdminChapterPage />} />
+          <Route path="chapters/:id" element={<ChapterDetailPage />} />
           {/* Thêm các route con khác ở đây */}
         </Route>
 

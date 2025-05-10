@@ -106,7 +106,7 @@ export default function StoryDetailPage() {
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground whitespace-pre-line">
-            {story.description || 'Chưa có mô tả'}
+            {story.description ? <div dangerouslySetInnerHTML={{ __html: story.description }} /> : 'Chưa có mô tả'}
           </p>
         </CardContent>
       </Card>
