@@ -125,16 +125,16 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       await this.getSource();
     }
     try {
+      console.log(`Crawl chương: ${url}`);
       const { data } = await axiosInstance.get(url);
       const $ = cheerio.load(data);
       const title = $('.chapter-c-content a.more-chap').first().text().trim();
-      console.log(`Crawl chương: ${title}`);
       return {
         content: $('.box-chap').first().html()?.trim() || '',
         title: title,
       };
     } catch (err) {
-      console.warn(`Không thể crawl chương: ${url}`);
+      console.warn(`Không thể crawl chương: ${url}`, err.message);
       this.gateway.sendCrawlInfo(this.source._id.toString(), `❌ Không thể crawl chương: ${url}`);
       return {};
     }
