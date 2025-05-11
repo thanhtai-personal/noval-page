@@ -12,6 +12,7 @@ import { Category } from "@/schemas/category.schema";
 import { Tag } from "@/schemas/tag.schema";
 import { CrawlerGateway } from "../crawler.gateway";
 import { axiosInstance } from "@/utils/api";
+import puppeteer from 'puppeteer';
 
 const DEMO_STORIES_NUMBER = 50,
   DEMO_CHAPTERS_NUMBER = 500,
@@ -40,46 +41,87 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     }
   }
 
+
   private async getChaptersFromStory(story: any, storySlug: string): Promise<void> {
     try {
-      const baseUrl = story.url;
-      const { data: firstPageHtml } = await axiosInstance.get(baseUrl);
-      const $ = cheerio.load(firstPageHtml);
+      const browser = await puppeteer.launch({ headless: true });
+      const page = await browser.newPage();
+      await page.goto(story.url, { waitUntil: 'networkidle2' });
 
-      const totalChaptersText = $('#j-bookCatalogPage').text();
-      const totalChaptersMatch = totalChaptersText.match(/(\d+)\s+chương/);
-      const totalChapters = totalChaptersMatch ? parseInt(totalChaptersMatch[1], 10) : 0;
+      // ✅ Click tab "Danh sách chương"
+      await page.waitForSelector('#j-tab-menu a[href="#j-bookCatalogPage"]');
+      await page.click('#j-tab-menu a[href="#j-bookCatalogPage"]');
+      await page.waitForSelector('#j-bookCatalogPage ul > li');
 
-      const currentTotalChapters = await this.chapterModel.countDocuments({ story: story._id });
+      const chapterUrls = new Set<string>();
+      const chapters: { title: string; url: string; chapterNumber: number }[] = [];
 
-      const chapterUrlSample = $('#max-volume li a').first().attr('href') || '';
-      const chapterUrlPattern = chapterUrlSample.replace(/chuong-\d+$/, 'chuong-');
+      let pageCount = 1;
+      while (true) {
+        console.log(`📄 Đang crawl chương - Trang ${pageCount}`);
 
-      await this.storyModel.findByIdAndUpdate(story._id, { totalChapters });
-      console.log(`📚 Tổng số chương: ${totalChapters}`);
-      this.gateway.sendCrawlInfo(this.source._id.toString(), `📚 Tổng số chương: ${totalChapters}`);
+        // ✅ Lấy danh sách chương ở trang hiện tại
+        const newChapters = await page.$$eval('#j-bookCatalogPage ul > li a', (links) =>
+          links.map((link) => ({
+            title: link.textContent?.trim() || '',
+            url: link.getAttribute('href') || '',
+          }))
+        );
 
-      for (let c = currentTotalChapters + 1; c <= totalChapters; c++) {
-        console.log(`📚 initial ${story._id} - ${story.title} - Chương ${c}`);
-        this.gateway.sendCrawlInfo(this.source._id.toString(), `📚 initial ${story.title} - Chương ${c}`);
-        const chUrl = `${chapterUrlPattern}${c}`;
-        await this.chapterModel.create({
-          title: 'Chưa cập nhật',
-          url: chUrl,
-          slug: `${storySlug}-${chUrl}`,
-          chapterNumber: c,
-          story: story._id,
-        });
-        console.log(`📚 Tạo chương ${c}: ${chUrl} with chapterNumber ${c}`);
+        for (const item of newChapters) {
+          if (!item.url || chapterUrls.has(item.url)) continue;
+          chapterUrls.add(item.url);
+
+          const chapterNumberMatch = item.title.match(/Chương\s+(\d+)/i);
+          const chapterNumber = chapterNumberMatch ? parseInt(chapterNumberMatch[1], 10) : chapterUrls.size;
+          console.log(`📚 Chương ${chapterNumber}: ${item.title}`);
+          console.log(`URL: ${item.url}`);
+          chapters.push({
+            title: item.title,
+            url: item.url,
+            chapterNumber,
+          });
+        }
+
+        // ✅ Kiểm tra có nút next không
+        const hasNext = await page.$('.pagination a[rel="next"]:not(.disabled)');
+        if (!hasNext) break;
+
+        await hasNext.click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await page.waitForSelector('#j-bookCatalogPage ul > li');
+        pageCount++;
       }
 
-      console.log(`📚 Tổng số chương lấy được: ${totalChapters}`);
-      this.gateway.sendCrawlInfo(this.source._id.toString(), `📚 Tổng số chương lấy được: ${totalChapters}`);
+      // ✅ Lưu tổng số chương
+      await this.storyModel.findByIdAndUpdate(story._id, { totalChapters: chapters.length });
+
+      for (const ch of chapters) {
+        const slug = `${storySlug}-${ch.url.split('/').pop()}`;
+        await this.chapterModel.updateOne(
+          { slug },
+          {
+            title: ch.title,
+            url: ch.url,
+            slug,
+            chapterNumber: ch.chapterNumber,
+            story: story._id,
+          },
+          { upsert: true }
+        );
+
+        console.log(`📚 Tạo chương ${ch.chapterNumber}: ${ch.title}`);
+        this.gateway.sendCrawlInfo(this.source._id.toString(), `📚 Tạo chương ${ch.chapterNumber}: ${ch.title}`);
+      }
+
+      await browser.close();
+      this.gateway.sendCrawlInfo(this.source._id.toString(), `✅ Tổng số chương lấy được: ${chapters.length}`);
     } catch (err) {
-      console.warn(`❌ Lỗi khi crawl danh sách chương phân trang: ${storySlug}`);
-      this.gateway.sendCrawlInfo(this.source._id.toString(), `❌ Lỗi khi crawl danh sách chương phân trang: ${storySlug}`);
+      console.warn(`❌ Lỗi khi crawl danh sách chương phân trang bằng Puppeteer: ${storySlug}`, err);
+      this.gateway.sendCrawlInfo(this.source._id.toString(), `❌ Lỗi khi crawl danh sách chương phân trang bằng Puppeteer: ${storySlug}`);
     }
   }
+
 
   async crawlStory(story: any) {
     if (!this.source) await this.getSource();
@@ -237,16 +279,19 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             );
           }
 
-          await this.storyModel.create({
-            title: s.title,
-            slug: s.slug,
-            url: s.url,
-            intro: s.intro,
-            cover: s.cover,
-            author: authorDoc?._id,
-            categories: [categoryDoc?._id],
-            source: this.source.name,
-          });
+          await this.storyModel.updateOne(
+            { slug: s.slug },
+            {
+              title: s.title,
+              slug: s.slug,
+              url: s.url,
+              intro: s.intro,
+              cover: s.cover,
+              author: authorDoc?._id,
+              categories: [categoryDoc?._id],
+              source: this.source.name,
+            },
+            { upsert: true, new: true });
 
           processedSlugs.add(s.slug);
           await this.sourceModel.updateOne(
