@@ -23,7 +23,7 @@ export interface ICrawlerAdapter {
   /**
    * Crawl nội dung chương theo URL chương.
    */
-  crawlChapterContent(url: string): Promise<string>;
+  crawlChapterContent(url: string): Promise<any>;
 
   /**
    * Trả về danh sách tất cả các URL truyện từ trang chính.
