@@ -152,7 +152,7 @@ export default function AdminStoryPage() {
               <TableCell>
                 {(s.categories || []).map((c: any) => c.name).join(', ')}
               </TableCell>
-              <TableCell className="text-center">{s.chapterCount || s.chapters?.length || 0}</TableCell>
+              <TableCell className="text-center">{s.totalChapters || 0}</TableCell>
               <TableCell>{s.source}</TableCell>
               <TableCell>
                 <div className="flex gap-2 w-full justify-end items-center">

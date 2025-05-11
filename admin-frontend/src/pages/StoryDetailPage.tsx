@@ -10,19 +10,24 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function StoryDetailPage() {
   const { id } = useParams();
   const [story, setStory] = useState<any>(null);
+  const [chapters, setChapters] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchStory() {
+    async function fetchStoryData() {
       try {
-        const res = await api.get(`/stories/${id}`);
-        setStory(res.data);
+        const [storyRes, chaptersRes] = await Promise.all([
+          api.get(`/stories/${id}`),
+          api.get(`/stories/${id}/chapters?limit=50&sort=-chapterNumber`),
+        ]);
+        setStory(storyRes.data);
+        setChapters(chaptersRes.data.data || []);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchStory();
+    fetchStoryData();
   }, [id]);
 
   if (loading) {
@@ -79,7 +84,7 @@ export default function StoryDetailPage() {
           </div>
 
           <div className="flex gap-4 mt-2 text-sm text-muted-foreground">
-            <span>📖 <strong>{story.chapterCount || story.totalChapters || 0}</strong> chương</span>
+            <span>📖 <strong>{story.totalChapters || 0}</strong> chương</span>
             <span>👁️ {story.views || 0} lượt đọc</span>
             <span>👍 {story.likes || 0} lượt thích</span>
             <span>⭐ {story.recommends || 0} đề cử</span>
@@ -108,6 +113,29 @@ export default function StoryDetailPage() {
           <p className="text-sm text-muted-foreground whitespace-pre-line">
             {story.description ? <div dangerouslySetInnerHTML={{ __html: story.description }} /> : 'Chưa có mô tả'}
           </p>
+        </CardContent>
+      </Card>
+
+      {/* ✅ 50 chương mới nhất */}
+      <Card>
+        <CardHeader>
+          <CardTitle>📚 Chương mới nhất</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4">
+            {chapters.map((ch) => (
+              <a
+                key={ch._id}
+                href={`/reader/${story.slug}/${ch.chapterNumber}`}
+                className="block text-sm hover:text-blue-600 hover:underline"
+              >
+                <Card className="p-3 h-full">
+                  <p className="font-medium">Chương {ch.chapterNumber}</p>
+                  <p className="text-muted-foreground">{ch.title}</p>
+                </Card>
+              </a>
+            ))}
+          </div>
         </CardContent>
       </Card>
     </div>

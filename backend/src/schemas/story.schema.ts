@@ -34,6 +34,9 @@ export class Story extends Document {
   url: string;
 
   @Prop({ default: 0 })
+  totalChapters: number;
+
+  @Prop({ default: 0 })
   views: number;
 
   @Prop({ default: 0 })
