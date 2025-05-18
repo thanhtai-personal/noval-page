@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { OAuth2Client } from 'google-auth-library';
@@ -24,7 +21,7 @@ export class AuthService {
   // 🟢 LOGIN THƯỜNG
   async login(email: string, password: string) {
     if (password === 'google_user') {
-      throw new UnauthorizedException('Vui lòng sử dụng Google để đăng nhập')
+      throw new UnauthorizedException('Vui lòng sử dụng Google để đăng nhập');
     }
     let user = await this.userModel.findOne({ email }).populate('role');
     if (!user) {
@@ -34,6 +31,44 @@ export class AuthService {
   }
 
   // 🔵 GOOGLE LOGIN
+  private async handleGoogleUser(googleInfo: {
+    email: string;
+    name?: string;
+    picture?: string;
+  }) {
+    const { email, name, picture } = googleInfo;
+    let user: any = await this.userModel.findOne({ email }).populate('role');
+
+    // Nếu chưa có thì tạo mới với role reader
+    if (!user) {
+      const readerRole = await this.roleModel.findOne({ slug: 'reader' });
+      user = await this.userModel.create({
+        email,
+        name,
+        password: await bcrypt.hash('google_user', 10),
+        role: readerRole?._id,
+      });
+    }
+
+    // update nếu thiếu thông tin
+    if (!user.name && name) {
+      user.name = name;
+      await user.save();
+    }
+
+    return this.issueTokensAndStore(user);
+  }
+
+  //🔵 GOOGLE LOGIN
+  async googleLogin(user: any) {
+    return this.handleGoogleUser({
+      email: user.email,
+      name: `${user.firstName} ${user.lastName}`,
+      picture: user.picture,
+    });
+  }
+
+  //🔵 GOOGLE LOGIN with id token
   async loginWithGoogle(idToken: string) {
     const ticket = await googleClient.verifyIdToken({ idToken });
     const payload = ticket.getPayload();
@@ -42,12 +77,10 @@ export class AuthService {
       throw new UnauthorizedException('Token Google không hợp lệ');
     }
 
-    const email = payload.email;
-    let user = await this.validateOrCreateUser(email, payload.at_hash || 'google_user');
-
-    return this.issueTokensAndStore({
-      ...user,
-      name: payload.name || 'GG_User',
+    return this.handleGoogleUser({
+      email: payload.email,
+      name: payload.name,
+      picture: payload.picture,
     });
   }
 
@@ -68,13 +101,11 @@ export class AuthService {
         throw new UnauthorizedException('Refresh token không hợp lệ');
       }
 
-      const newAccessToken = this.jwtService.sign(
-        {
-          sub: user._id,
-          email: user.email,
-          role: payload.role,
-        },
-      );
+      const newAccessToken = this.jwtService.sign({
+        sub: user._id,
+        email: user.email,
+        role: payload.role,
+      });
 
       return { access_token: newAccessToken };
     } catch (err) {
@@ -117,7 +148,9 @@ export class AuthService {
     });
 
     const hashedRt = await bcrypt.hash(refresh_token, 10);
-    await this.userModel.findByIdAndUpdate(user._id, { refreshToken: hashedRt });
+    await this.userModel.findByIdAndUpdate(user._id, {
+      refreshToken: hashedRt,
+    });
 
     return {
       access_token,
@@ -134,57 +167,59 @@ export class AuthService {
   async register(email: string, name: string, password: string) {
     const exists = await this.userModel.findOne({ email });
     if (exists) throw new UnauthorizedException('Email đã tồn tại');
-  
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const readerRole = await this.roleModel.findOne({ slug: 'reader' });
-  
+
     const user = await this.userModel.create({
       email,
       name,
       password: hashedPassword,
       role: readerRole?._id,
     });
-  
+
     return this.issueTokensAndStore(user);
   }
-  
+
   async forgotPassword(email: string) {
     const user = await this.userModel.findOne({ email });
     if (!user) return { message: 'Nếu email tồn tại, liên kết đã được gửi' };
-  
+
     const payload = {
       sub: user._id,
       email: user.email,
       type: 'password_reset',
     };
-  
+
     const token = this.jwtService.sign(payload, {
       expiresIn: '15m',
       secret: process.env.JWT_PASSWORD_SECRET || 'pwResetSecret',
     });
-  
+
     // 🔧 Bạn có thể gửi mail ở đây - hiện tại mock lại bằng console
-    console.log(`🔐 Link reset: https://your-domain/reset-password?token=${token}`);
-  
+    console.log(
+      `🔐 Link reset: https://your-domain/reset-password?token=${token}`,
+    );
+
     return { message: 'Liên kết đặt lại mật khẩu đã được gửi (mock)' };
   }
-  
+
   async resetPassword(token: string, newPassword: string) {
     try {
       const payload = this.jwtService.verify(token, {
         secret: process.env.JWT_PASSWORD_SECRET || 'pwResetSecret',
       });
-  
+
       if (payload.type !== 'password_reset') {
         throw new UnauthorizedException('Token không hợp lệ');
       }
-  
+
       const hashed = await bcrypt.hash(newPassword, 10);
       await this.userModel.findByIdAndUpdate(payload.sub, {
         password: hashed,
         refreshToken: null, // hủy session cũ
       });
-  
+
       return { message: 'Đặt lại mật khẩu thành công' };
     } catch {
       throw new UnauthorizedException('Token không hợp lệ hoặc đã hết hạn');

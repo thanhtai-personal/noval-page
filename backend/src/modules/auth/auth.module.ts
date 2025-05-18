@@ -7,6 +7,8 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from "./jwt.stragety";
 import { Role, RoleSchema } from "@/schemas/role.schema";
+import { GoogleOAuthGuard } from './guards/google-oauth.guard';
+import { GoogleStrategy } from './strategies/google.strategy';
 
 @Module({
   imports: [
@@ -21,6 +23,6 @@ import { Role, RoleSchema } from "@/schemas/role.schema";
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, GoogleStrategy, GoogleOAuthGuard],
 })
 export class AuthModule {}

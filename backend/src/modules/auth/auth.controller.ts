@@ -3,7 +3,10 @@ import {
   Controller,
   Get,
   Post,
+  Req,
+  Res,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -16,23 +19,39 @@ import { ResetPasswordDto } from "./dto/reset-password.dto";
 import { Throttle } from "@nestjs/throttler";
 import { Roles } from "./decorators/roles.decorator";
 import { RoleSlug } from "@/constants/role.enum";
+import { GoogleOAuthGuard } from './guards/google-oauth.guard';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // 🔐 Đăng nhập bằng email + mật khẩu
-  @Public()
-  @Post('login')
-  login(@Body() dto: LoginDto) {
-    return this.authService.login(dto.email, dto.password);
-  }
 
   // 🔗 Đăng nhập bằng Google
   @Public()
   @Post('google')
   googleLogin(@Body() dto: GoogleLoginDto) {
     return this.authService.loginWithGoogle(dto.idToken);
+  }
+
+  //--
+  @Get('google')
+  @UseGuards(GoogleOAuthGuard)
+  async googleAuth(@Req() _req) {
+    // Guard sẽ xử lý chuyển hướng
+  }
+  @Get('google/redirect')
+  @UseGuards(GoogleOAuthGuard)
+  async googleAuthRedirect(@Req() req: any, @Res() res: Response) {
+    const token = await this.authService.googleLogin(req.user);
+    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
+  }
+
+  // 🔐 Đăng nhập bằng email + mật khẩu
+  @Public()
+  @Post('login')
+  login(@Body() dto: LoginDto) {
+    return this.authService.login(dto.email, dto.password);
   }
 
   // 🔁 Refresh token
