@@ -1,55 +1,51 @@
-import { Link } from "@heroui/link";
-import { Snippet } from "@heroui/snippet";
-import { Code } from "@heroui/code";
-import { button as buttonStyles } from "@heroui/theme";
+import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
+import {Badge} from "@heroui/badge";
+import { Button } from "@heroui/button";
+import Link from "next/link";
+import { ApiInstant } from "@/utils/api";
+import { Story } from "@/types/interfaces/story";
 
-import { siteConfig } from "@/config/site";
-import { title, subtitle } from "@/components/primitives";
-import { GithubIcon } from "@/components/icons";
+async function fetchStories(): Promise<Story[]> {
+  const res = await ApiInstant.get("/stories");
+  return res.data?.data || [];
+}
 
-export default function Home() {
+export default async function HomePage() {
+  const stories = await fetchStories();
+
   return (
-    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      <div className="inline-block max-w-xl text-center justify-center">
-        <span className={title()}>Make&nbsp;</span>
-        <span className={title({ color: "violet" })}>beautiful&nbsp;</span>
-        <br />
-        <span className={title()}>
-          websites regardless of your design experience.
-        </span>
-        <div className={subtitle({ class: "mt-4" })}>
-          Beautiful, fast and modern React UI library.
-        </div>
-      </div>
-
-      <div className="flex gap-3">
-        <Link
-          isExternal
-          className={buttonStyles({
-            color: "primary",
-            radius: "full",
-            variant: "shadow",
-          })}
-          href={siteConfig.links.docs}
-        >
-          Documentation
-        </Link>
-        <Link
-          isExternal
-          className={buttonStyles({ variant: "bordered", radius: "full" })}
-          href={siteConfig.links.github}
-        >
-          <GithubIcon size={20} />
-          GitHub
-        </Link>
-      </div>
-
-      <div className="mt-8">
-        <Snippet hideCopyButton hideSymbol variant="bordered">
-          <span>
-            Get started by editing <Code color="primary">app/page.tsx</Code>
-          </span>
-        </Snippet>
+    <section className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-6">Truyện Mới</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {stories.map((story) => (
+          <Card key={story._id}>
+            <CardHeader className="p-0">
+              <img
+                src={story.cover}
+                alt={story.title}
+                className="w-full h-48 object-cover rounded-t"
+              />
+            </CardHeader>
+            <CardBody>
+              <h2 className="text-lg font-semibold">{story.title}</h2>
+              <div className="text-sm text-gray-600" dangerouslySetInnerHTML={{__html: story.intro }}></div>
+              <div className="flex flex-wrap gap-1 mt-2">
+                {story.categories.map((cat) => (
+                  <Badge key={cat.slug} variant="flat" color="primary">
+                    {cat.name}
+                  </Badge>
+                ))}
+              </div>
+            </CardBody>
+            <CardFooter>
+              <Link href={`/truyen/${story.slug}`}>
+                <Button size="sm" variant="flat" color="primary">
+                  Đọc ngay
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+        ))}
       </div>
     </section>
   );
