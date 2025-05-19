@@ -1,12 +1,22 @@
+import {heroui} from "@heroui/theme"
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+const config = {
   content: [
-    './app/**/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
-    './node_modules/@nextui-org/react/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)"],
+        mono: ["var(--font-mono)"],
+      },
+    },
   },
-  plugins: [],
-};
+  darkMode: "class",
+  plugins: [heroui()],
+}
+
+module.exports = config;
