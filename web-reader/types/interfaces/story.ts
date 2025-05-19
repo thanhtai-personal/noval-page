@@ -13,5 +13,5 @@ export interface Story {
   categories: { name: string, _id: string, slug: string }[];
   tags: { name: string, _id: string, slug: string }[];
   author: { name: string, _id: string, slug: string };
-  source: { title: string, _id: string, url: string };
+  source: { name: string, _id: string, url: string };
 }
