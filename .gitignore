@@ -1,1 +1,2 @@
-web-reader/.env
+.env
+.env.dev

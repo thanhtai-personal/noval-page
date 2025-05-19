@@ -1,4 +1,18 @@
 services:
+  - name: mongodb
+    type: pserv
+    env: docker
+    plan: free
+    repo: https://github.com/render-examples/mongodb
+    buildFilter:
+      paths:
+        - ignored/never-trigger
+    envVars:
+      - key: MONGO_INITDB_ROOT_USERNAME
+        value: root
+      - key: MONGO_INITDB_ROOT_PASSWORD
+        value: password
+
   - name: backend
     type: web
     env: node
@@ -6,10 +20,12 @@ services:
     buildCommand: npm install && npm run build
     startCommand: npm run start:prod
     envVars:
+      - fromService:
+          type: pserv
+          name: mongodb
+          envVarKey: MONGODB_URI
       - key: PORT
         value: 3000
-      - key: MONGODB_URI
-        sync: false
       - key: JWT_SECRET
         sync: false
       - key: GOOGLE_CLIENT_ID
