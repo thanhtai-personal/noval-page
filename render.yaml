@@ -18,9 +18,11 @@ services:
         sync: false
 
   - name: admin-frontend
-    type: static
+    type: web
+    env: static
     rootDir: admin-frontend
     buildCommand: npm install && npm run build
+    startCommand: ""
     staticPublishPath: dist
     envVars:
       - key: VITE_API_BASE_URL
