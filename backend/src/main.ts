@@ -24,7 +24,7 @@ async function bootstrap() {
       'http://localhost:3001',
       'http://localhost:3000',
       'https://noval-page.vercel.app',
-      'https://noval-page-yadu.vercel.app/',
+      'https://noval-page-yadu.vercel.app',
     ],
     credentials: true,
   });
