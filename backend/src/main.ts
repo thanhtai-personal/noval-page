@@ -1,8 +1,8 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { JwtAuthGuard } from "./modules/auth/guards/jwt-auth.guard";
-import { RolesGuard } from "./modules/auth/guards/role.guard";
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
+import { RolesGuard } from './modules/auth/guards/role.guard';
 import * as crypto from 'crypto';
 
 // 🛡 Gán globalThis.crypto.randomUUID nếu chưa có (Node < 19)
@@ -19,7 +19,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://localhost:3001', 'http://localhost:3000', 'https://noval-page.vercel.app'],
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:3001',
+      'http://localhost:3000',
+      'https://noval-page.vercel.app',
+      'https://noval-page-yadu.vercel.app/',
+    ],
     credentials: true,
   });
 
@@ -35,10 +41,7 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   const reflector = app.get(Reflector);
-  app.useGlobalGuards(
-    new JwtAuthGuard(reflector),
-    new RolesGuard(reflector),
-  );
+  app.useGlobalGuards(new JwtAuthGuard(reflector), new RolesGuard(reflector));
 
   await app.listen(process.env.PORT || 8000);
 }
