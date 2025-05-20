@@ -20,13 +20,11 @@ export class AppStore {
     this.token = token;
     setToken(token);
     Cookies.set("token", token, {
-      name: "token",
-      value: token,
-      httpOnly: true,
+      httpOnly: false,
       secure: true,
       path: "/",
       sameSite: "lax",
-      maxAge: 60 * 60 * 24,
+      expires: 1,
     });
   }
 
