@@ -19,7 +19,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://localhost:3001', 'http://localhost:3000'],
+    origin: ['http://localhost:5173', 'http://localhost:3001', 'http://localhost:3000', 'https://noval-page.vercel.app'],
     credentials: true,
   });
 
@@ -32,7 +32,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document); // http://localhost:5000/docs
+  SwaggerModule.setup('docs', app, document);
 
   const reflector = app.get(Reflector);
   app.useGlobalGuards(
@@ -40,6 +40,6 @@ async function bootstrap() {
     new RolesGuard(reflector),
   );
 
-  await app.listen(process.env.PORT || 5000);
+  await app.listen(process.env.PORT || 8000);
 }
 bootstrap();

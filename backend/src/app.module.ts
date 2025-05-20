@@ -58,7 +58,7 @@ import { CrawlerGateway } from "./modules/crawler/crawler.gateway";
         }
       ],
     }),
-    MongooseModule.forRoot(process.env.NODE_ENV === 'docker' ? process.env.MONGO_URI! : 'mongodb://localhost:27017/truyen'),
+    MongooseModule.forRoot(process.env.MONGO_URI!),
     MongooseModule.forFeature([
       { name: Story.name, schema: StorySchema },
       { name: Chapter.name, schema: ChapterSchema },
