@@ -6,7 +6,6 @@ import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
-import { StoreProvider } from "@/store/Provider";
 import { AppLayout } from "@/components/AppLayout";
 
 export const metadata: Metadata = {
@@ -41,13 +40,9 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <StoreProvider>
-          <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-            <AppLayout>
-              {children}
-            </AppLayout>
-          </Providers>
-        </StoreProvider>
+        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+          <AppLayout>{children}</AppLayout>
+        </Providers>
       </body>
     </html>
   );

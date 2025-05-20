@@ -18,12 +18,10 @@ import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import {
   SearchIcon,
-  Logo,
-  ProfileIcon,
-  LogoutIcon,
   FacebookIcon,
 } from "@/components/icons";
 import { LogoIcon } from "@/assets/icons/Logo";
+import { AuthActions } from "./AuthActions";
 
 export const Navbar = () => {
   const searchInput = (
@@ -85,12 +83,9 @@ export const Navbar = () => {
         </NavbarItem>
         <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
         <NavbarItem className="hidden sm:flex gap-2">
-          <Link aria-label="Profile" href="/profile">
-            <ProfileIcon className="size-6 text-default-500" />
-          </Link>
-          <Link aria-label="Logout" href="/logout">
-            <LogoutIcon className="size-6 text-default-500" />
-          </Link>
+          <NavbarItem>
+            <AuthActions />
+          </NavbarItem>
         </NavbarItem>
       </NavbarContent>
 
