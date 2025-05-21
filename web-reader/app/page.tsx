@@ -8,7 +8,9 @@ import { Story } from "@/types/interfaces/story";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { StoriesWithSkeletonLoading } from "@/components/StoriesWithSkeletonLoading";
 import { StoryCard } from "@/components/StoryCard";
+import { StoryCardSkeleton } from "@/components/StoryCardSkeleton";
 
 export default function HomePage() {
   const [topView, setTopView] = useState<Story[]>([]);
@@ -53,9 +55,16 @@ export default function HomePage() {
       <div>
         <h1 className="text-3xl font-bold mb-4">🔥 Top Truyện Đề Cử</h1>
         <Slider {...sliderSettings}>
-          {topVote.map((story) => (
-            <StoryCard key={story._id} story={story} isSlide />
-          ))}
+          {(!topVote || topVote.length === 0
+            ? Array.from({ length: 4 })
+            : topVote
+          ).map((story: any, i: number) =>
+            story ? (
+              <StoryCard key={story._id} story={story} isSlide />
+            ) : (
+              <StoryCardSkeleton key={`skeleton-${i}`} />
+            )
+          )}
         </Slider>
       </div>
 
@@ -70,9 +79,7 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {topRecommend.map((story) => (
-            <StoryCard key={story._id} story={story} />
-          ))}
+          <StoriesWithSkeletonLoading stories={topRecommend} />
         </div>
       </div>
 
@@ -87,9 +94,7 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {topView.map((story) => (
-            <StoryCard key={story._id} story={story} />
-          ))}
+          <StoriesWithSkeletonLoading stories={topView} />
         </div>
       </div>
 
@@ -103,9 +108,7 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {topLike.map((story) => (
-            <StoryCard key={story._id} story={story} />
-          ))}
+          <StoriesWithSkeletonLoading stories={topLike} />
         </div>
       </div>
 
@@ -119,9 +122,7 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {topChapter.map((story) => (
-            <StoryCard key={story._id} story={story} />
-          ))}
+          <StoriesWithSkeletonLoading stories={topChapter} />
         </div>
       </div>
     </section>

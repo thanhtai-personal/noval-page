@@ -7,7 +7,7 @@ import { Story } from "@/types/interfaces/story";
 import { Pagination } from "@heroui/pagination";
 import { Checkbox } from "@heroui/checkbox";
 import { Button } from "@heroui/button";
-import { StoryCard } from "@/components/StoryCard";
+import { StoriesWithSkeletonLoading } from "./StoriesWithSkeletonLoading";
 
 const ranges = [
   { label: "0 - 300", value: "0-300" },
@@ -85,9 +85,7 @@ export default function SearchPageClient() {
 
       <section className="md:col-span-3 space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {stories.map((story) => (
-            <StoryCard key={story._id} story={story} />
-          ))}
+          <StoriesWithSkeletonLoading stories={stories} />
         </div>
         {total > limit && (
           <div className="flex justify-center">
