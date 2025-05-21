@@ -32,6 +32,8 @@ import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { APP_GUARD } from "@nestjs/core";
 import { ScheduleModule } from "@nestjs/schedule";
 import { CrawlerGateway } from "./modules/crawler/crawler.gateway";
+import { Blog, BlogSchema } from './schemas/blog.schema';
+import { BlogModule } from './modules/blog/blog.module';
 
 @Module({
   imports: [
@@ -69,6 +71,7 @@ import { CrawlerGateway } from "./modules/crawler/crawler.gateway";
       { name: Role.name, schema: RoleSchema },
       { name: Comment.name, schema: CommentSchema },
       { name: Source.name, schema: SourceSchema },
+      { name: Blog.name, schema: BlogSchema },
     ]),
     CrawlerModule,
     StoryModule,
@@ -80,7 +83,8 @@ import { CrawlerGateway } from "./modules/crawler/crawler.gateway";
     CategoryModule,
     TagModule,
     AuthModule,
-    SourceModule
+    SourceModule,
+    BlogModule 
   ],
   providers: [
     {

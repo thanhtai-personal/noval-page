@@ -7,9 +7,6 @@ import {
   NavbarItem,
   NavbarMenuItem,
 } from "@heroui/navbar";
-import { Kbd } from "@heroui/kbd";
-import { Link } from "@heroui/link";
-import { Input } from "@heroui/input";
 import { link as linkStyles } from "@heroui/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
@@ -20,6 +17,7 @@ import { FacebookIcon } from "@/components/icons";
 import { LogoIcon } from "@/assets/icons/Logo";
 import { AuthActions } from "./AuthActions";
 import { SearchBox } from "./SearchInput";
+import { LinkWithRedirecting } from "./LinkWithRedirecting";
 
 export const Navbar = () => {
   return (
@@ -53,9 +51,9 @@ export const Navbar = () => {
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
-          <Link isExternal aria-label="TTV" href="https://www.facebook.com/">
+          <LinkWithRedirecting isExternal aria-label="TTV" href="https://www.facebook.com/">
             <FacebookIcon className="size-5 text-default-500" />
-          </Link>
+          </LinkWithRedirecting>
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden lg:flex">
@@ -78,7 +76,7 @@ export const Navbar = () => {
         <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navMenuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
-              <Link
+              <LinkWithRedirecting
                 color={
                   index === 2
                     ? "primary"
@@ -90,7 +88,7 @@ export const Navbar = () => {
                 size="lg"
               >
                 {item.label}
-              </Link>
+              </LinkWithRedirecting>
             </NavbarMenuItem>
           ))}
         </div>
