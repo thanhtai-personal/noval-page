@@ -7,11 +7,11 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Story } from '@/schemas/story.schema';
 import { Author } from '@/schemas/author.schema';
-import { Chapter } from "@/schemas/chapter.schema";
-import { Category } from "@/schemas/category.schema";
-import { Tag } from "@/schemas/tag.schema";
-import { CrawlerGateway } from "../crawler.gateway";
-import { axiosInstance } from "@/utils/api";
+import { Chapter } from '@/schemas/chapter.schema';
+import { Category } from '@/schemas/category.schema';
+import { Tag } from '@/schemas/tag.schema';
+import { CrawlerGateway } from '../crawler.gateway';
+import { axiosInstance } from '@/utils/api';
 import puppeteer from 'puppeteer';
 
 const DEMO_STORIES_NUMBER = 50,
@@ -41,31 +41,42 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     }
   }
 
-
-  private async getChaptersFromStory(story: any, storySlug: string): Promise<void> {
+  private async getChaptersFromStory(
+    story: any,
+    storySlug: string,
+  ): Promise<void> {
     try {
-      const browser = await puppeteer.launch({ headless: true });
+      const browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      });
       const page = await browser.newPage();
       await page.goto(story.url, { waitUntil: 'networkidle2' });
 
-      // ✅ Click tab "Danh sách chương"
-      await page.waitForSelector('#j-tab-menu a[href="#j-bookCatalogPage"]');
+      // Mở tab danh sách chương
+      await page.waitForSelector('#j-tab-menu a[href="#j-bookCatalogPage"]', {
+        timeout: 5000,
+      });
       await page.click('#j-tab-menu a[href="#j-bookCatalogPage"]');
-      await page.waitForSelector('#j-bookCatalogPage ul > li');
+      await page.waitForSelector('#j-bookCatalogPage ul > li', {
+        timeout: 5000,
+      });
 
       const chapterUrls = new Set<string>();
-      const chapters: { title: string; url: string; chapterNumber: number }[] = [];
+      const chapters: { title: string; url: string; chapterNumber: number }[] =
+        [];
 
       let pageCount = 1;
       while (true) {
-        console.log(`📄 Đang crawl chương - Trang ${pageCount}`);
+        console.log(`📄 Crawling chương - Trang ${pageCount}`);
 
-        // ✅ Lấy danh sách chương ở trang hiện tại
-        const newChapters = await page.$$eval('#j-bookCatalogPage ul > li a', (links) =>
-          links.map((link) => ({
-            title: link.textContent?.trim() || '',
-            url: link.getAttribute('href') || '',
-          }))
+        const newChapters = await page.$$eval(
+          '#j-bookCatalogPage ul > li a',
+          (links) =>
+            links.map((link) => ({
+              title: link.textContent?.trim() || '',
+              url: link.getAttribute('href') || '',
+            })),
         );
 
         for (const item of newChapters) {
@@ -73,28 +84,42 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
           chapterUrls.add(item.url);
 
           const chapterNumberMatch = item.title.match(/Chương\s+(\d+)/i);
-          const chapterNumber = chapterNumberMatch ? parseInt(chapterNumberMatch[1], 10) : chapterUrls.size;
-          console.log(`📚 Chương ${chapterNumber}: ${item.title}`);
-          console.log(`URL: ${item.url}`);
+          const chapterNumber = chapterNumberMatch
+            ? parseInt(chapterNumberMatch[1], 10)
+            : chapters.length + 1;
+
           chapters.push({
             title: item.title,
             url: item.url,
             chapterNumber,
           });
+
+          console.log(`📚 Chương ${chapterNumber}: ${item.title}`);
         }
 
-        // ✅ Kiểm tra có nút next không
-        const hasNext = await page.$('.pagination a[rel="next"]:not(.disabled)');
+        // Kiểm tra nút next
+        const hasNext = await page.$(
+          '.pagination a[rel="next"]:not(.disabled)',
+        );
         if (!hasNext) break;
 
-        await hasNext.click();
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        await page.waitForSelector('#j-bookCatalogPage ul > li');
+        await Promise.all([
+          hasNext.click(),
+          page
+            .waitForNavigation({ waitUntil: 'networkidle2', timeout: 10000 })
+            .catch(() => null),
+        ]);
+
+        await page.waitForSelector('#j-bookCatalogPage ul > li', {
+          timeout: 5000,
+        });
         pageCount++;
       }
 
-      // ✅ Lưu tổng số chương
-      await this.storyModel.findByIdAndUpdate(story._id, { totalChapters: chapters.length });
+      // Lưu số chương
+      await this.storyModel.findByIdAndUpdate(story._id, {
+        totalChapters: chapters.length,
+      });
 
       for (const ch of chapters) {
         const slug = `${storySlug}-${ch.url.split('/').pop()}`;
@@ -107,21 +132,28 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             chapterNumber: ch.chapterNumber,
             story: story._id,
           },
-          { upsert: true }
+          { upsert: true },
         );
 
-        console.log(`📚 Tạo chương ${ch.chapterNumber}: ${ch.title}`);
-        this.gateway.sendCrawlInfo(this.source._id.toString(), `📚 Tạo chương ${ch.chapterNumber}: ${ch.title}`);
+        this.gateway.sendCrawlInfo(
+          this.source._id.toString(),
+          `📚 Tạo chương ${ch.chapterNumber}: ${ch.title}`,
+        );
       }
 
       await browser.close();
-      this.gateway.sendCrawlInfo(this.source._id.toString(), `✅ Tổng số chương lấy được: ${chapters.length}`);
+      this.gateway.sendCrawlInfo(
+        this.source._id.toString(),
+        `✅ Tổng số chương lấy được: ${chapters.length}`,
+      );
     } catch (err) {
-      console.warn(`❌ Lỗi khi crawl danh sách chương phân trang bằng Puppeteer: ${storySlug}`, err);
-      this.gateway.sendCrawlInfo(this.source._id.toString(), `❌ Lỗi khi crawl danh sách chương phân trang bằng Puppeteer: ${storySlug}`);
+      console.warn(`❌ Lỗi crawl danh sách chương: ${storySlug}`, err);
+      this.gateway.sendCrawlInfo(
+        this.source._id.toString(),
+        `❌ Lỗi crawl danh sách chương: ${storySlug}`,
+      );
     }
   }
-
 
   async crawlStory(story: any) {
     if (!this.source) await this.getSource();
@@ -137,7 +169,10 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       const slug = slugify(title);
 
       console.log(`Duyệt danh sách chương`);
-      this.gateway.sendCrawlInfo(this.source._id.toString(), `Duyệt danh sách chương`);
+      this.gateway.sendCrawlInfo(
+        this.source._id.toString(),
+        `Duyệt danh sách chương`,
+      );
       await this.getChaptersFromStory(story, slug);
 
       return {
@@ -149,7 +184,10 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       };
     } catch (error) {
       console.error(`Lỗi khi crawl truyện: ${story.url}`, error);
-      this.gateway.sendCrawlInfo(this.source._id.toString(), `❌ Lỗi khi crawl truyện: ${story.url}`);
+      this.gateway.sendCrawlInfo(
+        this.source._id.toString(),
+        `❌ Lỗi khi crawl truyện: ${story.url}`,
+      );
       return {
         title: '',
         slug: '',
@@ -177,7 +215,10 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       };
     } catch (err) {
       console.warn(`Không thể crawl chương: ${url}`, err.message);
-      this.gateway.sendCrawlInfo(this.source._id.toString(), `❌ Không thể crawl chương: ${url}`);
+      this.gateway.sendCrawlInfo(
+        this.source._id.toString(),
+        `❌ Không thể crawl chương: ${url}`,
+      );
       return {};
     }
   }
@@ -191,17 +232,23 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     await this.crawlStoryUrls();
 
     const storiesToDetail = await this.storyModel.find();
-    const detailList = this.debugMode ? storiesToDetail.slice(0, DEMO_STORIES_NUMBER) : storiesToDetail;
+    const detailList = this.debugMode
+      ? storiesToDetail.slice(0, DEMO_STORIES_NUMBER)
+      : storiesToDetail;
     for (const story of detailList) {
       await this.crawlStoryDetailBySlug(story.slug);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
-    const storiesToChapter = await this.storyModel.find({ isDetailCrawled: true });
-    const chapterList = this.debugMode ? storiesToChapter.slice(0, DEMO_CHAPTERS_NUMBER) : storiesToChapter;
+    const storiesToChapter = await this.storyModel.find({
+      isDetailCrawled: true,
+    });
+    const chapterList = this.debugMode
+      ? storiesToChapter.slice(0, DEMO_CHAPTERS_NUMBER)
+      : storiesToChapter;
     for (const story of chapterList) {
       await this.crawlAllChaptersForStory(story._id as string);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
     this.gateway.sendStatus(this.source._id.toString(), 'idle');
@@ -219,12 +266,17 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     const processedSlugs = new Set(this.source.processedStorySlugs || []);
 
     try {
-      const { data } = await axiosInstance.get(`${this.source.baseUrl}/ket-qua-tim-kiem?page=1`);
+      const { data } = await axiosInstance.get(
+        `${this.source.baseUrl}/ket-qua-tim-kiem?page=1`,
+      );
       const $ = cheerio.load(data);
       const pages = $('.pagination li');
       const totalPagesText = pages.last().prev().text();
       totalPages = parseInt(totalPagesText, 10);
-      await this.sourceModel.updateOne({ _id: this.source._id }, { totalPages });
+      await this.sourceModel.updateOne(
+        { _id: this.source._id },
+        { totalPages },
+      );
     } catch (err) {
       console.error(`❌ Lỗi khi lấy tổng số trang: ${err.message}`);
     }
@@ -232,10 +284,15 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     for (let page = currentPage; page <= totalPages; page++) {
       if (this.debugMode && page > DEMO_CRAWL_PAGES) break;
       console.log(`📄 Đang xử lý trang ${page}/${totalPages}`);
-      this.gateway.sendCrawlInfo(this.source._id.toString(), `📄 Đang xử lý trang ${page}/${totalPages}`);
+      this.gateway.sendCrawlInfo(
+        this.source._id.toString(),
+        `📄 Đang xử lý trang ${page}/${totalPages}`,
+      );
 
       try {
-        const { data: searchData } = await axiosInstance.get(`${this.source.baseUrl}/ket-qua-tim-kiem?page=${page}`);
+        const { data: searchData } = await axiosInstance.get(
+          `${this.source.baseUrl}/ket-qua-tim-kiem?page=${page}`,
+        );
         const $ = cheerio.load(searchData);
 
         const stories = $('#rank-view-list .book-img-text ul li')
@@ -244,17 +301,22 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             const href = anchor.attr('href');
             const title = anchor.text().trim();
             return {
-              url: href?.startsWith('http') ? href : `${this.source.baseUrl}${href}`,
+              url: href?.startsWith('http')
+                ? href
+                : `${this.source.baseUrl}${href}`,
               title,
               slug: slugify(title),
               author: $(el).find('.author a.name').text().trim(),
-              category: $(el).find('.author a[href*="/the-loai/"]').text().trim(),
+              category: $(el)
+                .find('.author a[href*="/the-loai/"]')
+                .text()
+                .trim(),
               cover: $(el).find('img').attr('src'),
               intro: $(el).find('.intro').text().trim(),
             };
           })
           .get()
-          .filter(s => s.url && s.title);
+          .filter((s) => s.url && s.title);
 
         for (const s of stories) {
           if (processedSlugs.has(s.slug)) continue;
@@ -265,7 +327,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             authorDoc = await this.authorModel.findOneAndUpdate(
               { slug: authorSlug },
               { name: s.author },
-              { upsert: true, new: true }
+              { upsert: true, new: true },
             );
           }
 
@@ -275,7 +337,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             categoryDoc = await this.categoryModel.findOneAndUpdate(
               { slug: categorySlug },
               { name: s.category },
-              { upsert: true, new: true }
+              { upsert: true, new: true },
             );
           }
 
@@ -291,7 +353,8 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
               categories: [categoryDoc?._id],
               source: this.source.name,
             },
-            { upsert: true, new: true });
+            { upsert: true, new: true },
+          );
 
           processedSlugs.add(s.slug);
           await this.sourceModel.updateOne(
@@ -302,13 +365,16 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
               currentStory: s.title,
               $addToSet: { processedStorySlugs: s.slug },
               status: 'idle',
-            }
+            },
           );
           console.log(`✅ Lưu truyện: ${s.title}`);
         }
       } catch (err) {
         console.warn(`❌ Lỗi khi crawl trang ${page}: ${err.message}`);
-        this.gateway.sendCrawlInfo(this.source._id.toString(), `❌ Lỗi khi crawl trang ${page}: ${err.message}`);
+        this.gateway.sendCrawlInfo(
+          this.source._id.toString(),
+          `❌ Lỗi khi crawl trang ${page}: ${err.message}`,
+        );
         break;
       }
     }
@@ -324,42 +390,71 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       const $ = cheerio.load(data);
 
       const description = $('.book-intro').html()?.trim() || '';
-      const categories = $('.info a[href*="/the-loai/"]').map((_, el) => $(el).text().trim()).get();
-      const tags = $('.info a[href*="/tu-khoa/"]').map((_, el) => $(el).text().trim()).get();
+      const categories = $('.info a[href*="/the-loai/"]')
+        .map((_, el) => $(el).text().trim())
+        .get();
+      const tags = $('.info a[href*="/tu-khoa/"]')
+        .map((_, el) => $(el).text().trim())
+        .get();
 
-      const categoryIds = await Promise.all(categories.map(async name => {
-        const slug = slugify(name);
-        const cat = await this.categoryModel.findOneAndUpdate({ slug }, { name }, { upsert: true, new: true });
-        return cat._id;
-      }));
+      const categoryIds = await Promise.all(
+        categories.map(async (name) => {
+          const slug = slugify(name);
+          const cat = await this.categoryModel.findOneAndUpdate(
+            { slug },
+            { name },
+            { upsert: true, new: true },
+          );
+          return cat._id;
+        }),
+      );
 
-      const tagIds = await Promise.all(tags.map(async name => {
-        const slug = slugify(name);
-        const tag = await this.tagModel.findOneAndUpdate({ slug }, { name }, { upsert: true, new: true });
-        return tag._id;
-      }));
+      const tagIds = await Promise.all(
+        tags.map(async (name) => {
+          const slug = slugify(name);
+          const tag = await this.tagModel.findOneAndUpdate(
+            { slug },
+            { name },
+            { upsert: true, new: true },
+          );
+          return tag._id;
+        }),
+      );
 
-      const likes = parseInt($('.book-info span[class*="-like"]').text().trim()) || 0;
-      const views = parseInt($('.book-info span[class*="-view"]').text().trim()) || 0;
-      const recommends = parseInt($('.book-info span[class*="-follow"]').text().trim()) || 0;
-      const votes = parseInt($('.book-info span[class*="-nomi"]').text().trim()) || 0;
+      const likes =
+        parseInt($('.book-info span[class*="-like"]').text().trim()) || 0;
+      const views =
+        parseInt($('.book-info span[class*="-view"]').text().trim()) || 0;
+      const recommends =
+        parseInt($('.book-info span[class*="-follow"]').text().trim()) || 0;
+      const votes =
+        parseInt($('.book-info span[class*="-nomi"]').text().trim()) || 0;
 
-      await this.storyModel.updateOne({ _id: story._id }, {
-        description,
-        categories: categoryIds,
-        tags: tagIds,
-        isDetailCrawled: true,
-        likes,
-        views,
-        recommends,
-        votes,
-      });
+      await this.storyModel.updateOne(
+        { _id: story._id },
+        {
+          description,
+          categories: categoryIds,
+          tags: tagIds,
+          isDetailCrawled: true,
+          likes,
+          views,
+          recommends,
+          votes,
+        },
+      );
 
       console.log(`📝 Cập nhật chi tiết: ${story.title}`);
-      this.gateway.sendCrawlInfo(this.source._id.toString(), `📝 Cập nhật chi tiết: ${story.title}`);
+      this.gateway.sendCrawlInfo(
+        this.source._id.toString(),
+        `📝 Cập nhật chi tiết: ${story.title}`,
+      );
     } catch (err) {
       console.warn(`❌ Lỗi khi crawl chi tiết truyện: ${slug}`);
-      this.gateway.sendCrawlInfo(this.source._id.toString(), `❌ Lỗi khi crawl chi tiết truyện: ${slug}`);
+      this.gateway.sendCrawlInfo(
+        this.source._id.toString(),
+        `❌ Lỗi khi crawl chi tiết truyện: ${slug}`,
+      );
     }
   }
 
@@ -369,7 +464,10 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       const story = await this.storyModel.findById(storyId);
       if (!story) {
         console.log(`❌ Không tìm thấy truyện với ID: ${storyId}`);
-        this.gateway.sendCrawlInfo(this.source._id.toString(), `❌ Không tìm thấy truyện với ID: ${storyId}`);
+        this.gateway.sendCrawlInfo(
+          this.source._id.toString(),
+          `❌ Không tìm thấy truyện với ID: ${storyId}`,
+        );
         return;
       }
 
@@ -379,18 +477,33 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       for (const ch of chapters) {
         if (ch?.content) continue;
 
-        const dataUpdated = await this.crawlChapterContent(ch.url) || {};
-        await this.chapterModel.findOneAndUpdate({ _id: ch._id }, dataUpdated, { upsert: true, new: true });
+        const dataUpdated = (await this.crawlChapterContent(ch.url)) || {};
+        await this.chapterModel.findOneAndUpdate({ _id: ch._id }, dataUpdated, {
+          upsert: true,
+          new: true,
+        });
         console.log(`📖 Lưu chương: ${dataUpdated.title}`);
-        this.gateway.sendCrawlInfo(this.source._id.toString(), `📖 Lưu chương: ${dataUpdated.title}`);
+        this.gateway.sendCrawlInfo(
+          this.source._id.toString(),
+          `📖 Lưu chương: ${dataUpdated.title}`,
+        );
       }
 
-      await this.storyModel.updateOne({ _id: story._id }, { isChapterCrawled: true });
+      await this.storyModel.updateOne(
+        { _id: story._id },
+        { isChapterCrawled: true },
+      );
       console.log(`✅ Crawl chương xong: ${story.title}`);
-      this.gateway.sendCrawlInfo(this.source._id.toString(), `✅ Crawl chương xong: ${story.title}`);
+      this.gateway.sendCrawlInfo(
+        this.source._id.toString(),
+        `✅ Crawl chương xong: ${story.title}`,
+      );
     } catch (error) {
       console.log(`❌ Lỗi khi crawl tất cả chương cho truyện: ${storyId}`);
-      this.gateway.sendCrawlInfo(this.source._id.toString(), `❌ Lỗi khi crawl tất cả chương cho truyện: ${storyId}`);
+      this.gateway.sendCrawlInfo(
+        this.source._id.toString(),
+        `❌ Lỗi khi crawl tất cả chương cho truyện: ${storyId}`,
+      );
     }
   }
 }
