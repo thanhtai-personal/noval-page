@@ -14,6 +14,10 @@ export class GetStoryListDto {
   @IsString()
   category?: string;
 
+  @IsOptional()
+  @IsString()
+  sort?: string;
+
   @Type(() => Number)
   @IsOptional()
   @IsNumber()

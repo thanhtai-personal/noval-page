@@ -13,7 +13,7 @@ export class StoryService {
   ) {}
 
   async getStories(query: GetStoryListDto) {
-    const { page, limit, keyword, tag, category } = query;
+    const { page, limit, keyword, tag, category, sort } = query;
     const filter: any = {};
   
     if (keyword) {
@@ -25,11 +25,17 @@ export class StoryService {
     if (category) {
       filter.categories = category;
     }
-  
+    
+    let sortBy: any = { updatedAt: -1 };
+
+    if (sort) {
+      sortBy = { [sort]: -1 };
+    }
+
     const total = await this.storyModel.countDocuments(filter);
     const data = await this.storyModel
       .find(filter)
-      .sort({ updatedAt: -1 }) // bạn có thể dùng viewCount, createdAt,...
+      .sort(sortBy)
       .skip((page - 1) * limit)
       .limit(limit)
       .select('-__v')

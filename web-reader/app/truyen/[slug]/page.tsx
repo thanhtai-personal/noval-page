@@ -4,6 +4,7 @@ import { Badge } from "@heroui/badge";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { StoryTabs } from "@/components/StoryTabs";
+import { LastReadChapter } from "@/components/LastReadChapter";
 
 async function fetchStory(slug: string): Promise<any | null> {
   try {
@@ -16,7 +17,6 @@ async function fetchStory(slug: string): Promise<any | null> {
 
 export async function generateMetadata({ params }: any): Promise<Metadata> {
   const story = await fetchStory((await params).slug);
-  console.log("story", story);
   return {
     title: story?.title || "Chi tiết truyện",
     description: story?.introduce,
@@ -67,6 +67,9 @@ export default async function StoryDetailPage({ params }: any) {
             Lượt xem: {story.views} | Lượt thích: {story.likes} | Đề cử:{" "}
             {story.recommends} | Bình chọn: {story.votes}
           </p>
+          <h1 className="text-3xl font-bold mb-2">{story.title}</h1>
+          <LastReadChapter slug={story.slug} />
+
           <h3 className="text-xl font-semibold mb-2 underline mt-10">
             Giới thiệu
           </h3>
