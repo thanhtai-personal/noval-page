@@ -6,7 +6,7 @@ export const siteConfig = {
   navItems: [
     {
       label: "Truyện hay",
-      href: "/",
+      href: "/search?sort=recommends",
     },
     {
       label: "Blog",

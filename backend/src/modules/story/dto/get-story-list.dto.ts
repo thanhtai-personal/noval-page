@@ -12,11 +12,19 @@ export class GetStoryListDto {
 
   @IsOptional()
   @IsString()
-  category?: string;
+  categories?: string[];
 
   @IsOptional()
   @IsString()
   sort?: string;
+
+  @IsOptional()
+  @IsString()
+  author?: string;
+
+  @IsOptional()
+  @IsString()
+  chapterRange?: string;
 
   @Type(() => Number)
   @IsOptional()

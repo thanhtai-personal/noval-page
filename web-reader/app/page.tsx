@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
-import { Badge } from "@heroui/badge";
 import { Button } from "@heroui/button";
 import Link from "next/link";
 import { ApiInstant } from "@/utils/api";
@@ -10,6 +8,7 @@ import { Story } from "@/types/interfaces/story";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { StoryCard } from "@/components/StoryCard";
 
 export default function HomePage() {
   const [topView, setTopView] = useState<Story[]>([]);
@@ -39,55 +38,6 @@ export default function HomePage() {
     fetchData();
   }, []);
 
-  const renderStoryCard = (story: Story, isSlide: boolean = false) => (
-    <Card key={story._id}>
-      <CardHeader className="p-0">
-        <img
-          src={story.cover}
-          alt={story.title}
-          className={isSlide ? `w-auto h-[calc(100vh/2.8)] object-cover rounded-t mx-auto` : `w-full h-48 object-cover rounded-t`}
-        />
-      </CardHeader>
-      <CardBody>
-        <h2 className="text-lg font-semibold">{story.title}</h2>
-        <p className="text-sm text-gray-600 mb-1">
-          Tác giả: {story.author?.name}
-        </p>
-        <div
-          className="text-sm text-gray-600"
-          dangerouslySetInnerHTML={{ __html: story.intro }}
-        />
-        <div className="flex flex-wrap gap-1 mt-2">
-          {story.categories.map((cat) => (
-            <Badge key={cat.slug} variant="flat" color="primary">
-              {cat.name}
-            </Badge>
-          ))}
-          {story.tags.map((tag) => (
-            <Badge key={tag.name} variant="flat" color="secondary">
-              {tag.name}
-            </Badge>
-          ))}
-        </div>
-        <div className="mt-2 text-xs text-gray-500 space-y-1">
-          <p>👁️ Lượt đọc: {story.views}</p>
-          <p>📖 Số chương: {story.totalChapters}</p>
-          <p>
-            🌟 Bình chọn: {story.votes} | ❤️ Yêu thích: {story.likes} | 📌 Đề
-            cử: {story.recommends}
-          </p>
-        </div>
-      </CardBody>
-      <CardFooter>
-        <Link href={`/truyen/${story.slug}`}>
-          <Button size="sm" variant="flat" color="primary">
-            Đọc ngay
-          </Button>
-        </Link>
-      </CardFooter>
-    </Card>
-  );
-
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -104,9 +54,7 @@ export default function HomePage() {
         <h1 className="text-3xl font-bold mb-4">🔥 Top Truyện Đề Cử</h1>
         <Slider {...sliderSettings}>
           {topVote.map((story) => (
-            <div key={story._id} className="px-2">
-              {renderStoryCard(story, true)}
-            </div>
+            <StoryCard key={story._id} story={story} isSlide />
           ))}
         </Slider>
       </div>
@@ -122,7 +70,9 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {topRecommend.map((s) => renderStoryCard(s))}
+          {topRecommend.map((story) => (
+            <StoryCard key={story._id} story={story} />
+          ))}
         </div>
       </div>
 
@@ -137,7 +87,9 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {topView.map((s) => renderStoryCard(s))}
+          {topView.map((story) => (
+            <StoryCard key={story._id} story={story} />
+          ))}
         </div>
       </div>
 
@@ -151,7 +103,9 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {topLike.map((s) => renderStoryCard(s))}
+          {topLike.map((story) => (
+            <StoryCard key={story._id} story={story} />
+          ))}
         </div>
       </div>
 
@@ -165,7 +119,9 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {topChapter.map((s) => renderStoryCard(s))}
+          {topChapter.map((story) => (
+            <StoryCard key={story._id} story={story} />
+          ))}
         </div>
       </div>
     </section>
