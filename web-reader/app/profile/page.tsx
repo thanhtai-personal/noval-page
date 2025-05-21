@@ -11,7 +11,6 @@ interface ReadItem {
   slug: string;
   index: string;
 }
-
 const PAGE_SIZE = 20;
 
 export default function ProfilePage() {
