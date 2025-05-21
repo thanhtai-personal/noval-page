@@ -7,6 +7,7 @@ import { Providers } from "./providers";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { AppLayout } from "@/components/AppLayout";
+import { GoogleAnalytics } from "@/lib/analytic";
 
 export const metadata: Metadata = {
   title: {
@@ -40,6 +41,7 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
+        <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_ID!} />
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <AppLayout>{children}</AppLayout>
         </Providers>
