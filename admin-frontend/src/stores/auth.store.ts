@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { api, setAccessToken } from "@/services/api";
+import { api, clearAccessToken, setAccessToken } from "@/services/api";
 
 class AuthStore {
   isAuthenticated = false;
@@ -71,6 +71,7 @@ class AuthStore {
     this.isAuthenticated = false;
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    clearAccessToken();
   }
 }
 

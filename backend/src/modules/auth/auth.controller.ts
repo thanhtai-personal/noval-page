@@ -40,6 +40,7 @@ export class AuthController {
   async googleAuth(@Req() _req) {
     // Guard sẽ xử lý chuyển hướng
   }
+  
   @Get('google/redirect')
   @UseGuards(GoogleOAuthGuard)
   async googleAuthRedirect(@Req() req: any, @Res() res: Response) {

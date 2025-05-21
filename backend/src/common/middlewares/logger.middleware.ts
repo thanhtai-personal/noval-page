@@ -7,7 +7,7 @@ export class LoggerMiddleware implements NestMiddleware {
     const now = new Date().toISOString();
     const method = req.method;
     const url = req.originalUrl;
-    const user: any = req['user']; // JWT user từ guard
+    const user: any = req['user'];
 
     console.log(`[${now}] ${method} ${url} ${user ? `| User: ${user.email} (${user.role})` : '| Public'}`);
     

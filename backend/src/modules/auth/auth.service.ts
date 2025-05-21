@@ -144,7 +144,7 @@ export class AuthService {
     const access_token = this.jwtService.sign(jwtPayload);
     const refresh_token = this.jwtService.sign(jwtPayload, {
       expiresIn: '14d',
-      secret: process.env.JWT_REFRESH_SECRET || 'refreshSecret123',
+      secret: process.env.JWT_REFRESH_SECRET,
     });
 
     const hashedRt = await bcrypt.hash(refresh_token, 10);
