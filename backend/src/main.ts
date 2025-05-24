@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from './modules/auth/guards/role.guard';
 import * as crypto from 'crypto';
+import * as cookieParser from 'cookie-parser';
 
 // 🛡 Gán globalThis.crypto.randomUUID nếu chưa có (Node < 19)
 if (
@@ -18,6 +19,7 @@ if (
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.use(cookieParser());
   app.enableCors({
     origin: [
       'http://localhost:5173',
@@ -42,6 +44,8 @@ async function bootstrap() {
 
   const reflector = app.get(Reflector);
   app.useGlobalGuards(new JwtAuthGuard(reflector), new RolesGuard(reflector));
+
+
 
   await app.listen(process.env.PORT || 8000);
 }

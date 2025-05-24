@@ -9,23 +9,19 @@ export default function LoginPage() {
   const router = useRouter();
 
   const handleLoginSuccess = async (credentialResponse: any) => {
-  try {
-    const res = await ApiInstant.post(`/auth/google`, {
-      idToken: credentialResponse.credential,
-    });
+    try {
+      // This will trigger server to set the token in cookies
+      await ApiInstant.post(`/auth/google`, {
+        idToken: credentialResponse.credential,
+      });
 
-    const token = res.data.access_token;
-    console.log('token', token)
-    appStore.setToken(token);
+      appStore.fetchProfile();
 
-    const profile = await ApiInstant.get('/auth/me');
-    appStore.setProfile(profile.data);
-
-    router.push('/');
-  } catch (err) {
-    console.error('Login failed', err);
-  }
-};
+      router.push('/');
+    } catch (err) {
+      console.error('Login failed', err);
+    }
+  };
 
   return (
     <div className="min-h-[calc(100vh-150px)] flex items-center justify-center">

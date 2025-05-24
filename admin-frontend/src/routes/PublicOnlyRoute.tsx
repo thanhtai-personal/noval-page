@@ -9,26 +9,22 @@ type Props = {
 
 const PublicOnlyRoute = ({ children }: Props) => {
   const [checking, setChecking] = useState(true);
-  const [valid, setValid] = useState(false);
 
   useEffect(() => {
     const validate = async () => {
-      const token = localStorage.getItem('accessToken');
-      if (token) {
-        try {
-          await authStore.fetchUser(); // gọi /auth/me
-          setValid(true);
-        } catch {
-          authStore.logout();
-        }
+      try {
+        await authStore.fetchUser(); // call /auth/me
+      } catch {
+        authStore.logout();
+      } finally {
+        setChecking(false);
       }
-      setChecking(false);
     };
     validate();
   }, []);
 
   if (checking) return null;
-  if (authStore.isAuthenticated || valid) {
+  if (authStore.isAuthenticated) {
     return <Navigate to="/crawl" replace />;
   }
   return <>{children}</>;

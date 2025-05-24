@@ -87,29 +87,23 @@ export class AuthService {
   // 🔁 REFRESH TOKEN
   async refreshToken(refreshToken: string) {
     try {
-      const payload = this.jwtService.verify(refreshToken, {
-        secret: process.env.JWT_REFRESH_SECRET || 'refreshSecret123',
-      });
-
-      const user = await this.userModel.findById(payload.sub);
-      if (!user || !user.refreshToken) {
-        throw new UnauthorizedException();
+      const payload = this.jwtService.verify(refreshToken);
+      const user = await this.userModel.findById(payload.sub).populate('role');
+      if (!user) {
+        throw new UnauthorizedException('Invalid refresh token');
       }
+      const newAccessToken = this.jwtService.sign(
+        {
+          sub: user._id,
+          email: user.email,
+          role: user.role,
+        },
+        { expiresIn: '15m' },
+      );
 
-      const isMatch = await bcrypt.compare(refreshToken, user.refreshToken);
-      if (!isMatch) {
-        throw new UnauthorizedException('Refresh token không hợp lệ');
-      }
-
-      const newAccessToken = this.jwtService.sign({
-        sub: user._id,
-        email: user.email,
-        role: payload.role,
-      });
-
-      return { access_token: newAccessToken };
-    } catch (err) {
-      throw new UnauthorizedException('Refresh token không hợp lệ');
+      return { accessToken: newAccessToken };
+    } catch (error) {
+      throw new UnauthorizedException('Invalid or expired refresh token');
     }
   }
 

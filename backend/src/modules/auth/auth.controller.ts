@@ -13,19 +13,18 @@ import { LoginDto } from './dto/login.dto';
 import { GoogleLoginDto } from './dto/google-login.dto';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
-import { ForgotPasswordDto } from "./dto/forgot-password.dto";
-import { RegisterDto } from "./dto/register.dto";
-import { ResetPasswordDto } from "./dto/reset-password.dto";
-import { Throttle } from "@nestjs/throttler";
-import { Roles } from "./decorators/roles.decorator";
-import { RoleSlug } from "@/constants/role.enum";
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { RegisterDto } from './dto/register.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { Throttle } from '@nestjs/throttler';
+import { Roles } from './decorators/roles.decorator';
+import { RoleSlug } from '@/constants/role.enum';
 import { GoogleOAuthGuard } from './guards/google-oauth.guard';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
 
   // 🔗 Đăng nhập bằng Google
   @Public()
@@ -40,7 +39,7 @@ export class AuthController {
   async googleAuth(@Req() _req) {
     // Guard sẽ xử lý chuyển hướng
   }
-  
+
   @Get('google/redirect')
   @UseGuards(GoogleOAuthGuard)
   async googleAuthRedirect(@Req() req: any, @Res() res: Response) {
@@ -51,22 +50,31 @@ export class AuthController {
   // 🔐 Đăng nhập bằng email + mật khẩu
   @Public()
   @Post('login')
-  login(@Body() dto: LoginDto) {
-    return this.authService.login(dto.email, dto.password);
-  }
-
-  // 🔁 Refresh token
-  @Public()
-  @Post('refresh')
-  refresh(@Body('refresh_token') rt: string) {
-    if (!rt) throw new UnauthorizedException('Thiếu refresh_token');
-    return this.authService.refreshToken(rt);
+  async login(
+    @Body() dto: LoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { access_token: token } = await this.authService.login(
+      dto.email,
+      dto.password,
+    );
+    res.cookie('access_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+    return { message: 'Login successful' };
   }
 
   // 🚪 Logout
   @Post('logout')
   @Roles(RoleSlug.READER, RoleSlug.ADMIN, RoleSlug.SUPER_ADMIN)
-  logout(@CurrentUser('userId') userId: string) {
+  logout(
+    @CurrentUser('userId') userId: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    res.clearCookie('access_token');
     return this.authService.logout(userId);
   }
 
@@ -97,5 +105,23 @@ export class AuthController {
   @Post('reset-password')
   resetPassword(@Body() dto: ResetPasswordDto) {
     return this.authService.resetPassword(dto.token, dto.newPassword);
+  }
+
+  @Public()
+  @Post('refresh')
+  async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    const rt = req.cookies?.refresh_token;
+    if (!rt) throw new UnauthorizedException('Thiếu refresh_token');
+
+    const newTokens = await this.authService.refreshToken(rt);
+
+    res.cookie('access_token', newTokens.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    });
+
+    return { message: 'Token refreshed' };
   }
 }
