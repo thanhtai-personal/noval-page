@@ -19,7 +19,6 @@ const ProtectedRoute = ({ children }: Props) => {
   if (loadingAuth) {
     return <div className="w-full h-screen flex items-center justify-center">Loading...</div>;
   }
-  
   // ❌ Không có quyền truy cập
   if (role !== RoleSlug.ADMIN && role !== RoleSlug.SUPER_ADMIN) {
     return <Navigate to="/403" replace />;

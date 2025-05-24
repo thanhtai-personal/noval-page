@@ -34,6 +34,8 @@ import { ScheduleModule } from "@nestjs/schedule";
 import { CrawlerGateway } from "./modules/crawler/crawler.gateway";
 import { Blog, BlogSchema } from './schemas/blog.schema';
 import { BlogModule } from './modules/blog/blog.module';
+import { RolesGuard } from './modules/auth/guards/role.guard';
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -91,7 +93,9 @@ import { BlogModule } from './modules/blog/blog.module';
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
-    CrawlerGateway
+    CrawlerGateway,
+    JwtAuthGuard,
+    RolesGuard
   ],
 })
   

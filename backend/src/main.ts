@@ -42,10 +42,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  const reflector = app.get(Reflector);
-  app.useGlobalGuards(new JwtAuthGuard(reflector), new RolesGuard(reflector));
-
-
+  const jwtAuthGuard = app.select(AppModule).get(JwtAuthGuard);
+  const rolesGuard = app.select(AppModule).get(RolesGuard);
+  app.useGlobalGuards(jwtAuthGuard, rolesGuard);
 
   await app.listen(process.env.PORT || 8000);
 }

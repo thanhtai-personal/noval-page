@@ -21,7 +21,10 @@ import { Roles } from './decorators/roles.decorator';
 import { RoleSlug } from '@/constants/role.enum';
 import { GoogleOAuthGuard } from './guards/google-oauth.guard';
 import { Request, Response } from 'express';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
+
+// @UseGuards(JwtAuthGuard) //But only do this if you haven't already applied JwtAuthGuard globally in main.ts.
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -54,22 +57,19 @@ export class AuthController {
     @Body() dto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { access_token: token } = await this.authService.login(
-      dto.email,
-      dto.password,
-    );
-    res.cookie('access_token', token, {
+    const { access_token, user } = await this.authService.login(dto.email, dto.password);
+    res.cookie('access_token', access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 15 * 60 * 1000, // 15 minutes
     });
-    return { message: 'Login successful' };
+    return { message: 'Login successful', user };
   }
 
   // 🚪 Logout
+  @Public()
   @Post('logout')
-  @Roles(RoleSlug.READER, RoleSlug.ADMIN, RoleSlug.SUPER_ADMIN)
   logout(
     @CurrentUser('userId') userId: string,
     @Res({ passthrough: true }) res: Response,
@@ -82,6 +82,7 @@ export class AuthController {
   @Get('me')
   @Roles(RoleSlug.READER, RoleSlug.ADMIN, RoleSlug.SUPER_ADMIN)
   me(@CurrentUser() user: any) {
+    console.log('call to me!!')
     return user;
   }
 
@@ -109,7 +110,10 @@ export class AuthController {
 
   @Public()
   @Post('refresh')
-  async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async refresh(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const rt = req.cookies?.refresh_token;
     if (!rt) throw new UnauthorizedException('Thiếu refresh_token');
 
