@@ -8,7 +8,6 @@ export class LoggerMiddleware implements NestMiddleware {
     const method = req.method;
     const url = req.originalUrl;
     const user: any = req['user'];
-
     console.log(`[${now}] ${method} ${url} ${user ? `| User: ${user.email} (${user.role})` : '| Public'}`);
     
     next();
