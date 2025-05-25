@@ -23,7 +23,6 @@ import { GoogleOAuthGuard } from './guards/google-oauth.guard';
 import { Request, Response } from 'express';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
-
 // @UseGuards(JwtAuthGuard) //But only do this if you haven't already applied JwtAuthGuard globally in main.ts.
 @Controller('auth')
 export class AuthController {
@@ -57,13 +56,25 @@ export class AuthController {
     @Body() dto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { access_token, user } = await this.authService.login(dto.email, dto.password);
+    const { access_token, refresh_token, user } = await this.authService.login(
+      dto.email,
+      dto.password,
+    );
+
     res.cookie('access_token', access_token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 15 * 60 * 1000, // 15 minutes
+      secure: true,
+      sameSite: 'none',
+      maxAge: 15 * 60 * 1000, // 15 phút
     });
+
+    res.cookie('refresh_token', refresh_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 14 * 24 * 60 * 60 * 1000, // 14 ngày
+    });
+
     return { message: 'Login successful', user };
   }
 
