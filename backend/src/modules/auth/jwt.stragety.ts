@@ -10,18 +10,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) => {
           const token = req?.cookies?.['access_token'];
-          console.log('🧪 Token from cookie:', token);
           return token;
         },
         ExtractJwt.fromAuthHeaderAsBearerToken(),
       ]),
       secretOrKey: process.env.JWT_SECRET!,
     });
-    console.log('🛡 JWT_SECRET used:', process.env.JWT_SECRET);
   }
 
   async validate(payload: any) {
-    console.log('✅ Payload:', payload);
     return { userId: payload.sub, email: payload.email, role: payload.role };
   }
 }
