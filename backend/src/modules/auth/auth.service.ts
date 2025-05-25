@@ -132,13 +132,16 @@ export class AuthService {
     const jwtPayload = {
       sub: user._id,
       email: user.email,
-      role: typeof user.role === 'object' ? user.role?.slug : 'reader',
+      role: typeof user.role === 'object' ? user.role?.slug : 'Reader',
     };
 
-    const access_token = this.jwtService.sign(jwtPayload);
+    const access_token = this.jwtService.sign(jwtPayload, {
+      expiresIn: '1d',
+      secret: process.env.JWT_SECRET,
+    });
     const refresh_token = this.jwtService.sign(jwtPayload, {
       expiresIn: '14d',
-      secret: process.env.JWT_REFRESH_SECRET,
+      secret: process.env.JWT_SECRET,
     });
 
     const hashedRt = await bcrypt.hash(refresh_token, 10);

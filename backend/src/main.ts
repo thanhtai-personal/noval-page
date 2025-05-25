@@ -5,6 +5,7 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from './modules/auth/guards/role.guard';
 import * as crypto from 'crypto';
 import * as cookieParser from 'cookie-parser';
+import { LoggerInterceptor } from './common/interceptors/logger.interceptor';
 
 // 🛡 Gán globalThis.crypto.randomUUID nếu chưa có (Node < 19)
 if (
@@ -42,9 +43,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  const jwtAuthGuard = app.select(AppModule).get(JwtAuthGuard);
-  const rolesGuard = app.select(AppModule).get(RolesGuard);
-  app.useGlobalGuards(jwtAuthGuard, rolesGuard);
+  const reflector = app.get(Reflector);
+  app.useGlobalGuards(new JwtAuthGuard(reflector), new RolesGuard(reflector));
+  app.useGlobalInterceptors(new LoggerInterceptor());
 
   await app.listen(process.env.PORT || 8000);
 }

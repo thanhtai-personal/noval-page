@@ -82,7 +82,6 @@ export class AuthController {
   @Get('me')
   @Roles(RoleSlug.READER, RoleSlug.ADMIN, RoleSlug.SUPER_ADMIN)
   me(@CurrentUser() user: any) {
-    console.log('call to me!!')
     return user;
   }
 

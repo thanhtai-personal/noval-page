@@ -27,16 +27,13 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
 
   React.useEffect(() => {
-    const token = appStore.token;
-    if (token) {
-      ApiInstant.get("/auth/profile")
-        .then((res) => {
-          appStore.setProfile(res.data);
-        })
-        .catch(() => {
-          appStore.logout();
-        });
-    }
+    (async () => {
+      try {
+        await appStore.fetchProfile();
+      } catch (error) {
+        appStore.logout();
+      }
+    })();
   }, []);
 
   return (

@@ -27,7 +27,7 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { SourceModule } from "./modules/source/source.module";
 
 // Middleware
-import { LoggerMiddleware } from '@/common/middlewares/logger.middleware';
+import { LoggerMiddleware } from "@/common/middlewares/logger.middleware";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { APP_GUARD } from "@nestjs/core";
 import { ScheduleModule } from "@nestjs/schedule";
