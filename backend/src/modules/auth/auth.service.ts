@@ -26,6 +26,12 @@ export class AuthService {
     const user = await this.userModel.findOne({ email }).populate('role');
     if (!user) throw new UnauthorizedException('Email không tồn tại');
 
+    // So sánh mật khẩu
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      throw new UnauthorizedException('Mật khẩu không đúng');
+    }
+
     return this.issueTokensAndStore(user);
   }
 
@@ -40,7 +46,8 @@ export class AuthService {
   async loginWithGoogle(idToken: string) {
     const ticket = await googleClient.verifyIdToken({ idToken });
     const payload = ticket.getPayload();
-    if (!payload?.email) throw new UnauthorizedException('Token Google không hợp lệ');
+    if (!payload?.email)
+      throw new UnauthorizedException('Token Google không hợp lệ');
 
     return this.handleGoogleUser({
       email: payload.email,
@@ -49,7 +56,11 @@ export class AuthService {
     });
   }
 
-  private async handleGoogleUser(googleInfo: { email: string; name?: string; picture?: string }) {
+  private async handleGoogleUser(googleInfo: {
+    email: string;
+    name?: string;
+    picture?: string;
+  }) {
     const { email, name } = googleInfo;
     let user: any = await this.userModel.findOne({ email }).populate('role');
 
@@ -73,7 +84,9 @@ export class AuthService {
 
   async refreshToken(refreshToken: string) {
     try {
-      const payload = this.jwtService.verify(refreshToken, { secret: process.env.JWT_SECRET });
+      const payload = this.jwtService.verify(refreshToken, {
+        secret: process.env.JWT_SECRET,
+      });
       const user = await this.userModel.findById(payload.sub).populate('role');
       if (!user) throw new UnauthorizedException('Invalid refresh token');
 
@@ -125,7 +138,9 @@ export class AuthService {
       secret: process.env.JWT_PASSWORD_SECRET || 'pwResetSecret',
     });
 
-    console.log(`🔐 Link reset: https://your-domain/reset-password?token=${token}`);
+    console.log(
+      `🔐 Link reset: https://your-domain/reset-password?token=${token}`,
+    );
 
     return { message: 'Liên kết đặt lại mật khẩu đã được gửi (mock)' };
   }
@@ -174,7 +189,9 @@ export class AuthService {
     });
 
     const hashedRt = await bcrypt.hash(refresh_token, 10);
-    await this.userModel.findByIdAndUpdate(user._id, { refreshToken: hashedRt });
+    await this.userModel.findByIdAndUpdate(user._id, {
+      refreshToken: hashedRt,
+    });
 
     return {
       access_token,

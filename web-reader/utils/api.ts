@@ -9,7 +9,7 @@ let isRefreshing = false;
 let failedQueue: any[] = [];
 
 const processQueue = (error: any, tokenRefreshed: boolean) => {
-  failedQueue.forEach((prom) => {
+  failedQueue.forEach(prom => {
     if (tokenRefreshed) {
       prom.resolve();
     } else {
@@ -23,6 +23,12 @@ ApiInstant.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    // Detect login route explicitly to avoid infinite refresh loops.
+    if (originalRequest.url.includes('/auth/login')) {
+      // Login failed clearly, just reject immediately.
+      return Promise.reject(error);
+    }
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
@@ -40,7 +46,8 @@ ApiInstant.interceptors.response.use(
         return ApiInstant(originalRequest);
       } catch (err) {
         processQueue(err, false);
-        await ApiInstant.post('/auth/logout');
+        // Remove or comment this line:
+        // await ApiInstant.post('/auth/logout');
         return Promise.reject(err);
       } finally {
         isRefreshing = false;
@@ -50,3 +57,4 @@ ApiInstant.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+

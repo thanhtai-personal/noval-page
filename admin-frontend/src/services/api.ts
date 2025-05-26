@@ -24,9 +24,14 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // Detect login route explicitly to avoid infinite refresh loops.
+    if (originalRequest.url.includes('/auth/login')) {
+      // Login failed clearly, just reject immediately.
+      return Promise.reject(error);
+    }
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        // Push vào hàng đợi chờ token mới
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         }).then(() => api(originalRequest));
@@ -41,7 +46,8 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (err) {
         processQueue(err, false);
-        await api.post('/auth/logout');
+        // Remove or comment this line:
+        // await api.post('/auth/logout');
         return Promise.reject(err);
       } finally {
         isRefreshing = false;
