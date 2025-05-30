@@ -7,8 +7,6 @@ import { HeroUIProvider } from "@heroui/system";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { StoreProvider } from "@/store/Provider";
-import { appStore } from "@/store/AppStore.store";
-import { ApiInstant } from "@/utils/api";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -25,16 +23,6 @@ declare module "@react-types/shared" {
 
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
-
-  React.useEffect(() => {
-    (async () => {
-      try {
-        await appStore.fetchProfile();
-      } catch (error) {
-        appStore.logout();
-      }
-    })();
-  }, []);
 
   return (
     <StoreProvider>

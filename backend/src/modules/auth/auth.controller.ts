@@ -31,8 +31,28 @@ export class AuthController {
   // 🔗 Đăng nhập bằng Google
   @Public()
   @Post('google')
-  googleLogin(@Body() dto: GoogleLoginDto) {
-    return this.authService.loginWithGoogle(dto.idToken);
+  async googleLogin(
+    @Body() dto: GoogleLoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { access_token, refresh_token, user } =
+      await this.authService.loginWithGoogle(dto.idToken);
+
+    res.cookie('access_token', access_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.cookie('refresh_token', refresh_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 14 * 24 * 60 * 60 * 1000,
+    });
+
+    return { message: 'Google login successful', user };
   }
 
   //--
@@ -134,7 +154,14 @@ export class AuthController {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 15 * 60 * 1000, // 15 minutes
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.cookie('refresh_token', newTokens.refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 14 * 24 * 60 * 60 * 1000,
     });
 
     return { message: 'Token refreshed' };

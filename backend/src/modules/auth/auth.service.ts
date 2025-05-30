@@ -26,11 +26,8 @@ export class AuthService {
     const user = await this.userModel.findOne({ email }).populate('role');
     if (!user) throw new UnauthorizedException('Email không tồn tại');
 
-    // So sánh mật khẩu
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      throw new UnauthorizedException('Mật khẩu không đúng');
-    }
+    if (!isMatch) throw new UnauthorizedException('Mật khẩu không đúng');
 
     return this.issueTokensAndStore(user);
   }
@@ -46,8 +43,9 @@ export class AuthService {
   async loginWithGoogle(idToken: string) {
     const ticket = await googleClient.verifyIdToken({ idToken });
     const payload = ticket.getPayload();
-    if (!payload?.email)
+    if (!payload?.email) {
       throw new UnauthorizedException('Token Google không hợp lệ');
+    }
 
     return this.handleGoogleUser({
       email: payload.email,
@@ -85,19 +83,31 @@ export class AuthService {
   async refreshToken(refreshToken: string) {
     try {
       const payload = this.jwtService.verify(refreshToken, {
-        secret: process.env.JWT_SECRET,
+        secret: process.env.JWT_REFRESH_SECRET,
       });
+
       const user = await this.userModel.findById(payload.sub).populate('role');
-      if (!user) throw new UnauthorizedException('Invalid refresh token');
+      if (!user || !user.refreshToken) {
+        throw new UnauthorizedException('User không tồn tại hoặc chưa lưu refresh token');
+      }
+
+      const isMatch = await bcrypt.compare(refreshToken, user.refreshToken);
+      if (!isMatch) {
+        throw new UnauthorizedException('Refresh token không hợp lệ');
+      }
 
       return {
         accessToken: this.jwtService.sign(this.buildPayload(user), {
           secret: process.env.JWT_SECRET,
           expiresIn: '15m',
         }),
+        refreshToken: this.jwtService.sign(this.buildPayload(user), {
+          secret: process.env.JWT_REFRESH_SECRET,
+          expiresIn: '14d',
+        }),
       };
     } catch {
-      throw new UnauthorizedException('Invalid or expired refresh token');
+      throw new UnauthorizedException('Token hết hạn hoặc không hợp lệ');
     }
   }
 
@@ -138,10 +148,7 @@ export class AuthService {
       secret: process.env.JWT_PASSWORD_SECRET || 'pwResetSecret',
     });
 
-    console.log(
-      `🔐 Link reset: https://your-domain/reset-password?token=${token}`,
-    );
-
+    console.log(`🔐 Link reset: https://your-domain/reset-password?token=${token}`);
     return { message: 'Liên kết đặt lại mật khẩu đã được gửi (mock)' };
   }
 
@@ -171,7 +178,7 @@ export class AuthService {
     return {
       sub: user._id.toString(),
       email: user.email,
-      role: typeof user.role === 'object' ? user.role?.slug : user.role,
+      role: typeof user.role === 'object' ? user.role?.slug : user.role || 'Reader',
     };
   }
 
