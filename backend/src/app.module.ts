@@ -36,6 +36,7 @@ import { Blog, BlogSchema } from './schemas/blog.schema';
 import { BlogModule } from './modules/blog/blog.module';
 import { RolesGuard } from './modules/auth/guards/role.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
+import { CrawlHistory, CrawlHistorySchema } from './schemas/crawlHistory.schema';
 
 @Module({
   imports: [
@@ -74,6 +75,7 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
       { name: Comment.name, schema: CommentSchema },
       { name: Source.name, schema: SourceSchema },
       { name: Blog.name, schema: BlogSchema },
+      { name: CrawlHistory.name, schema: CrawlHistorySchema },
     ]),
     CrawlerModule,
     StoryModule,

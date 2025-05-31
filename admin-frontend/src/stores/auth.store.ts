@@ -14,7 +14,6 @@ class AuthStore {
   }
 
   async login(email: string, password: string) {
-    console.log("login called");
     this.loading = true;
     try {
       runInAction(() => {
@@ -25,19 +24,16 @@ class AuthStore {
       runInAction(() => {
         this.isAuthenticated = true;
       });
-      console.log("login success");
     } catch (error: any) {
       runInAction(() => {
         this.loginError =
           error?.response?.data?.message || "Đăng nhập thất bại!";
         this.isAuthenticated = false;
       });
-      console.log("login error", this.loginError);
     } finally {
       runInAction(() => {
         this.loading = false;
       });
-      console.log("finally - loading false", this.loading);
     }
   }
 

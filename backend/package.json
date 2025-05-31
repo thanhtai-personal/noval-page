@@ -45,13 +45,15 @@
     "class-validator": "^0.14.1",
     "cookie-parser": "^1.4.7",
     "google-auth-library": "^9.15.1",
+    "moment": "^2.30.1",
     "mongoose": "^8.14.1",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
-    "puppeteer": "^24.8.2",
+    "puppeteer": "^18.2.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "shelljs": "^0.10.0",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {

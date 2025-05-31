@@ -32,12 +32,14 @@ export default function ProfilePage() {
   const totalPages = Math.ceil(readItems.length / PAGE_SIZE);
   const paginated = readItems.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
+  console.log('profile', appStore.profile);
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
       <div className="flex items-center gap-4">
         <Avatar name={appStore.profile?.name || 'Guest'} />
         <div>
-          <h1 className="text-xl font-bold">{appStore.profile?.name || 'Guest'}</h1>
+          <h1 className="text-xl font-bold">{appStore.profile?.name || appStore.profile?.email || 'Guest'}</h1>
           <p className="text-sm text-gray-500">Trang cá nhân</p>
         </div>
       </div>

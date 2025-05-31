@@ -22,7 +22,8 @@ export class CrawlerController {
   @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
   @Post('story/:id')
   async crawlStoryById(@Param('id') storyId: string) {
-    return this.crawlerService.crawlStoryById(storyId);
+    this.crawlerService.crawlStoryById(storyId);
+    return { message: `Crawl started for story ID: ${storyId}` };
   }
 
   /**
@@ -31,12 +32,14 @@ export class CrawlerController {
   @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
   @Post('site/start')
   async startSiteCrawl(@Body() body: { source: string }) {
-    return this.crawlerService.startCrawlSite(body.source);
+    this.crawlerService.startCrawlSite(body.source);
+    return { message: `Crawl started for source: ${body.source}` };
   }
 
   @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
   @Post('source/:id/crawl')
   async startSourceCrawl(@Param('id') id: string) {
-    return this.crawlerService.startCrawlSite(id);
+    this.crawlerService.startCrawlSite(id);
+    return { message: `Crawl started for source ID: ${id}` };
   }
 }

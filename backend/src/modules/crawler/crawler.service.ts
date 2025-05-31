@@ -5,11 +5,11 @@ import { Model } from 'mongoose';
 import { Story } from '@/schemas/story.schema';
 import { Chapter } from '@/schemas/chapter.schema';
 
-import { TangthuvienCrawler } from './sites/tangthuvien.crawler';
+import { TangthuvienCrawler } from './sites/tangthuvien/tangthuvien.crawler';
 import { VtruyenCrawler } from './sites/vtruyen.crawler';
 import { ICrawlerAdapter } from './sites/interfaces/crawler-adapter.interface';
-import { Source } from "@/schemas/source.schema";
-import { CrawlerGateway } from "./crawler.gateway";
+import { Source } from '@/schemas/source.schema';
+import { CrawlerGateway } from './crawler.gateway';
 
 @Injectable()
 export class CrawlerService {
@@ -27,93 +27,103 @@ export class CrawlerService {
 
   private getAdapter(source: string): ICrawlerAdapter {
     switch (source.toLowerCase()) {
-      case 'tangthuvien': return this.tangthuvien;
-      case 'vtruyen': return this.vtruyen;
-      default: throw new Error(`Unsupported source: ${source}`);
+      case 'tangthuvien':
+        return this.tangthuvien;
+      case 'vtruyen':
+        return this.vtruyen;
+      default:
+        throw new Error(`Unsupported source: ${source}`);
     }
   }
 
   async startCrawlSite(sourceId: string) {
     const source = await this.sourceModel.findById(sourceId);
-    if (!source) throw new Error('Source not found');
-  
-    if (this.activeCrawlMap.get(source.name)) {
-      this.logger.warn(`⚠️ Đã crawl "${source.name}" rồi`);
+    if (!source) {
+      this.logData(`Source with ID ${sourceId} not found.`, source);
       return;
     }
-  
-    const adapter = this.getAdapter(source.name);
-    this.activeCrawlMap.set(source.name, true);
-  
-    await this.sourceModel.updateOne({ _id: sourceId }, { status: 'crawling' });
-  
+
+    if (this.activeCrawlMap.get(source._id.toString())) {
+      this.logData(
+        `Crawl for source ${source.name} is already in progress.`,
+        source,
+      );
+      return;
+    }
+
+    this.activeCrawlMap.set(source._id.toString(), true);
+    this.logData(`Starting crawl for source: ${source.name}`, source);
+
     try {
-      adapter.crawlAllStoryUrls(() => {
-        this.activeCrawlMap.set(source.name, false);
-      }); // let it run without await
-    } catch (err) {
-      this.logger.error(`❌ Crawl lỗi: ${err.message}`);
+      const adapter = this.getAdapter(source.name);
+      await adapter.getAllStoryOverview();
+      this.logData(`Crawl completed for source: ${source.name}`, source);
+
+      const allCrawledStories = await this.storyModel
+        .find({
+          source: source._id,
+        })
+        .populate('source');
+
+      for (const story of allCrawledStories) {
+        this.logData(`Crawling chapter list of: ${story.title}`, source);
+        await adapter.getListChapters(story);
+        this.logData(`Crawled chapters for: ${story.title}`, source);
+        const chapters = await this.chapterModel.find({ story: story._id });
+        for (const chapter of chapters) {
+          this.logData(`Crawling content of chapter: ${chapter.title}`, source);
+          await adapter.getChapterContent(chapter);
+          this.logData(`Crawled content for chapter: ${chapter.title}`, source);
+        }
+        this.logData(`Completed crawling for story: ${story.title}`, source);
+      }
+    } catch (error) {
+      this.logger.error(`Error during crawl for source ${source.name}:`, error);
+      this.logData(`Error during crawl: ${error.message}`, source);
+    } finally {
+      this.activeCrawlMap.delete(source._id.toString());
     }
   }
 
   async crawlStoryById(storyId: string) {
-    const story = await this.storyModel.findById(storyId);
-    if (!story) throw new Error('Story not found');
-
-    const adapter = this.getAdapter(story.source);
-    const data = await adapter.crawlStory(story.url);
-
-    const existingChapters = await this.chapterModel.find({ story: story._id });
-    const existingUrls = new Set(existingChapters.map(ch => ch.url));
-
-    for (const ch of (data.chapters || [])) {
-      if (existingUrls.has(ch.url)) continue;
-
-      const content = await adapter.crawlChapterContent(ch.url);
-      await this.chapterModel.create({
-        title: ch.title,
-        slug: ch.slug,
-        url: ch.url,
-        chapterNumber: ch.chapterNumber,
-        story: story._id,
-        content,
-      });
+    const story = await this.storyModel.findById(storyId).populate('source');
+    if (!story) {
+      this.logger.error(`Story with ID ${storyId} not found.`);
+      return;
     }
 
-    this.logger.log(`✅ Crawl thêm chương mới cho "${story.title}"`);
-    return { message: 'Crawl thành công', added: (data.chapters?.length || 0) - existingChapters.length };
+    const source: any = story.source;
+    if (!source) {
+      this.logger.error(`Source for story ${story.title} not found.`);
+      return;
+    }
+
+    this.logData(`Starting crawl for story: ${story.title}`, source);
+
+    try {
+      const adapter = this.getAdapter(source.name);
+      await adapter.getStoryDetail(story);
+      this.logData(`Crawled story details for: ${story.title}`, source);
+      await adapter.getListChapters(story);
+      this.logData(`Crawled chapters for story: ${story.title}`, source);
+
+      const chapters = await this.chapterModel.find({ story: story._id });
+      for (const chapter of chapters) {
+        this.logData(`Crawling content of chapter: ${chapter.title}`, source);
+        await adapter.getChapterContent(chapter);
+        this.logData(`Crawled content for chapter: ${chapter.title}`, source);
+      }
+      this.logData(`Completed crawling for story: ${story.title}`, source);
+    } catch (error) {
+      this.logger.error(`Error during crawl for story ${story.title}:`, error);
+      this.logData(`Error during crawl: ${error.message}`, source);
+    }
   }
 
-  async crawlNewStoriesOnly(sourceName: string) {
-    const source = await this.sourceModel.findOne({ name: sourceName.toLowerCase() });
-    if (!source) throw new Error('Source not found');
-  
-    const adapter = this.getAdapter(sourceName);
-    this.logger.log(`🔎 Bắt đầu crawl các truyện mới cho "${sourceName}"`);
-  
-    // Gọi trực tiếp adapter để chỉ crawl list, không crawl chương
-    await adapter.crawlStoryUrls();
-  
-    const storiesToDetail = await this.storyModel.find({
-      source: source.name,
-      isDetailCrawled: { $ne: true },
-    });
-  
-    for (const story of storiesToDetail) {
-      await adapter.crawlStoryDetailBySlug?.(story.slug); // nếu hàm này không có, cần refactor lại crawler adapter
-    }
-  
-    const storiesToChapter = await this.storyModel.find({
-      source: source.name,
-      isDetailCrawled: true,
-      isChapterCrawled: { $ne: true },
-    });
-  
-    for (const story of storiesToChapter) {
-      await adapter.crawlAllChaptersForStory?.(story._id as string); // như trên
-    }
-  
-    this.logger.log(`✅ Crawl mới cho "${sourceName}" xong.`);
+  async crawlNewStoriesOnly(sourceName: string) {}
+
+  private logData(message: string, source: any) {
+    this.logger.log(message);
+    this.gateway.sendCrawlInfo(source._id.toString(), message);
   }
-  
 }
