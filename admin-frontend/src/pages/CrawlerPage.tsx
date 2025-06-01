@@ -17,7 +17,6 @@ export default function CrawlerPage() {
   useEffect(() => {
     sources.forEach((source) => {
       socket.on(`crawl:${source._id}`, (msg) => {
-        console.log("SOCKET Receive message:", msg);
         setSources((prev) =>
           prev.map((s) =>
             s._id === source._id ? { ...s, currentInfo: msg } : s
@@ -26,7 +25,6 @@ export default function CrawlerPage() {
       });
 
       socket.on(`crawl:status:${source._id}`, (status) => {
-        console.log("SOCKET Receive message:", status);
         setSources((prev) =>
           prev.map((s) => (s._id === source._id ? { ...s, status } : s))
         );

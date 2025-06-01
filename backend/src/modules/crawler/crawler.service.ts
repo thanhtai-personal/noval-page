@@ -72,14 +72,14 @@ export class CrawlerService {
       for (const story of allCrawledStories) {
         // get Story details
         this.logData(`Crawled story details for: ${story.title}`, source);
-        await sleep(100);
+        // await sleep(100);
         await adapter.getStoryDetail(story);
       }
 
       for (const story of allCrawledStories) {
         // get Story chapters
         this.logData(`Crawled story details for: ${story.title}`, source);
-        await sleep(100);
+        // await sleep(100);
 
         this.logData(`Crawling chapter list of: ${story.title}`, source);
         await adapter.getListChapters(story);
@@ -92,7 +92,7 @@ export class CrawlerService {
               source,
             );
             await adapter.getChapterContent(chapter);
-            await sleep(800);
+            // await sleep(300);
           } catch (error) {
             this.logData(
               `[[Skipped]] chapter by error ${chapter.title}: ${error.message}`,

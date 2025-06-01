@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { api } from '@/services/api';
-import {
-  Card, CardHeader, CardTitle, CardContent,
-} from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { api } from "@/services/api";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function StoryDetailPage() {
   const { id } = useParams();
@@ -16,9 +14,7 @@ export default function StoryDetailPage() {
   useEffect(() => {
     async function fetchStoryData() {
       try {
-        const [storyRes] = await Promise.all([
-          api.get(`/stories/${id}`),
-        ]);
+        const [storyRes] = await Promise.all([api.get(`/stories/${id}`)]);
         setStory(storyRes.data);
       } finally {
         setLoading(false);
@@ -33,9 +29,14 @@ export default function StoryDetailPage() {
     async function fetChapters() {
       try {
         const [chaptersRes] = await Promise.all([
-          api.get(`/stories/${story.slug}/chapters?limit=50&sort=-chapterNumber`),
+          api.get(`/stories/${story.slug}/chapters`, {
+            params: {
+              limit: 100,
+              sort: "+chapterNumber",
+            },
+          }),
         ]);
-        setChapters(chaptersRes.data);
+        setChapters(chaptersRes.data.data || []);
       } finally {
         setLoading(false);
       }
@@ -62,7 +63,7 @@ export default function StoryDetailPage() {
     <div className="p-6 max-w-4xl space-y-6">
       <div className="flex gap-6">
         <img
-          src={story.cover || '/placeholder.jpg'}
+          src={story.cover || "/placeholder.jpg"}
           alt={story.title}
           className="w-40 h-60 rounded border object-cover"
         />
@@ -71,34 +72,47 @@ export default function StoryDetailPage() {
           <h1 className="text-2xl font-bold">{story.title}</h1>
 
           <div className="text-sm text-muted-foreground">
-            <strong>Tác giả:</strong> {story.author?.name || 'Không rõ'}
+            <strong>Tác giả:</strong> {story.author?.name || "Không rõ"}
           </div>
 
           <div className="text-sm text-muted-foreground">
-            <strong>Nguồn:</strong>{' '}
+            <strong>Nguồn:</strong>{" "}
             {story.url ? (
-              <a href={story.url} target="_blank" rel="noreferrer" className="text-blue-600 underline">
+              <a
+                href={story.url}
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-600 underline"
+              >
                 {story.source}
               </a>
-            ) : story.source || 'Không rõ'}
+            ) : (
+              story.source || "Không rõ"
+            )}
           </div>
 
           <div className="text-sm text-muted-foreground">
-            <strong>Thể loại:</strong>{' '}
+            <strong>Thể loại:</strong>{" "}
             {(story.categories || []).map((c: any) => (
-              <Badge key={c._id} variant="outline" className="mr-1">{c.name}</Badge>
+              <Badge key={c._id} variant="outline" className="mr-1">
+                {c.name}
+              </Badge>
             ))}
           </div>
 
           <div className="text-sm text-muted-foreground">
-            <strong>Tags:</strong>{' '}
+            <strong>Tags:</strong>{" "}
             {(story.tags || []).map((t: any) => (
-              <Badge key={t._id} variant="secondary" className="mr-1">{t.name}</Badge>
+              <Badge key={t._id} variant="secondary" className="mr-1">
+                {t.name}
+              </Badge>
             ))}
           </div>
 
           <div className="flex gap-4 mt-2 text-sm text-muted-foreground">
-            <span>📖 <strong>{story.totalChapters || 0}</strong> chương</span>
+            <span>
+              📖 <strong>{story.totalChapters || 0}</strong> chương
+            </span>
             <span>👁️ {story.views || 0} lượt đọc</span>
             <span>👍 {story.likes || 0} lượt thích</span>
             <span>⭐ {story.recommends || 0} đề cử</span>
@@ -125,7 +139,11 @@ export default function StoryDetailPage() {
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground whitespace-pre-line">
-            <div dangerouslySetInnerHTML={{ __html: story.description || '<i>Truyện tiên hiệp mới</i>' }} />
+            <div
+              dangerouslySetInnerHTML={{
+                __html: story.description || "<i>Truyện tiên hiệp mới</i>",
+              }}
+            />
           </p>
         </CardContent>
       </Card>

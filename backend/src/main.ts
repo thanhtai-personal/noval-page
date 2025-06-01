@@ -6,6 +6,9 @@ import { RolesGuard } from './modules/auth/guards/role.guard';
 import * as crypto from 'crypto';
 import * as cookieParser from 'cookie-parser';
 import { LoggerInterceptor } from './common/interceptors/logger.interceptor';
+import { EventEmitter } from 'events';
+
+EventEmitter.defaultMaxListeners = 50;
 
 // 🛡 Gán globalThis.crypto.randomUUID nếu chưa có (Node < 19)
 if (

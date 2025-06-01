@@ -16,9 +16,10 @@ export default function AdminChapterPage() {
   const [total, setTotal] = useState(0);
 
   const fetchChapters = async () => {
-    const res = await api.get('/chapters', {
-      params: { story: storyId, page, limit: LIMIT }
+    const res = await api.get(`stories/${storyId}/chapters`, {
+      params: { page, limit: LIMIT }
     });
+    console.log('Fetched chapters:', res);
     setChapters(res.data.data || []);
     setTotal(res.data.total || 0);
   };
@@ -28,7 +29,7 @@ export default function AdminChapterPage() {
   }, [storyId, page]);
 
   const totalPages = Math.ceil(total / LIMIT);
-
+  
   return (
     <div className="p-6 space-y-4 max-w-5xl">
       <h1 className="text-2xl font-semibold">📄 Danh sách chương</h1>
@@ -44,7 +45,7 @@ export default function AdminChapterPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {chapters.map((ch: any, idx) => (
+          {chapters?.map((ch: any, idx) => (
             <TableRow key={ch._id}>
               <TableCell>{(page - 1) * LIMIT + idx + 1}</TableCell>
               <TableCell>{ch.title}</TableCell>

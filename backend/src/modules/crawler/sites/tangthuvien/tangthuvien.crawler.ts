@@ -194,82 +194,99 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       let authorImage: any = '';
       let authorName: any = '';
 
-      try {
-        authorImage = await page.$eval('.author-info .author-photo img', (e) =>
-          e.getAttribute('src'),
-        );
-      } catch (error) {
-        this.logData(
-          `Error getting author image for ${story.title}: ${error.message}`,
-        );
-      }
-
-      try {
-        authorName = await page.$eval(
-          '.author-photo p a',
-          (e) => e.textContent || '',
-        );
-      } catch (error) {
-        this.logData(
-          `Error getting author name for ${story.title}: ${error.message}`,
-        );
-      }
-
-      const authorSlug = slugify(authorName);
-      const author = await this.authorModel.findOneAndUpdate(
-        { slug: authorSlug },
-        {
-          slug: authorSlug,
-          name: authorName,
-          image: authorImage,
-        },
-        { upsert: true, new: true, setDefaultsOnInsert: true },
-      );
-
-      let cover, status, intro, description, views, likes, recommends, votes;
       this.logData(`Processing novel: ${story.title}`);
 
-      try {
-        cover = await page.$eval(
-          '.book-detail-wrap .book-img img',
-          (e) => e.getAttribute('src') || '',
+      const storyData: Partial<Story> = {
+        source: this.source._id,
+        slug,
+        isDetailCrawled: true,
+        isChapterCrawled: false,
+      };
+
+      if (!story.isDetailCrawled) {
+        try {
+          authorImage = await page.$eval(
+            '.author-info .author-photo img',
+            (e) => e.getAttribute('src'),
+          );
+        } catch (error) {
+          this.logData(
+            `Error getting author image for ${story.title}: ${error.message}`,
+          );
+        }
+
+        try {
+          authorName = await page.$eval(
+            '.author-photo p a',
+            (e) => e.textContent || '',
+          );
+        } catch (error) {
+          this.logData(
+            `Error getting author name for ${story.title}: ${error.message}`,
+          );
+        }
+
+        const authorSlug = slugify(authorName);
+        const author = await this.authorModel.findOneAndUpdate(
+          { slug: authorSlug },
+          {
+            slug: authorSlug,
+            name: authorName,
+            image: authorImage,
+          },
+          { upsert: true, new: true, setDefaultsOnInsert: true },
         );
-        this.logData(`Cover: ${cover}`);
-      } catch (error) {
-        this.logData(
-          `Error getting cover for ${story.title}: ${error.message}`,
-        );
+
+        storyData.author = author._id as any;
+
+        try {
+          const cover = await page.$eval(
+            '.book-detail-wrap .book-img img',
+            (e) =>
+              e.getAttribute('src') ||
+              'https://imagedelivery.net/w111oH5cwLzgQJESf-Uf2g/e3ac7ced-db9f-412f-96f0-cf272e7bc500/public',
+          );
+          storyData.cover = cover;
+          this.logData(`Cover: ${cover}`);
+        } catch (error) {
+          this.logData(
+            `Error getting cover for ${story.title}: ${error.message}`,
+          );
+        }
+
+        try {
+          const intro = await page.$eval(
+            '.book-information .book-info .intro',
+            (e) => e.textContent || '',
+          );
+          storyData.intro = intro;
+          this.logData(`Intro: ${intro}`);
+        } catch (error) {
+          this.logData(
+            `Error getting intro for ${story.title}: ${error.message}`,
+          );
+        }
+
+        try {
+          const description = await page.$eval(
+            '.book-content-wrap .book-info-detail .book-intro',
+            (e) => e.textContent || '',
+          );
+          storyData.description = description;
+          this.logData(`Get Description successfully`);
+        } catch (error) {
+          this.logData(
+            `Error getting description for ${story.title}: ${error.message}`,
+          );
+        }
       }
 
       try {
-        intro = await page.$eval(
-          '.book-information .book-info .intro',
-          (e) => e.textContent || '',
-        );
-        this.logData(`Intro: ${intro}`);
-      } catch (error) {
-        this.logData(
-          `Error getting intro for ${story.title}: ${error.message}`,
-        );
-      }
-
-      try {
-        description = await page.$eval(
-          '.book-content-wrap .book-info-detail .book-intro',
-          (e) => e.textContent || '',
-        );
-        this.logData(`Get Description successfully`);
-      } catch (error) {
-        this.logData(
-          `Error getting description for ${story.title}: ${error.message}`,
-        );
-      }
-
-      try {
-        views = await page.$eval(
+        const views = await page.$eval(
           '.book-information .book-info span[class*="-view"]',
           (e) => e.textContent || '',
         );
+        storyData.views = Number(views);
         this.logData(`Views: ${views}`);
       } catch (error) {
         this.logData(
@@ -278,10 +295,11 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       }
 
       try {
-        likes = await page.$eval(
+        const likes = await page.$eval(
           '.book-information .book-info span[class*="-like"]',
           (e) => e.textContent || '',
         );
+        storyData.likes = Number(likes);
         this.logData(`Likes: ${likes}`);
       } catch (error) {
         this.logData(
@@ -290,10 +308,11 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       }
 
       try {
-        recommends = await page.$eval(
+        const recommends = await page.$eval(
           '.book-information .book-info span[class*="-follow"]',
           (e) => e.textContent || '',
         );
+        storyData.recommends = Number(recommends);
         this.logData(`Recommends: ${recommends}`);
       } catch (error) {
         this.logData(
@@ -302,10 +321,11 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       }
 
       try {
-        votes = await page.$eval(
+        const votes = await page.$eval(
           '.book-information .book-info span[class*="-nomi"]',
           (e) => e.textContent || '',
         );
+        storyData.votes = Number(votes);
         this.logData(`Votes: ${votes}`);
       } catch (error) {
         this.logData(
@@ -313,27 +333,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         );
       }
 
-      if (!cover) {
-        cover =
-          'https://imagedelivery.net/w111oH5cwLzgQJESf-Uf2g/e3ac7ced-db9f-412f-96f0-cf272e7bc500/public';
-      }
       this.logData(`Novel Info: ${story.title}`);
-      const storyData = {
-        source: this.source._id,
-        slug,
-        cover,
-        author: author._id,
-        authorName: author.name,
-        status,
-        intro,
-        description,
-        views: Number(views),
-        likes: Number(likes),
-        recommends: Number(recommends),
-        votes: Number(votes),
-        isDetailCrawled: true,
-        isChapterCrawled: false,
-      };
 
       await this.storyModel.findOneAndUpdate({ slug }, storyData, {
         upsert: true,
@@ -360,7 +360,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
 
     await page.waitForTimeout(50);
 
-    const listChapters: any[] = [];
+    let listChapters: any[] = [];
     let nextPageBtn: any = null;
 
     this.logData(`...Fetching chapters for story: ${story.title}`);
@@ -374,8 +374,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
               title: element.getAttribute('title') || '',
             })),
         );
-
-        listChapters.push(...chapterJSNodes);
+        listChapters = listChapters.concat(chapterJSNodes);
         try {
           nextPageBtn = await page.$('ul.pagination li a[aria-label=Next]');
           try {
@@ -407,6 +406,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       this.logData(
         `Processing chapter ${Number(chapterIndex) + 1}: ${listChapters[chapterIndex].title}`,
       );
+      await sleep(300);
       const slug = slugify(
         listChapters[chapterIndex].title ||
           `story-${story.title}-chapter-${chapterIndex}`,
@@ -426,6 +426,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       });
       this.logData(`Created chapter: ${listChapters[chapterIndex].title}`);
     }
+    await sleep(1000000000); // Giữ trình duyệt mở để kiểm tra
 
     await browser.close();
   }
