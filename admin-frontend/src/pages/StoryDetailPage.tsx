@@ -16,12 +16,10 @@ export default function StoryDetailPage() {
   useEffect(() => {
     async function fetchStoryData() {
       try {
-        const [storyRes, chaptersRes] = await Promise.all([
+        const [storyRes] = await Promise.all([
           api.get(`/stories/${id}`),
-          api.get(`/stories/${id}/chapters?limit=50&sort=-chapterNumber`),
         ]);
         setStory(storyRes.data);
-        setChapters(chaptersRes.data.data || []);
       } finally {
         setLoading(false);
       }
@@ -29,6 +27,22 @@ export default function StoryDetailPage() {
 
     fetchStoryData();
   }, [id]);
+
+  useEffect(() => {
+    if (!story) return;
+    async function fetChapters() {
+      try {
+        const [chaptersRes] = await Promise.all([
+          api.get(`/stories/${story.slug}/chapters?limit=50&sort=-chapterNumber`),
+        ]);
+        setChapters(chaptersRes.data);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetChapters();
+  }, [story]);
 
   if (loading) {
     return (
@@ -111,7 +125,7 @@ export default function StoryDetailPage() {
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground whitespace-pre-line">
-            {story.description ? <div dangerouslySetInnerHTML={{ __html: story.description }} /> : 'Chưa có mô tả'}
+            <div dangerouslySetInnerHTML={{ __html: story.description || '<i>Truyện tiên hiệp mới</i>' }} />
           </p>
         </CardContent>
       </Card>

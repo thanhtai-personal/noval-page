@@ -8,8 +8,8 @@ export class TagController {
 
   @Get()
   @Public()
-  getAll() {
-    return this.tagService.getAll();
+  async getAll() {
+    return await this.tagService.getAll();
   }
 }
 

@@ -10,8 +10,10 @@ export function StoryTabs({
   storyId,
   slug,
   description,
+  storySlug,
 }: {
   storyId: string;
+  storySlug: string;
   slug: string;
   description: string;
 }) {
@@ -21,7 +23,7 @@ export function StoryTabs({
 
   const fetchChapters = async () => {
     const res = await ApiInstant.get(
-      `/chapters?story=${storyId}&page=${page}&limit=20`
+      `/stories/${storySlug}/chapters?page=${page}&limit=20`
     );
     setChapters(res.data.data || []);
     setTotalPages(Math.ceil(res.data.total / 20));
@@ -29,7 +31,7 @@ export function StoryTabs({
 
   useEffect(() => {
     fetchChapters();
-  }, [page]);
+  }, [storySlug, page]);
 
   return (
     <Card className="mt-6">
@@ -54,9 +56,9 @@ export function StoryTabs({
             <ul className="space-y-2">
               {chapters.map((chapter: any) => (
                 <li key={chapter._id}>
-                  <Link href={`/truyen/${slug}/chuong/${chapter.index}`}>
+                  <Link href={`/truyen/${storySlug}/chuong/${chapter.slug}`}>
                     <span className="text-blue-600 hover:underline">
-                      {chapter.name}
+                      {chapter.title}
                     </span>
                   </Link>
                 </li>

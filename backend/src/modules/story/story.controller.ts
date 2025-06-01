@@ -13,8 +13,8 @@ export class StoryController {
 
   @Public()
   @Get()
-  getStories(@Query() query: GetStoryListDto) {
-    return this.storyService.getStories(query);
+  async getStories(@Query() query: GetStoryListDto) {
+    return await this.storyService.getStories(query);
   }
 
   @Public()
@@ -28,10 +28,10 @@ export class StoryController {
   
   @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
   @Post()
-  createStory(
+  async createStory(
     @Body() dto: CreateStoryDto,
     @CurrentUser('userId') userId: string,
   ) {
-    return this.storyService.createStory(dto, userId);
+    return await this.storyService.createStory(dto, userId);
   }
 }

@@ -12,17 +12,17 @@ export class CommentController {
 
   @Public()
   @Get()
-  getComments(@Param('slug') slug: string) {
-    return this.commentService.getCommentsByStorySlug(slug);
+  async getComments(@Param('slug') slug: string) {
+    return await this.commentService.getCommentsByStorySlug(slug);
   }
 
   @Post()
   @Roles(RoleSlug.READER)
-  createComment(
+  async createComment(
     @Param('slug') slug: string,
     @Body() dto: CreateCommentDto,
     @CurrentUser('userId') userId: string,
   ) {
-    return this.commentService.createComment(slug, dto);
+    return await this.commentService.createComment(slug, dto);
   }
 }

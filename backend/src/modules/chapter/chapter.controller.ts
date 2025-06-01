@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Query } from '@nestjs/common';
 import { ChapterService } from './chapter.service';
 import { GetChapterListDto } from './dto/get-chapter-list.dto';
 import { Public } from "../auth/decorators/public.decorator";
@@ -13,7 +13,8 @@ export class ChapterController {
     @Param('slug') slug: string,
     @Query() query: GetChapterListDto,
   ) {
-    return this.chapterService.getChapterList(slug, query);
+    const chaptersResponse = await this.chapterService.getChapterList(slug, query);
+    return chaptersResponse;
   }
 
   @Public()
@@ -22,6 +23,17 @@ export class ChapterController {
     @Param('slug') slug: string,
     @Param('chapterSlug') chapterSlug: string,
   ) {
-    return this.chapterService.getChapterDetail(slug, chapterSlug);
+    const chaptersResponse =  await this.chapterService.getChapterDetail(slug, chapterSlug);
+    return chaptersResponse;
+  }
+
+  @Public()
+  @Get('prev-and-next/:chapterNumber')
+  async getNextAndPrev(
+    @Param('slug') slug: string,
+    @Param('chapterNumber') chapterNumber: number,
+  ) {
+    const chaptersResponse =  await this.chapterService.getPrevAndNext(slug, chapterNumber);
+    return chaptersResponse;
   }
 }

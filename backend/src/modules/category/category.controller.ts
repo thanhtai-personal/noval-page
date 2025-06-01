@@ -8,7 +8,7 @@ export class CategoryController {
 
   @Public()
   @Get()
-  getAll() {
-    return this.categoryService.getAll();
+  async getAll() {
+    return await this.categoryService.getAll();
   }
 }

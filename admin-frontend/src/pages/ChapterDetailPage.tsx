@@ -4,14 +4,14 @@ import { api } from '@/services/api';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 export default function ChapterDetailPage() {
-  const { id } = useParams();
+  const { id, storySlug } = useParams();
   const [chapter, setChapter] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchChapter() {
       try {
-        const res = await api.get(`/chapters/${id}`);
+        const res = await api.get(`stories/${storySlug}/chapters/${id}`);
         setChapter(res.data);
       } finally {
         setLoading(false);

@@ -101,13 +101,13 @@ export class AuthController {
   // 🚪 Logout
   @Public()
   @Post('logout')
-  logout(
+  async logout(
     @CurrentUser('userId') userId: string,
     @Res({ passthrough: true }) res: Response,
   ) {
     res.clearCookie('access_token');
     res.clearCookie('refresh_token');
-    return this.authService.logout(userId);
+    return await this.authService.logout(userId);
   }
 
   // 👤 Lấy thông tin người dùng hiện tại
@@ -121,22 +121,22 @@ export class AuthController {
   @Public()
   @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Post('register')
-  register(@Body() dto: RegisterDto) {
-    return this.authService.register(dto.email, dto.name, dto.password);
+  async register(@Body() dto: RegisterDto) {
+    return await this.authService.register(dto.email, dto.name, dto.password);
   }
 
   // 📩 Gửi email khôi phục mật khẩu
   @Public()
   @Post('forgot-password')
-  forgotPassword(@Body() dto: ForgotPasswordDto) {
-    return this.authService.forgotPassword(dto.email);
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return await this.authService.forgotPassword(dto.email);
   }
 
   // 🔑 Đặt lại mật khẩu
   @Public()
   @Post('reset-password')
-  resetPassword(@Body() dto: ResetPasswordDto) {
-    return this.authService.resetPassword(dto.token, dto.newPassword);
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    return await this.authService.resetPassword(dto.token, dto.newPassword);
   }
 
   @Public()

@@ -12,16 +12,4 @@ export class SourceController {
   async getAll() {
     return this.sourceService.findAll();
   }
-
-  @Post(':id/crawl')
-  async startCrawl(@Param('id') id: string) {
-    this.sourceService.startCrawl(id);
-    return { message: 'Crawl started' };
-  }
-
-  @Post(':id/cancel')
-  async cancelCrawl(@Param('id') id: string) {
-    this.sourceService.cancelCrawl(id);
-    return { message: 'Crawl cancelled' };
-  }
 }

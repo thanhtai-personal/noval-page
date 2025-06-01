@@ -9,8 +9,8 @@ export class AuthorController {
 
   @Public()
   @Get()
-  getAuthorList(@Query() query: GetAuthorListDto) {
-    return this.authorService.getAuthorList(query);
+  async getAuthorList(@Query() query: GetAuthorListDto) {
+    return await this.authorService.getAuthorList(query);
   }
   
   @Public()

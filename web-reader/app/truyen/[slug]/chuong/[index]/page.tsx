@@ -9,21 +9,36 @@ export default function ChapterPage() {
   const { slug, index } = useParams();
   const router = useRouter();
   const [chapter, setChapter] = useState<any>(null);
+  const [nextChapter, setNextChapter] = useState<any>(null);
+  const [prevChapter, setPrevChapter] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   const loadChapter = useCallback(async () => {
     setLoading(true);
-    const res = await ApiInstant.get(`/chapters/${slug}/${index}`);
+    const res = await ApiInstant.get(`/stories/${slug}/chapters/${index}`);
     setChapter(res.data);
-    localStorage.setItem(`read-${slug}`, index?.toString() || '0');
+    localStorage.setItem(`read-${slug}-${slug}`, index?.toString() || '0');
     setLoading(false);
   }, [slug, index]);
 
   useEffect(() => {
     loadChapter();
-  }, [loadChapter]);
+  }, []);
 
-  // Vuốt ngang trên mobile
+  useEffect(() => {
+    if (!chapter) return;
+    const fetchNextChapter = async () => {
+      try {
+        const res = await ApiInstant.get(`/stories/${slug}/chapters/prev-and-next/${chapter.chapterNumber}`);
+        setNextChapter(res.data.next || null);
+        setPrevChapter(res.data.prev || null);
+      } catch (error) {
+        console.error('Error fetching next chapter:', error);
+      }
+    };
+    fetchNextChapter();
+  }, [chapter]);
+
   useEffect(() => {
     let touchStartX = 0;
     let touchEndX = 0;
@@ -47,8 +62,12 @@ export default function ChapterPage() {
   }, [index, slug]);
 
   const handleNext = () => {
-    const nextIndex = parseInt(index as string, 10) + 1;
-    router.push(`/truyen/${slug}/chuong/${nextIndex}`);
+    if (!nextChapter) return;
+    router.push(`/truyen/${slug}/chuong/${nextChapter.slug}`);
+  };
+
+  const handleBack = () => {
+    router.push(`/truyen/${slug}/chuong/${prevChapter.slug}`);
   };
 
   const handleBackToList = () => {
@@ -60,9 +79,10 @@ export default function ChapterPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6 space-y-4">
-      <h1 className="text-xl font-bold text-center">{chapter.name}</h1>
-      <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: chapter.content }} />
+      <h1 className="text-xl font-bold text-center">{chapter.title}</h1>
+      <div className="prose max-w-none whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: chapter.content }} />
       <div className="flex justify-between mt-6">
+        {prevChapter && <Button size="sm" onClick={handleBack}>← Danh sách chương</Button>}
         <Button size="sm" onClick={handleBackToList}>← Danh sách chương</Button>
         <Button size="sm" onClick={handleNext}>Chương tiếp →</Button>
       </div>

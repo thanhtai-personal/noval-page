@@ -9,7 +9,8 @@ export class RoleController {
 
   @Get()
   @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
-  getRoles() {
-    return this.roleService.getRoles();
+  async getRoles() {
+    const roleRS = await this.roleService.getRoles();
+    return roleRS;
   }
 }

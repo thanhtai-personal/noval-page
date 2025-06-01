@@ -75,13 +75,14 @@ export default async function StoryDetailPage({ params }: any) {
           </h3>
           <div
             className="text-default-700"
-            dangerouslySetInnerHTML={{ __html: story.intro }}
+            dangerouslySetInnerHTML={{ __html: story.intro || "<i>Chưa cập nhật</i>" }}
           ></div>
         </div>
       </div>
 
       <StoryTabs
         storyId={story._id}
+        storySlug={story.slug}
         slug={story.slug}
         description={story.description}
       />

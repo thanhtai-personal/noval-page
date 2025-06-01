@@ -14,10 +14,13 @@ import puppeteer from 'puppeteer';
 import { CrawlHistory } from '@/schemas/crawlHistory.schema';
 import { sleep } from '@/utils/functions';
 
+import * as fs from 'fs';
+import * as path from 'path';
+
 const DEBUG_CONFIG = {
-  ON: process.env.DEBUG_CRAWL === 'true',
+  ON: true, //process.env.DEBUG_CRAWL === 'true',
   DEMO_STORIES_NUMBER: 50,
-  DEMO_CHAPTERS_NUMBER: 500,
+  DEMO_CHAPTERS_NUMBER: 100,
   DEMO_CRAWL_PAGES: 5,
 };
 
@@ -119,13 +122,12 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
               (e) => e.textContent || 'no-category',
             );
             this.logData(`Category: ${category}`);
-            
+
             totalChapters = await novalInfoJSNode.$eval(
               '.author span>span',
               (e) => e.textContent || '',
             );
             this.logData(`Total Chapters: ${totalChapters}`);
-
           } catch (error) {
             this.logData(
               `Error getting title or URL for story: ${error.message}`,
@@ -154,6 +156,8 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             categories: [cate._id],
             totalChapters: Number(totalChapters),
             title,
+            cover:
+              'https://imagedelivery.net/w111oH5cwLzgQJESf-Uf2g/e3ac7ced-db9f-412f-96f0-cf272e7bc500/public',
             isDetailCrawled: false,
             isChapterCrawled: false,
           };
@@ -222,24 +226,19 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         { upsert: true, new: true, setDefaultsOnInsert: true },
       );
 
-      let cover,
-        status,
-        intro,
-        description,
-        views,
-        likes,
-        recommends,
-        votes;
+      let cover, status, intro, description, views, likes, recommends, votes;
       this.logData(`Processing novel: ${story.title}`);
-      
+
       try {
         cover = await page.$eval(
           '.book-detail-wrap .book-img img',
-          (e) => e.getAttribute('alt') || '',
+          (e) => e.getAttribute('src') || '',
         );
         this.logData(`Cover: ${cover}`);
       } catch (error) {
-        this.logData(`Error getting cover for ${story.title}: ${error.message}`);
+        this.logData(
+          `Error getting cover for ${story.title}: ${error.message}`,
+        );
       }
 
       try {
@@ -249,7 +248,9 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         );
         this.logData(`Intro: ${intro}`);
       } catch (error) {
-        this.logData(`Error getting intro for ${story.title}: ${error.message}`);
+        this.logData(
+          `Error getting intro for ${story.title}: ${error.message}`,
+        );
       }
 
       try {
@@ -271,7 +272,9 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         );
         this.logData(`Views: ${views}`);
       } catch (error) {
-        this.logData(`Error getting views for ${story.title}: ${error.message}`);
+        this.logData(
+          `Error getting views for ${story.title}: ${error.message}`,
+        );
       }
 
       try {
@@ -281,7 +284,9 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         );
         this.logData(`Likes: ${likes}`);
       } catch (error) {
-        this.logData(`Error getting likes for ${story.title}: ${error.message}`);
+        this.logData(
+          `Error getting likes for ${story.title}: ${error.message}`,
+        );
       }
 
       try {
@@ -303,15 +308,16 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         );
         this.logData(`Votes: ${votes}`);
       } catch (error) {
-        this.logData(`Error getting votes for ${story.title}: ${error.message}`);
+        this.logData(
+          `Error getting votes for ${story.title}: ${error.message}`,
+        );
       }
 
       if (!cover) {
-        cover = 'https://imagedelivery.net/w111oH5cwLzgQJESf-Uf2g/e3ac7ced-db9f-412f-96f0-cf272e7bc500/public';
+        cover =
+          'https://imagedelivery.net/w111oH5cwLzgQJESf-Uf2g/e3ac7ced-db9f-412f-96f0-cf272e7bc500/public';
       }
-      this.logData(
-        `Novel Info: ${story.title}`,
-      );
+      this.logData(`Novel Info: ${story.title}`);
       const storyData = {
         source: this.source._id,
         slug,
@@ -387,7 +393,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       }
     } while (nextPageBtn);
     this.logData(
-      `Found ${listChapters.length} chapters for story: ${story.title}`, 
+      `Found ${listChapters.length} chapters for story: ${story.title}`,
     );
 
     for (const chapterIndex in listChapters) {
@@ -434,12 +440,10 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       content = await page.$eval('div.box-chap', (e) => e.innerHTML);
     } catch (error) {
       this.logData(`Error getting chapter content: ${error.message}`);
-      await browser.close();
       return;
     }
     if (!content) {
       this.logData(`No content found for chapter: ${chapter.title}`);
-      await browser.close();
       return;
     }
 
@@ -448,12 +452,10 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       title = await page.$eval('h5 a.more-chap', (e) => e.textContent || '');
     } catch (error) {
       this.logData(`Error getting chapter title: ${error.message}`);
-      await browser.close();
       return;
     }
     if (!title) {
       this.logData(`No title found for chapter: ${chapter.url}`);
-      await browser.close();
       return;
     }
     chapter.content = content;
@@ -476,13 +478,33 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     }
   }
 
-  private logData(message: string) {
+  private async logData(message: string) {
     if (!this.source) {
-      this.getSource();
+      await this.getSource();
       this.logger.log('Source not initialized, fetching source data...');
       return;
     }
+
+    const timestamp = new Date().toISOString();
+    const logMessage = `[${timestamp}] ${message}\n`;
+
     this.logger.log(message);
     this.gateway.sendCrawlInfo(this.source._id.toString(), message);
+
+    const logDir = path.join(__dirname, '..', '..', 'logs');
+
+    // Tạo thư mục logs nếu chưa tồn tại
+    if (!fs.existsSync(logDir)) {
+      fs.mkdirSync(logDir, { recursive: true });
+    }
+
+    // Tạo tên file log dựa trên tên nguồn
+    const logFile = path.join(
+      logDir,
+      `${this.source.name.replace(/\s+/g, '_')}.md`,
+    );
+
+    // Ghi log vào file .md
+    fs.appendFileSync(logFile, logMessage);
   }
 }

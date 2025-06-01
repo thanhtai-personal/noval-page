@@ -12,6 +12,9 @@ import { Source } from '@/schemas/source.schema';
 import { CrawlerGateway } from './crawler.gateway';
 import { sleep } from '@/utils/functions';
 
+import * as fs from 'fs';
+import * as path from 'path';
+
 @Injectable()
 export class CrawlerService {
   private readonly logger = new Logger(CrawlerService.name);
@@ -67,17 +70,35 @@ export class CrawlerService {
         .populate('source');
 
       for (const story of allCrawledStories) {
+        // get Story details
         this.logData(`Crawled story details for: ${story.title}`, source);
+        await sleep(100);
         await adapter.getStoryDetail(story);
-        await sleep(1000); // Thêm thời gian chờ giữa các yêu cầu để tránh quá tải
-        
+      }
+
+      for (const story of allCrawledStories) {
+        // get Story chapters
+        this.logData(`Crawled story details for: ${story.title}`, source);
+        await sleep(100);
+
         this.logData(`Crawling chapter list of: ${story.title}`, source);
         await adapter.getListChapters(story);
         this.logData(`Crawled chapters for: ${story.title}`, source);
         const chapters = await this.chapterModel.find({ story: story._id });
         for (const chapter of chapters) {
-          this.logData(`Crawling content of chapter: ${chapter.title}`, source);
-          await adapter.getChapterContent(chapter);
+          try {
+            this.logData(
+              `Crawling content of chapter: ${chapter.title}`,
+              source,
+            );
+            await adapter.getChapterContent(chapter);
+            await sleep(800);
+          } catch (error) {
+            this.logData(
+              `[[Skipped]] chapter by error ${chapter.title}: ${error.message}`,
+              source,
+            );
+          }
           this.logData(`Crawled content for chapter: ${chapter.title}`, source);
         }
         this.logData(`Completed crawling for story: ${story.title}`, source);
@@ -128,7 +149,23 @@ export class CrawlerService {
   async crawlNewStoriesOnly(sourceName: string) {}
 
   private logData(message: string, source: any) {
+    const timestamp = new Date().toISOString();
+    const logMessage = `[${timestamp}] ${message}\n`;
+
     this.logger.log(message);
     this.gateway.sendCrawlInfo(source._id.toString(), message);
+
+    const logDir = path.join(__dirname, '..', '..', 'logs');
+
+    // Tạo thư mục logs nếu chưa tồn tại
+    if (!fs.existsSync(logDir)) {
+      fs.mkdirSync(logDir, { recursive: true });
+    }
+
+    // Tạo tên file log dựa trên tên nguồn
+    const logFile = path.join(logDir, `${source.name.replace(/\s+/g, '_')}.md`);
+
+    // Ghi log vào file .md
+    fs.appendFileSync(logFile, logMessage);
   }
 }

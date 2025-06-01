@@ -10,12 +10,10 @@ export class ChapterService {
   constructor(
     @InjectModel(Chapter.name) private chapterModel: Model<Chapter>,
     @InjectModel(Story.name) private storyModel: Model<Story>,
-  ) { }
-
+  ) {}
 
   async getChapterList(slug: string, query: GetChapterListDto) {
     const { page = 1, limit = 50 } = query;
-
     const story = await this.storyModel.findOne({ slug }).select('_id');
     if (!story) return { total: 0, page, limit, data: [] };
 
@@ -37,9 +35,32 @@ export class ChapterService {
     };
   }
 
+  async getPrevAndNext(storySlug: string, chapterNumber: number) {
+    const story = await this.storyModel
+      .findOne({ slug: storySlug })
+      .select('_id');
+    if (!story) return null;
+
+    const prev = await this.chapterModel.findOne({
+      story: story._id,
+      chapterNumber: Number(chapterNumber) - 1,
+    });
+
+    const next = await this.chapterModel.findOne({
+      story: story._id,
+      chapterNumber: Number(chapterNumber) + 1,
+    });
+
+    return {
+      prev,
+      next,
+    };
+  }
 
   async getChapterDetail(storySlug: string, chapterSlug: string) {
-    const story = await this.storyModel.findOne({ slug: storySlug }).select('_id');
+    const story = await this.storyModel
+      .findOne({ slug: storySlug })
+      .select('_id');
     if (!story) return null;
 
     return this.chapterModel.findOne({

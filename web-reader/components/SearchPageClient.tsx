@@ -33,7 +33,7 @@ export default function SearchPageClient() {
         ApiInstant.get("/tags"),
         ApiInstant.get("/authors"),
       ]);
-      setCategories(catRes.data?.data || []);
+      setCategories(catRes.data || []);
       setTags(tagRes.data?.data || []);
       setAuthors(authorRes.data?.data || []);
     };

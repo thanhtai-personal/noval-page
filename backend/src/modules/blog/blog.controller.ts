@@ -8,6 +8,6 @@ export class BlogController {
   @Get()
   async findAll(@Query() query: any) {
     const { page, limit, sort } = query;
-    return this.blogService.getBlogs(Number(page), Number(limit), sort);
+    return await this.blogService.getBlogs(Number(page), Number(limit), sort);
   }
 }
