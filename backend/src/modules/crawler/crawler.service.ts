@@ -69,7 +69,7 @@ export class CrawlerService {
       for (const story of allCrawledStories) {
         this.logData(`Crawled story details for: ${story.title}`, source);
         await adapter.getStoryDetail(story);
-        await sleep(1000000); // Thêm thời gian chờ giữa các yêu cầu để tránh quá tải
+        await sleep(1000); // Thêm thời gian chờ giữa các yêu cầu để tránh quá tải
         
         this.logData(`Crawling chapter list of: ${story.title}`, source);
         await adapter.getListChapters(story);
