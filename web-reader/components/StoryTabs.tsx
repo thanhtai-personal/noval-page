@@ -45,7 +45,7 @@ export function StoryTabs({
           <CardBody>
             <h2 className="text-xl font-semibold mb-2">Mô tả</h2>
             <div
-              className="text-default-700"
+              className="text-default-700  whitespace-pre-wrap"
               dangerouslySetInnerHTML={{ __html: description }}
             />
           </CardBody>

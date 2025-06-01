@@ -74,7 +74,7 @@ export default async function StoryDetailPage({ params }: any) {
             Giới thiệu
           </h3>
           <div
-            className="text-default-700"
+            className="text-default-700 whitespace-pre-wrap"
             dangerouslySetInnerHTML={{ __html: story.intro || "<i>Chưa cập nhật</i>" }}
           ></div>
         </div>

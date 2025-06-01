@@ -25,7 +25,7 @@ export default function BlogDetailPage() {
       {blog.cover && (
         <img src={blog.cover} alt={blog.title} className="rounded w-full h-auto" />
       )}
-      <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: blog.content }} />
+      <div className="prose max-w-none whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: blog.content }} />
     </section>
   );
 }

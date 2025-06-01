@@ -20,7 +20,7 @@ export const StoryCard = ({ story, isSlide }: { story: Story; isSlide?: boolean 
       <h2 className="text-lg font-semibold">{story.title}</h2>
       <p className="text-sm text-gray-600 mb-1">Tác giả: {story.author?.name}</p>
       <div
-        className="text-sm text-gray-600"
+        className="text-sm text-gray-600  whitespace-pre-wrap"
         dangerouslySetInnerHTML={{ __html: story.intro }}
       />
       <div className="flex flex-wrap gap-1 mt-2">

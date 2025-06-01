@@ -374,7 +374,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
               title: element.getAttribute('title') || '',
             })),
         );
-        listChapters = listChapters.concat(chapterJSNodes);
+        listChapters = [...listChapters, ...chapterJSNodes];
         try {
           nextPageBtn = await page.$('ul.pagination li a[aria-label=Next]');
           try {
@@ -403,10 +403,11 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         this.logData(`>> DEMO MODE: Stopping at chapter ${chapterIndex}`);
         break;
       }
-      this.logData(
-        `Processing chapter ${Number(chapterIndex) + 1}: ${listChapters[chapterIndex].title}`,
-      );
-      await sleep(300);
+      // this.logData(
+      //   `Processing chapter ${Number(chapterIndex) + 1}: ${listChapters[chapterIndex].title}`,
+      // );
+      this.logData(`chapterIndex: ${chapterIndex}`);
+      await sleep(500);
       const slug = slugify(
         listChapters[chapterIndex].title ||
           `story-${story.title}-chapter-${chapterIndex}`,
@@ -426,8 +427,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       });
       this.logData(`Created chapter: ${listChapters[chapterIndex].title}`);
     }
-    await sleep(1000000000); // Giữ trình duyệt mở để kiểm tra
-
+    await sleep(10000000);
     await browser.close();
   }
 
