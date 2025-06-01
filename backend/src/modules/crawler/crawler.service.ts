@@ -10,6 +10,7 @@ import { VtruyenCrawler } from './sites/vtruyen.crawler';
 import { ICrawlerAdapter } from './sites/interfaces/crawler-adapter.interface';
 import { Source } from '@/schemas/source.schema';
 import { CrawlerGateway } from './crawler.gateway';
+import { sleep } from '@/utils/functions';
 
 @Injectable()
 export class CrawlerService {
@@ -66,6 +67,10 @@ export class CrawlerService {
         .populate('source');
 
       for (const story of allCrawledStories) {
+        this.logData(`Crawled story details for: ${story.title}`, source);
+        await adapter.getStoryDetail(story);
+        await sleep(1000000); // Thêm thời gian chờ giữa các yêu cầu để tránh quá tải
+        
         this.logData(`Crawling chapter list of: ${story.title}`, source);
         await adapter.getListChapters(story);
         this.logData(`Crawled chapters for: ${story.title}`, source);

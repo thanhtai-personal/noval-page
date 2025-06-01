@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import * as cheerio from 'cheerio';
 import { ICrawlerAdapter } from '../interfaces/crawler-adapter.interface';
 import { slugify } from '@/utils/slugify';
 import { Source } from '@/schemas/source.schema';
@@ -13,9 +12,10 @@ import { Tag } from '@/schemas/tag.schema';
 import { CrawlerGateway } from '../../crawler.gateway';
 import puppeteer from 'puppeteer';
 import { CrawlHistory } from '@/schemas/crawlHistory.schema';
+import { sleep } from '@/utils/functions';
 
 const DEBUG_CONFIG = {
-  ON: false, //process.env.DEBUG_CRAWL === 'true',
+  ON: true, //process.env.DEBUG_CRAWL === 'true',
   DEMO_STORIES_NUMBER: 50,
   DEMO_CHAPTERS_NUMBER: 500,
   DEMO_CRAWL_PAGES: 5,
@@ -99,18 +99,33 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
 
         const novalsInfoNodes = await page.$$('div.book-img-text ul li');
         for (const novalInfoJSNode of novalsInfoNodes) {
-          let title, url;
+          let title, url, category, totalChapters;
+
           try {
             title = await novalInfoJSNode.$eval(
               'h4 a',
               (e) => e.textContent || 'no-title',
             );
             this.logData(`Processing story: ${title}`);
+
             url = await novalInfoJSNode.$eval(
               'h4 a',
               (e) => e.getAttribute('href') || '',
             );
-            this.logData(`Story URL: ${url}`);
+            this.logData(`URL: ${url}`);
+
+            category = await novalInfoJSNode.$eval(
+              'div.book-mid-info p.author a[href*="/the-loai/"]',
+              (e) => e.textContent || 'no-category',
+            );
+            this.logData(`Category: ${category}`);
+            
+            totalChapters = await novalInfoJSNode.$eval(
+              '.author span>span',
+              (e) => e.textContent || '',
+            );
+            this.logData(`Total Chapters: ${totalChapters}`);
+
           } catch (error) {
             this.logData(
               `Error getting title or URL for story: ${error.message}`,
@@ -124,10 +139,20 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             this.logData(`Story already exists: ${title}`);
             continue;
           }
+
+          const cateSlug = slugify(category);
+          const cate = await this.categoryModel.findOneAndUpdate(
+            { slug: cateSlug },
+            { name: category, slug: cateSlug },
+            { upsert: true, new: true, setDefaultsOnInsert: true },
+          );
+
           const storyData = {
             url,
             source: this.source._id,
             slug,
+            categories: [cate._id],
+            totalChapters: Number(totalChapters),
             title,
             isDetailCrawled: false,
             isChapterCrawled: false,
@@ -160,36 +185,29 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       const page = await browser.newPage();
       await page.goto(story.url);
 
-      const novalName = await page.$eval(
-        '.book-mid-info h4 a',
-        (e) => e.textContent || 'no-name',
-      );
-      const ttvUrl = await page.$eval('.book-img-box a', (e) =>
-        e.getAttribute('href'),
-      );
-      const slug = slugify(novalName);
+      const slug = slugify(story.title);
 
       let authorImage: any = '';
       let authorName: any = '';
 
       try {
-        authorImage = await page.$eval('.book-mid-info .author img', (e) =>
+        authorImage = await page.$eval('.author-info .author-photo img', (e) =>
           e.getAttribute('src'),
         );
       } catch (error) {
         this.logData(
-          `Error getting author image for ${novalName}: ${error.message}`,
+          `Error getting author image for ${story.title}: ${error.message}`,
         );
       }
 
       try {
         authorName = await page.$eval(
-          '.book-mid-info .author img',
+          '.author-photo p a',
           (e) => e.textContent || '',
         );
       } catch (error) {
         this.logData(
-          `Error getting author name for ${novalName}: ${error.message}`,
+          `Error getting author name for ${story.title}: ${error.message}`,
         );
       }
 
@@ -213,102 +231,106 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         likes,
         recommends,
         votes;
-      this.logData(`Processing novel: ${novalName}`);
+      this.logData(`Processing novel: ${story.title}`);
+      
       try {
         cover = await page.$eval(
-          '.book-img-box a img',
+          '.book-detail-wrap .book-img img',
           (e) => e.getAttribute('alt') || '',
         );
+        this.logData(`Cover: ${cover}`);
       } catch (error) {
-        this.logData(`Error getting cover for ${novalName}: ${error.message}`);
+        this.logData(`Error getting cover for ${story.title}: ${error.message}`);
       }
-      try {
-        status = await page.$eval(
-          '.book-mid-info span',
-          (e) => e.textContent || '',
-        );
-      } catch (error) {
-        this.logData(`Error getting status for ${novalName}: ${error.message}`);
-      }
-      try {
-        totalChapters = await page.$eval(
-          '.book-mid-info span span',
-          (e) => e.textContent || '',
-        );
-      } catch (error) {
-        this.logData(
-          `Error getting total chapters for ${novalName}: ${error.message}`,
-        );
-      }
+
+      // try {
+      //   status = await page.$eval(
+      //     '.book-mid-info span',
+      //     (e) => e.textContent || '',
+      //   );
+      //   this.logData(`Status: ${status}`);
+      // } catch (error) {
+      //   this.logData(`Error getting status for ${story.title}: ${error.message}`);
+      // }
+
       try {
         intro = await page.$eval(
-          '.book-mid-info .intro',
+          '.book-information .book-info .intro',
           (e) => e.textContent || '',
         );
+        this.logData(`Intro: ${intro}`);
       } catch (error) {
-        this.logData(`Error getting intro for ${novalName}: ${error.message}`);
+        this.logData(`Error getting intro for ${story.title}: ${error.message}`);
       }
+
       try {
         description = await page.$eval(
-          '.book-mid-info .book-intro',
+          '.book-content-wrap .book-info-detail .book-intro',
           (e) => e.textContent || '',
         );
+        this.logData(`Get Description successfully`);
       } catch (error) {
         this.logData(
-          `Error getting description for ${novalName}: ${error.message}`,
+          `Error getting description for ${story.title}: ${error.message}`,
         );
       }
+
       try {
         views = await page.$eval(
-          '.book-mid-info span[class="-view"]',
+          '.book-information .book-info span[class*="-view"]',
           (e) => e.textContent || '',
         );
+        this.logData(`Views: ${views}`);
       } catch (error) {
-        this.logData(`Error getting views for ${novalName}: ${error.message}`);
+        this.logData(`Error getting views for ${story.title}: ${error.message}`);
       }
+
       try {
         likes = await page.$eval(
-          '.book-mid-info span[class="-like"]',
+          '.book-information .book-info span[class*="-like"]',
           (e) => e.textContent || '',
         );
+        this.logData(`Likes: ${likes}`);
       } catch (error) {
-        this.logData(`Error getting likes for ${novalName}: ${error.message}`);
+        this.logData(`Error getting likes for ${story.title}: ${error.message}`);
       }
+
       try {
         recommends = await page.$eval(
-          '.book-mid-info span[class="-follow"]',
+          '.book-information .book-info span[class*="-follow"]',
           (e) => e.textContent || '',
         );
+        this.logData(`Recommends: ${recommends}`);
       } catch (error) {
         this.logData(
-          `Error getting recommends for ${novalName}: ${error.message}`,
+          `Error getting recommends for ${story.title}: ${error.message}`,
         );
       }
+
       try {
         votes = await page.$eval(
-          '.book-mid-info span[class="-nomi"]',
+          '.book-information .book-info span[class*="-nomi"]',
           (e) => e.textContent || '',
         );
+        this.logData(`Votes: ${votes}`);
       } catch (error) {
-        this.logData(`Error getting votes for ${novalName}: ${error.message}`);
+        this.logData(`Error getting votes for ${story.title}: ${error.message}`);
       }
+
       if (!cover) {
-        cover = 'https://tangthuvien.vn/images/no-cover.png';
+        cover = 'https://imagedelivery.net/w111oH5cwLzgQJESf-Uf2g/e3ac7ced-db9f-412f-96f0-cf272e7bc500/public';
       }
       this.logData(
-        `Novel Info: ${novalName}, Author: ${author.name}, Status: ${status}, Total Chapters: ${totalChapters}`,
+        `Novel Info: ${story.title}, Author: ${author.name}, Status: ${status}, Total Chapters: ${totalChapters}`,
       );
-
+      await sleep(1000000); //REMOVE THIS LINE IN PRODUCTION
       const storyData = {
-        url: ttvUrl,
         source: this.source._id,
         slug,
         cover,
-        title: novalName,
         author: author._id,
         authorName: author.name,
         status,
-        totalChapters: Number(totalChapters),
         intro,
         description,
         views: Number(views),
@@ -324,7 +346,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         new: true,
         setDefaultsOnInsert: true,
       });
-      this.logData(`Created story: ${storyData.title}`);
+      this.logData(`Updated story: ${story.title}`);
     } catch (error) {
       this.logData(`Error processing novel info: ${error.message}`);
     }
@@ -362,10 +384,6 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         listChapters.push(...chapterJSNodes);
         try {
           nextPageBtn = await page.$('ul.pagination li a[aria-label=Next]');
-          const activeBtnText = await page.$eval(
-            'ul.pagination li.active a',
-            (e) => e.textContent || '',
-          );
           try {
             await nextPageBtn?.click();
           } catch (clickError) {
@@ -399,6 +417,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         listChapters[chapterIndex].title ||
           `story-${story.title}-chapter-${chapterIndex}`,
       );
+      this.logData(`Creating chapter slug: ${slug}`);
       const chapterData = {
         chapterNumber: Number(chapterIndex) + 1,
         story: story._id,
