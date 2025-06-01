@@ -321,9 +321,8 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         cover = 'https://imagedelivery.net/w111oH5cwLzgQJESf-Uf2g/e3ac7ced-db9f-412f-96f0-cf272e7bc500/public';
       }
       this.logData(
-        `Novel Info: ${story.title}, Author: ${author.name}, Status: ${status}, Total Chapters: ${totalChapters}`,
+        `Novel Info: ${story.title}`,
       );
-      await sleep(1000000); //REMOVE THIS LINE IN PRODUCTION
       const storyData = {
         source: this.source._id,
         slug,
