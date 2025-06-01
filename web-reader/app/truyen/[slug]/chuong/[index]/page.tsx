@@ -81,9 +81,9 @@ export default function ChapterPage() {
     <div className="max-w-3xl mx-auto px-4 py-6 space-y-4">
       <h1 className="text-xl font-bold text-center">{chapter.title}</h1>
       <div className="prose max-w-none whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: chapter.content }} />
-      <div className="flex justify-between mt-6">
-        {prevChapter && <Button size="sm" onClick={handleBack}>← Danh sách chương</Button>}
-        <Button size="sm" onClick={handleBackToList}>← Danh sách chương</Button>
+      <div className="flex justify-end md:justify-between mt-10">
+        {prevChapter && <Button size="sm" className=' hidden md:block' onClick={handleBack}>← Chương trước</Button>}
+        <Button size="sm" className='underline hidden md:block' onClick={handleBackToList}>Danh sách chương</Button>
         <Button size="sm" onClick={handleNext}>Chương tiếp →</Button>
       </div>
     </div>
