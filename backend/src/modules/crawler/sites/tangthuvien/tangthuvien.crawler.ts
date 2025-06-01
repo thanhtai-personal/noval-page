@@ -15,7 +15,7 @@ import { CrawlHistory } from '@/schemas/crawlHistory.schema';
 import { sleep } from '@/utils/functions';
 
 const DEBUG_CONFIG = {
-  ON: true, //process.env.DEBUG_CRAWL === 'true',
+  ON: process.env.DEBUG_CRAWL === 'true',
   DEMO_STORIES_NUMBER: 50,
   DEMO_CHAPTERS_NUMBER: 500,
   DEMO_CRAWL_PAGES: 5,
@@ -224,7 +224,6 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
 
       let cover,
         status,
-        totalChapters,
         intro,
         description,
         views,
@@ -242,16 +241,6 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       } catch (error) {
         this.logData(`Error getting cover for ${story.title}: ${error.message}`);
       }
-
-      // try {
-      //   status = await page.$eval(
-      //     '.book-mid-info span',
-      //     (e) => e.textContent || '',
-      //   );
-      //   this.logData(`Status: ${status}`);
-      // } catch (error) {
-      //   this.logData(`Error getting status for ${story.title}: ${error.message}`);
-      // }
 
       try {
         intro = await page.$eval(
