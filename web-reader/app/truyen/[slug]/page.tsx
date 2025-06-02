@@ -3,8 +3,8 @@ import { ApiInstant } from "@/utils/api";
 import { Badge } from "@heroui/badge";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { StoryTabs } from "@/components/StoryTabs";
-import { LastReadChapter } from "@/components/LastReadChapter";
+import { StoryTabs } from "@/components/story/StoryTabs";
+import { LastReadChapter } from "@/components/chapter/LastReadChapter";
 
 async function fetchStory(slug: string): Promise<any | null> {
   try {

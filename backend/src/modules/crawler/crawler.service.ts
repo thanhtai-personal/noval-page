@@ -67,6 +67,7 @@ export class CrawlerService {
       const allCrawledStories = await this.storyModel
         .find({
           source: source._id,
+          isDetailCrawled: false, // Only get stories that haven't been detailed crawled
         })
         .populate('source');
 
@@ -84,7 +85,7 @@ export class CrawlerService {
         // get Story details
         this.logData(`Crawled story details for: ${story.title}`, source);
         // await sleep(100);
-        await adapter.getStoryDetail(story, false);
+        await adapter.getStoryDetail(story);
       }
 
       for (const story of allCrawledStories) {

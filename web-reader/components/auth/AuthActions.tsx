@@ -3,8 +3,8 @@
 import { observer } from "mobx-react-lite";
 import { appStore } from "@/store/AppStore.store";
 import { Button } from "@heroui/button";
-import { ProfileIcon, LogoutIcon } from "@/components/icons";
-import { LinkWithRedirecting } from "./LinkWithRedirecting";
+import { ProfileIcon, LogoutIcon } from "@/components/default/icons";
+import { LinkWithRedirecting } from "../common/utils/LinkWithRedirecting";
 
 export const AuthActions = observer(() => {
   return (

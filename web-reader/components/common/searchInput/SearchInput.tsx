@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Input } from '@heroui/input';
 import { Kbd } from '@heroui/kbd';
-import { SearchIcon } from '@/components/icons';
+import { SearchIcon } from '@/components/default/icons';
 import { useRouter } from 'next/navigation';
 
 export function SearchBox() {

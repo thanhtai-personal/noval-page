@@ -1,6 +1,6 @@
 'use client';
 
-import { Navbar } from "@/components/navbar";
+import { Navbar } from "@/components/layout/navbar";
 
 import { observer } from 'mobx-react-lite';
 import { useAppStore } from "@/store/Provider";

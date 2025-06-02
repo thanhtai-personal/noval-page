@@ -1,8 +1,8 @@
 'use client';
 
 import { Story } from '@/types/interfaces/story';
-import { StoryCard } from './StoryCard';
-import { StoryCardSkeleton } from './StoryCardSkeleton';
+import { StoryCard } from '../../story/StoryCard';
+import { StoryCardSkeleton } from '../../story/StoryCardSkeleton';
 
 export function StoriesWithSkeletonLoading({
   stories,

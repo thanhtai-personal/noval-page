@@ -12,12 +12,12 @@ import NextLink from "next/link";
 import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
-import { ThemeSwitch } from "@/components/theme-switch";
-import { FacebookIcon } from "@/components/icons";
+import { ThemeSwitch } from "@/components/common/utils/theme-switch";
+import { FacebookIcon } from "@/components/default/icons";
 import { LogoIcon } from "@/assets/icons/Logo";
-import { AuthActions } from "./AuthActions";
-import { SearchBox } from "./SearchInput";
-import { LinkWithRedirecting } from "./LinkWithRedirecting";
+import { AuthActions } from "../auth/AuthActions";
+import { SearchBox } from "../common/searchInput/SearchInput";
+import { LinkWithRedirecting } from "../common/utils/LinkWithRedirecting";
 
 export const Navbar = () => {
   return (
@@ -25,7 +25,7 @@ export const Navbar = () => {
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
-            <LogoIcon className="w-20 h-10 text-default-900" />
+            <LogoIcon className="w-20 h-14 text-default-900" />
           </NextLink>
         </NavbarBrand>
         <ul className="hidden lg:flex gap-4 justify-start ml-2">

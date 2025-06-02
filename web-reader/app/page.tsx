@@ -8,9 +8,9 @@ import { Story } from "@/types/interfaces/story";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { StoriesWithSkeletonLoading } from "@/components/StoriesWithSkeletonLoading";
-import { StoryCard } from "@/components/StoryCard";
-import { StoryCardSkeleton } from "@/components/StoryCardSkeleton";
+import { StoriesWithSkeletonLoading } from "@/components/common/utils/StoriesWithSkeletonLoading";
+import { StoryCard } from "@/components/story/StoryCard";
+import { StoryCardSkeleton } from "@/components/story/StoryCardSkeleton";
 
 export default function HomePage() {
   const [topView, setTopView] = useState<Story[]>([]);
