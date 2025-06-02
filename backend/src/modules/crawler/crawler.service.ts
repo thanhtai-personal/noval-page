@@ -84,7 +84,7 @@ export class CrawlerService {
         // get Story details
         this.logData(`Crawled story details for: ${story.title}`, source);
         // await sleep(100);
-        await adapter.getStoryDetail(story);
+        await adapter.getStoryDetail(story, false);
       }
 
       for (const story of allCrawledStories) {

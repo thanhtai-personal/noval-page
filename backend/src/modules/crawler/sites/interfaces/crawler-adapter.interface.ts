@@ -7,7 +7,7 @@ export interface ICrawlerAdapter {
   getAllStoryOverview(): Promise<void>;
   getListChapters(story: Story): Promise<void>;
   getChapterContent(chapter: Chapter): Promise<void>;
-  getStoryDetail(story: Story): Promise<void>;
+  getStoryDetail(story: Story, reUpdate?: boolean): Promise<void>;
 }
 export interface ICrawlerAdapterConstructor {
   new (...args: any[]): ICrawlerAdapter;

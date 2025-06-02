@@ -41,6 +41,10 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
 
   async getAllStoryOverview() {
     await this.getSource();
+
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
     try {
       const currentStories = await this.storyModel.find({});
       this.logData(
@@ -67,8 +71,6 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         currentPage: 1,
       };
 
-      const browser = await puppeteer.launch();
-      const page = await browser.newPage();
       await page.goto(ttvSearchPath);
 
       const searchValue = await page.$$('ul.pagination li a');
@@ -174,15 +176,22 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     } catch (error) {
       this.logData(`Error in getAllStoryOverview: ${error.message}`);
       return;
+    } finally {
+      await page.close();
+      await browser.close();
     }
   }
 
-  async getStoryDetail(story: Story) {
-    try {
-      const browser = await puppeteer.launch();
-      const page = await browser.newPage();
-      await page.goto(story.url);
+  async getStoryDetail(story: Story, reUpdate = true) {
+    if (!reUpdate && story.isDetailCrawled) {
+      this.logData(`Story ${story.title} already has details crawled.`);
+      return;
+    }
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
 
+    try {
+      await page.goto(story.url);
       const slug = slugify(story.title);
 
       let authorImage: any = '';
@@ -337,6 +346,9 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       this.logData(`Updated story: ${story.title}`);
     } catch (error) {
       this.logData(`Error processing novel info: ${error.message}`);
+    } finally {
+      await page.close();
+      await browser.close();
     }
   }
 
@@ -345,129 +357,143 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     const page = await browser.newPage();
     await page.goto(story.url);
 
-    const chaptersTab = await page.$('#j-bookCatalogPage');
     try {
-      await chaptersTab?.click();
-    } catch (error) {
-      this.logData(`Error clicking chapters tab: ${error.message}`);
-    }
-
-    await page.waitForTimeout(300);
-
-    let listChapters: any[] = [];
-    let nextPageBtn: any = null;
-
-    this.logData(`...Fetching chapters for story: ${story.title}`);
-    
-    let countWhile = 0;
-    this.logData(`Starting to fetch chapters... ${story.title}`);
-    do {
-      countWhile++;
+      const chaptersTab = await page.$('#j-bookCatalogPage');
       try {
-        const chapterJSNodes: any[] = await page.$$eval(
-          '#max-volume ul li a[target=_blank]',
-          (elements) =>
-            elements.map((element) => ({
-              url: element.getAttribute('href') || '',
-              title: element.getAttribute('title') || '',
-            })),
-        );
-        listChapters = [...listChapters, ...chapterJSNodes];
+        await chaptersTab?.click();
+      } catch (error) {
+        this.logData(`Error clicking chapters tab: ${error.message}`);
+      }
+
+      await page.waitForTimeout(300);
+
+      let listChapters: any[] = [];
+      let nextPageBtn: any = null;
+
+      this.logData(`...Fetching chapters for story: ${story.title}`);
+
+      let countWhile = 0;
+      this.logData(`Starting to fetch chapters... ${story.title}`);
+      do {
+        countWhile++;
         try {
-          nextPageBtn = await page.$('ul.pagination li a[aria-label=Next]');
+          const chapterJSNodes: any[] = await page.$$eval(
+            '#max-volume ul li a[target=_blank]',
+            (elements) =>
+              elements.map((element) => ({
+                url: element.getAttribute('href') || '',
+                title: element.getAttribute('title') || '',
+              })),
+          );
+          listChapters = [...listChapters, ...chapterJSNodes];
           try {
-            await nextPageBtn?.click();
-          } catch (clickError) {
-            await page.click('ul.pagination li a[aria-label=Next]');
+            nextPageBtn = await page.$('ul.pagination li a[aria-label=Next]');
+            try {
+              await nextPageBtn?.click();
+            } catch (clickError) {
+              await page.click('ul.pagination li a[aria-label=Next]');
+            }
+
+            await page.waitForTimeout(1000);
+          } catch (paginationError) {
+            nextPageBtn = null;
           }
-
-          await page.waitForTimeout(1000);
-        } catch (paginationError) {
-          nextPageBtn = null;
+        } catch (err) {
+          this.logData(`Error getting chapter list: ${err.message}`);
         }
-      } catch (err) {
-        this.logData(`Error getting chapter list: ${err.message}`);
-      }
-    } while (nextPageBtn);
-    this.logData(`while loop count: ${countWhile}`);
-    this.logData(
-      `Found ${listChapters.length} chapters for story: ${story.title}`,
-    );
-    // await sleep(10000000); // for debug
-
-    for (const chapterIndex in listChapters) {
-      if (
-        DEBUG_CONFIG.ON &&
-        Number(chapterIndex) >= DEBUG_CONFIG.DEMO_CHAPTERS_NUMBER
-      ) {
-        this.logData(`>> DEMO MODE: Stopping at chapter ${chapterIndex}`);
-        break;
-      }
+      } while (nextPageBtn);
+      this.logData(`while loop count: ${countWhile}`);
       this.logData(
-        `Processing chapter ${Number(chapterIndex) + 1}: ${listChapters[chapterIndex].title}`,
+        `Found ${listChapters.length} chapters for story: ${story.title}`,
       );
-      const slug = slugify(
-        listChapters[chapterIndex].title ||
-          `story-${story.title}-chapter-${chapterIndex}`,
-      );
-      this.logData(`Creating chapter slug: ${slug}`);
-      const chapterData = {
-        chapterNumber: Number(chapterIndex) + 1,
-        story: story._id,
-        url: listChapters[chapterIndex].url,
-        title: listChapters[chapterIndex].title,
-        slug,
-      };
-      await this.chapterModel.findOneAndUpdate({ slug }, chapterData, {
-        upsert: true,
-        new: true,
-        setDefaultsOnInsert: true,
-      });
-      this.logData(`Created chapter: ${listChapters[chapterIndex].title}`);
+      // await sleep(10000000); // for debug
+
+      for (const chapterIndex in listChapters) {
+        if (
+          DEBUG_CONFIG.ON &&
+          Number(chapterIndex) >= DEBUG_CONFIG.DEMO_CHAPTERS_NUMBER
+        ) {
+          this.logData(`>> DEMO MODE: Stopping at chapter ${chapterIndex}`);
+          break;
+        }
+        this.logData(
+          `Processing chapter ${Number(chapterIndex) + 1}: ${listChapters[chapterIndex].title}`,
+        );
+        const slug = slugify(
+          listChapters[chapterIndex].title ||
+            `story-${story.title}-chapter-${chapterIndex}`,
+        );
+        this.logData(`Creating chapter slug: ${slug}`);
+        const chapterData = {
+          chapterNumber: Number(chapterIndex) + 1,
+          story: story._id,
+          url: listChapters[chapterIndex].url,
+          title: listChapters[chapterIndex].title,
+          slug,
+        };
+        await this.chapterModel.findOneAndUpdate({ slug }, chapterData, {
+          upsert: true,
+          new: true,
+          setDefaultsOnInsert: true,
+        });
+        this.logData(`Created chapter: ${listChapters[chapterIndex].title}`);
+      }
+    } catch (error) {
+    } finally {
+      await page.close();
+      await browser.close();
     }
-    await browser.close();
   }
 
   async getChapterContent(chapter: Chapter) {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto(chapter.url);
-
-    let content = '';
     try {
-      content = await page.$eval('div.box-chap', (e) => e.innerHTML);
+      await page.goto(chapter.url);
+
+      let content = '';
+      try {
+        content = await page.$eval('div.box-chap', (e) => e.innerHTML);
+      } catch (error) {
+        this.logData(`Error getting chapter content: ${error.message}`);
+        return;
+      }
+      if (!content) {
+        this.logData(`No content found for chapter: ${chapter.title}`);
+        return;
+      }
+
+      let title = '';
+      try {
+        title = await page.$eval('h5 a.more-chap', (e) => e.textContent || '');
+      } catch (error) {
+        this.logData(`Error getting chapter title: ${error.message}`);
+        return;
+      }
+      if (!title) {
+        this.logData(`No title found for chapter: ${chapter.url}`);
+        return;
+      }
+      chapter.content = content;
+      chapter.title = title;
+      chapter.slug = slugify(title);
+
+      await this.chapterModel.findOneAndUpdate(
+        { slug: chapter.slug },
+        chapter,
+        {
+          new: true,
+          upsert: true,
+          setDefaultsOnInsert: true,
+        },
+      );
+
+      this.logData(`Updated chapter content: ${chapter.title}`);
     } catch (error) {
-      this.logData(`Error getting chapter content: ${error.message}`);
-      return;
+    } finally {
+      await page.close();
+      await browser.close();
     }
-    if (!content) {
-      this.logData(`No content found for chapter: ${chapter.title}`);
-      return;
-    }
-
-    let title = '';
-    try {
-      title = await page.$eval('h5 a.more-chap', (e) => e.textContent || '');
-    } catch (error) {
-      this.logData(`Error getting chapter title: ${error.message}`);
-      return;
-    }
-    if (!title) {
-      this.logData(`No title found for chapter: ${chapter.url}`);
-      return;
-    }
-    chapter.content = content;
-    chapter.title = title;
-    chapter.slug = slugify(title);
-
-    await this.chapterModel.findOneAndUpdate({ slug: chapter.slug }, chapter, {
-      new: true,
-      upsert: true,
-      setDefaultsOnInsert: true,
-    });
-
-    this.logData(`Updated chapter content: ${chapter.title}`);
-    await browser.close();
   }
 
   private async getSource() {
