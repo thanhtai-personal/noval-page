@@ -54,7 +54,7 @@ export default async function getListChapter(
             await page.click('ul.pagination li a[aria-label=Next]');
           }
 
-          await page.waitForTimeout(0);
+          await page.waitForTimeout(1000);
         } catch (paginationError) {
           nextPageBtn = null;
         }

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { ApiInstant } from '@/utils/api';
-import { Button } from '@heroui/button';
+import { useEffect, useState, useCallback } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { ApiInstant } from "@/utils/api";
+import { Button } from "@heroui/button";
 
 export default function ChapterPage() {
   const { slug, index } = useParams();
@@ -17,7 +17,7 @@ export default function ChapterPage() {
     setLoading(true);
     const res = await ApiInstant.get(`/stories/${slug}/chapters/${index}`);
     setChapter(res.data);
-    localStorage.setItem(`read-${slug}-${slug}`, index?.toString() || '0');
+    localStorage.setItem(`read-${slug}-${slug}`, index?.toString() || "0");
     setLoading(false);
   }, [slug, index]);
 
@@ -29,11 +29,13 @@ export default function ChapterPage() {
     if (!chapter) return;
     const fetchNextChapter = async () => {
       try {
-        const res = await ApiInstant.get(`/stories/${slug}/chapters/prev-and-next/${chapter.chapterNumber}`);
+        const res = await ApiInstant.get(
+          `/stories/${slug}/chapters/prev-and-next/${chapter.chapterNumber}`
+        );
         setNextChapter(res.data.next || null);
         setPrevChapter(res.data.prev || null);
       } catch (error) {
-        console.error('Error fetching next chapter:', error);
+        console.error("Error fetching next chapter:", error);
       }
     };
     fetchNextChapter();
@@ -53,11 +55,11 @@ export default function ChapterPage() {
       if (dx < -100) handleNext();
     };
 
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchend', handleTouchEnd);
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchend", handleTouchEnd);
     return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchend", handleTouchEnd);
     };
   }, [index, slug]);
 
@@ -79,12 +81,32 @@ export default function ChapterPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6 space-y-4">
-      <h1 className="text-xl font-bold text-center">{chapter.title}</h1>
-      <div className="prose max-w-none whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: chapter.content }} />
+      <h1
+        className="text-xl font-bold text-center"
+        dangerouslySetInnerHTML={{
+          __html: chapter.title?.replace(/<\/?span[^>]*>/g, ""), // xóa tất cả thẻ span nếu có
+        }}
+      ></h1>
+      <div
+        className="prose max-w-none whitespace-pre-wrap"
+        dangerouslySetInnerHTML={{ __html: chapter.content }}
+      />
       <div className="flex justify-end md:justify-between mt-10">
-        {prevChapter && <Button size="sm" className=' hidden md:block' onClick={handleBack}>← Chương trước</Button>}
-        <Button size="sm" className='underline hidden md:block' onClick={handleBackToList}>Danh sách chương</Button>
-        <Button size="sm" onClick={handleNext}>Chương tiếp →</Button>
+        {prevChapter && (
+          <Button size="sm" className=" hidden md:block" onClick={handleBack}>
+            ← Chương trước
+          </Button>
+        )}
+        <Button
+          size="sm"
+          className="underline hidden md:block"
+          onClick={handleBackToList}
+        >
+          Danh sách chương
+        </Button>
+        <Button size="sm" onClick={handleNext}>
+          Chương tiếp →
+        </Button>
       </div>
     </div>
   );

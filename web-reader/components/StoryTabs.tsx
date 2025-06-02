@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Card, CardBody } from "@heroui/card";
 import Link from "next/link";
 import { ApiInstant } from "@/utils/api";
+import { Pagination } from "@heroui/pagination";
 
 export function StoryTabs({
   storyId,
@@ -53,29 +54,32 @@ export function StoryTabs({
         <Tab key="chapters" title="Danh sách chương">
           <CardBody>
             <h2 className="text-xl font-semibold mb-4">Danh sách chương</h2>
-            <ul className="space-y-2">
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {chapters.map((chapter: any) => (
                 <li key={chapter._id}>
-                  <Link href={`/truyen/${storySlug}/chuong/${chapter.slug}`}>
-                    <span className="text-blue-600 hover:underline">
-                      {chapter.title}
-                    </span>
+                  <Link
+                    className="text-blue-600 hover:underline"
+                    href={`/truyen/${storySlug}/chuong/${chapter.slug}`}
+                  >
+                    <span>Chương&nbsp;{chapter.chapterNumber + 1}:&nbsp;</span>
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: chapter.title?.replace(/<\/?span[^>]*>/g, ""), // xóa tất cả thẻ span nếu có
+                      }}
+                    />
                   </Link>
                 </li>
               ))}
             </ul>
-            <div className="flex justify-center gap-4 mt-4">
-              {Array.from({ length: totalPages }, (_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setPage(i + 1)}
-                  className={`px-3 py-1 border rounded-3xl ${
-                    page === i + 1 ? "bg-blue-500" : ""
-                  }`}
-                >
-                  {i + 1}
-                </button>
-              ))}
+            <div className="flex justify-center gap-4 mt-10">
+              <div className="flex flex-wrap gap-4 items-center">
+                <Pagination
+                  initialPage={page}
+                  size="md"
+                  total={totalPages}
+                  onChange={(newPage) => setPage(newPage)}
+                />
+              </div>
             </div>
           </CardBody>
         </Tab>

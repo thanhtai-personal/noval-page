@@ -16,13 +16,7 @@ import { sleep } from '@/utils/functions';
 
 import * as fs from 'fs';
 import * as path from 'path';
-
-const DEBUG_CONFIG = {
-  ON: true, //process.env.DEBUG_CRAWL === 'true',
-  DEMO_STORIES_NUMBER: 50,
-  DEMO_CHAPTERS_NUMBER: 100,
-  DEMO_CRAWL_PAGES: 5,
-};
+import { DEBUG_CONFIG } from '@/utils/constants';
 
 const ttvSearchPath = 'https://truyen.tangthuvien.vn/tong-hop?rank=vw&page=';
 
@@ -358,13 +352,17 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       this.logData(`Error clicking chapters tab: ${error.message}`);
     }
 
-    await page.waitForTimeout(50);
+    await page.waitForTimeout(300);
 
     let listChapters: any[] = [];
     let nextPageBtn: any = null;
 
     this.logData(`...Fetching chapters for story: ${story.title}`);
+    
+    let countWhile = 0;
+    this.logData(`Starting to fetch chapters... ${story.title}`);
     do {
+      countWhile++;
       try {
         const chapterJSNodes: any[] = await page.$$eval(
           '#max-volume ul li a[target=_blank]',
@@ -383,7 +381,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             await page.click('ul.pagination li a[aria-label=Next]');
           }
 
-          await page.waitForTimeout(0);
+          await page.waitForTimeout(1000);
         } catch (paginationError) {
           nextPageBtn = null;
         }
@@ -391,9 +389,11 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         this.logData(`Error getting chapter list: ${err.message}`);
       }
     } while (nextPageBtn);
+    this.logData(`while loop count: ${countWhile}`);
     this.logData(
       `Found ${listChapters.length} chapters for story: ${story.title}`,
     );
+    // await sleep(10000000); // for debug
 
     for (const chapterIndex in listChapters) {
       if (
@@ -403,11 +403,9 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         this.logData(`>> DEMO MODE: Stopping at chapter ${chapterIndex}`);
         break;
       }
-      // this.logData(
-      //   `Processing chapter ${Number(chapterIndex) + 1}: ${listChapters[chapterIndex].title}`,
-      // );
-      this.logData(`chapterIndex: ${chapterIndex}`);
-      await sleep(500);
+      this.logData(
+        `Processing chapter ${Number(chapterIndex) + 1}: ${listChapters[chapterIndex].title}`,
+      );
       const slug = slugify(
         listChapters[chapterIndex].title ||
           `story-${story.title}-chapter-${chapterIndex}`,
@@ -427,7 +425,6 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       });
       this.logData(`Created chapter: ${listChapters[chapterIndex].title}`);
     }
-    await sleep(10000000);
     await browser.close();
   }
 

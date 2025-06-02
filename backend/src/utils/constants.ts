@@ -1,0 +1,6 @@
+export const DEBUG_CONFIG = {
+  ON: process.env.DEBUG_CRAWL === 'true',
+  DEMO_STORIES_NUMBER: 30,
+  DEMO_CHAPTERS_NUMBER: 100,
+  DEMO_CRAWL_PAGES: 5,
+};
