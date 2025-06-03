@@ -5,6 +5,7 @@ import { Card, CardBody } from "@heroui/card";
 import { Pagination } from "@heroui/pagination";
 import { Avatar } from "@heroui/avatar";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import { appStore } from "@/store/AppStore.store";
 
@@ -15,6 +16,7 @@ interface ReadItem {
 const PAGE_SIZE = 20;
 
 export default function ProfilePage() {
+  const t = useTranslations("profile");
   const [readItems, setReadItems] = useState<ReadItem[]>([]);
   const [page, setPage] = useState(1);
 
@@ -40,31 +42,29 @@ export default function ProfilePage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
       <div className="flex items-center gap-4">
-        <Avatar name={appStore.profile?.name || "Guest"} />
+        <Avatar name={appStore.profile?.name || t("guest")} />
         <div>
           <h1 className="text-xl font-bold">
-            {appStore.profile?.name || appStore.profile?.email || "Guest"}
+            {appStore.profile?.name || appStore.profile?.email || t("guest")}
           </h1>
-          <p className="text-sm text-gray-500">Trang cá nhân</p>
+          <p className="text-sm text-gray-500">{t("title")}</p>
         </div>
       </div>
 
       <Card>
         <CardBody>
           <h2 className="text-lg font-semibold mb-4">
-            Truyện đã đọc ({readItems.length})
+            {t("read_stories")} ({readItems.length})
           </h2>
           {paginated.length === 0 ? (
-            <p className="text-sm text-gray-500">
-              Chưa có truyện nào được lưu.
-            </p>
+            <p className="text-sm text-gray-500">{t("no_saved")}</p>
           ) : (
             <ul className="space-y-2">
               {paginated.map(({ slug, index }) => (
                 <li key={slug}>
                   <Link href={`/truyen/${slug}/chuong/${index}`}>
                     <span className="text-blue-600 hover:underline">
-                      {slug.replace(/-/g, " ")} - Đọc tới chương {index}
+                      {slug.replace(/-/g, " ")} - {t("read_until", { index })}
                     </span>
                   </Link>
                 </li>

@@ -3,11 +3,13 @@ import { Metadata, Viewport } from "next";
 import clsx from "clsx";
 
 import { Providers } from "./providers";
-
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { GoogleAnalytics } from "@/lib/analytic";
+
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: {
@@ -27,24 +29,27 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = await getLocale();
   return (
-    <html suppressHydrationWarning lang="en">
+    <html suppressHydrationWarning lang={locale}>
       <head />
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
+          fontSans.variable
         )}
       >
-        <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_ID!} />
-        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <AppLayout>{children}</AppLayout>
-        </Providers>
+        <NextIntlClientProvider locale={locale}>
+          <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_ID!} />
+          <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+            <AppLayout>{children}</AppLayout>
+          </Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

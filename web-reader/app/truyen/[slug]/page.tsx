@@ -1,6 +1,7 @@
 import { Badge } from "@heroui/badge";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { ApiInstant } from "@/utils/api";
 import { Story } from "@/types/interfaces/story";
@@ -36,6 +37,8 @@ export default async function StoryDetailPage({ params }: any) {
     return notFound();
   }
 
+  const t = useTranslations("story");
+
   return (
     <section className="container mx-auto px-4 py-6">
       <div className="flex flex-col md:flex-row gap-6">
@@ -47,7 +50,7 @@ export default async function StoryDetailPage({ params }: any) {
         <div>
           <h1 className="text-3xl font-bold mb-2">{story.title}</h1>
           <p className="text-default-600 mb-2">
-            Tác giả: {story.author?.name || "Không rõ"}
+            {t("author")}: {story.author?.name || t("unknown")}
           </p>
           <div className="flex gap-2 flex-wrap mb-2">
             {story.categories?.map((c: any) => (
@@ -62,24 +65,24 @@ export default async function StoryDetailPage({ params }: any) {
             ))}
           </div>
           <p className="text-sm text-default-700 mb-2">
-            Tổng chương: {story.totalChapters}
+            {t("total_chapters")}: {story.totalChapters}
           </p>
           <p className="text-sm text-default-700 mb-2">
-            Nguồn: {story.source?.name}
+            {t("source")}: {story.source?.name}
           </p>
           <p className="text-sm text-gray-500 mb-2">
-            Lượt xem: {story.views} | Lượt thích: {story.likes} | Đề cử:{" "}
-            {story.recommends} | Bình chọn: {story.votes}
+            {t("views")}: {story.views} | {t("likes")}: {story.likes} |{" "}
+            {t("recommends")}: {story.recommends} | {t("votes")}: {story.votes}
           </p>
           <h1 className="text-3xl font-bold mb-2">{story.title}</h1>
           <LastReadChapter slug={story.slug} />
 
           <h3 className="text-xl font-semibold mb-2 underline mt-10">
-            Giới thiệu
+            {t("intro")}
           </h3>
           <div
             dangerouslySetInnerHTML={{
-              __html: story.intro || "<i>Chưa cập nhật</i>",
+              __html: story.intro || `<i>${t("not_updated")}</i>`,
             }}
             className="text-default-700 whitespace-pre-wrap"
           />

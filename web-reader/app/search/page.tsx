@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { useTranslations } from "next-intl";
 
 import SearchPageClient from "@/components/searchPage/SearchPageClient";
 
@@ -9,11 +10,12 @@ export const metadata = {
 };
 
 export default function Page() {
+  const t = useTranslations("search");
   return (
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center text-lg font-semibold">
-          Đang chuyển trang...
+          {t("loading")}
         </div>
       }
     >

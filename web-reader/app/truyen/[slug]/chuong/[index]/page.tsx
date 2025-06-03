@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@heroui/button";
+import { useTranslations } from "next-intl";
 
 import { ApiInstant } from "@/utils/api";
 import { ReadingSettings } from "@/components/chapter/ReadingSettings";
@@ -27,6 +28,7 @@ export default function ChapterPage() {
     "#f5f5dc",
     "#f0e6fa",
   ];
+  const t = useTranslations("chapter");
 
   const loadChapter = useCallback(async () => {
     setLoading(true);
@@ -96,8 +98,8 @@ export default function ChapterPage() {
     router.push(`/truyen/${slug}`);
   };
 
-  if (loading) return <p className="p-4">Đang tải chương...</p>;
-  if (!chapter) return <p className="p-4">Không tìm thấy chương.</p>;
+  if (loading) return <p className="p-4">{t("loading")}</p>;
+  if (!chapter) return <p className="p-4">{t("not_found")}</p>;
 
   return (
     <div
@@ -130,7 +132,7 @@ export default function ChapterPage() {
       <div className="flex justify-end md:justify-between mt-10">
         {prevChapter && (
           <Button className=" hidden md:block" size="sm" onClick={handleBack}>
-            ← Chương trước
+            ← {t("prev")}
           </Button>
         )}
         <Button
@@ -138,10 +140,10 @@ export default function ChapterPage() {
           size="sm"
           onClick={handleBackToList}
         >
-          Danh sách chương
+          {t("chapter_list")}
         </Button>
         <Button size="sm" onClick={handleNext}>
-          Chương tiếp →
+          {t("next")} →
         </Button>
       </div>
     </div>

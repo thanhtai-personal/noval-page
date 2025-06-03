@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@heroui/button";
 import Link from "next/link";
 import Slider from "react-slick";
+import { useTranslations } from "next-intl";
 
 import { ApiInstant } from "@/utils/api";
 import { Story } from "@/types/interfaces/story";
@@ -14,6 +15,7 @@ import { StoryCard } from "@/components/story/StoryCard";
 import { StoryCardSkeleton } from "@/components/story/StoryCardSkeleton";
 
 export default function HomePage() {
+  const t = useTranslations("home");
   const [topView, setTopView] = useState<Story[]>([]);
   const [topRecommend, setTopRecommend] = useState<Story[]>([]);
   const [topLike, setTopLike] = useState<Story[]>([]);
@@ -23,13 +25,13 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       const recommendRes = await ApiInstant.get(
-        "/stories?sort=recommends&limit=10",
+        "/stories?sort=recommends&limit=10"
       );
       const viewRes = await ApiInstant.get("/stories?sort=views&limit=10");
       const voteRes = await ApiInstant.get("/stories?sort=votes&limit=5");
       const likeRes = await ApiInstant.get("/stories?sort=likes&limit=10");
       const chapterRes = await ApiInstant.get(
-        "/stories?sort=totalChapters&limit=10",
+        "/stories?sort=totalChapters&limit=10"
       );
 
       setTopView(viewRes.data?.data || []);
@@ -55,7 +57,9 @@ export default function HomePage() {
     <section className="container mx-auto px-4 py-8 space-y-12">
       {/* Banner Slide */}
       <div>
-        <h1 className="text-3xl font-bold mb-4">🔥 Top Truyện Đề Cử</h1>
+        <h1 className="text-3xl font-bold mb-4">
+          🔥 {t("top_recommend_title")}
+        </h1>
         <Slider {...sliderSettings}>
           {(!topVote || topVote.length === 0
             ? Array.from({ length: 4 })
@@ -65,7 +69,7 @@ export default function HomePage() {
               <StoryCard key={story._id} isSlide story={story} />
             ) : (
               <StoryCardSkeleton key={`skeleton-${i}`} />
-            ),
+            )
           )}
         </Slider>
       </div>
@@ -73,10 +77,10 @@ export default function HomePage() {
       {/* Đề cử nhiều */}
       <div>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">📌 Truyện Đề Cử Nhiều</h2>
+          <h2 className="text-2xl font-bold">📌 {t("most_recommended")}</h2>
           <Link href="/search?sort=recommends">
             <Button size="sm" variant="light">
-              Xem thêm
+              {t("see_more")}
             </Button>
           </Link>
         </div>
@@ -88,10 +92,10 @@ export default function HomePage() {
       {/* Nhiều lượt đọc */}
       <div>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">📚 Truyện Đọc Nhiều</h2>
+          <h2 className="text-2xl font-bold">📚 {t("most_viewed")}</h2>
           <Link href="/search?sort=views">
             <Button size="sm" variant="light">
-              Xem thêm
+              {t("see_more")}
             </Button>
           </Link>
         </div>
@@ -102,10 +106,10 @@ export default function HomePage() {
 
       <div>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">📚 Truyện nhiều yêu thích</h2>
+          <h2 className="text-2xl font-bold">📚 {t("most_liked")}</h2>
           <Link href="/search?sort=views">
             <Button size="sm" variant="light">
-              Xem thêm
+              {t("see_more")}
             </Button>
           </Link>
         </div>
@@ -116,10 +120,10 @@ export default function HomePage() {
 
       <div>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">📚 Truyện dài nhất</h2>
+          <h2 className="text-2xl font-bold">📚 {t("longest")}</h2>
           <Link href="/search?sort=views">
             <Button size="sm" variant="light">
-              Xem thêm
+              {t("see_more")}
             </Button>
           </Link>
         </div>

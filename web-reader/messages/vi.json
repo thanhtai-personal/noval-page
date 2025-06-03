@@ -1,0 +1,85 @@
+{
+  "search": {
+    "title": "Tìm kiếm truyện hay | Vô Ưu Các",
+    "description": "Tìm kiếm truyện tiên hiệp, kiếm hiệp, huyền huyễn hấp dẫn theo từ khóa, thể loại, tác giả hoặc số chương.",
+    "category": "Danh mục",
+    "author": "Tác giả",
+    "choose_author": "Chọn tác giả",
+    "tag": "Thẻ",
+    "chapter_count": "Số chương",
+    "search": "Tìm kiếm",
+    "no_result": "Không tìm thấy kết quả nào",
+    "prev_page": "Trang trước",
+    "next_page": "Trang sau",
+    "select": "Chọn",
+    "cancel": "Hủy",
+    "selected": "Đã chọn ({count})"
+  },
+  "home": {
+    "top_recommend_title": "Top Truyện Đề Cử",
+    "most_recommended": "Truyện Đề Cử Nhiều",
+    "see_more": "Xem thêm",
+    "most_viewed": "Truyện Đọc Nhiều",
+    "most_liked": "Truyện nhiều yêu thích",
+    "longest": "Truyện dài nhất"
+  },
+  "chapter": {
+    "loading": "Đang tải chương...",
+    "not_found": "Không tìm thấy chương.",
+    "prev": "Chương trước",
+    "next": "Chương tiếp",
+    "chapter_list": "Danh sách chương"
+  },
+  "story": {
+    "author": "Tác giả",
+    "unknown": "Không rõ",
+    "total_chapters": "Tổng chương",
+    "source": "Nguồn",
+    "views": "Lượt xem",
+    "likes": "Lượt thích",
+    "recommends": "Đề cử",
+    "votes": "Bình chọn",
+    "intro": "Giới thiệu",
+    "not_updated": "Chưa cập nhật",
+    "totalChapters": "Tổng chương",
+    "readNow": "Đọc ngay"
+  },
+  "about": {
+    "title": "Giới thiệu"
+  },
+  "contact": {
+    "title": "Liên hệ",
+    "desc": "Nếu bạn có thắc mắc hoặc góp ý, vui lòng để lại thông tin bên dưới.",
+    "name": "Họ tên",
+    "name_placeholder": "Tên của bạn",
+    "email_placeholder": "Email của bạn",
+    "content": "Nội dung",
+    "content_placeholder": "Nội dung liên hệ...",
+    "send": "Gửi"
+  },
+  "error": {
+    "something_wrong": "Đã xảy ra lỗi!",
+    "try_again": "Thử lại"
+  },
+  "blog": {
+    "loading": "Đang tải nội dung...",
+    "views": "Lượt xem"
+  },
+  "login": {
+    "login_with_google": "Đăng nhập bằng Google",
+    "login_error": "Đăng nhập thất bại"
+  },
+  "pricing": {
+    "title": "Bảng giá"
+  },
+  "profile": {
+    "title": "Trang cá nhân",
+    "read_stories": "Truyện đã đọc",
+    "no_saved": "Chưa có truyện nào được lưu.",
+    "read_until": "Đọc tới chương {index}",
+    "guest": "Khách"
+  },
+  "docs": {
+    "title": "Tài liệu"
+  }
+}

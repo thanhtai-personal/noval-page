@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 export default function Error({
   error,
@@ -9,6 +10,8 @@ export default function Error({
   error: Error;
   reset: () => void;
 }) {
+  const t = useTranslations("error");
+
   useEffect(() => {
     // Log the error to an error reporting service
 
@@ -17,15 +20,8 @@ export default function Error({
 
   return (
     <div>
-      <h2>Something went wrong!</h2>
-      <button
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          () => reset()
-        }
-      >
-        Try again
-      </button>
+      <h2>{t("something_wrong")}</h2>
+      <button onClick={() => reset()}>{t("try_again")}</button>
     </div>
   );
 }

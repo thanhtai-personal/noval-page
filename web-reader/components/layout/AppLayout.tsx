@@ -11,7 +11,7 @@ export const AppLayout = observer(({ children }: any) => {
   return (
     <div className="relative flex flex-col h-screen">
       {store.useLayout && <Navbar />}
-      <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
+      <main className="container mx-auto max-w-7xl px-6 flex-grow">
         {children}
       </main>
     </div>

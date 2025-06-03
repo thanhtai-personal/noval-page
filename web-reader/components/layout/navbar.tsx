@@ -19,8 +19,15 @@ import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/common/utils/theme-switch";
 import { FacebookIcon } from "@/components/default/icons";
 import { LogoIcon } from "@/assets/icons/Logo";
+import { Switch } from "@heroui/switch";
+import Cookies from 'js-cookie';
 
 export const Navbar = () => {
+  const handleUpdateLanguage = (value: boolean) => {
+    Cookies.set('NEXT_LOCALE', value ? 'en' : 'vi', { expires: 365 });
+    location.reload(); // hoặc dùng router.refresh() nếu cần
+  };
+
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
@@ -35,7 +42,7 @@ export const Navbar = () => {
               <NextLink
                 className={clsx(
                   linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
+                  "data-[active=true]:text-primary data-[active=true]:font-medium"
                 )}
                 color="foreground"
                 href={item.href}
@@ -68,6 +75,18 @@ export const Navbar = () => {
           <NavbarItem>
             <AuthActions />
           </NavbarItem>
+        </NavbarItem>
+        <NavbarItem className="hidden sm:flex gap-2">
+          <Switch
+            defaultSelected
+            color="secondary"
+            endContent={<span className="mx-2">EN</span>}
+            size="lg"
+            startContent={<span className="mx-2">VI</span>}
+            className="rounded-none"
+            onChange={handleUpdateLanguage as any}
+          >
+          </Switch>
         </NavbarItem>
       </NavbarContent>
 

@@ -1,0 +1,85 @@
+{
+  "search": {
+    "title": "Search for great stories | Vo Uu Cac",
+    "description": "Search for Xianxia, Wuxia, Huyen Huyen stories by keyword, genre, author or chapter count.",
+    "category": "Category",
+    "author": "Author",
+    "choose_author": "Choose author",
+    "tag": "Tag",
+    "chapter_count": "Chapter count",
+    "search": "Search",
+    "no_result": "No results found",
+    "prev_page": "Previous page",
+    "next_page": "Next page",
+    "select": "Select",
+    "cancel": "Cancel",
+    "selected": "Selected ({count})"
+  },
+  "home": {
+    "top_recommend_title": "Top Recommended Stories",
+    "most_recommended": "Most Recommended Stories",
+    "see_more": "See more",
+    "most_viewed": "Most Viewed Stories",
+    "most_liked": "Most Liked Stories",
+    "longest": "Longest Stories"
+  },
+  "chapter": {
+    "loading": "Loading chapter...",
+    "not_found": "Chapter not found.",
+    "prev": "Previous chapter",
+    "next": "Next chapter",
+    "chapter_list": "Chapter list"
+  },
+  "story": {
+    "author": "Author",
+    "unknown": "Unknown",
+    "total_chapters": "Total chapters",
+    "source": "Source",
+    "views": "Views",
+    "likes": "Likes",
+    "recommends": "Recommends",
+    "votes": "Votes",
+    "intro": "Introduction",
+    "not_updated": "Not updated",
+    "totalChapters": "Total chapters",
+    "readNow": "Read now"
+  },
+  "about": {
+    "title": "About"
+  },
+  "contact": {
+    "title": "Contact",
+    "desc": "If you have any questions or feedback, please leave your information below.",
+    "name": "Name",
+    "name_placeholder": "Your name",
+    "email_placeholder": "Your email",
+    "content": "Content",
+    "content_placeholder": "Contact content...",
+    "send": "Send"
+  },
+  "error": {
+    "something_wrong": "Something went wrong!",
+    "try_again": "Try again"
+  },
+  "blog": {
+    "loading": "Loading content...",
+    "views": "Views"
+  },
+  "login": {
+    "login_with_google": "Login with Google",
+    "login_error": "Login failed"
+  },
+  "pricing": {
+    "title": "Pricing"
+  },
+  "profile": {
+    "title": "Profile",
+    "read_stories": "Read stories",
+    "no_saved": "No stories saved.",
+    "read_until": "Read until chapter {index}",
+    "guest": "Guest"
+  },
+  "docs": {
+    "title": "Docs"
+  }
+}
