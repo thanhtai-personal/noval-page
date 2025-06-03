@@ -37,7 +37,11 @@
     "brightness": "Brightness",
     "settings": "Settings",
     "read_audio": "Read audio",
-    "stop_audio": "Stop reading"
+    "stop_audio": "Stop reading",
+    "pause_audio": "Pause",
+    "resume_audio": "Resume",
+    "choose_text_color": "Choose text color {color}",
+    "audio_speed": "Audio speed"
   },
   "story": {
     "author": "Author",

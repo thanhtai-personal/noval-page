@@ -4,6 +4,7 @@ import {
   Modal,
   ModalContent,
 } from "@heroui/modal";
+import { AudioReader } from "./AudioReader";
 
 export interface ReadingSettingsProps {
   fontSize: number;
@@ -36,36 +37,112 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
   const locale = useLocale();
   const [open, setOpen] = React.useState(false);
   const [isSpeaking, setIsSpeaking] = React.useState(false);
+  const [isPaused, setIsPaused] = React.useState(false);
+  const [progress, setProgress] = React.useState(0); // 0-100
   const utteranceRef = React.useRef<SpeechSynthesisUtterance | null>(null);
+  const [currentChar, setCurrentChar] = React.useState(0);
+  const [rate, setRate] = React.useState(() => 1);
+  const rateOptions = [0.5, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.5];
 
-  // Function to start reading
-  const startReading = (text: string) => {
+  const getChapterText = () => {
+    return chapter.content;
+  };
+
+  // Start reading
+  const startReading = (text: string, startChar: number = 0) => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      if (window.speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
-      }
-      const utterance = new window.SpeechSynthesisUtterance(text);
+      window.speechSynthesis.cancel();
+      const utterance = new window.SpeechSynthesisUtterance(text.slice(startChar));
       utterance.lang = locale === "vi" ? "vi-VN" : "en-US";
-      utterance.onend = () => setIsSpeaking(false);
-      utterance.onerror = () => setIsSpeaking(false);
+      utterance.rate = rate;
+      utterance.onend = () => {
+        setIsSpeaking(false);
+        setIsPaused(false);
+        setProgress(100);
+        setCurrentChar(0);
+      };
+      utterance.onerror = () => {
+        setIsSpeaking(false);
+        setIsPaused(false);
+      };
+      utterance.onboundary = (event: any) => {
+        if (typeof event.charIndex === 'number' && text.length > 0) {
+          setCurrentChar(startChar + event.charIndex);
+          setProgress(Math.min(100, Math.round(((startChar + event.charIndex) / text.length) * 100)));
+        }
+      };
       window.speechSynthesis.speak(utterance);
       utteranceRef.current = utterance;
       setIsSpeaking(true);
+      setIsPaused(false);
+      setProgress(Math.round((startChar / text.length) * 100));
     }
   };
-
-  // Function to stop reading
+  // Pause
+  const pauseReading = () => {
+    if (typeof window !== "undefined" && window.speechSynthesis.speaking) {
+      window.speechSynthesis.pause();
+      setIsPaused(true);
+      setIsSpeaking(true);
+    }
+  };
+  // Resume
+  const resumeReading = () => {
+    if (typeof window !== "undefined" && window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+      setIsPaused(false);
+      setIsSpeaking(true);
+    }
+  };
+  // Stop
   const stopReading = () => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
+      setIsPaused(false);
+      setProgress(0);
+      setCurrentChar(0);
     }
   };
 
-  // Get chapter text from props or context (assume window.chapterText for demo)
-  const getChapterText = () => {
-    return chapter?.content || "";
+  // Seek to position in audio
+  const seekAudio = (percent: number) => {
+    if (!chapter?.content) return;
+    const text = chapter.content;
+    const charIndex = Math.floor((percent / 100) * text.length);
+    stopReading();
+    setTimeout(() => {
+      startReading(text, charIndex);
+    }, 100);
   };
+
+  // Auto-stop audio on refresh or navigation
+  React.useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  // Auto-pause and resume audio at new speed when rate changes
+  React.useEffect(() => {
+    if (!isSpeaking || isPaused) return;
+    if (chapter?.content && typeof window !== "undefined" && "speechSynthesis" in window) {
+      stopReading();
+      setTimeout(() => {
+        startReading(chapter.content, currentChar);
+      }, 100);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rate]);
 
   return (
     <>
@@ -94,6 +171,7 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
         <ModalContent className="p-0 bg-transparent shadow-none">
           <div className="p-6 bg-white dark:bg-gray-900 rounded shadow max-w-md w-full mx-auto">
             <div className="flex flex-col gap-4">
+              {/* Config controls */}
               <div>
                 <label className="block mb-1 font-medium">
                   {t("font_size")}
@@ -164,22 +242,12 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
                 />
                 <div className="text-sm mt-1">{brightness}%</div>
               </div>
+              {/* Audio reading controls at the bottom */}
+              <AudioReader chapter={chapter} rate={rate} setRate={setRate} rateOptions={rateOptions} />
             </div>
           </div>
         </ModalContent>
       </Modal>
-      <div className="flex justify-end gap-2 mb-2">
-        <button
-          type="button"
-          className="px-3 py-1 rounded bg-primary-600 text-white font-medium shadow hover:bg-primary-700 transition"
-          onClick={() => {
-            if (!isSpeaking) startReading(getChapterText());
-            else stopReading();
-          }}
-        >
-          {isSpeaking ? t("stop_audio") : t("read_audio")}
-        </button>
-      </div>
     </>
   );
 };

@@ -37,7 +37,11 @@
     "brightness": "Độ sáng",
     "settings": "Cài đặt",
     "read_audio": "Đọc audio",
-    "stop_audio": "Dừng đọc"
+    "stop_audio": "Dừng đọc",
+    "pause_audio": "Tạm dừng",
+    "resume_audio": "Tiếp tục",
+    "choose_text_color": "Chọn màu chữ {color}",
+    "audio_speed": "Tốc độ đọc"
   },
   "story": {
     "author": "Tác giả",
