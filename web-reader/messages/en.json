@@ -1,7 +1,7 @@
 {
   "search": {
-    "title": "Search for great stories | Vo Uu Cac",
-    "description": "Search for Xianxia, Wuxia, Huyen Huyen stories by keyword, genre, author or chapter count.",
+    "title": "Find great stories | Vo Uu Cac",
+    "description": "Search for captivating xianxia, wuxia, and fantasy stories by keyword, genre, author, or chapter count.",
     "category": "Category",
     "author": "Author",
     "choose_author": "Choose author",
@@ -37,7 +37,7 @@
     "source": "Source",
     "views": "Views",
     "likes": "Likes",
-    "recommends": "Recommends",
+    "recommends": "Recommendations",
     "votes": "Votes",
     "intro": "Introduction",
     "not_updated": "Not updated",
@@ -50,7 +50,7 @@
   "contact": {
     "title": "Contact",
     "desc": "If you have any questions or feedback, please leave your information below.",
-    "name": "Name",
+    "name": "Full name",
     "name_placeholder": "Your name",
     "email_placeholder": "Your email",
     "content": "Content",
@@ -58,7 +58,7 @@
     "send": "Send"
   },
   "error": {
-    "something_wrong": "Something went wrong!",
+    "something_wrong": "An error occurred!",
     "try_again": "Try again"
   },
   "blog": {
@@ -75,12 +75,12 @@
   "profile": {
     "title": "Profile",
     "read_stories": "Read stories",
-    "no_saved": "No stories saved.",
-    "read_until": "Read until chapter {index}",
+    "no_saved": "No stories saved yet.",
+    "read_until": "Read up to chapter {index}",
     "guest": "Guest"
   },
   "docs": {
-    "title": "Docs"
+    "title": "Documentation"
   },
   "nav": {
     "home": "Home",
@@ -90,7 +90,8 @@
     "blog": "Blog",
     "pricing": "Pricing",
     "profile": "Profile",
-    "docs": "Docs",
-    "bestStories": "Top Stories"
+    "docs": "Documentation",
+    "bestStories": "Best Stories",
+    "logout": "Logout"
   }
 }

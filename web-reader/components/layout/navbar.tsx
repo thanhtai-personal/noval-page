@@ -20,15 +20,18 @@ import { ThemeSwitch } from "@/components/common/utils/theme-switch";
 import { FacebookIcon } from "@/components/default/icons";
 import { LogoIcon } from "@/assets/icons/Logo";
 import { Switch } from "@heroui/switch";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import { useTranslations } from "next-intl";
 
 export const Navbar = () => {
-  const handleUpdateLanguage = (value: boolean) => {
-    Cookies.set('NEXT_LOCALE', value ? 'en' : 'vi', { expires: 365 });
-    location.reload(); // hoặc dùng router.refresh() nếu cần
-  };
   const t = useTranslations("nav");
+
+  const handleUpdateLanguage = () => {
+    const value = Cookies.get("NEXT_LOCALE") !== "vi";
+    Cookies.set("NEXT_LOCALE", value ? "vi" : "en", { expires: 365 });
+    location.reload();
+  };
+
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
@@ -64,6 +67,7 @@ export const Navbar = () => {
             isExternal
             aria-label="TTV"
             href="https://www.facebook.com/"
+            target="_blank"
           >
             <FacebookIcon className="size-5 text-default-500" />
           </LinkWithRedirecting>
@@ -78,16 +82,9 @@ export const Navbar = () => {
           </NavbarItem>
         </NavbarItem>
         <NavbarItem className="hidden sm:flex gap-2">
-          <Switch
-            defaultSelected
-            color="secondary"
-            endContent={<span className="mx-2">EN</span>}
-            size="lg"
-            startContent={<span className="mx-2">VI</span>}
-            className="rounded-none"
-            onChange={handleUpdateLanguage as any}
-          >
-          </Switch>
+          <div className="cursor-pointer w-8 h-8 flex justify-center items-center" onClick={handleUpdateLanguage}>
+            {Cookies.get("NEXT_LOCALE") === "en" ? engFlag : viFlag}
+          </div>
         </NavbarItem>
       </NavbarContent>
 
@@ -121,3 +118,35 @@ export const Navbar = () => {
     </HeroUINavbar>
   );
 };
+
+const engFlag = (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55.2 38.4">
+    <rect width="55.2" height="38.4" fill="#012169" />
+    <g>
+      <polygon
+        fill="#FFF"
+        points="0,0 22.08,14.4 22.08,0 33.12,0 33.12,14.4 55.2,0 55.2,5.12 36.96,17.28 55.2,17.28 55.2,21.12 36.96,21.12 55.2,33.28 55.2,38.4 33.12,24 33.12,38.4 22.08,38.4 22.08,24 0,38.4 0,33.28 18.24,21.12 0,21.12 0,17.28 18.24,17.28 0,5.12"
+      />
+      <polygon
+        fill="#C8102E"
+        points="0,2.08 24.96,17.28 24.96,0 30.24,0 30.24,17.28 55.2,2.08 55.2,7.04 34.56,19.2 55.2,19.2 55.2,19.2 34.56,19.2 55.2,31.36 55.2,36.32 30.24,21.12 30.24,38.4 24.96,38.4 24.96,21.12 0,36.32 0,31.36 20.64,19.2 0,19.2 0,19.2 20.64,19.2 0,7.04"
+      />
+      <rect x="22.08" y="0" width="11.04" height="38.4" fill="#FFF" />
+      <rect x="0" y="14.4" width="55.2" height="9.6" fill="#FFF" />
+      <rect x="24.96" y="0" width="5.28" height="38.4" fill="#C8102E" />
+      <rect x="0" y="17.28" width="55.2" height="3.84" fill="#C8102E" />
+    </g>
+  </svg>
+);
+
+const viFlag = (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55.2 38.4">
+    <rect width="55.2" height="38.4" fill="#DA251D" />
+    <g>
+      <polygon
+        fill="#FFFF00"
+        points="27.6,11.52 29.97,18.82 37.65,18.82 31.44,23.33 33.81,30.63 27.6,26.12 21.39,30.63 23.76,23.33 17.55,18.82 25.23,18.82"
+      />
+    </g>
+  </svg>
+);

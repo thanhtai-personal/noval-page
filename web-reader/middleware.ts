@@ -11,7 +11,6 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Lấy locale từ cookie, default = 'vi'
   const locale = request.cookies.get("NEXT_LOCALE")?.value || "vi";
 
   const response = NextResponse.next();
