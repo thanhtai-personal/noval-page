@@ -1,13 +1,14 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Input } from '@heroui/input';
-import { Kbd } from '@heroui/kbd';
-import { SearchIcon } from '@/components/default/icons';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { Input } from "@heroui/input";
+import { Kbd } from "@heroui/kbd";
+import { useRouter } from "next/navigation";
+
+import { SearchIcon } from "@/components/default/icons";
 
 export function SearchBox() {
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState("");
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -35,9 +36,9 @@ export function SearchBox() {
         startContent={
           <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
         }
+        type="search"
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
-        type="search"
       />
     </form>
   );

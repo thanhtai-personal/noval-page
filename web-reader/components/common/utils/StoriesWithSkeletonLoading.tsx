@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import { Story } from '@/types/interfaces/story';
-import { StoryCard } from '../../story/StoryCard';
-import { StoryCardSkeleton } from '../../story/StoryCardSkeleton';
+import { StoryCard } from "../../story/StoryCard";
+import { StoryCardSkeleton } from "../../story/StoryCardSkeleton";
+
+import { Story } from "@/types/interfaces/story";
 
 export function StoriesWithSkeletonLoading({
   stories,
@@ -17,15 +18,13 @@ export function StoriesWithSkeletonLoading({
 
   return (
     <>
-      {(isLoading
-        ? Array.from({ length: skeletonCount })
-        : stories
-      ).map((story: any, i: number) =>
-        story ? (
-          <StoryCard key={story._id} story={story} isSlide={isSlide} />
-        ) : (
-          <StoryCardSkeleton key={`skeleton-${i}`} />
-        )
+      {(isLoading ? Array.from({ length: skeletonCount }) : stories).map(
+        (story: any, i: number) =>
+          story ? (
+            <StoryCard key={story._id} isSlide={isSlide} story={story} />
+          ) : (
+            <StoryCardSkeleton key={`skeleton-${i}`} />
+          ),
       )}
     </>
   );

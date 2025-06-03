@@ -1,5 +1,6 @@
-import { ApiInstant } from '@/utils/api';
-import { Metadata } from 'next';
+import { Metadata } from "next";
+
+import { ApiInstant } from "@/utils/api";
 
 export async function generateMetadata({ params }: any): Promise<Metadata> {
   const res = await ApiInstant.get(`/blogs/${params.slug}`);
@@ -7,10 +8,10 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
 
   return {
     title: `${blog.title} | Vô Ưu Các`,
-    description: blog.content?.replace(/<[^>]+>/g, '').slice(0, 160),
+    description: blog.content?.replace(/<[^>]+>/g, "").slice(0, 160),
     openGraph: {
       title: blog.title,
-      description: blog.content?.replace(/<[^>]+>/g, '').slice(0, 160),
+      description: blog.content?.replace(/<[^>]+>/g, "").slice(0, 160),
       images: blog.cover ? [{ url: blog.cover }] : undefined,
     },
   };

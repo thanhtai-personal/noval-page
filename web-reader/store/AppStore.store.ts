@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+
 import { ApiInstant } from "@/utils/api";
 
 export class AppStore {
@@ -17,6 +18,7 @@ export class AppStore {
   async fetchProfile() {
     try {
       const res = await ApiInstant.get("/auth/me");
+
       this.profile = res.data;
     } catch {
       this.clear();

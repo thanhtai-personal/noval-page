@@ -1,17 +1,19 @@
-'use client';
+"use client";
 
-import Script from 'next/script';
+import Script from "next/script";
 
-export function GoogleAnalytics({ GA_MEASUREMENT_ID }: { GA_MEASUREMENT_ID: string }) {
+export function GoogleAnalytics({
+  GA_MEASUREMENT_ID,
+}: {
+  GA_MEASUREMENT_ID: string;
+}) {
   return (
     <>
       <Script
-        strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        strategy="afterInteractive"
       />
       <Script
-        id="gtag-init"
-        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
           window.dataLayer = window.dataLayer || [];
@@ -20,6 +22,8 @@ export function GoogleAnalytics({ GA_MEASUREMENT_ID }: { GA_MEASUREMENT_ID: stri
           gtag('config', '${GA_MEASUREMENT_ID}');
         `,
         }}
+        id="gtag-init"
+        strategy="afterInteractive"
       />
     </>
   );

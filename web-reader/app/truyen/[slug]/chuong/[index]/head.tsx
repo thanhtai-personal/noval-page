@@ -1,5 +1,6 @@
-import { ApiInstant } from '@/utils/api';
-import { Metadata } from 'next';
+import { Metadata } from "next";
+
+import { ApiInstant } from "@/utils/api";
 
 export async function generateMetadata({ params }: any): Promise<Metadata> {
   const { slug, index } = params;
@@ -8,6 +9,6 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
 
   return {
     title: `${chapter.title} - Đọc truyện ${chapter.story.title} | Vô Ưu Các`,
-    description: chapter.content?.replace(/<[^>]+>/g, '').slice(0, 160),
+    description: chapter.content?.replace(/<[^>]+>/g, "").slice(0, 160),
   };
 }

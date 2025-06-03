@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { appStore } from '@/store/AppStore.store';
-import { ApiInstant } from '@/utils/api';
-import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
-import { useRouter } from 'next/navigation';
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import { useRouter } from "next/navigation";
+
+import { appStore } from "@/store/AppStore.store";
+import { ApiInstant } from "@/utils/api";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,9 +18,9 @@ export default function LoginPage() {
 
       appStore.fetchProfile();
 
-      router.push('/');
+      router.push("/");
     } catch (err) {
-      console.error('Login failed', err);
+      console.error("Login failed", err);
     }
   };
 
@@ -28,7 +29,10 @@ export default function LoginPage() {
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
         <div className="p-8 rounded shadow">
           <h1 className="text-xl mb-4">Đăng nhập bằng Google</h1>
-          <GoogleLogin onSuccess={handleLoginSuccess} onError={() => console.error('Login Error')} />
+          <GoogleLogin
+            onError={() => console.error("Login Error")}
+            onSuccess={handleLoginSuccess}
+          />
         </div>
       </GoogleOAuthProvider>
     </div>

@@ -1,11 +1,12 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { ApiInstant } from '@/utils/api';
-import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
-import { Button } from '@heroui/button';
-import { Pagination } from '@heroui/pagination';
-import Link from 'next/link';
+import { useEffect, useState } from "react";
+import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
+import { Button } from "@heroui/button";
+import { Pagination } from "@heroui/pagination";
+import Link from "next/link";
+
+import { ApiInstant } from "@/utils/api";
 
 interface Blog {
   _id: string;
@@ -25,12 +26,14 @@ export default function BlogPage() {
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      const res = await ApiInstant.get('/blogs', {
-        params: { page, limit, sort: 'views' },
+      const res = await ApiInstant.get("/blogs", {
+        params: { page, limit, sort: "views" },
       });
+
       setBlogs(res.data.data);
       setTotal(res.data.total);
     };
+
     fetchBlogs();
   }, [page]);
 
@@ -44,19 +47,23 @@ export default function BlogPage() {
             {blog.cover && (
               <CardHeader className="p-0">
                 <img
-                  src={blog.cover}
                   alt={blog.title}
                   className="w-full h-40 object-cover rounded-t"
+                  src={blog.cover}
                 />
               </CardHeader>
             )}
             <CardBody>
               <h2 className="text-lg font-semibold">{blog.title}</h2>
-              <p className="text-sm text-gray-600 line-clamp-3">{blog.content}</p>
+              <p className="text-sm text-gray-600 line-clamp-3">
+                {blog.content}
+              </p>
             </CardBody>
             <CardFooter>
               <Link href={`/blog/${blog.slug}`}>
-                <Button size="sm" variant="flat" color="primary">Xem chi tiết</Button>
+                <Button color="primary" size="sm" variant="flat">
+                  Xem chi tiết
+                </Button>
               </Link>
             </CardFooter>
           </Card>

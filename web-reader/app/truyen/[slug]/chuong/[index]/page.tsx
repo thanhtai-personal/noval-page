@@ -2,8 +2,10 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ApiInstant } from "@/utils/api";
 import { Button } from "@heroui/button";
+
+import { ApiInstant } from "@/utils/api";
+import { ReadingSettings } from "@/components/chapter/ReadingSettings";
 
 export default function ChapterPage() {
   const { slug, index } = useParams();
@@ -12,10 +14,24 @@ export default function ChapterPage() {
   const [nextChapter, setNextChapter] = useState<any>(null);
   const [prevChapter, setPrevChapter] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [fontSize, setFontSize] = useState(20);
+  const [bgColor, setBgColor] = useState("#fff");
+  const [brightness, setBrightness] = useState(100);
+  const bgOptions = [
+    "#fff",
+    "#f7f7f7",
+    "#fbeee6",
+    "#e6f7fb",
+    "#222",
+    "#111",
+    "#f5f5dc",
+    "#f0e6fa",
+  ];
 
   const loadChapter = useCallback(async () => {
     setLoading(true);
     const res = await ApiInstant.get(`/stories/${slug}/chapters/${index}`);
+
     setChapter(res.data);
     localStorage.setItem(`read-${slug}-${slug}`, index?.toString() || "0");
     setLoading(false);
@@ -30,14 +46,16 @@ export default function ChapterPage() {
     const fetchNextChapter = async () => {
       try {
         const res = await ApiInstant.get(
-          `/stories/${slug}/chapters/prev-and-next/${chapter.chapterNumber}`
+          `/stories/${slug}/chapters/prev-and-next/${chapter.chapterNumber}`,
         );
+
         setNextChapter(res.data.next || null);
         setPrevChapter(res.data.prev || null);
       } catch (error) {
         console.error("Error fetching next chapter:", error);
       }
     };
+
     fetchNextChapter();
   }, [chapter]);
 
@@ -52,11 +70,13 @@ export default function ChapterPage() {
     const handleTouchEnd = (e: TouchEvent) => {
       touchEndX = e.changedTouches[0].screenX;
       const dx = touchEndX - touchStartX;
+
       if (dx < -100) handleNext();
     };
 
     window.addEventListener("touchstart", handleTouchStart);
     window.addEventListener("touchend", handleTouchEnd);
+
     return () => {
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchend", handleTouchEnd);
@@ -80,26 +100,42 @@ export default function ChapterPage() {
   if (!chapter) return <p className="p-4">Không tìm thấy chương.</p>;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6 space-y-4">
+    <div
+      className="max-w-3xl mx-auto px-4 py-6 space-y-4"
+      style={{ background: bgColor, filter: `brightness(${brightness}%)` }}
+    >
+      <div className="mb-6">
+        <ReadingSettings
+          bgColor={bgColor}
+          bgOptions={bgOptions}
+          brightness={brightness}
+          fontSize={fontSize}
+          setBgColor={setBgColor}
+          setBrightness={setBrightness}
+          setFontSize={setFontSize}
+        />
+      </div>
       <h1
-        className="text-xl font-bold text-center"
         dangerouslySetInnerHTML={{
-          __html: chapter.title?.replace(/<\/?span[^>]*>/g, ""), // xóa tất cả thẻ span nếu có
+          __html: chapter.title?.replace(/<\/?span[^>]*>/g, ""),
         }}
-      ></h1>
+        className="text-xl font-bold text-center"
+        style={{ fontSize }}
+      />
       <div
-        className="prose max-w-none whitespace-pre-wrap"
         dangerouslySetInnerHTML={{ __html: chapter.content }}
+        className="prose max-w-none whitespace-pre-wrap"
+        style={{ fontSize }}
       />
       <div className="flex justify-end md:justify-between mt-10">
         {prevChapter && (
-          <Button size="sm" className=" hidden md:block" onClick={handleBack}>
+          <Button className=" hidden md:block" size="sm" onClick={handleBack}>
             ← Chương trước
           </Button>
         )}
         <Button
-          size="sm"
           className="underline hidden md:block"
+          size="sm"
           onClick={handleBackToList}
         >
           Danh sách chương

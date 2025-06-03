@@ -2,13 +2,13 @@ import { IconSvgProps } from "@/types";
 
 export const LogoIcon: React.FC<IconSvgProps> = (props) => (
   <svg
-    version="1.0"
-    xmlns="http://www.w3.org/2000/svg"
-    width="1024.000000pt"
-    height="1024.000000pt"
-    viewBox="0 0 1024.000000 1024.000000"
-    preserveAspectRatio="xMidYMid meet"
     fill="currentColor"
+    height="1024.000000pt"
+    preserveAspectRatio="xMidYMid meet"
+    version="1.0"
+    viewBox="0 0 1024.000000 1024.000000"
+    width="1024.000000pt"
+    xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
     <g

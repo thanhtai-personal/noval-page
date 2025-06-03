@@ -1,8 +1,8 @@
-'use client';
+"use client";
+
+import { observer } from "mobx-react-lite";
 
 import { Navbar } from "@/components/layout/navbar";
-
-import { observer } from 'mobx-react-lite';
 import { useAppStore } from "@/store/Provider";
 
 export const AppLayout = observer(({ children }: any) => {
@@ -17,4 +17,3 @@ export const AppLayout = observer(({ children }: any) => {
     </div>
   );
 });
-  

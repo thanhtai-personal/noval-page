@@ -1,13 +1,15 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { ApiInstant } from "@/utils/api";
-import { Story } from "@/types/interfaces/story";
 import { Pagination } from "@heroui/pagination";
 import { Checkbox } from "@heroui/checkbox";
 import { Button } from "@heroui/button";
-import { StoriesWithSkeletonLoading } from "./StoriesWithSkeletonLoading";
+
+import { StoriesWithSkeletonLoading } from "../common/utils/StoriesWithSkeletonLoading";
+
+import { Story } from "@/types/interfaces/story";
+import { ApiInstant } from "@/utils/api";
 
 const ranges = [
   { label: "0 - 300", value: "0-300" },
@@ -33,10 +35,12 @@ export default function SearchPageClient() {
         ApiInstant.get("/tags"),
         ApiInstant.get("/authors"),
       ]);
+
       setCategories(catRes.data || []);
       setTags(tagRes.data?.data || []);
       setAuthors(authorRes.data?.data || []);
     };
+
     fetchData();
   }, []);
 
@@ -47,9 +51,11 @@ export default function SearchPageClient() {
       const res = await ApiInstant.get(`/stories`, {
         params: { keyword, sort, page, limit },
       });
+
       setStories(res.data.data);
       setTotal(res.data.total);
     };
+
     fetchStories();
   }, [params, page]);
 
@@ -59,28 +65,38 @@ export default function SearchPageClient() {
         <div>
           <h3 className="font-semibold mb-2">Danh mục</h3>
           {categories.map((cat) => (
-            <Checkbox key={cat._id} value={cat.slug}>{cat.name}</Checkbox>
+            <Checkbox key={cat._id} value={cat.slug}>
+              {cat.name}
+            </Checkbox>
           ))}
         </div>
         <div>
           <h3 className="font-semibold mb-2">Tác giả</h3>
           {authors.map((author) => (
-            <Checkbox key={author._id} value={author._id}>{author.name}</Checkbox>
+            <Checkbox key={author._id} value={author._id}>
+              {author.name}
+            </Checkbox>
           ))}
         </div>
         <div>
           <h3 className="font-semibold mb-2">Thẻ</h3>
           {tags.map((tag) => (
-            <Checkbox key={tag._id} value={tag._id}>{tag.name}</Checkbox>
+            <Checkbox key={tag._id} value={tag._id}>
+              {tag.name}
+            </Checkbox>
           ))}
         </div>
         <div>
           <h3 className="font-semibold mb-2">Số chương</h3>
           {ranges.map((r) => (
-            <Checkbox key={r.value} value={r.value}>{r.label}</Checkbox>
+            <Checkbox key={r.value} value={r.value}>
+              {r.label}
+            </Checkbox>
           ))}
         </div>
-        <Button size="sm" className="mt-4 w-full">Áp dụng</Button>
+        <Button className="mt-4 w-full" size="sm">
+          Áp dụng
+        </Button>
       </aside>
 
       <section className="md:col-span-3 space-y-6">

@@ -1,14 +1,16 @@
-import { Story } from "@/types/interfaces/story";
-import { ApiInstant } from "@/utils/api";
 import { Badge } from "@heroui/badge";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+
+import { ApiInstant } from "@/utils/api";
+import { Story } from "@/types/interfaces/story";
 import { StoryTabs } from "@/components/story/StoryTabs";
 import { LastReadChapter } from "@/components/chapter/LastReadChapter";
 
 async function fetchStory(slug: string): Promise<any | null> {
   try {
     const res = await ApiInstant.get(`/stories/${slug}`);
+
     return res.data || null;
   } catch {
     return null;
@@ -17,6 +19,7 @@ async function fetchStory(slug: string): Promise<any | null> {
 
 export async function generateMetadata({ params }: any): Promise<Metadata> {
   const story = await fetchStory((await params).slug);
+
   return {
     title: story?.title || "Chi tiết truyện",
     description: story?.introduce,
@@ -25,6 +28,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
 
 export default async function StoryDetailPage({ params }: any) {
   let story: Story;
+
   try {
     story = await fetchStory((await params).slug);
     if (!story) return notFound();
@@ -36,9 +40,9 @@ export default async function StoryDetailPage({ params }: any) {
     <section className="container mx-auto px-4 py-6">
       <div className="flex flex-col md:flex-row gap-6">
         <img
-          src={story.cover}
           alt={story.title}
           className="w-full max-w-xs object-cover rounded shadow"
+          src={story.cover}
         />
         <div>
           <h1 className="text-3xl font-bold mb-2">{story.title}</h1>
@@ -74,17 +78,19 @@ export default async function StoryDetailPage({ params }: any) {
             Giới thiệu
           </h3>
           <div
+            dangerouslySetInnerHTML={{
+              __html: story.intro || "<i>Chưa cập nhật</i>",
+            }}
             className="text-default-700 whitespace-pre-wrap"
-            dangerouslySetInnerHTML={{ __html: story.intro || "<i>Chưa cập nhật</i>" }}
-          ></div>
+          />
         </div>
       </div>
 
       <StoryTabs
+        description={story.description}
+        slug={story.slug}
         storyId={story._id}
         storySlug={story.slug}
-        slug={story.slug}
-        description={story.description}
       />
     </section>
   );

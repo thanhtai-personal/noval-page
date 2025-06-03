@@ -4,8 +4,9 @@ import { Tabs, Tab } from "@heroui/tabs";
 import { useEffect, useState } from "react";
 import { Card, CardBody } from "@heroui/card";
 import Link from "next/link";
-import { ApiInstant } from "@/utils/api";
 import { Pagination } from "@heroui/pagination";
+
+import { ApiInstant } from "@/utils/api";
 
 export function StoryTabs({
   storyId,
@@ -24,8 +25,9 @@ export function StoryTabs({
 
   const fetchChapters = async () => {
     const res = await ApiInstant.get(
-      `/stories/${storySlug}/chapters?page=${page}&limit=20`
+      `/stories/${storySlug}/chapters?page=${page}&limit=20`,
     );
+
     setChapters(res.data.data || []);
     setTotalPages(Math.ceil(res.data.total / 20));
   };
@@ -37,17 +39,17 @@ export function StoryTabs({
   return (
     <Card className="mt-6">
       <Tabs
-        aria-label="Tabs chi tiết truyện"
-        variant="underlined"
-        color="primary"
         fullWidth
+        aria-label="Tabs chi tiết truyện"
+        color="primary"
+        variant="underlined"
       >
         <Tab key="description" title="Mô tả">
           <CardBody>
             <h2 className="text-xl font-semibold mb-2">Mô tả</h2>
             <div
-              className="text-default-700  whitespace-pre-wrap"
               dangerouslySetInnerHTML={{ __html: description }}
+              className="text-default-700  whitespace-pre-wrap"
             />
           </CardBody>
         </Tab>

@@ -10,8 +10,8 @@ export interface Story {
   likes: number;
   votes: number;
   recommends: number;
-  categories: { name: string, _id: string, slug: string }[];
-  tags: { name: string, _id: string, slug: string }[];
-  author: { name: string, _id: string, slug: string };
-  source: { name: string, _id: string, url: string };
+  categories: { name: string; _id: string; slug: string }[];
+  tags: { name: string; _id: string; slug: string }[];
+  author: { name: string; _id: string; slug: string };
+  source: { name: string; _id: string; url: string };
 }

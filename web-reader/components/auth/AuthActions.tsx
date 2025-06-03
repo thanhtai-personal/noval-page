@@ -1,10 +1,12 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { appStore } from "@/store/AppStore.store";
 import { Button } from "@heroui/button";
-import { ProfileIcon, LogoutIcon } from "@/components/default/icons";
+
 import { LinkWithRedirecting } from "../common/utils/LinkWithRedirecting";
+
+import { appStore } from "@/store/AppStore.store";
+import { ProfileIcon, LogoutIcon } from "@/components/default/icons";
 
 export const AuthActions = observer(() => {
   return (
@@ -15,12 +17,12 @@ export const AuthActions = observer(() => {
         </Button>
       </LinkWithRedirecting>
       {appStore.isLoggedIn ? (
-        <Button size="sm" color="danger" onClick={() => appStore.logout()}>
+        <Button color="danger" size="sm" onClick={() => appStore.logout()}>
           <LogoutIcon className="size-5 text-default-500" />
         </Button>
       ) : (
         <LinkWithRedirecting href="/login">
-          <Button size="sm" color="primary">
+          <Button color="primary" size="sm">
             Login
           </Button>
         </LinkWithRedirecting>

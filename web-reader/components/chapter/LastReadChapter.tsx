@@ -1,12 +1,13 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export function LastReadChapter({ slug }: { slug: string }) {
   const [lastRead, setLastRead] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem(`read-${slug}`);
+
     if (saved) setLastRead(saved);
   }, [slug]);
 

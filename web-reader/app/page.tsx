@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { Button } from "@heroui/button";
 import Link from "next/link";
+import Slider from "react-slick";
+
 import { ApiInstant } from "@/utils/api";
 import { Story } from "@/types/interfaces/story";
-import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { StoriesWithSkeletonLoading } from "@/components/common/utils/StoriesWithSkeletonLoading";
@@ -22,13 +23,13 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       const recommendRes = await ApiInstant.get(
-        "/stories?sort=recommends&limit=10"
+        "/stories?sort=recommends&limit=10",
       );
       const viewRes = await ApiInstant.get("/stories?sort=views&limit=10");
       const voteRes = await ApiInstant.get("/stories?sort=votes&limit=5");
       const likeRes = await ApiInstant.get("/stories?sort=likes&limit=10");
       const chapterRes = await ApiInstant.get(
-        "/stories?sort=totalChapters&limit=10"
+        "/stories?sort=totalChapters&limit=10",
       );
 
       setTopView(viewRes.data?.data || []);
@@ -37,6 +38,7 @@ export default function HomePage() {
       setTopVote(voteRes.data?.data || []);
       setTopChapter(chapterRes.data?.data || []);
     };
+
     fetchData();
   }, []);
 
@@ -60,10 +62,10 @@ export default function HomePage() {
             : topVote
           ).map((story: any, i: number) =>
             story ? (
-              <StoryCard key={story._id} story={story} isSlide />
+              <StoryCard key={story._id} isSlide story={story} />
             ) : (
               <StoryCardSkeleton key={`skeleton-${i}`} />
-            )
+            ),
           )}
         </Slider>
       </div>
