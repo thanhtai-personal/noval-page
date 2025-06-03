@@ -131,6 +131,7 @@ export default function ChapterPage() {
           colorOptions={colorOptions}
           color={color}
           setColor={setColor}
+          chapter={chapter}
         />
       </div>
       <h1

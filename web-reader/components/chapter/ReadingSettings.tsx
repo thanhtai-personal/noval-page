@@ -1,11 +1,8 @@
 import React from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import {
   Modal,
   ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
 } from "@heroui/modal";
 
 export interface ReadingSettingsProps {
@@ -19,6 +16,7 @@ export interface ReadingSettingsProps {
   setBrightness: (value: number) => void;
   bgOptions: string[];
   colorOptions: string[];
+  chapter?: any;
 }
 
 export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
@@ -32,9 +30,42 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
   setBrightness,
   bgOptions,
   colorOptions,
+  chapter
 }) => {
   const t = useTranslations("chapter");
+  const locale = useLocale();
   const [open, setOpen] = React.useState(false);
+  const [isSpeaking, setIsSpeaking] = React.useState(false);
+  const utteranceRef = React.useRef<SpeechSynthesisUtterance | null>(null);
+
+  // Function to start reading
+  const startReading = (text: string) => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+      }
+      const utterance = new window.SpeechSynthesisUtterance(text);
+      utterance.lang = locale === "vi" ? "vi-VN" : "en-US";
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+      window.speechSynthesis.speak(utterance);
+      utteranceRef.current = utterance;
+      setIsSpeaking(true);
+    }
+  };
+
+  // Function to stop reading
+  const stopReading = () => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    }
+  };
+
+  // Get chapter text from props or context (assume window.chapterText for demo)
+  const getChapterText = () => {
+    return chapter?.content || "";
+  };
 
   return (
     <>
@@ -137,6 +168,18 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
           </div>
         </ModalContent>
       </Modal>
+      <div className="flex justify-end gap-2 mb-2">
+        <button
+          type="button"
+          className="px-3 py-1 rounded bg-primary-600 text-white font-medium shadow hover:bg-primary-700 transition"
+          onClick={() => {
+            if (!isSpeaking) startReading(getChapterText());
+            else stopReading();
+          }}
+        >
+          {isSpeaking ? t("stop_audio") : t("read_audio")}
+        </button>
+      </div>
     </>
   );
 };

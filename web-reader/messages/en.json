@@ -35,7 +35,9 @@
     "text_color": "Text color",
     "auto_text_color": "Automatically choose the best text color for background",
     "brightness": "Brightness",
-    "settings": "Settings"
+    "settings": "Settings",
+    "read_audio": "Read audio",
+    "stop_audio": "Stop reading"
   },
   "story": {
     "author": "Author",

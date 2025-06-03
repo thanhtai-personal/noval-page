@@ -35,7 +35,9 @@
     "text_color": "Màu chữ",
     "auto_text_color": "Tự động chọn màu chữ phù hợp với màu nền",
     "brightness": "Độ sáng",
-    "settings": "Cài đặt"
+    "settings": "Cài đặt",
+    "read_audio": "Đọc audio",
+    "stop_audio": "Dừng đọc"
   },
   "story": {
     "author": "Tác giả",
