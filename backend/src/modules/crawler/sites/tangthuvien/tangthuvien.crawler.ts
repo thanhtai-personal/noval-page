@@ -406,7 +406,6 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       this.logData(
         `Found ${listChapters.length} chapters for story: ${story.title}`,
       );
-      // await sleep(10000000); // for debug
 
       for (const chapterIndex in listChapters) {
         if (
@@ -416,16 +415,17 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
           this.logData(`>> DEMO MODE: Stopping at chapter ${chapterIndex}`);
           break;
         }
+        const chapterNumber = Number(chapterIndex) + 1;
         this.logData(
-          `Processing chapter ${Number(chapterIndex) + 1}: ${listChapters[chapterIndex].title}`,
+          `Processing chapter ${chapterNumber}: ${listChapters[chapterIndex].title}`,
         );
         const slug = slugify(
           listChapters[chapterIndex].title ||
-            `story-${story.title}-chapter-${chapterIndex}`,
+            `story-${story.title}-chapter-${chapterNumber}`,
         );
         this.logData(`Creating chapter slug: ${slug}`);
         const chapterData = {
-          chapterNumber: Number(chapterIndex) + 1,
+          chapterNumber,
           story: story._id,
           url: listChapters[chapterIndex].url,
           title: listChapters[chapterIndex].title,
@@ -438,6 +438,13 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         });
         this.logData(`Created chapter: ${listChapters[chapterIndex].title}`);
       }
+
+      this.storyModel.findOneAndUpdate(
+        { slug: story.slug },
+        { isChapterCrawled: true },
+        { new: true, upsert: true, setDefaultsOnInsert: true },
+      );
+      this.logData(`Updated story ${story.title} with chapters.`);
     } catch (error) {
     } finally {
       await page.close();

@@ -36,6 +36,16 @@ export class CrawlerController {
     return { message: `Crawl started for source: ${body.source}` };
   }
 
+  /**
+   * API: Bắt đầu crawl toàn bộ site
+   */
+  @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
+  @Post('source/:id/crawl-chapters')
+  async continueCrawlChapters(@Param('id') id: string) {
+    this.crawlerService.crawlAllChapters(id);
+    return { message: `Crawl chapters started for source: ${id}` };
+  }
+
   @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
   @Post('source/:id/crawl')
   async startSourceCrawl(@Param('id') id: string) {

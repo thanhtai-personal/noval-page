@@ -10,8 +10,6 @@ const socket = io(import.meta.env.VITE_API_WS_URL || "http://localhost:5000");
 
 export default function CrawlerPage() {
   const [sources, setSources] = useState<Source[]>([]);
-  const [expanded, setExpanded] = useState<string | null>(null);
-  const [loadingMap, setLoadingMap] = useState<{ [id: string]: boolean }>({});
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -49,20 +47,6 @@ export default function CrawlerPage() {
     }
   };
 
-  const handleCrawl = async (id: string) => {
-    setLoadingMap((prev) => ({ ...prev, [id]: true }));
-    try {
-      await api.post(`/crawler/source/${id}/crawl`);
-      await fetchSources();
-    } finally {
-      setLoadingMap((prev) => ({ ...prev, [id]: false }));
-    }
-  };
-
-  const toggleExpand = (id: string) => {
-    setExpanded((prev) => (prev === id ? null : id));
-  };
-
   useEffect(() => {
     fetchSources();
   }, []);
@@ -91,10 +75,6 @@ export default function CrawlerPage() {
             <SourceCard
               key={src._id}
               source={src}
-              isExpanded={expanded === src._id}
-              isLoading={loadingMap[src._id]}
-              onCrawl={() => handleCrawl(src._id)}
-              onToggleExpand={() => toggleExpand(src._id)}
             />
           ))}
     </div>

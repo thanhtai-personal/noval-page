@@ -123,6 +123,70 @@ export class CrawlerService {
     }
   }
 
+  async crawlAllChapters(sourceId: string) {
+    const source = await this.sourceModel.findById(sourceId);
+    if (!source) {
+      this.logData(`Source with ID ${sourceId} not found.`, source);
+      return;
+    }
+
+    if (this.activeCrawlMap.get(source._id.toString())) {
+      this.logData(
+        `Crawl for source ${source.name} is already in progress.`,
+        source,
+      );
+      return;
+    }
+
+    this.logData(`Starting crawl for source: ${source.name}`, source);
+
+    try {
+      const adapter = this.getAdapter(source.name);
+      
+      const allCrawledStories = await this.storyModel
+        .find({
+          source: source._id,
+          isDetailCrawled: true,
+          isChapterCrawled: false,
+        })
+        .populate('source');
+
+
+      for (const story of allCrawledStories) {
+        // get Story chapters
+        this.logData(`Crawled story details for: ${story.title}`, source);
+        // await sleep(100);
+
+        this.logData(`Crawling chapter list of: ${story.title}`, source);
+        await adapter.getListChapters(story);
+        this.logData(`Crawled chapters for: ${story.title}`, source);
+        const chapters = await this.chapterModel.find({ story: story._id });
+        for (const chapter of chapters) {
+          try {
+            this.logData(
+              `Crawling content of chapter: ${chapter.title}`,
+              source,
+            );
+            await adapter.getChapterContent(chapter);
+            // await sleep(300);
+          } catch (error) {
+            this.logData(
+              `[[Skipped]] chapter by error ${chapter.title}: ${error.message}`,
+              source,
+            );
+          }
+          this.logData(`Crawled content for chapter: ${chapter.title}`, source);
+        }
+        this.logData(`Completed crawling for story: ${story.title}`, source);
+      }
+    } catch (error) {
+      this.logger.error(`Error during crawl for source ${source.name}:`, error);
+      this.logData(`Error during crawl: ${error.message}`, source);
+    } finally {
+      this.activeCrawlMap.delete(source._id.toString());
+    }
+  }
+
   async crawlStoryById(storyId: string) {
     const story = await this.storyModel.findById(storyId).populate('source');
     if (!story) {
