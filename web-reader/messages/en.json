@@ -28,7 +28,14 @@
     "not_found": "Chapter not found.",
     "prev": "Previous chapter",
     "next": "Next chapter",
-    "chapter_list": "Chapter list"
+    "chapter_list": "Chapter list",
+    "font_size": "Font size",
+    "bg_color": "Background color",
+    "choose_bg_color": "Choose color {color}",
+    "text_color": "Text color",
+    "auto_text_color": "Automatically choose the best text color for background",
+    "brightness": "Brightness",
+    "settings": "Settings"
   },
   "story": {
     "author": "Author",

@@ -63,10 +63,13 @@ export function StoryTabs({
                     className="text-blue-600 hover:underline"
                     href={`/truyen/${storySlug}/chuong/${chapter.slug}`}
                   >
-                    <span>Chương&nbsp;{chapter.chapterNumber + 1}:&nbsp;</span>
+                    <span>Chương&nbsp;{chapter.chapterNumber}:&nbsp;</span>
                     <span
                       dangerouslySetInnerHTML={{
-                        __html: chapter.title?.replace(/<\/?span[^>]*>/g, ""), // xóa tất cả thẻ span nếu có
+                        // xóa tất cả thẻ span nếu có, xóa thêm text chương + number và dấu :
+                        __html: chapter.title
+                          ?.replace(/<\/?span[^>]*>/g, "")
+                          .replace(/chương\s*\d+\s*[:\-–]?\s*/i, ""),
                       }}
                     />
                   </Link>
