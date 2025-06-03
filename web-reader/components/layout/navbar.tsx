@@ -19,7 +19,6 @@ import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/common/utils/theme-switch";
 import { FacebookIcon } from "@/components/default/icons";
 import { LogoIcon } from "@/assets/icons/Logo";
-import { Switch } from "@heroui/switch";
 import Cookies from "js-cookie";
 import { useTranslations } from "next-intl";
 
