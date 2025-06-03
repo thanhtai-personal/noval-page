@@ -21,13 +21,14 @@ import { FacebookIcon } from "@/components/default/icons";
 import { LogoIcon } from "@/assets/icons/Logo";
 import { Switch } from "@heroui/switch";
 import Cookies from 'js-cookie';
+import { useTranslations } from "next-intl";
 
 export const Navbar = () => {
   const handleUpdateLanguage = (value: boolean) => {
     Cookies.set('NEXT_LOCALE', value ? 'en' : 'vi', { expires: 365 });
     location.reload(); // hoặc dùng router.refresh() nếu cần
   };
-
+  const t = useTranslations("nav");
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
@@ -47,7 +48,7 @@ export const Navbar = () => {
                 color="foreground"
                 href={item.href}
               >
-                {item.label}
+                {t(item.intlKey)}
               </NextLink>
             </NavbarItem>
           ))}
@@ -111,7 +112,7 @@ export const Navbar = () => {
                 href="#"
                 size="lg"
               >
-                {item.label}
+                {t(item.intlKey)}
               </LinkWithRedirecting>
             </NavbarMenuItem>
           ))}

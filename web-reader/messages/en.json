@@ -81,5 +81,16 @@
   },
   "docs": {
     "title": "Docs"
+  },
+  "nav": {
+    "home": "Home",
+    "search": "Search",
+    "about": "About",
+    "contact": "Contact",
+    "blog": "Blog",
+    "pricing": "Pricing",
+    "profile": "Profile",
+    "docs": "Docs",
+    "bestStories": "Top Stories"
   }
 }

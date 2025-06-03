@@ -1,28 +1,33 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Vô ưu các",
-  description: "Không gian tiên hiệp, vô thúc vô ưu",
+  name: "Vo Uu Cac",
+  description: "Xianxia space, carefree and unrestrained",
   navItems: [
     {
-      label: "Truyện hay",
+      intlKey: "bestStories",
+      label: "Truyện hay nhất",
       href: "/search?sort=recommends",
     },
     {
+      intlKey: "blog",
       label: "Blog",
       href: "/blog",
     },
     {
+      intlKey: "contact",
       label: "Liên hệ",
       href: "/contact",
     },
   ],
   navMenuItems: [
     {
-      label: "Profile",
+      intlKey: "profile",
+      label: "Hồ sơ",
       href: "/profile",
     },
     {
+      intlKey: "logout",
       label: "Đăng xuất",
       href: "/logout",
     },

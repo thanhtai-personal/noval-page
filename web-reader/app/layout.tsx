@@ -9,7 +9,8 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { GoogleAnalytics } from "@/lib/analytic";
 
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale } from "next-intl/server";
+import { headers } from "next/headers";
+// import { getLocale } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: {
@@ -34,7 +35,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const locale = await getLocale();
+  // const locale = await getLocale();
+  const locale = (await headers()).get("x-next-intl-locale") || "vi";
   return (
     <html suppressHydrationWarning lang={locale}>
       <head />

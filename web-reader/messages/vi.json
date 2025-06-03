@@ -81,5 +81,16 @@
   },
   "docs": {
     "title": "Tài liệu"
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "search": "Tìm kiếm",
+    "about": "Giới thiệu",
+    "contact": "Liên hệ",
+    "blog": "Blog",
+    "pricing": "Bảng giá",
+    "profile": "Trang cá nhân",
+    "docs": "Tài liệu",
+    "bestStories": "Truyện hay nhất"
   }
 }
