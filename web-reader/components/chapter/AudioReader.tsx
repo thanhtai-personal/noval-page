@@ -28,8 +28,9 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       const utterance = new window.SpeechSynthesisUtterance(
-        text.slice(startChar)
+        text.slice(startChar),
       );
+
       utterance.lang = locale === "vi" ? "vi-VN" : "en-US";
       utterance.rate = rate;
       utterance.onend = () => {
@@ -48,8 +49,8 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
           setProgress(
             Math.min(
               100,
-              Math.round(((startChar + event.charIndex) / text.length) * 100)
-            )
+              Math.round(((startChar + event.charIndex) / text.length) * 100),
+            ),
           );
         }
       };
@@ -88,6 +89,7 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
     if (!chapter?.content) return;
     const text = chapter.content;
     const charIndex = Math.floor((percent / 100) * text.length);
+
     stopReading();
     setTimeout(() => {
       startReading(text, charIndex);
@@ -100,7 +102,9 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
         window.speechSynthesis.cancel();
       }
     };
+
     window.addEventListener("beforeunload", handleBeforeUnload);
+
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
@@ -121,7 +125,6 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
         startReading(chapter.content, currentChar);
       }, 100);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rate]);
 
   return (
@@ -130,23 +133,23 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
         <div className="flex gap-2 items-center mb-2">
           {!isSpeaking ? (
             <button
-              type="button"
-              className="p-1 rounded bg-primary-600 text-white font-medium shadow hover:bg-primary-700 transition flex items-center justify-center"
-              onClick={() => startReading(getChapterText())}
               aria-label={t("read_audio")}
+              className="p-1 rounded bg-primary-600 text-white font-medium shadow hover:bg-primary-700 transition flex items-center justify-center"
+              type="button"
+              onClick={() => startReading(getChapterText())}
             >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
                 className="size-6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
                 <path
+                  d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
                 />
               </svg>
             </button>
@@ -154,45 +157,45 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
             <>
               {isPaused ? (
                 <button
-                  type="button"
-                  className="p-1 rounded bg-primary-600 text-white font-medium shadow hover:bg-primary-700 transition flex items-center justify-center"
-                  onClick={resumeReading}
                   aria-label={t("resume_audio")}
+                  className="p-1 rounded bg-primary-600 text-white font-medium shadow hover:bg-primary-700 transition flex items-center justify-center"
+                  type="button"
+                  onClick={resumeReading}
                 >
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
                     className="size-6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
+                      d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
                     />
                   </svg>
                 </button>
               ) : (
                 <button
-                  type="button"
-                  className="px-3 py-1 rounded bg-primary-600 text-white font-medium shadow hover:bg-primary-700 transition flex items-center justify-center"
-                  onClick={pauseReading}
                   aria-label={t("pause_audio")}
+                  className="px-3 py-1 rounded bg-primary-600 text-white font-medium shadow hover:bg-primary-700 transition flex items-center justify-center"
+                  type="button"
+                  onClick={pauseReading}
                 >
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
                     className="size-6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
+                      d="M15.75 5.25v13.5m-7.5-13.5v13.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M15.75 5.25v13.5m-7.5-13.5v13.5"
                     />
                   </svg>
                 </button>
@@ -202,12 +205,12 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
         </div>
         <div className="flex items-center gap-2 w-full">
           <input
-            type="range"
-            min={0}
+            className="flex-1 accent-primary-500"
             max={100}
+            min={0}
+            type="range"
             value={progress}
             onChange={(e) => seekAudio(Number(e.target.value))}
-            className="flex-1 accent-primary-500"
           />
           <div className="text-xs text-right text-gray-500 min-w-[40px]">
             {progress}%
@@ -231,13 +234,13 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
               {rateOptions.map((opt, idx) => (
                 <button
                   key={opt}
-                  type="button"
+                  aria-label={opt.toFixed(1) + "x"}
                   className={`absolute top-1/2 -translate-y-1/2 z-10 w-4 h-4 rounded-full border-2 transition-all ${rate === opt ? "bg-primary-500 border-primary-600" : "bg-white border-gray-400"}`}
                   style={{
                     left: `${(idx / (rateOptions.length - 1)) * 100}%`,
                     transform: "translate(-50%, -50%)",
                   }}
-                  aria-label={opt.toFixed(1) + "x"}
+                  type="button"
                   onClick={() => setRate(opt)}
                 >
                   <span className="sr-only">{opt.toFixed(1)}x</span>

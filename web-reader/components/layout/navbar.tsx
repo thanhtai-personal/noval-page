@@ -10,6 +10,8 @@ import {
 import { link as linkStyles } from "@heroui/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
+import Cookies from "js-cookie";
+import { useTranslations } from "next-intl";
 
 import { AuthActions } from "../auth/AuthActions";
 import { SearchBox } from "../common/searchInput/SearchInput";
@@ -19,14 +21,13 @@ import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/common/utils/theme-switch";
 import { FacebookIcon } from "@/components/default/icons";
 import { LogoIcon } from "@/assets/icons/Logo";
-import Cookies from "js-cookie";
-import { useTranslations } from "next-intl";
 
 export const Navbar = () => {
   const t = useTranslations("nav");
 
   const handleUpdateLanguage = () => {
     const value = Cookies.get("NEXT_LOCALE") !== "vi";
+
     Cookies.set("NEXT_LOCALE", value ? "vi" : "en", { expires: 365 });
     location.reload();
   };
@@ -45,7 +46,7 @@ export const Navbar = () => {
               <NextLink
                 className={clsx(
                   linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium"
+                  "data-[active=true]:text-primary data-[active=true]:font-medium",
                 )}
                 color="foreground"
                 href={item.href}
@@ -81,7 +82,10 @@ export const Navbar = () => {
           </NavbarItem>
         </NavbarItem>
         <NavbarItem className="hidden sm:flex gap-2">
-          <div className="cursor-pointer w-8 h-8 flex justify-center items-center" onClick={handleUpdateLanguage}>
+          <div
+            className="cursor-pointer w-8 h-8 flex justify-center items-center"
+            onClick={handleUpdateLanguage}
+          >
             {Cookies.get("NEXT_LOCALE") === "en" ? engFlag : viFlag}
           </div>
         </NavbarItem>
@@ -119,8 +123,8 @@ export const Navbar = () => {
 };
 
 const engFlag = (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55.2 38.4">
-    <rect width="55.2" height="38.4" fill="#012169" />
+  <svg viewBox="0 0 55.2 38.4" xmlns="http://www.w3.org/2000/svg">
+    <rect fill="#012169" height="38.4" width="55.2" />
     <g>
       <polygon
         fill="#FFF"
@@ -130,17 +134,17 @@ const engFlag = (
         fill="#C8102E"
         points="0,2.08 24.96,17.28 24.96,0 30.24,0 30.24,17.28 55.2,2.08 55.2,7.04 34.56,19.2 55.2,19.2 55.2,19.2 34.56,19.2 55.2,31.36 55.2,36.32 30.24,21.12 30.24,38.4 24.96,38.4 24.96,21.12 0,36.32 0,31.36 20.64,19.2 0,19.2 0,19.2 20.64,19.2 0,7.04"
       />
-      <rect x="22.08" y="0" width="11.04" height="38.4" fill="#FFF" />
-      <rect x="0" y="14.4" width="55.2" height="9.6" fill="#FFF" />
-      <rect x="24.96" y="0" width="5.28" height="38.4" fill="#C8102E" />
-      <rect x="0" y="17.28" width="55.2" height="3.84" fill="#C8102E" />
+      <rect fill="#FFF" height="38.4" width="11.04" x="22.08" y="0" />
+      <rect fill="#FFF" height="9.6" width="55.2" x="0" y="14.4" />
+      <rect fill="#C8102E" height="38.4" width="5.28" x="24.96" y="0" />
+      <rect fill="#C8102E" height="3.84" width="55.2" x="0" y="17.28" />
     </g>
   </svg>
 );
 
 const viFlag = (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55.2 38.4">
-    <rect width="55.2" height="38.4" fill="#DA251D" />
+  <svg viewBox="0 0 55.2 38.4" xmlns="http://www.w3.org/2000/svg">
+    <rect fill="#DA251D" height="38.4" width="55.2" />
     <g>
       <polygon
         fill="#FFFF00"

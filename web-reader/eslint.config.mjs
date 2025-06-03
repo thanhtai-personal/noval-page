@@ -104,7 +104,6 @@ export default defineConfig([
       "unused-imports/no-unused-vars": "off",
       "unused-imports/no-unused-imports": "warn",
 
-      
       // "@typescript-eslint/no-unused-vars": [
       //   "warn",
       //   {
@@ -119,6 +118,7 @@ export default defineConfig([
       "jsx-a11y/no-noninteractive-element-interactions": "off",
       "no-console": "off",
       "jsx-a11y/click-events-have-key-events": "off",
+      "jsx-a11y/no-static-element-interactions": "off",
 
       "import/order": [
         "warn",

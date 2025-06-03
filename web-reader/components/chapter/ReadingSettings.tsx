@@ -1,9 +1,7 @@
 import React from "react";
 import { useTranslations, useLocale } from "next-intl";
-import {
-  Modal,
-  ModalContent,
-} from "@heroui/modal";
+import { Modal, ModalContent } from "@heroui/modal";
+
 import { AudioReader } from "./AudioReader";
 
 export interface ReadingSettingsProps {
@@ -31,7 +29,7 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
   setBrightness,
   bgOptions,
   colorOptions,
-  chapter
+  chapter,
 }) => {
   const t = useTranslations("chapter");
   const locale = useLocale();
@@ -52,7 +50,10 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
   const startReading = (text: string, startChar: number = 0) => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
-      const utterance = new window.SpeechSynthesisUtterance(text.slice(startChar));
+      const utterance = new window.SpeechSynthesisUtterance(
+        text.slice(startChar),
+      );
+
       utterance.lang = locale === "vi" ? "vi-VN" : "en-US";
       utterance.rate = rate;
       utterance.onend = () => {
@@ -66,9 +67,14 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
         setIsPaused(false);
       };
       utterance.onboundary = (event: any) => {
-        if (typeof event.charIndex === 'number' && text.length > 0) {
+        if (typeof event.charIndex === "number" && text.length > 0) {
           setCurrentChar(startChar + event.charIndex);
-          setProgress(Math.min(100, Math.round(((startChar + event.charIndex) / text.length) * 100)));
+          setProgress(
+            Math.min(
+              100,
+              Math.round(((startChar + event.charIndex) / text.length) * 100),
+            ),
+          );
         }
       };
       window.speechSynthesis.speak(utterance);
@@ -110,6 +116,7 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
     if (!chapter?.content) return;
     const text = chapter.content;
     const charIndex = Math.floor((percent / 100) * text.length);
+
     stopReading();
     setTimeout(() => {
       startReading(text, charIndex);
@@ -123,7 +130,9 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
         window.speechSynthesis.cancel();
       }
     };
+
     window.addEventListener("beforeunload", handleBeforeUnload);
+
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
@@ -135,13 +144,16 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
   // Auto-pause and resume audio at new speed when rate changes
   React.useEffect(() => {
     if (!isSpeaking || isPaused) return;
-    if (chapter?.content && typeof window !== "undefined" && "speechSynthesis" in window) {
+    if (
+      chapter?.content &&
+      typeof window !== "undefined" &&
+      "speechSynthesis" in window
+    ) {
       stopReading();
       setTimeout(() => {
         startReading(chapter.content, currentChar);
       }, 100);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rate]);
 
   return (
@@ -152,17 +164,17 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
           onClick={() => setOpen(true)}
         >
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
             className="size-6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.5}
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
+              d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
             />
           </svg>
         </div>
@@ -197,8 +209,8 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
                       aria-label={t("choose_bg_color", { color: bg })}
                       className={`w-8 h-8 rounded border-2 ${bgColor === bg ? "border-primary-500" : "border-gray-200"}`}
                       style={{ background: bg }}
-                      onClick={() => setBgColor(bg)}
                       type="button"
+                      onClick={() => setBgColor(bg)}
                     />
                   ))}
                 </div>
@@ -214,8 +226,8 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
                       aria-label={t("choose_text_color", { color: c })}
                       className={`w-8 h-8 rounded border-2 ${color === c ? "border-primary-500" : "border-gray-200"}`}
                       style={{ background: c }}
-                      onClick={() => setColor(c)}
                       type="button"
+                      onClick={() => setColor(c)}
                     >
                       <span
                         className="block w-full h-full rounded"
@@ -243,7 +255,12 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
                 <div className="text-sm mt-1">{brightness}%</div>
               </div>
               {/* Audio reading controls at the bottom */}
-              <AudioReader chapter={chapter} rate={rate} setRate={setRate} rateOptions={rateOptions} />
+              <AudioReader
+                chapter={chapter}
+                rate={rate}
+                rateOptions={rateOptions}
+                setRate={setRate}
+              />
             </div>
           </div>
         </ModalContent>

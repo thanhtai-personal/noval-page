@@ -1,17 +1,18 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
+import { NextIntlClientProvider } from "next-intl";
+import { headers } from "next/headers";
+import { getMessages } from "next-intl/server";
 
 import { Providers } from "./providers";
+
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { GoogleAnalytics } from "@/lib/analytic";
 
-import { NextIntlClientProvider } from "next-intl";
-import { headers } from "next/headers";
 // import { getLocale } from "next-intl/server";
-import { getMessages } from 'next-intl/server';
 
 export const metadata: Metadata = {
   title: {
@@ -39,14 +40,14 @@ export default async function RootLayout({
   // const locale = await getLocale();
   const locale = (await headers()).get("x-next-intl-locale") || "vi";
   const messages = (await getMessages({ locale })) || {};
-  
+
   return (
     <html suppressHydrationWarning lang={locale}>
       <head />
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
+          fontSans.variable,
         )}
       >
         <NextIntlClientProvider locale={locale} messages={messages}>

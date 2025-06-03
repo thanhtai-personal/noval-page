@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Button } from "@heroui/button";
+import { useTranslations } from "next-intl";
+
 import { ApiInstant } from "@/utils/api";
-import { useTranslations } from 'next-intl';
 
 interface AuthorSelectModalProps {
   open: boolean;
@@ -10,8 +11,13 @@ interface AuthorSelectModalProps {
   setSelectedAuthors: (authors: any[]) => void;
 }
 
-export function AuthorSelectModal({ open, onClose, selectedAuthors, setSelectedAuthors }: AuthorSelectModalProps) {
-  const t = useTranslations('search');
+export function AuthorSelectModal({
+  open,
+  onClose,
+  selectedAuthors,
+  setSelectedAuthors,
+}: AuthorSelectModalProps) {
+  const t = useTranslations("search");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize] = useState(12);
@@ -52,25 +58,30 @@ export function AuthorSelectModal({ open, onClose, selectedAuthors, setSelectedA
   };
 
   if (!open) return null;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
       <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg w-full max-w-2xl p-6 relative">
-        <button className="absolute top-2 right-2 text-xl" onClick={onClose}>&times;</button>
-        <h2 className="text-lg font-bold mb-4">{t('choose_author')}</h2>
-        <form onSubmit={handleSearch} className="mb-4 flex gap-2">
+        <button className="absolute top-2 right-2 text-xl" onClick={onClose}>
+          &times;
+        </button>
+        <h2 className="text-lg font-bold mb-4">{t("choose_author")}</h2>
+        <form className="mb-4 flex gap-2" onSubmit={handleSearch}>
           <input
             className="border px-2 py-1 rounded w-full"
-            placeholder={t('author') + '...'}
+            placeholder={t("author") + "..."}
             value={search}
-            onChange={e => setSearch(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
           />
-          <Button size="sm" type="submit">{t('search')}</Button>
+          <Button size="sm" type="submit">
+            {t("search")}
+          </Button>
         </form>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4 min-h-[180px]">
           {loading ? (
-            <div className="col-span-3 text-center py-8">{t('search')}...</div>
+            <div className="col-span-3 text-center py-8">{t("search")}...</div>
           ) : authors.length === 0 ? (
-            <div className="col-span-3 text-center py-8">{t('no_result')}</div>
+            <div className="col-span-3 text-center py-8">{t("no_result")}</div>
           ) : (
             authors.map((author) => (
               <div
@@ -79,9 +90,9 @@ export function AuthorSelectModal({ open, onClose, selectedAuthors, setSelectedA
                 onClick={() => toggleSelect(author)}
               >
                 <input
-                  type="checkbox"
-                  checked={selectedAuthors.some((a) => a._id === author._id)}
                   readOnly
+                  checked={selectedAuthors.some((a) => a._id === author._id)}
+                  type="checkbox"
                 />
                 <span className="truncate">{author.name}</span>
               </div>
@@ -89,19 +100,31 @@ export function AuthorSelectModal({ open, onClose, selectedAuthors, setSelectedA
           )}
         </div>
         <div className="flex justify-between items-center mb-4">
-          <Button size="sm" disabled={page <= 1} onClick={() => setPage(page - 1)}>
-            {t('prev_page')}
+          <Button
+            disabled={page <= 1}
+            size="sm"
+            onClick={() => setPage(page - 1)}
+          >
+            {t("prev_page")}
           </Button>
           <span>
             Trang {page} / {totalPages || 1}
           </span>
-          <Button size="sm" disabled={page >= totalPages} onClick={() => setPage(page + 1)}>
-            {t('next_page')}
+          <Button
+            disabled={page >= totalPages}
+            size="sm"
+            onClick={() => setPage(page + 1)}
+          >
+            {t("next_page")}
           </Button>
         </div>
         <div className="flex justify-end gap-2">
-          <Button size="sm" variant="light" onClick={onClose}>{t('cancel')}</Button>
-          <Button size="sm" onClick={onClose}>{t('selected',{count:selectedAuthors.length})}</Button>
+          <Button size="sm" variant="light" onClick={onClose}>
+            {t("cancel")}
+          </Button>
+          <Button size="sm" onClick={onClose}>
+            {t("selected", { count: selectedAuthors.length })}
+          </Button>
         </div>
       </div>
     </div>

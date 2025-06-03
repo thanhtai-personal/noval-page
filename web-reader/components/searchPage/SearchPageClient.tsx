@@ -9,9 +9,10 @@ import { useTranslations } from "next-intl";
 
 import { StoriesWithSkeletonLoading } from "../common/utils/StoriesWithSkeletonLoading";
 
+import { AuthorSelectModal } from "./AuthorSelectModal";
+
 import { Story } from "@/types/interfaces/story";
 import { ApiInstant } from "@/utils/api";
-import { AuthorSelectModal } from "./AuthorSelectModal";
 
 const ranges = [
   { label: "0 - 300", value: "0-300" },
@@ -132,9 +133,9 @@ export default function SearchPageClient() {
         </Button>
         <AuthorSelectModal
           open={authorModalOpen}
-          onClose={() => setAuthorModalOpen(false)}
           selectedAuthors={selectedAuthors}
           setSelectedAuthors={setSelectedAuthors}
+          onClose={() => setAuthorModalOpen(false)}
         />
       </aside>
 

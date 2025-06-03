@@ -61,7 +61,7 @@ export default function ChapterPage() {
     const fetchNextChapter = async () => {
       try {
         const res = await ApiInstant.get(
-          `/stories/${slug}/chapters/prev-and-next/${chapter.chapterNumber}`
+          `/stories/${slug}/chapters/prev-and-next/${chapter.chapterNumber}`,
         );
 
         setNextChapter(res.data.next || null);
@@ -124,14 +124,14 @@ export default function ChapterPage() {
           bgColor={bgColor}
           bgOptions={bgOptions}
           brightness={brightness}
+          chapter={chapter}
+          color={color}
+          colorOptions={colorOptions}
           fontSize={fontSize}
           setBgColor={setBgColor}
           setBrightness={setBrightness}
-          setFontSize={setFontSize}
-          colorOptions={colorOptions}
-          color={color}
           setColor={setColor}
-          chapter={chapter}
+          setFontSize={setFontSize}
         />
       </div>
       <h1

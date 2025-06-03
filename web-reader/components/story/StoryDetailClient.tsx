@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import React from "react";
 import { Badge } from "@heroui/badge";
+
 import { StoryTabs } from "@/components/story/StoryTabs";
 import { LastReadChapter } from "@/components/chapter/LastReadChapter";
 import { Story } from "@/types/interfaces/story";

@@ -11,6 +11,7 @@ export const metadata = {
 
 export default function Page() {
   const t = useTranslations("search");
+
   return (
     <Suspense
       fallback={
