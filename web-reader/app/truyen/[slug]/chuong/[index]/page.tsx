@@ -172,6 +172,7 @@ export default function ChapterPage() {
           onClick={handleNext}
           onTouchEnd={(e) => {
             e.preventDefault();
+            alert("clicked me!!!")
             handleNext();
           }}
         >
