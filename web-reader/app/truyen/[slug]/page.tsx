@@ -30,9 +30,8 @@ export const revalidate = 600; // 10 phút
 export async function generateStaticParams() {
   // Gọi API lấy top 100 truyện nhiều lượt đọc nhất
   try {
-    const res = await ApiInstant.get("/stories/top-read?limit=100");
+    const res = await ApiInstant.get("/stories?limit=100&sort=-views");
     const stories = res.data || [];
-
     return stories.map((story: any) => ({ slug: story.slug }));
   } catch {
     return [];
