@@ -1,17 +1,13 @@
 export async function GET() {
   const API = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-  const [storyRes, blogRes] = await Promise.all([
-    fetch(`${API}/stories?limit=1000`)
-      .then((res) => res.json())
-      .catch(() => ({ data: [] })),
-    fetch(`${API}/blogs?limit=1000`)
+  const [storyRes] = await Promise.all([
+    fetch(`${API}/stories?limit=1000&sort=-views`)
       .then((res) => res.json())
       .catch(() => ({ data: [] })),
   ]);
 
   const stories = storyRes?.data || [];
-  const blogs = blogRes?.data || [];
 
   const urls = [
     { loc: "/", changefreq: "daily", priority: 1.0 },
@@ -21,18 +17,6 @@ export async function GET() {
       loc: `/truyen/${s.slug}`,
       changefreq: "weekly",
       priority: 0.9,
-    })),
-    ...stories.flatMap((s: any) =>
-      Array.from({ length: s.totalChapters || 0 }).map((_, i) => ({
-        loc: `/truyen/${s.slug}/chuong/${i + 1}`,
-        changefreq: "monthly",
-        priority: 0.5,
-      })),
-    ),
-    ...blogs.map((b: any) => ({
-      loc: `/blog/${b.slug}`,
-      changefreq: "monthly",
-      priority: 0.6,
     })),
   ];
 
