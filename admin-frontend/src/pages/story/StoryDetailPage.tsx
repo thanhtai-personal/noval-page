@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import { api } from "@/services/api";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useI18n } from "@/lib/i18n/i18n";
+import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 import StoryEditForm from "./StoryEditForm";
 import StoryDetailView from "./StoryDetailView";
-import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
 export default function StoryDetailPage() {
   const { id } = useParams();
@@ -17,8 +17,6 @@ export default function StoryDetailPage() {
   const [editStory, setEditStory] = useState<any>(null);
   const [allCategories, setAllCategories] = useState<any[]>([]);
   const [allSources, setAllSources] = useState<any[]>([]);
-  const [tagInput, setTagInput] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     async function fetchStoryData() {
@@ -64,34 +62,6 @@ export default function StoryDetailPage() {
       setEditStory({ ...story });
     }
   }, [editMode, story]);
-
-  const handleEditChange = (field: string, value: any) => {
-    setEditStory((prev: any) => ({ ...prev, [field]: value }));
-  };
-
-  const handleTagAdd = () => {
-    if (
-      tagInput.trim() &&
-      !editStory.tags.some((t: any) => t.name === tagInput.trim())
-    ) {
-      handleEditChange("tags", [...editStory.tags, { name: tagInput.trim() }]);
-      setTagInput("");
-    }
-  };
-
-  const handleTagRemove = (name: string) => {
-    handleEditChange(
-      "tags",
-      editStory.tags.filter((t: any) => t.name !== name)
-    );
-  };
-
-  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    // TODO: upload file lên server, lấy url và cập nhật editStory.cover
-    // handleEditChange('cover', url);
-  };
 
   const handleEditStoryChange = (updated: any) => setEditStory(updated);
   const handleEditSave = (data: any) => {

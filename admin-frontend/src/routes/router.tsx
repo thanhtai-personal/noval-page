@@ -6,13 +6,13 @@ import { AdminLayout } from '@/components/layout/AdminLayout';
 import { AppLoader } from "@/components/AppLoader";
 
 // 👇 Lazy-loaded pages
-const LoginPage = lazy(() => import('@/pages/LoginPage'));
-const AdminUserPage = lazy(() => import('@/pages/UserPage'));
-const CrawlerPage = lazy(() => import('@/pages/CrawlerPage'));
-const StoryPage = lazy(() => import('@/pages/StoryPage'));
-const StoryDetailPage = lazy(() => import('@/pages/StoryDetailPage'));
-const AdminChapterPage = lazy(() => import('@/pages/ChapterPage'));
-const ChapterDetailPage = lazy(() => import('@/pages/ChapterDetailPage'));
+const LoginPage = lazy(() => import('@/pages/login/LoginPage'));
+const AdminUserPage = lazy(() => import('@/pages/user/UserPage'));
+const CrawlerPage = lazy(() => import('@/pages/crawler/CrawlerPage'));
+const StoryPage = lazy(() => import('@/pages/story/StoryPage'));
+const StoryDetailPage = lazy(() => import('@/pages/story/StoryDetailPage'));
+const AdminChapterPage = lazy(() => import('@/pages/story/chapter/ChapterPage'));
+const ChapterDetailPage = lazy(() => import('@/pages/story/chapter/ChapterDetailPage'));
 const ForbiddenPage = lazy(() => import('@/pages/ForbiddenPage'));
 
 export function AppRouter() {

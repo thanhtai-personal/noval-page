@@ -10,6 +10,7 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
+import { useI18n } from '@/lib/i18n/i18n';
 
 interface UserFormProps {
   mode?: 'create' | 'edit';
@@ -22,6 +23,7 @@ export function UserForm({
   defaultData,
   onSuccess,
 }: UserFormProps) {
+  const { t } = useI18n();
   const [email, setEmail] = useState(defaultData?.email || '');
   const [name, setName] = useState(defaultData?.name || '');
   const [password, setPassword] = useState('');
@@ -41,7 +43,7 @@ export function UserForm({
 
   const handleSubmit = async () => {
     if (!email || !roleId || (mode === 'create' && !password)) {
-      alert('Vui lòng nhập đầy đủ Email, Vai trò và Mật khẩu (nếu tạo mới)');
+      alert(t('userform.required'));
       return;
     }
 
@@ -53,7 +55,7 @@ export function UserForm({
           name,
           role: roleId,
         });
-        alert('✅ Cập nhật người dùng thành công');
+        alert(t('userform.update_success'));
       } else {
         await api.post('/user', {
           email,
@@ -61,7 +63,7 @@ export function UserForm({
           password,
           role: roleId,
         });
-        alert('✅ Tạo người dùng thành công');
+        alert(t('userform.create_success'));
         // Reset form nếu tạo
         setEmail('');
         setName('');
@@ -71,7 +73,7 @@ export function UserForm({
 
       onSuccess?.();
     } catch (err: any) {
-      alert(err?.response?.data?.message || '❌ Có lỗi xảy ra');
+      alert(err?.response?.data?.message || t('userform.error'));
     } finally {
       setLoading(false);
     }
@@ -80,40 +82,40 @@ export function UserForm({
   return (
     <div className="space-y-4">
       <div>
-        <Label>Email</Label>
+        <Label>{t('userform.email')}</Label>
         <Input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="example@email.com"
+          placeholder={t('userform.email_placeholder')}
         />
       </div>
 
       <div>
-        <Label>Tên</Label>
+        <Label>{t('userform.name')}</Label>
         <Input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Họ tên"
+          placeholder={t('userform.name_placeholder')}
         />
       </div>
 
       {mode === 'create' && (
         <div>
-          <Label>Mật khẩu</Label>
+          <Label>{t('userform.password')}</Label>
           <Input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••"
+            placeholder={t('userform.password_placeholder')}
           />
         </div>
       )}
 
       <div>
-        <Label>Vai trò</Label>
+        <Label>{t('userform.role')}</Label>
         <Select value={roleId} onValueChange={(value) => setRoleId(value)}>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Chọn vai trò..." />
+            <SelectValue placeholder={t('userform.role_placeholder')} />
           </SelectTrigger>
           <SelectContent>
             {roles.map((r: any) => (
@@ -128,11 +130,11 @@ export function UserForm({
       <Button onClick={handleSubmit} disabled={loading} className="w-full">
         {loading
           ? mode === 'edit'
-            ? 'Đang cập nhật...'
-            : 'Đang tạo...'
+            ? t('userform.updating')
+            : t('userform.creating')
           : mode === 'edit'
-          ? 'Cập nhật người dùng'
-          : 'Tạo người dùng'}
+          ? t('userform.update')
+          : t('userform.create')}
       </Button>
     </div>
   );

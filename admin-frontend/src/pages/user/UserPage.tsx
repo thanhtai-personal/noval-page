@@ -71,14 +71,13 @@ export default function AdminUserPage() {
         <Button variant="outline" onClick={fetchUsers}>{t('user.refresh')}</Button>
       </div>
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">👤 Quản lý người dùng</h1>
         <Drawer>
           <DrawerTrigger asChild>
-            <Button>➕ Thêm user</Button>
+            <Button>➕ {t('user.add')}</Button>
           </DrawerTrigger>
           <DrawerContent>
             <DrawerHeader>
-              <DrawerTitle>Thêm người dùng mới</DrawerTitle>
+              <DrawerTitle>{t('user.add_title')}</DrawerTitle>
             </DrawerHeader>
             <div className="p-4">
               <UserForm onSuccess={fetchUsers} />
@@ -90,7 +89,7 @@ export default function AdminUserPage() {
       {/* Filter */}
       <div className="flex gap-4 items-center">
         <Input
-          placeholder="Tìm tên hoặc email..."
+          placeholder={t('user.search_placeholder')}
           value={filters.search}
           onChange={(e) => setFilters({ ...filters, search: e.target.value, page: 1 })}
           className="w-64"
@@ -100,10 +99,10 @@ export default function AdminUserPage() {
           defaultValue="all"
         >
           <SelectTrigger className="w-48">
-            <SelectValue placeholder="Vai trò" />
+            <SelectValue placeholder={t('user.role_placeholder')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tất cả</SelectItem>
+            <SelectItem value="all">{t('user.role_all')}</SelectItem>
             {roles.map((r: any) => (
               <SelectItem key={r._id} value={r._id}>{r.name}</SelectItem>
             ))}
@@ -115,10 +114,10 @@ export default function AdminUserPage() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Email</TableHead>
-            <TableHead>Tên</TableHead>
-            <TableHead>Vai trò</TableHead>
-            <TableHead>Hành động</TableHead>
+            <TableHead>{t('user.email')}</TableHead>
+            <TableHead>{t('user.name')}</TableHead>
+            <TableHead>{t('user.role')}</TableHead>
+            <TableHead>{t('user.action')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -128,9 +127,9 @@ export default function AdminUserPage() {
               <TableCell>{u.name}</TableCell>
               <TableCell>{u.role?.name || '—'}</TableCell>
               <TableCell className="space-x-2">
-                <Button size="sm" variant="outline" onClick={() => banUser(u._id)}>Cấm</Button>
-                <Button size="sm" variant="outline">Sửa</Button>
-                <Button size="sm" variant="destructive" onClick={() => deleteUser(u._id)}>Xóa</Button>
+                <Button size="sm" variant="outline" onClick={() => banUser(u._id)}>{t('user.ban')}</Button>
+                <Button size="sm" variant="outline">{t('user.edit')}</Button>
+                <Button size="sm" variant="destructive" onClick={() => deleteUser(u._id)}>{t('user.delete')}</Button>
               </TableCell>
             </TableRow>
           ))}
@@ -144,15 +143,15 @@ export default function AdminUserPage() {
             {filters.page > 1 ? (
               <PaginationPrevious onClick={() => setFilters({ ...filters, page: filters.page - 1 })} />
             ) : (
-              <span className="text-sm text-muted-foreground px-3 py-1 opacity-50">Trước</span>
+              <span className="text-sm text-muted-foreground px-3 py-1 opacity-50">{t('user.prev')}</span>
             )}
           </PaginationItem>
-          <span className="text-sm mt-1 px-2">Trang {filters.page} / {totalPages}</span>
+          <span className="text-sm mt-1 px-2">{t('user.page')} {filters.page} / {totalPages}</span>
           <PaginationItem>
             {filters.page < totalPages ? (
               <PaginationNext onClick={() => setFilters({ ...filters, page: filters.page + 1 })} />
             ) : (
-              <span className="text-sm text-muted-foreground px-3 py-1 opacity-50">Sau</span>
+              <span className="text-sm text-muted-foreground px-3 py-1 opacity-50">{t('user.next')}</span>
             )}
           </PaginationItem>
         </PaginationContent>

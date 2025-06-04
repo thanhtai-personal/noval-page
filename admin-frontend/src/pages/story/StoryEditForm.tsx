@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/lib/i18n/i18n";
-import { Button, TextArea, Select, TextField } from "@radix-ui/themes";
+import { Button, TextArea } from "@radix-ui/themes";
 import { PlusIcon, UploadIcon, CheckIcon, Cross2Icon } from '@/components/ui/RadixIcons';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
 
 export default function StoryEditForm({
   story,
@@ -90,44 +92,43 @@ export default function StoryEditForm({
           </Button>
         </div>
         <div className="flex flex-col gap-2 flex-1">
-          <TextField.Root
+          <Input
             className="text-2xl font-bold"
             value={editStory?.title || ""}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleEditChange("title", e.target.value)
             }
             placeholder={t("story.title")}
-          ></TextField.Root>
+          />
           <div className="text-sm text-muted-foreground">
             <strong>{t("story.author")}:</strong>{" "}
             {editStory?.author?.name || t("story.unknown")}
           </div>
           <div className="text-sm text-muted-foreground">
             <strong>{t("story.source")}:</strong>{" "}
-            <select
+            <Input
               className="border rounded px-2 py-1"
               value={editStory?.source || ""}
-              onChange={(e) => handleEditChange("source", e.target.value)}
-            >
-              <option value="">{t("story.choose_source")}</option>
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleEditChange("source", e.target.value)}
+              placeholder={t("story.choose_source")}
+              list="source-list"
+            />
+            <datalist id="source-list">
               {allSources.map((s: any) => (
-                <option key={s._id} value={s.name}>
-                  {s.name}
-                </option>
+                <option key={s._id} value={s.name} />
               ))}
-            </select>
+            </datalist>
           </div>
           <div className="text-sm text-muted-foreground">
             <strong>{t("story.categories")}:</strong>{" "}
-            <select
-              className="border rounded px-2 py-1"
+            <Select
               value={editStory?.categories?.[0]?._id || ""}
-              onChange={(e) =>
+              onValueChange={(value: string) =>
                 handleEditChange(
                   "categories",
-                  e.target.value === ""
+                  value === ""
                     ? []
-                    : [allCategories.find((c: any) => c._id === e.target.value)]
+                    : [allCategories.find((c: any) => c._id === value)]
                 )
               }
             >
@@ -137,7 +138,7 @@ export default function StoryEditForm({
                   {c.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className="text-sm text-muted-foreground">
             <strong>{t("story.tags")}:</strong>{" "}
@@ -160,7 +161,7 @@ export default function StoryEditForm({
                   </Button>
                 </Badge>
               ))}
-              <TextField.Root
+              <Input
                 className="text-xs w-24 flex items-center gap-2"
                 value={tagInput}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -170,7 +171,7 @@ export default function StoryEditForm({
                   if (e.key === "Enter") handleTagAdd();
                 }}
                 placeholder={t("story.add_tag")}
-              ></TextField.Root>
+              />
               <Button
                 size="1"
                 className="px-2 py-0.5 text-xs"
@@ -207,7 +208,7 @@ export default function StoryEditForm({
             value={editStory?.intro || ""}
             onChange={(value) => handleEditChange("intro", value)}
             placeholder={t("story.intro")}
-            style={{ width: '100%', minHeight: 60, borderRadius: 0, border: 'none' }}
+            style={{ width: '100%', minHeight: 120, borderRadius: 0, border: 'none' }}
             resize="vertical"
           />
         </CardContent>
@@ -222,7 +223,7 @@ export default function StoryEditForm({
             value={editStory?.description || ""}
             onChange={(value) => handleEditChange("description", value)}
             placeholder={t("story.description")}
-            style={{ width: '100%', minHeight: 60, borderRadius: 0, border: 'none' }}
+            style={{ width: '100%', minHeight: 180, borderRadius: 0, border: 'none' }}
             resize="vertical"
           />
         </CardContent>
