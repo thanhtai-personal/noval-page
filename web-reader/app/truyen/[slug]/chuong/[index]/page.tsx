@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@heroui/button";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 import { ApiInstant } from "@/utils/api";
 import { ReadingSettings } from "@/components/chapter/ReadingSettings";
@@ -150,34 +151,30 @@ export default function ChapterPage() {
       />
       <div className="flex justify-end md:justify-between mt-10">
         {prevChapter && (
-          <Button
-            className=" hidden md:block"
-            size="sm"
-            onClick={handleBack}
-            onTouchEnd={handleBack}
+          <Link
+            href={`/truyen/${slug}/chuong/${prevChapter.slug}`}
+            passHref
+            legacyBehavior
           >
-            ← {t("prev")}
-          </Button>
+            <Button className=" hidden md:block" size="sm" as="a">
+              ← {t("prev")}
+            </Button>
+          </Link>
         )}
-        <Button
-          className="underline hidden md:block"
-          size="sm"
-          onClick={handleBackToList}
-          onTouchEnd={handleBackToList}
+        <Link href={`/truyen/${slug}`} passHref legacyBehavior>
+          <Button className="underline hidden md:block" size="sm" as="a">
+            {t("chapter_list")}
+          </Button>
+        </Link>
+        <Link
+          href={`/truyen/${slug}/chuong/${nextChapter?.slug}`}
+          passHref
+          legacyBehavior
         >
-          {t("chapter_list")}
-        </Button>
-        <Button
-          size="sm"
-          onClick={handleNext}
-          onTouchEnd={(e) => {
-            e.preventDefault();
-            alert("clicked me!!!")
-            handleNext();
-          }}
-        >
-          {t("next")} →
-        </Button>
+          <Button size="sm" as="a">
+            {t("next")} →
+          </Button>
+        </Link>
       </div>
     </div>
   );
