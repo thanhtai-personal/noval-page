@@ -25,13 +25,16 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
   const getChapterText = () => chapter?.content || "";
 
   // Detect mobile device
-  const isMobile = typeof window !== 'undefined' && /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const isMobile =
+    typeof window !== "undefined" &&
+    /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   // Helper: Check if speechSynthesis is actually speaking (workaround for mobile)
   const checkSpeaking = () => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
       return window.speechSynthesis.speaking;
     }
+
     return false;
   };
 

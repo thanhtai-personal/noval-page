@@ -22,8 +22,10 @@ export default function ChapterPage() {
   const [brightness, setBrightness] = useState(100);
 
   const isMobile =
-          typeof navigator !== "undefined" &&
-          /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    typeof navigator !== "undefined" &&
+    /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent,
+    );
 
   // Mỗi màu nền phù hợp với màu chữ cùng index trong colorOptions
   // Đảm bảo độ tương phản tốt, dịu mắt cho người đọc truyện
@@ -67,7 +69,7 @@ export default function ChapterPage() {
     const fetchNextChapter = async () => {
       try {
         const res = await ApiInstant.get(
-          `/stories/${slug}/chapters/prev-and-next/${chapter.chapterNumber}`
+          `/stories/${slug}/chapters/prev-and-next/${chapter.chapterNumber}`,
         );
 
         setNextChapter(res.data.next || null);
@@ -155,26 +157,26 @@ export default function ChapterPage() {
       <div className="flex justify-end md:justify-between mt-10">
         {prevChapter && (
           <Link
-            href={`/truyen/${slug}/chuong/${prevChapter.slug}`}
-            passHref
             legacyBehavior
+            passHref
+            href={`/truyen/${slug}/chuong/${prevChapter.slug}`}
           >
-            <Button className=" hidden md:block" size="sm" as="a">
+            <Button as="a" className=" hidden md:block" size="sm">
               ← {t("prev")}
             </Button>
           </Link>
         )}
-        <Link href={`/truyen/${slug}`} passHref legacyBehavior>
-          <Button className="underline hidden md:block" size="sm" as="a">
+        <Link legacyBehavior passHref href={`/truyen/${slug}`}>
+          <Button as="a" className="underline hidden md:block" size="sm">
             {t("chapter_list")}
           </Button>
         </Link>
         <Link
-          href={`/truyen/${slug}/chuong/${nextChapter?.slug}`}
-          passHref
           legacyBehavior
+          passHref
+          href={`/truyen/${slug}/chuong/${nextChapter?.slug}`}
         >
-          <Button size="sm" as="a">
+          <Button as="a" size="sm">
             {t("next")} →
           </Button>
         </Link>

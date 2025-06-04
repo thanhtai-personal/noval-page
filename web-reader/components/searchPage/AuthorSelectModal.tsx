@@ -62,7 +62,11 @@ export function AuthorSelectModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
       <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg w-full max-w-2xl p-6 relative">
-        <button className="absolute top-2 right-2 text-xl" onClick={onClose} onTouchEnd={onClose}>
+        <button
+          className="absolute top-2 right-2 text-xl"
+          onClick={onClose}
+          onTouchEnd={onClose}
+        >
           &times;
         </button>
         <h2 className="text-lg font-bold mb-4">{t("choose_author")}</h2>
@@ -122,7 +126,12 @@ export function AuthorSelectModal({
           </Button>
         </div>
         <div className="flex justify-end gap-2">
-          <Button size="sm" variant="light" onClick={onClose} onTouchEnd={onClose}>
+          <Button
+            size="sm"
+            variant="light"
+            onClick={onClose}
+            onTouchEnd={onClose}
+          >
             {t("cancel")}
           </Button>
           <Button size="sm" onClick={onClose} onTouchEnd={onClose}>
