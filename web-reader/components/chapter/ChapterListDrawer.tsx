@@ -25,6 +25,7 @@ export const ChapterListDrawer: React.FC<ChapterListDrawerProps> = ({
         <button
           className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
           onClick={onClose}
+          onTouchEnd={onClose}
         >
           ✕
         </button>
@@ -36,6 +37,7 @@ export const ChapterListDrawer: React.FC<ChapterListDrawerProps> = ({
               key={chapter._id}
               className={`py-2 px-3 rounded cursor-pointer mb-1 ${chapter._id === currentChapterId ? "bg-primary-100 dark:bg-primary-800 font-bold" : "hover:bg-gray-100 dark:hover:bg-gray-800"}`}
               onClick={() => onSelectChapter(chapter._id)}
+              onTouchEnd={() => onSelectChapter(chapter._id)}
             >
               {chapter.index + 1}. {chapter.title}
             </li>

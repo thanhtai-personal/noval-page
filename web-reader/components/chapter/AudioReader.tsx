@@ -166,6 +166,7 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
               className="p-1 rounded bg-primary-600 text-white font-medium shadow hover:bg-primary-700 transition flex items-center justify-center"
               type="button"
               onClick={() => startReading(getChapterText())}
+              onTouchEnd={() => startReading(getChapterText())}
             >
               <svg
                 className="size-6"
@@ -190,6 +191,7 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
                   className="p-1 rounded bg-primary-600 text-white font-medium shadow hover:bg-primary-700 transition flex items-center justify-center"
                   type="button"
                   onClick={resumeReading}
+                  onTouchEnd={resumeReading}
                 >
                   <svg
                     className="size-6"
@@ -212,6 +214,7 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
                   className="px-3 py-1 rounded bg-primary-600 text-white font-medium shadow hover:bg-primary-700 transition flex items-center justify-center"
                   type="button"
                   onClick={pauseReading}
+                  onTouchEnd={pauseReading}
                 >
                   <svg
                     className="size-6"
@@ -271,6 +274,7 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
                   }}
                   type="button"
                   onClick={() => setRate(opt)}
+                  onTouchEnd={() => setRate(opt)}
                 >
                   <span className="sr-only">{opt.toFixed(1)}x</span>
                 </button>

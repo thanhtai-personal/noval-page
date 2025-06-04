@@ -17,7 +17,12 @@ export const AuthActions = observer(() => {
         </Button>
       </LinkWithRedirecting>
       {appStore.isLoggedIn ? (
-        <Button color="danger" size="sm" onClick={() => appStore.logout()}>
+        <Button
+          color="danger"
+          size="sm"
+          onClick={() => appStore.logout()}
+          onTouchEnd={() => appStore.logout()}
+        >
           <LogoutIcon className="size-5 text-default-500" />
         </Button>
       ) : (

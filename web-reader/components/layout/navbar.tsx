@@ -85,6 +85,7 @@ export const Navbar = () => {
           <div
             className="cursor-pointer w-8 h-8 flex justify-center items-center"
             onClick={handleUpdateLanguage}
+            onTouchEnd={handleUpdateLanguage}
           >
             {Cookies.get("NEXT_LOCALE") === "en" ? engFlag : viFlag}
           </div>

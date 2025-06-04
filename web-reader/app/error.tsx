@@ -21,7 +21,12 @@ export default function Error({
   return (
     <div>
       <h2>{t("something_wrong")}</h2>
-      <button onClick={() => reset()}>{t("try_again")}</button>
+      <button
+        onClick={() => reset()}
+        onTouchEnd={() => reset()}
+      >
+        {t("try_again")}
+      </button>
     </div>
   );
 }

@@ -92,6 +92,7 @@ export default function SearchPageClient() {
               size="lg"
               variant="light"
               onClick={() => setAuthorModalOpen(true)}
+              onTouchEnd={() => setAuthorModalOpen(true)}
             >
               {t("choose_author")}
             </Button>

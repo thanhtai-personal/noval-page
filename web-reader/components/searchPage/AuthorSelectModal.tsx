@@ -62,7 +62,7 @@ export function AuthorSelectModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
       <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg w-full max-w-2xl p-6 relative">
-        <button className="absolute top-2 right-2 text-xl" onClick={onClose}>
+        <button className="absolute top-2 right-2 text-xl" onClick={onClose} onTouchEnd={onClose}>
           &times;
         </button>
         <h2 className="text-lg font-bold mb-4">{t("choose_author")}</h2>
@@ -88,6 +88,7 @@ export function AuthorSelectModal({
                 key={author._id}
                 className={`border rounded p-2 flex items-center gap-2 cursor-pointer ${selectedAuthors.some((a) => a._id === author._id) ? "border-primary-500 bg-primary-50" : "hover:border-primary-300"}`}
                 onClick={() => toggleSelect(author)}
+                onTouchEnd={() => toggleSelect(author)}
               >
                 <input
                   readOnly
@@ -104,6 +105,7 @@ export function AuthorSelectModal({
             disabled={page <= 1}
             size="sm"
             onClick={() => setPage(page - 1)}
+            onTouchEnd={() => setPage(page - 1)}
           >
             {t("prev_page")}
           </Button>
@@ -114,15 +116,16 @@ export function AuthorSelectModal({
             disabled={page >= totalPages}
             size="sm"
             onClick={() => setPage(page + 1)}
+            onTouchEnd={() => setPage(page + 1)}
           >
             {t("next_page")}
           </Button>
         </div>
         <div className="flex justify-end gap-2">
-          <Button size="sm" variant="light" onClick={onClose}>
+          <Button size="sm" variant="light" onClick={onClose} onTouchEnd={onClose}>
             {t("cancel")}
           </Button>
-          <Button size="sm" onClick={onClose}>
+          <Button size="sm" onClick={onClose} onTouchEnd={onClose}>
             {t("selected", { count: selectedAuthors.length })}
           </Button>
         </div>

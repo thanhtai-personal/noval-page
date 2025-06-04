@@ -162,6 +162,7 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
         <div
           className="cursor:pointer absolute right-0 px-4 py-2 rounded bg-black text-white font-medium shadow hover:bg-primary-600 transition"
           onClick={() => setOpen(true)}
+          onTouchEnd={() => setOpen(true)}
         >
           <svg
             className="size-6"
@@ -211,6 +212,7 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
                       style={{ background: bg }}
                       type="button"
                       onClick={() => setBgColor(bg)}
+                      onTouchEnd={() => setBgColor(bg)}
                     />
                   ))}
                 </div>
@@ -228,6 +230,7 @@ export const ReadingSettings: React.FC<ReadingSettingsProps> = ({
                       style={{ background: c }}
                       type="button"
                       onClick={() => setColor(c)}
+                      onTouchEnd={() => setColor(c)}
                     >
                       <span
                         className="block w-full h-full rounded"

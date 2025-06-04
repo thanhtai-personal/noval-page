@@ -150,7 +150,7 @@ export default function ChapterPage() {
       />
       <div className="flex justify-end md:justify-between mt-10">
         {prevChapter && (
-          <Button className=" hidden md:block" size="sm" onClick={handleBack}>
+          <Button className=" hidden md:block" size="sm" onClick={handleBack} onTouchEnd={handleBack}>
             ← {t("prev")}
           </Button>
         )}
@@ -158,10 +158,11 @@ export default function ChapterPage() {
           className="underline hidden md:block"
           size="sm"
           onClick={handleBackToList}
+          onTouchEnd={handleBackToList}
         >
           {t("chapter_list")}
         </Button>
-        <Button size="sm" onClick={handleNext}>
+        <Button size="sm" onClick={handleNext} onTouchEnd={handleNext}>
           {t("next")} →
         </Button>
       </div>
