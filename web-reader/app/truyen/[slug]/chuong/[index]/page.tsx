@@ -20,6 +20,11 @@ export default function ChapterPage() {
   const [bgColor, setBgColor] = useState("#fff");
   const [color, setColor] = useState("#000");
   const [brightness, setBrightness] = useState(100);
+
+  const isMobile =
+          typeof navigator !== "undefined" &&
+          /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
   // Mỗi màu nền phù hợp với màu chữ cùng index trong colorOptions
   // Đảm bảo độ tương phản tốt, dịu mắt cho người đọc truyện
   const bgOptions = [
@@ -67,7 +72,13 @@ export default function ChapterPage() {
 
         setNextChapter(res.data.next || null);
         setPrevChapter(res.data.prev || null);
+        if (isMobile && !res.data.next) {
+          alert("Không thể tải chương tiếp theo. Vui lòng thử lại sau.");
+        }
       } catch (error) {
+        if (isMobile) {
+          alert("Không thể tải chương tiếp theo. Vui lòng thử lại sau.");
+        }
         console.error("Error fetching next chapter:", error);
       }
     };
@@ -102,14 +113,6 @@ export default function ChapterPage() {
   const handleNext = () => {
     if (!nextChapter) return;
     router.push(`/truyen/${slug}/chuong/${nextChapter.slug}`);
-  };
-
-  const handleBack = () => {
-    router.push(`/truyen/${slug}/chuong/${prevChapter.slug}`);
-  };
-
-  const handleBackToList = () => {
-    router.push(`/truyen/${slug}`);
   };
 
   if (loading) return <p className="p-4">{t("loading")}</p>;
