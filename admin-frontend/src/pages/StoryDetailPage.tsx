@@ -1,15 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "@/services/api";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useI18n } from "@/lib/i18n/i18n";
+import StoryEditForm from "./StoryEditForm";
+import StoryDetailView from "./StoryDetailView";
+import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
 export default function StoryDetailPage() {
   const { id } = useParams();
+  const { t } = useI18n();
   const [story, setStory] = useState<any>(null);
   const [chapters, setChapters] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editMode, setEditMode] = useState(false);
+  const [editStory, setEditStory] = useState<any>(null);
+  const [allCategories, setAllCategories] = useState<any[]>([]);
+  const [allSources, setAllSources] = useState<any[]>([]);
+  const [tagInput, setTagInput] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     async function fetchStoryData() {
@@ -45,6 +54,52 @@ export default function StoryDetailPage() {
     fetChapters();
   }, [story]);
 
+  useEffect(() => {
+    if (editMode) {
+      // Lấy danh sách category và source khi vào edit mode
+      api
+        .get("/categories")
+        .then((res) => setAllCategories(res.data.data || []));
+      api.get("/sources").then((res) => setAllSources(res.data.data || []));
+      setEditStory({ ...story });
+    }
+  }, [editMode, story]);
+
+  const handleEditChange = (field: string, value: any) => {
+    setEditStory((prev: any) => ({ ...prev, [field]: value }));
+  };
+
+  const handleTagAdd = () => {
+    if (
+      tagInput.trim() &&
+      !editStory.tags.some((t: any) => t.name === tagInput.trim())
+    ) {
+      handleEditChange("tags", [...editStory.tags, { name: tagInput.trim() }]);
+      setTagInput("");
+    }
+  };
+
+  const handleTagRemove = (name: string) => {
+    handleEditChange(
+      "tags",
+      editStory.tags.filter((t: any) => t.name !== name)
+    );
+  };
+
+  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    // TODO: upload file lên server, lấy url và cập nhật editStory.cover
+    // handleEditChange('cover', url);
+  };
+
+  const handleEditStoryChange = (updated: any) => setEditStory(updated);
+  const handleEditSave = (data: any) => {
+    // TODO: Gửi API cập nhật truyện
+    setEditMode(false);
+    setStory(data);
+  };
+
   if (loading) {
     return (
       <div className="p-6 max-w-4xl space-y-4">
@@ -60,116 +115,32 @@ export default function StoryDetailPage() {
   }
 
   return (
-    <div className="p-6 max-w-4xl space-y-6">
-      <div className="flex gap-6">
-        <img
-          src={story.cover || "/placeholder.jpg"}
-          alt={story.title}
-          className="w-40 h-60 rounded border object-cover"
-        />
-
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold">{story.title}</h1>
-
-          <div className="text-sm text-muted-foreground">
-            <strong>Tác giả:</strong> {story.author?.name || "Không rõ"}
-          </div>
-
-          <div className="text-sm text-muted-foreground">
-            <strong>Nguồn:</strong>{" "}
-            {story.url ? (
-              <a
-                href={story.url}
-                target="_blank"
-                rel="noreferrer"
-                className="text-blue-600 underline"
-              >
-                {story.source}
-              </a>
-            ) : (
-              story.source || "Không rõ"
-            )}
-          </div>
-
-          <div className="text-sm text-muted-foreground">
-            <strong>Thể loại:</strong>{" "}
-            {(story.categories || []).map((c: any) => (
-              <Badge key={c._id} variant="outline" className="mr-1">
-                {c.name}
-              </Badge>
-            ))}
-          </div>
-
-          <div className="text-sm text-muted-foreground">
-            <strong>Tags:</strong>{" "}
-            {(story.tags || []).map((t: any) => (
-              <Badge key={t._id} variant="secondary" className="mr-1">
-                {t.name}
-              </Badge>
-            ))}
-          </div>
-
-          <div className="flex gap-4 mt-2 text-sm text-muted-foreground">
-            <span>
-              📖 <strong>{story.totalChapters || 0}</strong> chương
-            </span>
-            <span>👁️ {story.views || 0} lượt đọc</span>
-            <span>👍 {story.likes || 0} lượt thích</span>
-            <span>⭐ {story.recommends || 0} đề cử</span>
-          </div>
+    <div className="p-6 max-w-4xl space-y-6 relative">
+      {!editMode && (
+        <div className="absolute top-2 right-6 flex gap-2 z-10">
+          <button
+            className="px-3 py-1 rounded bg-primary text-white text-sm flex items-center gap-1 shadow-md"
+            onClick={() => setEditMode((v) => !v)}
+            title={t("story.edit")}
+            type="button"
+          >
+            <Pencil2Icon className="w-4 h-4" />
+            {t("story.edit")}
+          </button>
         </div>
-      </div>
-
-      {story.intro && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Giới thiệu</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground whitespace-pre-line">
-              {story.intro}
-            </p>
-          </CardContent>
-        </Card>
       )}
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Mô tả</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground whitespace-pre-line">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: story.description || "<i>Truyện tiên hiệp mới</i>",
-              }}
-            />
-          </p>
-        </CardContent>
-      </Card>
-
-      {/* ✅ 50 chương mới nhất */}
-      <Card>
-        <CardHeader>
-          <CardTitle>📚 Chương mới nhất</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4">
-            {chapters.map((ch) => (
-              <a
-                key={ch._id}
-                href={`/reader/${story.slug}/${ch.chapterNumber}`}
-                className="block text-sm hover:text-blue-600 hover:underline"
-              >
-                <Card className="p-3 h-full">
-                  <p className="font-medium">Chương {ch.chapterNumber}</p>
-                  <p className="text-muted-foreground">{ch.title}</p>
-                </Card>
-              </a>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      {editMode ? (
+        <StoryEditForm
+          story={editStory || story}
+          allCategories={allCategories}
+          allSources={allSources}
+          onChange={handleEditStoryChange}
+          onSave={handleEditSave}
+          onCancel={() => setEditMode(false)}
+        />
+      ) : (
+        <StoryDetailView story={story} chapters={chapters} />
+      )}
     </div>
   );
 }
