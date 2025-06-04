@@ -24,9 +24,18 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
 
   const getChapterText = () => chapter?.content || "";
 
+  // Mobile Safari and Chrome on Android require user interaction to start speechSynthesis
+  // Also, on mobile, speechSynthesis events can be unreliable, so we add extra checks
+  const isMobile =
+    typeof window !== "undefined" && /Mobi|Android/i.test(navigator.userAgent);
+
   const startReading = (text: string, startChar: number = 0) => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
+      // On mobile, force resume in case speechSynthesis is paused by browser
+      if (isMobile && window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
       const utterance = new window.SpeechSynthesisUtterance(
         text.slice(startChar),
       );
@@ -54,17 +63,27 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
           );
         }
       };
-      window.speechSynthesis.speak(utterance);
-      utteranceRef.current = utterance;
-      setIsSpeaking(true);
-      setIsPaused(false);
-      setProgress(Math.round((startChar / text.length) * 100));
+      // On mobile, must call speak in a user gesture (button click)
+      setTimeout(
+        () => {
+          window.speechSynthesis.speak(utterance);
+          utteranceRef.current = utterance;
+          setIsSpeaking(true);
+          setIsPaused(false);
+          setProgress(Math.round((startChar / text.length) * 100));
+        },
+        isMobile ? 0 : 0,
+      );
     }
   };
 
+  // On mobile, resume/pause sometimes needs to be called twice
   const pauseReading = () => {
     if (typeof window !== "undefined" && window.speechSynthesis.speaking) {
       window.speechSynthesis.pause();
+      if (isMobile && !window.speechSynthesis.paused) {
+        setTimeout(() => window.speechSynthesis.pause(), 100);
+      }
       setIsPaused(true);
       setIsSpeaking(true);
     }
@@ -72,6 +91,9 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
   const resumeReading = () => {
     if (typeof window !== "undefined" && window.speechSynthesis.paused) {
       window.speechSynthesis.resume();
+      if (isMobile && window.speechSynthesis.paused) {
+        setTimeout(() => window.speechSynthesis.resume(), 100);
+      }
       setIsPaused(false);
       setIsSpeaking(true);
     }
