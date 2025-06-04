@@ -24,6 +24,18 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
 
   const getChapterText = () => chapter?.content || "";
 
+  // Detect mobile device
+  const isMobile = typeof window !== 'undefined' && /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  // Helper: Check if speechSynthesis is actually speaking (workaround for mobile)
+  const checkSpeaking = () => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      return window.speechSynthesis.speaking;
+    }
+    return false;
+  };
+
+  // Patch: On mobile, try to resume after short delay if not speaking
   const startReading = (text: string, startChar: number = 0) => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
@@ -59,6 +71,23 @@ export const AudioReader: React.FC<AudioReaderProps> = ({
       setIsSpeaking(true);
       setIsPaused(false);
       setProgress(Math.round((startChar / text.length) * 100));
+      // Mobile workaround: If not speaking after 300ms, try resume
+      if (isMobile) {
+        setTimeout(() => {
+          if (!checkSpeaking()) {
+            window.speechSynthesis.resume();
+            setTimeout(() => {
+              if (!checkSpeaking()) {
+                // Still not speaking, treat as error
+                setIsSpeaking(false);
+                setIsPaused(false);
+                setProgress(0);
+                setCurrentChar(0);
+              }
+            }, 500);
+          }
+        }, 300);
+      }
     }
   };
 
