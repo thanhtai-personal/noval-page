@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import '@radix-ui/themes/styles.css';
-
 /* Tailwind base token custom from shadcn */
 :root {
   --background: 0 0% 100%;
