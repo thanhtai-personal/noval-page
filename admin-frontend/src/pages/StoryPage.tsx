@@ -12,10 +12,12 @@ import {
   PaginationNext, PaginationPrevious,
 } from '@/components/ui/pagination';
 import { Link } from "react-router-dom";
+import { useI18n } from '@/lib/i18n/i18n';
 
 const LIMIT = 20;
 
 export default function AdminStoryPage() {
+  const { t } = useI18n();
   const [stories, setStories] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -87,8 +89,11 @@ export default function AdminStoryPage() {
   };
 
   return (
-    <div className="p-6 space-y-6 max-w-6xl">
-      <h1 className="text-2xl font-semibold">📚 Quản lý truyện</h1>
+    <div className="w-full p-6 max-w-6xl space-y-4">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold mb-4">{t('story.title')}</h1>
+        <Button variant="outline" onClick={fetchStories}>{t('story.refresh')}</Button>
+      </div>
 
       {/* Filter bar */}
       <div className="flex flex-wrap gap-4 items-center">

@@ -11,8 +11,10 @@ import {
 } from '@/components/ui/drawer';
 import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { UserForm } from "@/components/form/UserForm";
+import { useI18n } from '@/lib/i18n/i18n';
 
 export default function AdminUserPage() {
+  const { t } = useI18n();
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
 
@@ -63,7 +65,11 @@ export default function AdminUserPage() {
   };
 
   return (
-    <div className="p-6 space-y-6 max-w-6xl">
+    <div className="w-full p-6 max-w-6xl space-y-4">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold mb-4">{t('user.title')}</h1>
+        <Button variant="outline" onClick={fetchUsers}>{t('user.refresh')}</Button>
+      </div>
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">👤 Quản lý người dùng</h1>
         <Drawer>

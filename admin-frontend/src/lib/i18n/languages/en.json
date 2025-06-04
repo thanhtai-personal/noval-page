@@ -1,0 +1,14 @@
+{
+  "sidebar.stories": "📚 Story Management",
+  "sidebar.crawl": "🛠 Data Crawler",
+  "sidebar.users": "👤 Users",
+  "header.hello": "Hello",
+  "header.user": "User",
+  "header.profile": "Profile",
+  "crawler.title": "📚 Source Story Crawler Management",
+  "crawler.refresh": "Refresh",
+  "story.title": "📚 Story Management",
+  "story.refresh": "Refresh",
+  "user.title": "👤 Users",
+  "user.refresh": "Refresh"
+}

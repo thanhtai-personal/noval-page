@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Source, SourceCard } from "@/components/SourceCard";
 import { SourceCardSkeleton } from "@/components/SourceCardSkeleton";
 import { io } from "socket.io-client";
+import { useI18n } from '@/lib/i18n/i18n';
 
 const socket = io(import.meta.env.VITE_API_WS_URL || "http://localhost:5000");
 
 export default function CrawlerPage() {
+  const { t } = useI18n();
   const [sources, setSources] = useState<Source[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -55,15 +57,14 @@ export default function CrawlerPage() {
     <div className="w-full p-6 max-w-4xl space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold mb-4">
-          📚 Quản lý Crawl Nguồn Truyện
+          {t('crawler.title')}
         </h1>
         <Button
           variant="outline"
-          size="sm"
           onClick={fetchSources}
           disabled={refreshing}
         >
-          {refreshing ? "Đang tải..." : "🔄 Refresh"}
+          {t('crawler.refresh')}
         </Button>
       </div>
 

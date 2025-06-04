@@ -1,0 +1,14 @@
+{
+  "sidebar.stories": "📚 Quản lý truyện",
+  "sidebar.crawl": "🛠 Crawl dữ liệu",
+  "sidebar.users": "👤 Người dùng",
+  "header.hello": "Xin chào",
+  "header.user": "Người dùng",
+  "header.profile": "Hồ sơ",
+  "crawler.title": "📚 Quản lý Crawl Nguồn Truyện",
+  "crawler.refresh": "Làm mới",
+  "story.title": "📚 Quản lý truyện",
+  "story.refresh": "Làm mới",
+  "user.title": "👤 Người dùng",
+  "user.refresh": "Làm mới"
+}
