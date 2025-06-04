@@ -61,7 +61,7 @@ export default function ChapterPage() {
     const fetchNextChapter = async () => {
       try {
         const res = await ApiInstant.get(
-          `/stories/${slug}/chapters/prev-and-next/${chapter.chapterNumber}`,
+          `/stories/${slug}/chapters/prev-and-next/${chapter.chapterNumber}`
         );
 
         setNextChapter(res.data.next || null);
@@ -150,7 +150,12 @@ export default function ChapterPage() {
       />
       <div className="flex justify-end md:justify-between mt-10">
         {prevChapter && (
-          <Button className=" hidden md:block" size="sm" onClick={handleBack} onTouchEnd={handleBack}>
+          <Button
+            className=" hidden md:block"
+            size="sm"
+            onClick={handleBack}
+            onTouchEnd={handleBack}
+          >
             ← {t("prev")}
           </Button>
         )}
@@ -162,7 +167,14 @@ export default function ChapterPage() {
         >
           {t("chapter_list")}
         </Button>
-        <Button size="sm" onClick={handleNext} onTouchEnd={handleNext}>
+        <Button
+          size="sm"
+          onClick={handleNext}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            handleNext();
+          }}
+        >
           {t("next")} →
         </Button>
       </div>
