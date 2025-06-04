@@ -73,7 +73,7 @@ export default function ChapterPage() {
         setNextChapter(res.data.next || null);
         setPrevChapter(res.data.prev || null);
         if (isMobile && !res.data.next) {
-          alert("Không thể tải chương tiếp theo. Vui lòng thử lại sau.");
+          alert("Không thấy chương tiếp theo. Vui lòng thử lại sau.");
         }
       } catch (error) {
         if (isMobile) {
