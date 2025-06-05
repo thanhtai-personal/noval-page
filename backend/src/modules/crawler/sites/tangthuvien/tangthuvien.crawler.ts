@@ -376,6 +376,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       this.logData(`Starting to fetch chapters... ${story.title}`);
       do {
         countWhile++;
+        this.logData(`Fetching page: ${countWhile}`);
         try {
           const chapterJSNodes: any[] = await page.$$eval(
             '#max-volume ul li a[target=_blank]',
@@ -439,12 +440,12 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         this.logData(`Created chapter: ${listChapters[chapterIndex].title}`);
       }
 
-      this.storyModel.findOneAndUpdate(
+      await this.storyModel.findOneAndUpdate(
         { slug: story.slug },
         { isChapterCrawled: true },
         { new: true, upsert: true, setDefaultsOnInsert: true },
       );
-      this.logData(`Updated story ${story.title} with chapters.`);
+      this.logData(`Updated story ${story.title} with isChapterCrawled true.`);
     } catch (error) {
     } finally {
       await page.close();

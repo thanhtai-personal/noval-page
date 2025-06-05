@@ -2,6 +2,7 @@ import { Controller, Post, Body, Param } from '@nestjs/common';
 import { CrawlerService } from './crawler.service';
 import { Roles } from '@/modules/auth/decorators/roles.decorator';
 import { RoleSlug } from '@/constants/role.enum';
+import { timeout } from 'rxjs';
 
 @Controller('crawler')
 export class CrawlerController {
@@ -13,7 +14,9 @@ export class CrawlerController {
   @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
   @Post('crawl')
   async crawlByUrl(@Body() body: { url: string }) {
-    return this.crawlerService.startCrawlSite(body.url);
+    this.crawlerService.startCrawlSite(body.url);
+    await timeout(1000);
+    return { message: `Crawl started for URL: ${body.url}` };
   }
 
   /**
@@ -23,6 +26,7 @@ export class CrawlerController {
   @Post('story/:id')
   async crawlStoryById(@Param('id') storyId: string) {
     this.crawlerService.crawlStoryById(storyId);
+    await timeout(1000);
     return { message: `Crawl started for story ID: ${storyId}` };
   }
 
@@ -33,6 +37,7 @@ export class CrawlerController {
   @Post('site/start')
   async startSiteCrawl(@Body() body: { source: string }) {
     this.crawlerService.startCrawlSite(body.source);
+    await timeout(1000);
     return { message: `Crawl started for source: ${body.source}` };
   }
 
@@ -43,6 +48,7 @@ export class CrawlerController {
   @Post('source/:id/crawl-chapters')
   async continueCrawlChapters(@Param('id') id: string) {
     this.crawlerService.crawlAllChapters(id);
+    await timeout(1000);
     return { message: `Crawl chapters started for source: ${id}` };
   }
 
@@ -50,6 +56,7 @@ export class CrawlerController {
   @Post('source/:id/crawl')
   async startSourceCrawl(@Param('id') id: string) {
     this.crawlerService.startCrawlSite(id);
+    await timeout(1000);
     return { message: `Crawl started for source ID: ${id}` };
   }
 }

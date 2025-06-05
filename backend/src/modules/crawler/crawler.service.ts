@@ -96,7 +96,7 @@ export class CrawlerService {
         this.logData(`Crawling chapter list of: ${story.title}`, source);
         await adapter.getListChapters(story);
         this.logData(`Crawled chapters for: ${story.title}`, source);
-        const chapters = await this.chapterModel.find({ story: story._id });
+        const chapters = await this.chapterModel.find({ story: story._id, content: { $exists: false } });
         for (const chapter of chapters) {
           try {
             this.logData(
@@ -159,8 +159,11 @@ export class CrawlerService {
 
         this.logData(`Crawling chapter list of: ${story.title}`, source);
         await adapter.getListChapters(story);
-        this.logData(`Crawled chapters for: ${story.title}`, source);
-        const chapters = await this.chapterModel.find({ story: story._id });
+        this.logData(`Completed crawling for story: ${story.title}`, source);
+      }
+
+      this.logData(`Starting crawl chapters content`, source);
+      const chapters = await this.chapterModel.find({ content: { $exists: false } });
         for (const chapter of chapters) {
           try {
             this.logData(
@@ -177,8 +180,6 @@ export class CrawlerService {
           }
           this.logData(`Crawled content for chapter: ${chapter.title}`, source);
         }
-        this.logData(`Completed crawling for story: ${story.title}`, source);
-      }
     } catch (error) {
       this.logger.error(`Error during crawl for source ${source.name}:`, error);
       this.logData(`Error during crawl: ${error.message}`, source);
@@ -209,7 +210,7 @@ export class CrawlerService {
       await adapter.getListChapters(story);
       this.logData(`Crawled chapters for story: ${story.title}`, source);
 
-      const chapters = await this.chapterModel.find({ story: story._id });
+      const chapters = await this.chapterModel.find({ story: story._id, content: { $exists: false } });
       for (const chapter of chapters) {
         this.logData(`Crawling content of chapter: ${chapter.title}`, source);
         await adapter.getChapterContent(chapter);
