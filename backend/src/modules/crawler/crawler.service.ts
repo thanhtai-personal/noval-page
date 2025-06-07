@@ -96,25 +96,26 @@ export class CrawlerService {
         this.logData(`Crawling chapter list of: ${story.title}`, source);
         await adapter.getListChapters(story);
         this.logData(`Crawled chapters for: ${story.title}`, source);
-        const chapters = await this.chapterModel.find({ story: story._id, content: { $exists: false } });
-        for (const chapter of chapters) {
-          try {
-            this.logData(
-              `Crawling content of chapter: ${chapter.title}`,
-              source,
-            );
-            await adapter.getChapterContent(chapter);
-            // await sleep(300);
-          } catch (error) {
-            this.logData(
-              `[[Skipped]] chapter by error ${chapter.title}: ${error.message}`,
-              source,
-            );
-          }
-          this.logData(`Crawled content for chapter: ${chapter.title}`, source);
-        }
-        this.logData(`Completed crawling for story: ${story.title}`, source);
       }
+
+      this.logData(`Starting crawl chapters content`, source);
+      const chapters = await this.chapterModel.find({
+        content: { $exists: false },
+      });
+      for (const chapter of chapters) {
+        try {
+          this.logData(`Crawling content of chapter: ${chapter.title}`, source);
+          await adapter.getChapterContent(chapter);
+          // await sleep(300);
+        } catch (error) {
+          this.logData(
+            `[[Skipped]] chapter by error ${chapter.title}: ${error.message}`,
+            source,
+          );
+        }
+        this.logData(`Crawled content for chapter: ${chapter.title}`, source);
+      }
+      this.logData(`Success crawl chapters content`, source);
     } catch (error) {
       this.logger.error(`Error during crawl for source ${source.name}:`, error);
       this.logData(`Error during crawl: ${error.message}`, source);
@@ -142,7 +143,7 @@ export class CrawlerService {
 
     try {
       const adapter = this.getAdapter(source.name);
-      
+
       const allCrawledStories = await this.storyModel
         .find({
           source: source._id,
@@ -150,7 +151,10 @@ export class CrawlerService {
           isChapterCrawled: false,
         })
         .populate('source');
-
+      this.logData(
+        `Found ${allCrawledStories.length} stories to crawl chapters for.`,
+        source,
+      );
 
       for (const story of allCrawledStories) {
         // get Story chapters
@@ -163,25 +167,23 @@ export class CrawlerService {
       }
 
       this.logData(`Starting crawl chapters content`, source);
-      const chapters = await this.chapterModel.find({ content: { $exists: false } });
-        for (const chapter of chapters) {
-          try {
-            this.logData(
-              `Crawling content of chapter: ${chapter.title}`,
-              source,
-            );
-            await adapter.getChapterContent(chapter);
-            // await sleep(300);
-          } catch (error) {
-            this.logData(
-              `[[Skipped]] chapter by error ${chapter.title}: ${error.message}`,
-              source,
-            );
-          }
-          this.logData(`Crawled content for chapter: ${chapter.title}`, source);
+      const chapters = await this.chapterModel.find({
+        content: { $exists: false },
+      });
+      for (const chapter of chapters) {
+        try {
+          this.logData(`Crawling content of chapter: ${chapter.title}`, source);
+          await adapter.getChapterContent(chapter);
+          // await sleep(300);
+        } catch (error) {
+          this.logData(
+            `[[Skipped]] chapter by error ${chapter.title}: ${error.message}`,
+            source,
+          );
         }
+        this.logData(`Crawled content for chapter: ${chapter.title}`, source);
+      }
     } catch (error) {
-      this.logger.error(`Error during crawl for source ${source.name}:`, error);
       this.logData(`Error during crawl: ${error.message}`, source);
     } finally {
       this.activeCrawlMap.delete(source._id.toString());
@@ -210,7 +212,10 @@ export class CrawlerService {
       await adapter.getListChapters(story);
       this.logData(`Crawled chapters for story: ${story.title}`, source);
 
-      const chapters = await this.chapterModel.find({ story: story._id, content: { $exists: false } });
+      const chapters = await this.chapterModel.find({
+        story: story._id,
+        content: { $exists: false },
+      });
       for (const chapter of chapters) {
         this.logData(`Crawling content of chapter: ${chapter.title}`, source);
         await adapter.getChapterContent(chapter);
