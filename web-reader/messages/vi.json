@@ -13,7 +13,9 @@
     "next_page": "Trang sau",
     "select": "Chọn",
     "cancel": "Hủy",
-    "selected": "Đã chọn ({count})"
+    "selected": "Đã chọn ({count})",
+    "page": "Trang",
+    "loading": "Đang tải..."
   },
   "home": {
     "top_recommend_title": "Top Truyện Đề Cử",

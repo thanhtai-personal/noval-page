@@ -68,7 +68,7 @@ export function StoryTabs({
                       dangerouslySetInnerHTML={{
                         __html: chapter.title
                           ?.replace(/<\/?span[^>]*>/g, "")
-                          .replace(/chương\s*\d+\s*[:\-–]?\s*/i, ""),
+                          ?.replace(/chương\s*\d+\s*[:\-–]?\s*/i, ""),
                       }}
                     />
                   </Link>

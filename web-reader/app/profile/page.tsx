@@ -24,7 +24,7 @@ export default function ProfilePage() {
     const items: ReadItem[] = [];
 
     Object.keys(localStorage).forEach((key) => {
-      if (key.startsWith("read-")) {
+      if (key?.startsWith("read-")) {
         const slug = key.replace("read-", "");
         const index = localStorage.getItem(key) || "0";
 

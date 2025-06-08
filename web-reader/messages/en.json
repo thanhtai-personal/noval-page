@@ -13,7 +13,9 @@
     "next_page": "Next page",
     "select": "Select",
     "cancel": "Cancel",
-    "selected": "Selected ({count})"
+    "selected": "Selected ({count})",
+    "page": "Page",
+    "loading": "Loading..."
   },
   "home": {
     "top_recommend_title": "Top Recommended Stories",

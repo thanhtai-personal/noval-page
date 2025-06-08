@@ -66,7 +66,7 @@ export const Navbar = () => {
           <LinkWithRedirecting
             isExternal
             aria-label="TTV"
-            href="https://www.facebook.com/"
+            href="https://www.facebook.com/profile.php?id=61576845076989/"
             target="_blank"
           >
             <FacebookIcon className="size-5 text-default-500" />

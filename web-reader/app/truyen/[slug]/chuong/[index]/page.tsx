@@ -147,13 +147,15 @@ export default function ChapterPage() {
         className="text-xl font-bold text-center"
         style={{ fontSize, color }}
       />
-      <div
+      {chapter.content ? <div
         dangerouslySetInnerHTML={{
-          __html: chapter.content.replace(/Tàng thư viện/gi, "Vô ưu các"),
+          __html: chapter.content?.replace(/Tàng thư viện/gi, "Vô ưu các"),
         }}
         className="prose max-w-none whitespace-pre-wrap"
         style={{ fontSize, color }}
-      />
+      /> : <div className="w-full h-screen">
+        <iframe className="w-full h-full" src={chapter.url} />
+      </div>}
       <div className="flex justify-end md:justify-between mt-10">
         {prevChapter && (
           <Link
