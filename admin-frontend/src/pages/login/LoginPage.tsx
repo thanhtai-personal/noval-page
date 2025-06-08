@@ -14,14 +14,14 @@ const LoginPage = observer(() => {
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault();
-  await authStore.login(email, password);
-  
-  // Navigate ONLY if login succeeded
-  if (authStore.isAuthenticated) {
-    navigate('/crawl');
-  }
-};
+    e.preventDefault();
+    await authStore.login(email, password);
+
+    // Navigate ONLY if login succeeded
+    if (authStore.isAuthenticated) {
+      navigate("/crawl");
+    }
+  };
 
   return (
     <div
@@ -70,9 +70,11 @@ const LoginPage = observer(() => {
                 />
               </div>
 
-              <Button type="submit" className="w-full mt-4">
-                {authStore.loading ? "Đang đăng nhập..." : "Đăng nhập"}
-              </Button>
+              {authStore.loading ? (
+                <div className="animate-pulse w-full h-10 bg-gray-200 rounded mb-4" />
+              ) : (
+                <Button type="submit">Đăng nhập</Button>
+              )}
             </form>
           </CardContent>
         </Card>

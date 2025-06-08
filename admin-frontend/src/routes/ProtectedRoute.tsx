@@ -17,7 +17,11 @@ const ProtectedRoute = ({ children }: Props) => {
   }
   
   if (loadingAuth) {
-    return <div className="w-full h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <div className="animate-pulse w-40 h-8 bg-gray-200 rounded" />
+      </div>
+    );
   }
   // ❌ Không có quyền truy cập
   if (role !== RoleSlug.ADMIN && role !== RoleSlug.SUPER_ADMIN) {
