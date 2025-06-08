@@ -4,7 +4,21 @@ import { Badge } from "@/components/ui/badge";
 import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 import { useI18n } from "@/lib/i18n/i18n";
 import { Button, Link } from "@radix-ui/themes";
-import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import ChapterEditForm, { Chapter } from "./ChapterEditForm";
 
 export default function StoryDetailView({
   story,
@@ -28,6 +42,18 @@ export default function StoryDetailView({
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
+
+  const [editingChapter, setEditingChapter] = useState<Chapter | null>(null);
+
+  const handleEditChapter = (chapter: Chapter) => setEditingChapter(chapter);
+  const handleCloseDrawer = () => setEditingChapter(null);
+
+  const handleSaveChapter = async (data: Chapter) => {
+    // TODO: Gọi API cập nhật chương ở đây
+    // await updateChapter(data);
+    handleCloseDrawer();
+    // Có thể reload lại danh sách chương nếu cần
+  };
 
   return (
     <>
@@ -144,6 +170,7 @@ export default function StoryDetailView({
                     color="yellow"
                     className="px-2 py-1 text-xs rounded text-white flex items-center justify-center"
                     title={t("story.edit")}
+                    onClick={() => handleEditChapter(ch)}
                   >
                     <Pencil2Icon className="w-4 h-4" />
                   </Button>
@@ -159,6 +186,23 @@ export default function StoryDetailView({
               </div>
             ))}
           </div>
+          {/* Drawer for editing chapter */}
+          <Drawer open={!!editingChapter} onOpenChange={(open) => { if (!open) handleCloseDrawer(); }}>
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>{t("user.add_title")}</DrawerTitle>
+              </DrawerHeader>
+              <div className="p-4">
+                {editingChapter && (
+                  <ChapterEditForm
+                    chapter={editingChapter}
+                    onSave={handleSaveChapter}
+                    onCancel={handleCloseDrawer}
+                  />
+                )}
+              </div>
+            </DrawerContent>
+          </Drawer>
           {/* Paging controls */}
           <div className="flex justify-end items-center gap-2 mt-4">
             <Pagination className="justify-end mt-4">
@@ -173,7 +217,9 @@ export default function StoryDetailView({
                 </span>
                 <PaginationItem>
                   <PaginationNext
-                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                    onClick={() =>
+                      setCurrentPage(Math.min(totalPages, currentPage + 1))
+                    }
                   />
                 </PaginationItem>
               </PaginationContent>

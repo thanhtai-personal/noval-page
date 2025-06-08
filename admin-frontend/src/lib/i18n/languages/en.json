@@ -66,5 +66,10 @@
   "userform.update": "Update user",
   "userform.create": "Create user",
   "userform.updating": "Updating...",
-  "userform.creating": "Creating..."
+  "userform.creating": "Creating...",
+  "chapter.number": "Chapter number",
+  "chapter.title": "Title",
+  "chapter.content": "Chapter content",
+  "common.cancel": "Cancel",
+  "common.save": "Save"
 }

@@ -66,5 +66,10 @@
   "userform.update": "Cập nhật người dùng",
   "userform.create": "Tạo người dùng",
   "userform.updating": "Đang cập nhật...",
-  "userform.creating": "Đang tạo..."
+  "userform.creating": "Đang tạo...",
+  "chapter.number": "Số chương",
+  "chapter.title": "Tiêu đề",
+  "chapter.content": "Nội dung chương",
+  "common.cancel": "Hủy",
+  "common.save": "Lưu"
 }

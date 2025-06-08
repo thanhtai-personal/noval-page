@@ -1,72 +1,72 @@
-import * as React from "react"
-import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
-import { StarterKit } from "@tiptap/starter-kit"
-import { Image } from "@tiptap/extension-image"
-import { TaskItem } from "@tiptap/extension-task-item"
-import { TaskList } from "@tiptap/extension-task-list"
-import { TextAlign } from "@tiptap/extension-text-align"
-import { Typography } from "@tiptap/extension-typography"
-import { Highlight } from "@tiptap/extension-highlight"
-import { Subscript } from "@tiptap/extension-subscript"
-import { Superscript } from "@tiptap/extension-superscript"
-import { Underline } from "@tiptap/extension-underline"
-import { Link } from "@/components/tiptap-extension/link-extension"
-import { Selection } from "@/components/tiptap-extension/selection-extension"
-import { TrailingNode } from "@/components/tiptap-extension/trailing-node-extension"
-import { Button } from "@/components/tiptap-ui-primitive/button"
-import { Spacer } from "@/components/tiptap-ui-primitive/spacer"
+import * as React from "react";
+import { EditorContent, EditorContext, useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+import { Image } from "@tiptap/extension-image";
+import { TaskItem } from "@tiptap/extension-task-item";
+import { TaskList } from "@tiptap/extension-task-list";
+import { TextAlign } from "@tiptap/extension-text-align";
+import { Typography } from "@tiptap/extension-typography";
+import { Highlight } from "@tiptap/extension-highlight";
+import { Subscript } from "@tiptap/extension-subscript";
+import { Superscript } from "@tiptap/extension-superscript";
+import { Underline } from "@tiptap/extension-underline";
+import { Link } from "@/components/tiptap-extension/link-extension";
+import { Selection } from "@/components/tiptap-extension/selection-extension";
+import { TrailingNode } from "@/components/tiptap-extension/trailing-node-extension";
+import { Button } from "@/components/tiptap-ui-primitive/button";
+import { Spacer } from "@/components/tiptap-ui-primitive/spacer";
 import {
   Toolbar,
   ToolbarGroup,
   ToolbarSeparator,
-} from "@/components/tiptap-ui-primitive/toolbar"
-import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension"
-import "@/components/tiptap-node/code-block-node/code-block-node.scss"
-import "@/components/tiptap-node/list-node/list-node.scss"
-import "@/components/tiptap-node/image-node/image-node.scss"
-import "@/components/tiptap-node/paragraph-node/paragraph-node.scss"
-import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu"
-import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button"
-import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu"
-import { BlockQuoteButton } from "@/components/tiptap-ui/blockquote-button"
-import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button"
+} from "@/components/tiptap-ui-primitive/toolbar";
+import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension";
+import "@/components/tiptap-node/code-block-node/code-block-node.scss";
+import "@/components/tiptap-node/list-node/list-node.scss";
+import "@/components/tiptap-node/image-node/image-node.scss";
+import "@/components/tiptap-node/paragraph-node/paragraph-node.scss";
+import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu";
+import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button";
+import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu";
+import { BlockQuoteButton } from "@/components/tiptap-ui/blockquote-button";
+import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button";
 import {
   ColorHighlightPopover,
   ColorHighlightPopoverContent,
   ColorHighlightPopoverButton,
-} from "@/components/tiptap-ui/color-highlight-popover"
+} from "@/components/tiptap-ui/color-highlight-popover";
 import {
   LinkPopover,
   LinkContent,
   LinkButton,
-} from "@/components/tiptap-ui/link-popover"
-import { MarkButton } from "@/components/tiptap-ui/mark-button"
-import { TextAlignButton } from "@/components/tiptap-ui/text-align-button"
-import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button"
-import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon"
-import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon"
-import { LinkIcon } from "@/components/tiptap-icons/link-icon"
-import { useMobile } from "@/hooks/use-mobile"
-import { useWindowSize } from "@/hooks/use-window-size"
-import { useCursorVisibility } from "@/hooks/use-cursor-visibility"
-import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle"
-import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
-import "@/components/tiptap-templates/simple/simple-editor.scss"
+} from "@/components/tiptap-ui/link-popover";
+import { MarkButton } from "@/components/tiptap-ui/mark-button";
+import { TextAlignButton } from "@/components/tiptap-ui/text-align-button";
+import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button";
+import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon";
+import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon";
+import { LinkIcon } from "@/components/tiptap-icons/link-icon";
+import { useMobile } from "@/hooks/use-mobile";
+import { useWindowSize } from "@/hooks/use-window-size";
+import { useCursorVisibility } from "@/hooks/use-cursor-visibility";
+import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle";
+import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
+import "@/components/tiptap-templates/simple/simple-editor.scss";
 
 // --- Thêm type cho props ---
 type SimpleEditorProps = {
-  content?: string // HTML string
-  onChange?: (html: string) => void
-}
+  content?: string; // HTML string
+  onChange?: (html: string) => void;
+};
 
 const MainToolbarContent = ({
   onHighlighterClick,
   onLinkClick,
   isMobile,
 }: {
-  onHighlighterClick: () => void
-  onLinkClick: () => void
-  isMobile: boolean
+  onHighlighterClick: () => void;
+  onLinkClick: () => void;
+  isMobile: boolean;
 }) => {
   return (
     <>
@@ -117,10 +117,9 @@ const MainToolbarContent = ({
         <TextAlignButton align="right" />
         <TextAlignButton align="justify" />
       </ToolbarGroup>
-
-      <ToolbarSeparator />
-
-      <ToolbarGroup>
+      
+      {/* <ToolbarSeparator /> */}
+      {/* <ToolbarGroup>
         <ImageUploadButton text="Add" />
       </ToolbarGroup>
 
@@ -130,17 +129,17 @@ const MainToolbarContent = ({
 
       <ToolbarGroup>
         <ThemeToggle />
-      </ToolbarGroup>
+      </ToolbarGroup> */}
     </>
-  )
-}
+  );
+};
 
 const MobileToolbarContent = ({
   type,
   onBack,
 }: {
-  type: "highlighter" | "link"
-  onBack: () => void
+  type: "highlighter" | "link";
+  onBack: () => void;
 }) => (
   <>
     <ToolbarGroup>
@@ -162,15 +161,15 @@ const MobileToolbarContent = ({
       <LinkContent />
     )}
   </>
-)
+);
 
 export function SimpleEditor({ content, onChange }: SimpleEditorProps) {
-  const isMobile = useMobile()
-  const windowSize = useWindowSize()
+  const isMobile = useMobile();
+  const windowSize = useWindowSize();
   const [mobileView, setMobileView] = React.useState<
     "main" | "highlighter" | "link"
-  >("main")
-  const toolbarRef = React.useRef<HTMLDivElement>(null)
+  >("main");
+  const toolbarRef = React.useRef<HTMLDivElement>(null);
 
   // --- Khởi tạo editor với content từ props ---
   const editor = useEditor({
@@ -205,72 +204,74 @@ export function SimpleEditor({ content, onChange }: SimpleEditorProps) {
         "aria-label": "Main content area, start typing to enter text.",
       },
     },
-  })
+  });
 
   // --- Đồng bộ content khi props.content thay đổi ---
   React.useEffect(() => {
     if (editor && typeof content === "string" && content !== editor.getHTML()) {
-      editor.commands.setContent(content)
+      editor.commands.setContent(content);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [content])
+  }, [content]);
 
   // --- Lắng nghe thay đổi và trả ra ngoài ---
   React.useEffect(() => {
-    if (!editor || !onChange) return
+    if (!editor || !onChange) return;
     const update = () => {
-      onChange(editor.getHTML())
-    }
-    editor.on("update", update)
+      onChange(editor.getHTML());
+    };
+    editor.on("update", update);
     return () => {
-      editor.off("update", update)
-    }
-  }, [editor, onChange])
+      editor.off("update", update);
+    };
+  }, [editor, onChange]);
 
   const bodyRect = useCursorVisibility({
     editor,
     overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
-  })
+  });
 
   React.useEffect(() => {
     if (!isMobile && mobileView !== "main") {
-      setMobileView("main")
+      setMobileView("main");
     }
-  }, [isMobile, mobileView])
+  }, [isMobile, mobileView]);
 
   return (
     <EditorContext.Provider value={{ editor }}>
-      <Toolbar
-        ref={toolbarRef}
-        style={
-          isMobile
-            ? {
-                bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
-              }
-            : {}
-        }
-      >
-        {mobileView === "main" ? (
-          <MainToolbarContent
-            onHighlighterClick={() => setMobileView("highlighter")}
-            onLinkClick={() => setMobileView("link")}
-            isMobile={isMobile}
-          />
-        ) : (
-          <MobileToolbarContent
-            type={mobileView === "highlighter" ? "highlighter" : "link"}
-            onBack={() => setMobileView("main")}
-          />
-        )}
-      </Toolbar>
+      <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
+        <Toolbar
+          ref={toolbarRef}
+          style={
+            isMobile
+              ? {
+                  bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
+                }
+              : {}
+          }
+        >
+          {mobileView === "main" ? (
+            <MainToolbarContent
+              onHighlighterClick={() => setMobileView("highlighter")}
+              onLinkClick={() => setMobileView("link")}
+              isMobile={isMobile}
+            />
+          ) : (
+            <MobileToolbarContent
+              type={mobileView === "highlighter" ? "highlighter" : "link"}
+              onBack={() => setMobileView("main")}
+            />
+          )}
+        </Toolbar>
 
-      <div className="content-wrapper">
-        <EditorContent
-          editor={editor}
-          role="presentation"
-          className="simple-editor-content"
-        />
+        <div className="content-wrapper border border-gray-200 dark:border-gray-700">
+          <EditorContent
+            editor={editor}
+            role="contentinfo"
+            className="p-2 w-full mx-auto min-h-[200px]"
+          />
+        </div>
       </div>
     </EditorContext.Provider>
-  )
+  );
 }
