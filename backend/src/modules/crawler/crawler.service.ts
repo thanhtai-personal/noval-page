@@ -94,8 +94,25 @@ export class CrawlerService {
         // await sleep(100);
 
         this.logData(`Crawling chapter list of: ${story.title}`, source);
-        await adapter.getListChapters(story);
-        this.logData(`Crawled chapters for: ${story.title}`, source);
+        try {
+          await adapter.getListChapters(story);
+        } catch (error) {
+          this.logData(
+            `Retrying to crawl chapters for story: ${story.title} due to error: ${error.message}`,
+            source,
+          );
+          try {
+            await adapter.getListChapters(story);
+          } catch (error) {
+            this.logData(
+              `Failed on retrying to crawl chapters for story: ${story.title} with title ${error.message}`,
+              source,
+            );
+          } finally {
+            continue;
+          }
+        }
+        this.logData(`Completed crawling for story: ${story.title}`, source);
       }
 
       this.logData(`Starting crawl chapters content`, source);
@@ -178,7 +195,7 @@ export class CrawlerService {
             );
           } finally {
             continue;
-          };
+          }
         }
         this.logData(`Completed crawling for story: ${story.title}`, source);
       }
