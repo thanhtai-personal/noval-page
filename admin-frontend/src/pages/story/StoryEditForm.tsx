@@ -2,10 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/lib/i18n/i18n";
-import { Button, TextArea } from "@radix-ui/themes";
-import { PlusIcon, UploadIcon, CheckIcon, Cross2Icon } from '@/components/ui/RadixIcons';
-import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
+import { Button } from "@radix-ui/themes";
+import {
+  PlusIcon,
+  UploadIcon,
+  CheckIcon,
+  Cross2Icon,
+} from "@/components/ui/RadixIcons";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { SimpleEditor as TiptapSimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 
 export default function StoryEditForm({
   story,
@@ -18,7 +24,9 @@ export default function StoryEditForm({
   const { t } = useI18n();
   const [editStory, setEditStory] = useState<any>({ ...story });
   const [tagInput, setTagInput] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const pageSize = 10; // số chương mỗi trang
 
   useEffect(() => {
     setEditStory({ ...story });
@@ -58,6 +66,17 @@ export default function StoryEditForm({
     // TODO: upload file lên server, lấy url và cập nhật editStory.cover
     // handleEditChange('cover', url);
   };
+
+  // Giả sử editStory.chapters là mảng các chương
+  const sortedChapters = (editStory?.chapters || [])
+    .slice()
+    .sort((a: any, b: any) => b.chapterNumber - a.chapterNumber);
+
+  const totalPages = Math.ceil(sortedChapters.length / pageSize);
+  const pagedChapters = sortedChapters.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   return (
     <>
@@ -110,8 +129,6 @@ export default function StoryEditForm({
               className="border rounded px-2 py-1"
               value={editStory?.source || ""}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleEditChange("source", e.target.value)}
-              placeholder={t("story.choose_source")}
-              list="source-list"
             />
             <datalist id="source-list">
               {allSources.map((s: any) => (
@@ -183,8 +200,7 @@ export default function StoryEditForm({
           </div>
           <div className="flex gap-4 mt-2 text-sm text-muted-foreground">
             <span>
-              📖 <strong>{editStory?.totalChapters || 0}</strong>{" "}
-              {t("story.chapters")}
+              📖 <strong>{editStory?.totalChapters || 0}</strong> {t("story.chapters")}
             </span>
             <span>
               👁️ {editStory?.views || 0} {t("story.views")}
@@ -203,14 +219,7 @@ export default function StoryEditForm({
           <CardTitle>{t("story.intro")}</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          {/* TODO: Rich text editor cho intro */}
-          <TextArea
-            value={editStory?.intro || ""}
-            onChange={(value) => handleEditChange("intro", value)}
-            placeholder={t("story.intro")}
-            style={{ width: '100%', minHeight: 120, borderRadius: 0, border: 'none' }}
-            resize="vertical"
-          />
+          <TiptapSimpleEditor content={story.intro} onChange={() => {}} />
         </CardContent>
       </Card>
       <Card>
@@ -218,14 +227,7 @@ export default function StoryEditForm({
           <CardTitle>{t("story.description")}</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          {/* TODO: Rich text editor cho description */}
-          <TextArea
-            value={editStory?.description || ""}
-            onChange={(value) => handleEditChange("description", value)}
-            placeholder={t("story.description")}
-            style={{ width: '100%', minHeight: 180, borderRadius: 0, border: 'none' }}
-            resize="vertical"
-          />
+          <TiptapSimpleEditor content={story.description} onChange={() => {}} />
         </CardContent>
       </Card>
     </>

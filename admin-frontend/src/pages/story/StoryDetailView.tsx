@@ -1,11 +1,34 @@
+import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 import { useI18n } from "@/lib/i18n/i18n";
 import { Button, Link } from "@radix-ui/themes";
+import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
-export default function StoryDetailView({ story, chapters }: { story: any; chapters: any[] }) {
+export default function StoryDetailView({
+  story,
+  chapters,
+}: {
+  story: any;
+  chapters: any[];
+}) {
   const { t } = useI18n();
+
+  // Paging state
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
+
+  // Sort chapters by chapterNumber descending
+  const sortedChapters = [...chapters].sort(
+    (a, b) => b.chapterNumber - a.chapterNumber
+  );
+  const totalPages = Math.ceil(sortedChapters.length / pageSize);
+  const pagedChapters = sortedChapters.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
   return (
     <>
       <div className="flex gap-6">
@@ -17,7 +40,8 @@ export default function StoryDetailView({ story, chapters }: { story: any; chapt
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-bold">{story.title}</h1>
           <div className="text-sm text-muted-foreground">
-            <strong>{t("story.author")}:</strong> {story.author?.name || t("story.unknown")}
+            <strong>{t("story.author")}:</strong>{" "}
+            {story.author?.name || t("story.unknown")}
           </div>
           <div className="text-sm text-muted-foreground">
             <strong>{t("story.source")}:</strong>{" "}
@@ -52,11 +76,18 @@ export default function StoryDetailView({ story, chapters }: { story: any; chapt
           </div>
           <div className="flex gap-4 mt-2 text-sm text-muted-foreground">
             <span>
-              📖 <strong>{story.totalChapters || 0}</strong> {t("story.chapters")}
+              📖 <strong>{story.totalChapters || 0}</strong>{" "}
+              {t("story.chapters")}
             </span>
-            <span>👁️ {story.views || 0} {t("story.views")}</span>
-            <span>👍 {story.likes || 0} {t("story.likes")}</span>
-            <span>⭐ {story.recommends || 0} {t("story.recommends")}</span>
+            <span>
+              👁️ {story.views || 0} {t("story.views")}
+            </span>
+            <span>
+              👍 {story.likes || 0} {t("story.likes")}
+            </span>
+            <span>
+              ⭐ {story.recommends || 0} {t("story.recommends")}
+            </span>
           </div>
         </div>
       </div>
@@ -80,7 +111,9 @@ export default function StoryDetailView({ story, chapters }: { story: any; chapt
           <p className="text-sm text-muted-foreground whitespace-pre-line">
             <div
               dangerouslySetInnerHTML={{
-                __html: story.description || `<i>${t("story.default_description")}</i>`,
+                __html:
+                  story.description ||
+                  `<i>${t("story.default_description")}</i>`,
               }}
             />
           </p>
@@ -92,7 +125,7 @@ export default function StoryDetailView({ story, chapters }: { story: any; chapt
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-4">
-            {chapters.map((ch) => (
+            {pagedChapters.map((ch) => (
               <div key={ch._id} className="relative">
                 <Link
                   href={`/reader/${story.slug}/${ch.chapterNumber}`}
@@ -125,6 +158,26 @@ export default function StoryDetailView({ story, chapters }: { story: any; chapt
                 </div>
               </div>
             ))}
+          </div>
+          {/* Paging controls */}
+          <div className="flex justify-end items-center gap-2 mt-4">
+            <Pagination className="justify-end mt-4">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                  />
+                </PaginationItem>
+                <span className="mt-1 text-sm">
+                  Trang {currentPage} / {totalPages}
+                </span>
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         </CardContent>
       </Card>
