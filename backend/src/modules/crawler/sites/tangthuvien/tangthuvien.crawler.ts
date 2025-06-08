@@ -398,6 +398,8 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             await page.waitForTimeout(1000);
           } catch (paginationError) {
             nextPageBtn = null;
+          } finally {
+            await sleep(1000);
           }
         } catch (err) {
           this.logData(`Error getting chapter list: ${err.message}`);
@@ -537,6 +539,6 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     );
 
     // Ghi log vào file .md
-    fs.appendFileSync(logFile, logMessage);
+    // fs.appendFileSync(logFile, logMessage);
   }
 }
