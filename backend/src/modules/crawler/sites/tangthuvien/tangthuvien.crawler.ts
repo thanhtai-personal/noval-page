@@ -355,9 +355,9 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
   async getListChapters(story: Story) {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto(story.url);
 
     try {
+      await page.goto(story.url);
       const chaptersTab = await page.$('#j-bookCatalogPage');
       try {
         await chaptersTab?.click();
