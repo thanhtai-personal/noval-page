@@ -13,6 +13,8 @@ import "slick-carousel/slick/slick-theme.css";
 import { StoriesWithSkeletonLoading } from "@/components/common/utils/StoriesWithSkeletonLoading";
 import { StoryCard } from "@/components/story/StoryCard";
 import { StoryCardSkeleton } from "@/components/story/StoryCardSkeleton";
+import { Fire1 } from "@/components/animations/fires/Fire1";
+import FireLine from "@/components/animations/fires/FireLine";
 
 export default function HomePage() {
   const t = useTranslations("home");
@@ -25,13 +27,13 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       const recommendRes = await ApiInstant.get(
-        "/stories?sort=recommends&limit=10",
+        "/stories?sort=recommends&limit=10"
       );
       const viewRes = await ApiInstant.get("/stories?sort=views&limit=10");
       const voteRes = await ApiInstant.get("/stories?sort=votes&limit=5");
       const likeRes = await ApiInstant.get("/stories?sort=likes&limit=10");
       const chapterRes = await ApiInstant.get(
-        "/stories?sort=totalChapters&limit=10",
+        "/stories?sort=totalChapters&limit=10"
       );
 
       setTopView(viewRes.data?.data || []);
@@ -57,8 +59,17 @@ export default function HomePage() {
     <section className="container mx-auto px-4 py-8 space-y-12">
       {/* Banner Slide */}
       <div>
-        <h1 className="text-3xl font-bold mb-4">
-          🔥 {t("top_recommend_title")}
+        <h1 className="text-3xl font-bold mb-4 inline-flex items-center">
+          <Fire1
+            width={40}
+            height={60}
+            id={"top-truyen-de-cu"}
+            stopColor={"#8a00ff"}
+            strokeColor={"#9fdbf7"}
+            fill1={"#8c0168"}
+            fill2={"#19020f"}
+          />{" "}
+          {t("top_recommend_title")}
         </h1>
         <Slider {...sliderSettings}>
           {(!topVote || topVote.length === 0
@@ -69,9 +80,10 @@ export default function HomePage() {
               <StoryCard key={story._id} isSlide story={story} />
             ) : (
               <StoryCardSkeleton key={`skeleton-${i}`} />
-            ),
+            )
           )}
         </Slider>
+        <FireLine className={"w-16"} />
       </div>
 
       {/* Đề cử nhiều */}
