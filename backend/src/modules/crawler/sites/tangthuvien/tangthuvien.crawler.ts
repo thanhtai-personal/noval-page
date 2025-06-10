@@ -401,7 +401,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
           } finally {
             await sleep(600);
           }
-          if (countWhile > 100) {
+          if (countWhile > 500) {
             this.logData(
               `Stopping after 100 iterations to prevent infinite loop.`,
             );
