@@ -395,11 +395,17 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
               await page.click('ul.pagination li a[aria-label=Next]');
             }
 
-            await page.waitForTimeout(1000);
+            await page.waitForTimeout(600);
           } catch (paginationError) {
             nextPageBtn = null;
           } finally {
-            await sleep(1000);
+            await sleep(600);
+          }
+          if (countWhile > 100) {
+            this.logData(
+              `Stopping after 100 iterations to prevent infinite loop.`,
+            );
+            break;
           }
         } catch (err) {
           this.logData(`Error getting chapter list: ${err.message}`);
@@ -539,6 +545,6 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     );
 
     // Ghi log vào file .md
-    // fs.appendFileSync(logFile, logMessage);
+    fs.appendFileSync(logFile, logMessage);
   }
 }
