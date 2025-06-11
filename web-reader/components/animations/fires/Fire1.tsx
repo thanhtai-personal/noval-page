@@ -1,9 +1,11 @@
 // Simple mobile detection (can be replaced with a better solution or library)
 
+import { useAppStore } from "@/store/Provider";
 import { isMobile } from "@/utils/funtions";
+import { observer } from "mobx-react-lite";
 
 
-export const Fire1 = ({
+export const Fire1 = observer(({
   id = "fire-1",
   stopColor = "#8a00ff",
   strokeColor = "#9fdbf7",
@@ -11,8 +13,9 @@ export const Fire1 = ({
   fill2 = "#19020f",
   ...props
 }: any) => {
+  const uiConfig = useAppStore();
 
-  if (isMobile()) {
+  if (isMobile() || !uiConfig.animationMode) {
     return "🔥";
   }
   
@@ -84,4 +87,4 @@ export const Fire1 = ({
       <circle cx="119" cy="146" r="17" fill={fill2} />
     </svg>
   );
-};
+});

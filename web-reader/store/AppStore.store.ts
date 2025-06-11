@@ -5,6 +5,7 @@ import { ApiInstant } from "@/utils/api";
 export class AppStore {
   useLayout: boolean = true;
   profile: any = null;
+  animationMode: boolean = true;
 
   constructor() {
     makeAutoObservable(this);
@@ -13,6 +14,10 @@ export class AppStore {
 
   setConfig(useLayout?: boolean) {
     this.useLayout = useLayout || false;
+  }
+
+  setAnimationMode(on?: boolean) {
+    this.animationMode = on || false;
   }
 
   async fetchProfile() {

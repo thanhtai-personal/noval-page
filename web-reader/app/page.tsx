@@ -27,13 +27,13 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       const recommendRes = await ApiInstant.get(
-        "/stories?sort=recommends&limit=10"
+        "/stories?sort=recommends&limit=8"
       );
-      const viewRes = await ApiInstant.get("/stories?sort=views&limit=10");
+      const viewRes = await ApiInstant.get("/stories?sort=views&limit=8");
       const voteRes = await ApiInstant.get("/stories?sort=votes&limit=5");
-      const likeRes = await ApiInstant.get("/stories?sort=likes&limit=10");
+      const likeRes = await ApiInstant.get("/stories?sort=likes&limit=8");
       const chapterRes = await ApiInstant.get(
-        "/stories?sort=totalChapters&limit=10"
+        "/stories?sort=totalChapters&limit=8"
       );
 
       setTopView(viewRes.data?.data || []);
@@ -56,9 +56,9 @@ export default function HomePage() {
   };
 
   return (
-    <section className="container mx-auto px-4 py-8 space-y-12">
+    <section className="container mx-auto px-4 py-8 space-y-12 overflow-visible">
       {/* Banner Slide */}
-      <div>
+      <div className="">
         <h1 className="text-3xl font-bold mb-4 inline-flex items-center">
           <Fire1
             width={40}
@@ -83,13 +83,24 @@ export default function HomePage() {
             )
           )}
         </Slider>
-        <FireLine className={"w-16"} />
+        <FireLine />
       </div>
 
       {/* Đề cử nhiều */}
-      <div>
+      <div className="mt-10">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">📌 {t("most_recommended")}</h2>
+          <h2 className="text-2xl font-bold inline-flex items-center">
+            <Fire1
+              width={40}
+              height={60}
+              id={"top-truyen-de-cu"}
+              stopColor={"#8a00ff"}
+              strokeColor={"#9fdbf7"}
+              fill1={"#8c0168"}
+              fill2={"#19020f"}
+            />{" "}
+            {t("most_recommended")}
+          </h2>
           <Link href="/search?sort=recommends">
             <Button size="sm" variant="light">
               {t("see_more")}
@@ -102,7 +113,7 @@ export default function HomePage() {
       </div>
 
       {/* Nhiều lượt đọc */}
-      <div>
+      <div className="mt-10">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">📚 {t("most_viewed")}</h2>
           <Link href="/search?sort=views">
@@ -116,7 +127,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div>
+      <div className="mt-10">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">📚 {t("most_liked")}</h2>
           <Link href="/search?sort=views">
@@ -130,7 +141,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div>
+      <div className="mt-10">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">📚 {t("longest")}</h2>
           <Link href="/search?sort=views">
