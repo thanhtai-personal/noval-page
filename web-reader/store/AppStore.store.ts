@@ -6,18 +6,24 @@ export class AppStore {
   useLayout: boolean = true;
   profile: any = null;
   animationMode: boolean = true;
+  useFooter: boolean = true;
 
   constructor() {
     makeAutoObservable(this);
     this.fetchProfile();
   }
 
-  setConfig(useLayout?: boolean) {
-    this.useLayout = useLayout || false;
+  setConfig(config: {
+    useLayout?: boolean;
+    useFooter?: boolean;
+    animationMode?: boolean;
+  }) {
+    this.useLayout = config.useLayout || false;
+    this.useFooter = config.useFooter || false;
   }
 
-  setAnimationMode(on?: boolean) {
-    this.animationMode = on || false;
+  toggleAnimationMode() {
+    this.animationMode = !this.animationMode;
   }
 
   async fetchProfile() {

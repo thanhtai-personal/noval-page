@@ -107,6 +107,13 @@
     "profile": "Profile",
     "docs": "Documentation",
     "bestStories": "Best Stories",
-    "logout": "Logout"
+    "logout": "Logout",
+    "animationMode": "Animation Mode",
+    "animationModeDesc": "Enabling this mode will make transitions smoother, but may slow down page loading."
+  },
+  "footer": {
+    "about": "About",
+    "contact": "Contact",
+    "copyright": "© 2025 Vô Ưu Các. All rights reserved."
   }
 }

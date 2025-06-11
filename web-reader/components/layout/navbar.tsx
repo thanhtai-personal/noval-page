@@ -21,9 +21,13 @@ import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/common/utils/theme-switch";
 import { FacebookIcon } from "@/components/default/icons";
 import { LogoIcon } from "@/assets/icons/Logo";
+import { observer } from "mobx-react-lite";
+import { useAppStore } from "@/store/Provider";
+import { Button } from "@heroui/button";
 
-export const Navbar = () => {
+export const Navbar = observer(() => {
   const t = useTranslations("nav");
+  const appStore = useAppStore();
 
   const handleUpdateLanguage = () => {
     const value = Cookies.get("NEXT_LOCALE") !== "vi";
@@ -46,7 +50,7 @@ export const Navbar = () => {
               <NextLink
                 className={clsx(
                   linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
+                  "data-[active=true]:text-primary data-[active=true]:font-medium"
                 )}
                 color="foreground"
                 href={item.href}
@@ -66,11 +70,19 @@ export const Navbar = () => {
           <LinkWithRedirecting
             isExternal
             aria-label="TTV"
-            href="https://www.facebook.com/profile.php?id=61576845076989/"
+            href="https://www.facebook.com/people/V%C3%B4-%C6%B0u-c%C3%A1c/61576845076989/"
             target="_blank"
           >
             <FacebookIcon className="size-5 text-default-500" />
           </LinkWithRedirecting>
+
+          <div
+            className="cursor-pointer"
+            onClick={() => appStore.toggleAnimationMode()}
+            title={t("animationMode")}
+          >
+            🎬
+          </div>
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden lg:flex">
@@ -121,7 +133,7 @@ export const Navbar = () => {
       </NavbarMenu>
     </HeroUINavbar>
   );
-};
+});
 
 const engFlag = (
   <svg viewBox="0 0 55.2 38.4" xmlns="http://www.w3.org/2000/svg">
