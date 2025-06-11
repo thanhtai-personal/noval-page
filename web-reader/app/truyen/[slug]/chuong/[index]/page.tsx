@@ -154,7 +154,7 @@ export default function ChapterPage() {
         className="prose max-w-none whitespace-pre-wrap"
         style={{ fontSize, color }}
       /> : <div className="w-full h-screen">
-        <iframe className="w-full h-full" src={chapter.url} />
+        <iframe title="source-chapter" className="w-full h-full" src={chapter.url} />
       </div>}
       <div className="flex justify-end md:justify-between mt-10">
         {prevChapter && (
