@@ -30,7 +30,7 @@ export default function ContactPage() {
           minRows={5}
           placeholder={t("content_placeholder")}
         />
-        <Button color="primary" type="submit">
+        <Button color="primary" role="button" type="submit">
           {t("send")}
         </Button>
       </form>

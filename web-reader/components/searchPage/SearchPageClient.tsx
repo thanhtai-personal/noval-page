@@ -141,7 +141,7 @@ export default function SearchPageClient() {
       </aside>
 
       <section className="md:col-span-3 space-y-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {stories.length === 0 ? (
             <div className="col-span-full flex flex-col items-center justify-center py-12 text-gray-500">
               <span className="text-lg font-medium">{t("no_result")}</span>

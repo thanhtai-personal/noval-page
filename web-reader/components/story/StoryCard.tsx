@@ -17,7 +17,10 @@ export const StoryCard = observer(
     const WrapperComponent = isSlide ? "div" : ThreeDCardHover;
 
     return (
-      <div key={story._id}  className="grid w-full h-full place-items-center">
+      <div
+        key={story._id}
+        className="grid w-full h-full place-items-center"
+      >
         <WrapperComponent id={story._id} className="w-full h-full">
           <Card className="w-full h-full">
             <CardHeader className="p-0">
@@ -31,9 +34,11 @@ export const StoryCard = observer(
                 src={story.cover}
               />
             </CardHeader>
-            <CardBody>
-              <h2 className="text-lg font-semibold">{story.title}</h2>
-              <p className="text-sm text-gray-600 mb-1 whitespace-nowrap overflow-ellipsis">
+            <CardBody className="w-full max-w-[280px] overflow-hidden">
+              <h2 className="text-lg font-semibold w-full text-ellipsis whitespace-nowrap overflow-hidden">
+                {story.title}
+              </h2>
+              <p className="text-sm text-gray-600 mb-1 whitespace-nowrap text-ellipsis overflow-hidden">
                 {t("author")}: {story.author?.name}
               </p>
               <div className="flex flex-wrap gap-1 mt-2">
@@ -63,9 +68,7 @@ export const StoryCard = observer(
             </CardBody>
             <CardFooter>
               <Link href={`/truyen/${story.slug}`}>
-                <NeonButtons.Lightning>
-                  {t("readNow")}
-                </NeonButtons.Lightning>
+                <NeonButtons.Lightning>{t("readNow")}</NeonButtons.Lightning>
               </Link>
             </CardFooter>
           </Card>

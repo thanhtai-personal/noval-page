@@ -68,6 +68,7 @@
     "name": "Họ tên",
     "name_placeholder": "Tên của bạn",
     "email_placeholder": "Email của bạn",
+    "email": "Email",
     "content": "Nội dung",
     "content_placeholder": "Nội dung liên hệ...",
     "send": "Gửi"

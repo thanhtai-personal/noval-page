@@ -68,6 +68,7 @@
     "name": "Full name",
     "name_placeholder": "Your name",
     "email_placeholder": "Your email",
+    "email": "Email",
     "content": "Content",
     "content_placeholder": "Contact content...",
     "send": "Send"
