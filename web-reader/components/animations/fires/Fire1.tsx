@@ -1,3 +1,4 @@
+"use client";
 // Simple mobile detection (can be replaced with a better solution or library)
 
 import { useAppStore } from "@/store/Provider";
@@ -68,7 +69,7 @@ export const Fire1 = observer(({
         <path
           fill="url(#flame__gradient)"
           stroke={strokeColor}
-          stroke-width="1"
+          strokeWidth="1"
         >
           <animate
             attributeName="d"

@@ -1,0 +1,198 @@
+.threed-card-hover:root {
+  --saturation: 100%;
+  --lightness: 90%;
+  --gray-100: #a0a0a0;
+  /* --gray-300: #909090; */
+  /* --gray-500: #646464; */
+  --gray-700: #404040;
+  --hide-duration: 0.5s;
+}
+
+.threed-card-hover * {
+  box-sizing: border-box;
+}
+
+.animatedGradient {
+  /* requires width & height(in rem) and bgsize properties */
+  background: linear-gradient(
+    atan(var(--height) / var(--width)),
+    hsl(0, var(--saturation), var(--lightness)),
+    hsl(72, var(--saturation), var(--lightness)),
+    hsl(144, var(--saturation), var(--lightness)),
+    hsl(216, var(--saturation), var(--lightness)),
+    hsl(0, var(--saturation), var(--lightness)),
+    hsl(72, var(--saturation), var(--lightness)),
+    hsl(144, var(--saturation), var(--lightness)),
+    hsl(216, var(--saturation), var(--lightness)),
+    hsl(360, var(--saturation), var(--lightness))
+  );
+  background-repeat: repeat;
+  animation: gradient 60s linear infinite;
+  background-size: var(--bgsize) var(--bgsize);
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes gradient {
+  100% {
+    background-position: var(--bgsize) calc(-1 * var(--bgsize));
+  }
+}
+
+.glowCard {
+  box-shadow: 0px 0px 4px 3px rgba(247, 92, 2, 0.3);
+
+  /* properties for animated gradient */
+  --bgsize: 500%;
+  --width: 22;
+  --height: 27;
+
+  border-radius: 1.75rem;
+
+  .inner,
+  .stats,
+  .wpm,
+  .restart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .inner {
+    height: 100%;
+    border-radius: 1rem;
+
+    mix-blend-mode: difference;
+    background: var(--gray-100);
+    box-shadow: calc((var(--mouse-x, 0.5) - 0.5) * -0.05px)
+      calc((var(--mouse-y, 0.5) - 0.5) * -0.05px) 16px 8px #00000075 inset;
+
+    justify-content: center;
+    gap: 1.5rem;
+    color: black;
+  }
+
+  .wpm > .small,
+  .accuracy > .small,
+  .keys {
+    color: var(--gray-700);
+  }
+  .stats {
+    gap: 0.75rem;
+  }
+
+  .wpm {
+    gap: 0.25rem;
+    > .big {
+      font-size: 8rem;
+      line-height: 80%;
+    }
+  }
+
+  .accuracy {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .restart {
+    gap: 0.5rem;
+
+    > button {
+      width: 3.5rem;
+      aspect-ratio: 1;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      outline-color: black;
+      background-color: transparent;
+      border: none;
+
+      > i {
+        transition: rotate 0.5s;
+      }
+
+      &:focus-visible {
+        outline: none;
+      }
+
+      &:hover,
+      &:focus-visible {
+        background-color: #00000050;
+      }
+      &:hover > i,
+      &:focus-visible > i {
+        rotate: 0.5turn;
+      }
+    }
+  }
+
+  & hr {
+    border: none;
+
+    height: 3px;
+    width: 7.5rem;
+    background: linear-gradient(90deg, var(--gray-700) 50%, transparent 50%);
+    background-repeat: repeat-x;
+    background-size: 16px;
+    animation: dash 2s linear infinite;
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      white 3rem,
+      white calc(100% - 3rem),
+      transparent 100%
+    );
+  }
+
+  .keys {
+    > span {
+      border: 1px solid;
+      border-radius: 0.3rem;
+      padding: 0.1rem 0.5rem;
+    }
+  }
+}
+
+.cardWrapper {
+  opacity: 1;
+  animation: reveal 2s;
+  transition: 0.2s;
+  transition-timing-function: ease-out;
+  transform: rotateX(calc((var(--mouse-y, 0.5) - 0.5) * -0.075deg))
+    rotateY(calc((var(--mouse-x, 0.5) - 0.5) * 0.075deg));
+
+  &:hover {
+    scale: 1.01;
+  }
+
+  &.out {
+    transition-timing-function: ease-in;
+    translate: 0 -60rem;
+    rotate: 0.75turn;
+    transform-origin: 80% 10%;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+@keyframes reveal {
+  0%, 5%, 10%, 15%, 20%, 24%, 28%, 32%, 36%, 40%, 44%, 48% {
+    transform: scale(0.15);
+  }
+
+  2%, 7%, 12%, 17%, 22%, 26%, 30%, 34%, 38%, 42%, 46%, 50% {
+    transform: scale(0.18);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes dash {
+  to {
+    background-position: 16px;
+  }
+}

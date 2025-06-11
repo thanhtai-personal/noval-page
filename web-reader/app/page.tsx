@@ -87,8 +87,8 @@ export default function HomePage() {
       </div>
 
       {/* Đề cử nhiều */}
-      <div className="mt-10">
-        <div className="flex justify-between items-center mb-4">
+      <div className="mt-10 md:mt-20">
+        <div className="relative flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold inline-flex items-center">
             <Fire1
               width={40}
@@ -107,6 +107,7 @@ export default function HomePage() {
             </Button>
           </Link>
         </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           <StoriesWithSkeletonLoading stories={topRecommend} />
         </div>

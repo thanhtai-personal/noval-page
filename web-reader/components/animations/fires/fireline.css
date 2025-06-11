@@ -19,13 +19,13 @@
       0deg,
       #FFFFFF99 0px,
       #ff895199 5px,
-      #dcbc169c 30%,
-      transparent 70%
+      #dcbc169c 20%,
+      transparent 80%
     ),
-    radial-gradient(ellipse at bottom, transparent 30%, black 60%);
+    radial-gradient(ellipse at bottom, transparent 20%, black 70%);
   background-size:
     100% 100%,
-    100% 90%;
+    100% 100%;
   background-blend-mode: hard-light, color-dodge, multiply;
   background-position:
     0px 0px,
@@ -60,24 +60,18 @@
   }
 }
 
-html,
-body {
-  min-width: 100%;
-  min-height: 100%;
-}
-
 .fireline {
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-h1 {
+.fireline h1 {
   text-align: center;
   margin-bottom: 0;
 }
 
-h2 {
+.fireline h2 {
   font-weight: 200;
   opacity: 0.5;
   text-align: center;

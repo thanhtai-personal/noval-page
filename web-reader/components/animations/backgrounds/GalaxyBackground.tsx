@@ -1,9 +1,8 @@
 "use client";
 
-import "./galaxybackground.module.css";
+import styles from "./galaxybackground.module.css";
 import { useEffect } from "react";
 import * as THREE from 'three';
-import { GUI } from "dat.gui";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { observer } from "mobx-react-lite";
 import { isMobile } from "@/utils/funtions";
@@ -33,7 +32,6 @@ const GalaxyBackground = (props: any) => {
       height: window.innerHeight,
     };
 
-    const gui = new GUI();
 
     const canvas = document.querySelector(`#canvas-${props.id}`) as HTMLCanvasElement | null;
 
@@ -295,14 +293,14 @@ const GalaxyBackground = (props: any) => {
       renderer.setSize(sizes.width, sizes.height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     });
-  }, [appStore.animationMode]);
+  }, [appStore.animationMode, props.id]);
 
   if (isMobile() || appStore.animationMode === false) {
     return '';
   }
 
   return (
-    <canvas className="galaxybg" id={`canvas-${props.id}`} ></canvas>
+    <canvas className={styles.galaxybg} id={`canvas-${props.id}`} ></canvas>
   );
 };
 

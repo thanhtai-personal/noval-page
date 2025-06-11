@@ -1,3 +1,5 @@
+"use client";
+
 import { isMobile } from "@/utils/funtions";
 import "./fireline.css"
 import { observer } from "mobx-react-lite";
