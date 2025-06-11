@@ -1,0 +1,406 @@
+.neon-buttons {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  color: #fff;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+  gap: 40px;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.btnContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button {
+  position: relative;
+  padding: 15px 30px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.h1 {
+  color: #fff;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 2.5rem;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.subtitle {
+  color: #ccc;
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+
+.btnNeon {
+  background-color: transparent;
+  color: #0ff;
+  border: 2px solid #0ff;
+  box-shadow: 0 0 5px #0ff;
+  transition: all 0.3s;
+}
+
+.btnNeon:hover {
+  color: #111;
+  background-color: #0ff;
+  box-shadow:
+    0 0 20px #0ff,
+    0 0 40px #0ff,
+    0 0 60px #0ff;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  letter-spacing: 3px;
+}
+
+.btnExplosion {
+  background-color: #ff3366;
+  color: white;
+}
+
+.btnExplosion:hover {
+  animation: explode 0.5s forwards;
+  box-shadow: 0 0 30px #ff3366;
+}
+
+@keyframes explode {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  60% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+.btnLiquid {
+  background-color: #4a00e0;
+  color: white;
+  border-radius: 30px;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.btnLiquid:hover {
+  border-radius: 5px;
+  background-color: #8e2de2;
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 25px rgba(142, 45, 226, 0.4);
+}
+
+.btnSplit {
+  background-color: #fd1d1d;
+  color: white;
+  z-index: 1;
+}
+
+.btnSplit::before,
+.btnSplit::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background-color: #fd1d1d;
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+
+.btnSplit::before {
+  left: 0;
+}
+
+.btnSplit::after {
+  right: 0;
+}
+
+.btnSplit:hover::before {
+  transform: translateX(-20%);
+  background-color: #333;
+}
+
+.btnSplit:hover::after {
+  transform: translateX(20%);
+  background-color: #333;
+}
+
+.btnOutline {
+  background-color: transparent;
+  color: #3ae374;
+  border: 2px solid #3ae374;
+  transition: all 0.5s;
+  z-index: 1;
+}
+
+.btnOutline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background-color: #3ae374;
+  transition: all 0.5s;
+  z-index: -1;
+}
+
+.btnOutline:hover {
+  color: #000;
+}
+
+.btnOutline:hover::before {
+  width: 100%;
+}
+
+.btnShake {
+  background-color: #ffb142;
+  color: white;
+}
+
+.btnShake:hover {
+  animation: shake 0.5s infinite;
+  background-color: #ff5252;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px) rotate(-5deg);
+  }
+  50% {
+    transform: translateX(5px) rotate(5deg);
+  }
+  75% {
+    transform: translateX(-5px) rotate(-5deg);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.btnLightning {
+  background-color: #222;
+  color: #f1c40f;
+  border: 2px solid #f1c40f;
+}
+
+.btnLightning:hover {
+  animation: lightning 1.5s infinite;
+  box-shadow: 0 0 20px #f1c40f;
+}
+
+@keyframes lightning {
+  0% {
+    box-shadow: 0 0 5px #f1c40f;
+  }
+  25% {
+    box-shadow:
+      0 0 15px #f1c40f,
+      0 0 25px #f1c40f;
+  }
+  50% {
+    box-shadow: 0 0 5px #f1c40f;
+  }
+  75% {
+    box-shadow:
+      0 0 15px #f1c40f,
+      0 0 25px #f1c40f,
+      0 0 50px #f1c40f;
+  }
+  100% {
+    box-shadow: 0 0 5px #f1c40f;
+  }
+}
+
+.btn3DFlip {
+  background-color: #3498db;
+  color: white;
+  transform-style: preserve-3d;
+  perspective: 800px;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  padding: 25px 45px;
+  min-width: 180px;
+}
+
+.btn3DFlip:hover {
+  transform: rotateY(180deg);
+  background-color: #2980b9;
+}
+
+.btn3DFlip .front,
+.btn3DFlip .back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+}
+
+.btn3DFlip .back {
+  transform: rotateY(180deg);
+}
+
+.btnPulse {
+  background-color: #9b59b6;
+  color: white;
+}
+
+.btnPulse:hover {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(155, 89, 182, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 15px rgba(155, 89, 182, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(155, 89, 182, 0);
+  }
+}
+
+.btnBlur {
+  background-color: #27ae60;
+  color: white;
+}
+
+.btnBlur:hover {
+  animation: blur 0.5s forwards;
+  letter-spacing: 3px;
+}
+
+@keyframes blur {
+  0% {
+    filter: blur(0px);
+    transform: scale(1);
+  }
+  50% {
+    filter: blur(3px);
+    transform: scale(1.1);
+  }
+  100% {
+    filter: blur(0px);
+    transform: scale(1.05);
+    background-color: #2ecc71;
+  }
+}
+
+.btnGlitch {
+  background-color: #e84393;
+  color: white;
+  position: relative;
+  padding: 20px 40px;
+}
+
+.btnGlitch:hover {
+  animation: glitch 0.5s infinite;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-5px, 5px);
+  }
+  40% {
+    transform: translate(-5px, -5px);
+  }
+  60% {
+    transform: translate(5px, 5px);
+  }
+  80% {
+    transform: translate(5px, -5px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+.btnGlitch::before,
+.btnGlitch::after {
+  content: "GLITCH";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+.btnGlitch::before {
+  color: #ff00ff;
+  z-index: -1;
+}
+
+.btnGlitch::after {
+  color: #00ffff;
+  z-index: -2;
+}
+
+.btnGlitch:hover::before {
+  opacity: 0.8;
+  transform: translate(-5px, -5px);
+}
+
+.btnGlitch:hover::after {
+  opacity: 0.8;
+  transform: translate(5px, 5px);
+}
+
+.btnMorph {
+  background-color: #1abc9c;
+  color: white;
+  border-radius: 8px;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.btnMorph:hover {
+  border-radius: 50px;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(360deg);
+}

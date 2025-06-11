@@ -2,13 +2,13 @@
 
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
 import { Badge } from "@heroui/badge";
-import { Button } from "@heroui/button";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { Story } from "@/types/interfaces/story";
 import { observer } from "mobx-react-lite";
-import ThreeDCardHover from "../animations/cards/3DCardHover";
+import ThreeDCardHover from "@/components/animations/cards/3DCardHover";
+import NeonButtons from "@/components/animations/buttons/NeonButtons";
 
 export const StoryCard = observer(
   ({ story, isSlide }: { story: Story; isSlide?: boolean }) => {
@@ -63,9 +63,9 @@ export const StoryCard = observer(
             </CardBody>
             <CardFooter>
               <Link href={`/truyen/${story.slug}`}>
-                <Button color="primary" size="sm" variant="flat">
+                <NeonButtons.Lightning>
                   {t("readNow")}
-                </Button>
+                </NeonButtons.Lightning>
               </Link>
             </CardFooter>
           </Card>
