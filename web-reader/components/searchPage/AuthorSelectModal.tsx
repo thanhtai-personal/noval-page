@@ -96,10 +96,10 @@ export function AuthorSelectModal({
                 {t("no_result")}
               </div>
             ) : (
-              authors.map((author) =>
+              authors.map((author, index) =>
                 author.name ? (
                   <div
-                    key={author._id}
+                    key={author._id || index}
                     className={`flex justify-start gap-4 items-center cursor-pointer p-0 m-0 transition`}
                     onClick={() => toggleSelect(author)}
                     onTouchEnd={() => toggleSelect(author)}
