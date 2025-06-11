@@ -3,6 +3,7 @@
 import { observer } from "mobx-react-lite";
 
 import { Navbar } from "@/components/layout/navbar";
+import WallPaperBg1 from "@/components/animations/backgrounds/WallpaperBg1";
 import { useAppStore } from "@/store/Provider";
 import { Footer } from "./footer";
 
@@ -12,9 +13,11 @@ export const AppLayout = observer(({ children }: any) => {
   return (
     <div className="relative flex flex-col h-screen">
       {store.useLayout && <Navbar />}
-      <main className="container mx-auto max-w-7xl px-6 flex-grow">
-        {children}
-      </main>
+      <WallPaperBg1>
+        <main className="relative container mx-auto max-w-7xl px-6 flex-grow">
+          {children}
+        </main>
+      </WallPaperBg1>
       {store.useFooter && <Footer />}
     </div>
   );
