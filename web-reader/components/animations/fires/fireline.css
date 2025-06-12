@@ -65,15 +65,3 @@
   height: 100%;
   overflow: hidden;
 }
-
-.fireline h1 {
-  text-align: center;
-  margin-bottom: 0;
-}
-
-.fireline h2 {
-  font-weight: 200;
-  opacity: 0.5;
-  text-align: center;
-  margin: 0;
-}

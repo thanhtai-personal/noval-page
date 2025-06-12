@@ -58,7 +58,7 @@ export default function HomePage() {
   return (
     <section className="container mx-auto px-4 py-8 space-y-12 overflow-visible">
       {/* Banner Slide */}
-      <div className="">
+      <div className="relative">
         <h1 className="text-3xl font-bold mb-4 inline-flex items-center">
           <Fire1
             width={40}

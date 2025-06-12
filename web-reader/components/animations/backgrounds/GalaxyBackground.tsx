@@ -300,7 +300,7 @@ const GalaxyBackground = (props: any) => {
   }
 
   return (
-    <canvas className={styles.galaxybg} id={`canvas-${props.id}`} ></canvas>
+    <canvas className={`${styles.galaxybg} pointer-events-none`} id={`canvas-${props.id}`} ></canvas>
   );
 };
 
