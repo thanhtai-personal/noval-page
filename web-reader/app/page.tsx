@@ -47,9 +47,9 @@ export default function HomePage() {
   }, []);
 
   const sliderSettings = {
-    dots: true,
+    dots: false,
     infinite: true,
-    speed: 500,
+    speed: 1250,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
@@ -58,19 +58,19 @@ export default function HomePage() {
   return (
     <section className="container mx-auto px-4 py-8 space-y-12 overflow-visible">
       {/* Banner Slide */}
+      <h1 className="text-3xl font-bold inline-flex items-center">
+        <Fire1
+          width={60}
+          height={60}
+          id={"top-truyen-de-cu"}
+          stopColor={"#8a00ff"}
+          strokeColor={"#9fdbf7"}
+          fill1={"#8c0168"}
+          fill2={"#19020f"}
+        />{" "}
+        {t("top_recommend_title")}
+      </h1>
       <div className="relative">
-        <h1 className="text-3xl font-bold mb-4 inline-flex items-center">
-          <Fire1
-            width={40}
-            height={60}
-            id={"top-truyen-de-cu"}
-            stopColor={"#8a00ff"}
-            strokeColor={"#9fdbf7"}
-            fill1={"#8c0168"}
-            fill2={"#19020f"}
-          />{" "}
-          {t("top_recommend_title")}
-        </h1>
         <Slider {...sliderSettings}>
           {(!topVote || topVote.length === 0
             ? Array.from({ length: 4 })

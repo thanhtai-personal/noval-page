@@ -19,22 +19,25 @@ export const StoryCard = observer(
     return (
       <div
         key={story._id}
-        className="grid w-full h-full place-items-center"
+        className="grid w-full h-full place-items-center rounded-md"
       >
-        <WrapperComponent id={story._id} className="w-full h-full">
-          <Card className="w-full h-full">
+        <WrapperComponent id={story._id} className="w-full h-full  rounded-md overflow-hidden">
+          <Card className={`w-full h-full ${isSlide ? 'bg-[#FFAA0022]' : ''} backdrop:blur-xl`}>
             <CardHeader className="p-0">
-              <img
+              {isSlide ? <img
                 alt={story.title}
-                className={
-                  isSlide
-                    ? `w-auto h-[calc(100vh/2.8)] object-cover rounded-t mx-auto`
-                    : `w-full h-48 object-cover rounded-t`
-                }
+                className={`w-auto mt-2 h-[calc(100vh/2.8)] object-cover rounded-t mx-auto rounded-md`}
+                style={{
+                  boxShadow: '0px 0px 8px 6px rgba(247, 92, 2, 0.3)',
+                }}
                 src={story.cover}
-              />
+              /> : <img
+                alt={story.title}
+                className={`w-full h-48 object-cover rounded-t`}
+                src={story.cover}
+              />}
             </CardHeader>
-            <CardBody className="w-full max-w-[280px] overflow-hidden">
+            <CardBody className={`w-full ${!isSlide ? 'max-w-[280px]' : ''} overflow-hidden`}>
               <h2 className="text-lg font-semibold w-full text-ellipsis whitespace-nowrap overflow-hidden">
                 {story.title}
               </h2>

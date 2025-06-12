@@ -1,8 +1,10 @@
+"use client";
+
 import { useResize } from "@/hooks/useResize";
 import { useAppStore } from "@/store/Provider";
 import { isMobile } from "@/utils/funtions";
 import { observer } from "mobx-react-lite";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import GalaxyBackground from "@/components/animations/backgrounds/GalaxyBackground";
 import Sprite from "@/components/animations/sprites/Sprite";
@@ -12,15 +14,17 @@ import isLandChain from "@/assets/sprites/islandChain/islandchain.png";
 export const BottomSprites = observer(() => {
   const appStore = useAppStore();
   const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: 0,
+    height: 0,
   });
 
   useResize(() => {
-    setWindowSize({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
+    if (typeof window !== "undefined") {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
   });
 
   if (!appStore.animationMode || isMobile()) {
@@ -40,7 +44,7 @@ export const BottomSprites = observer(() => {
               right: 0,
             }}
           /> */}
-          <GalaxyBackground  />
+          <GalaxyBackground />
         </div>
       </div>
     </div>

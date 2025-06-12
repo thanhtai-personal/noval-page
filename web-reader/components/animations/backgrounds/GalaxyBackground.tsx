@@ -188,47 +188,7 @@ const GalaxyBackground = (props: any) => {
     };
 
     generateGalaxy();
-
-    // gui
-    //   .add(debugObject, "count", 1000, 500000, 100)
-    //   .onFinishChange(generateGalaxy)
-    //   .name("Stars");
-    // gui
-    //   .add(debugObject, "size", 0.001, 20, 0.001)
-    //   .onFinishChange(generateGalaxy)
-    //   .name("Star size");
-    // gui
-    //   .add(debugObject, "branches", 1, 10, 1)
-    //   .onFinishChange(generateGalaxy)
-    //   .name("Branches");
-    // gui
-    //   .add(debugObject, "radius", 0.3, 4, 0.001)
-    //   .onFinishChange(generateGalaxy)
-    //   .name("Radius");
-    // gui
-    //   .add(debugObject, "randomness", 0, 4, 0.001)
-    //   .onFinishChange(generateGalaxy)
-    //   .name("Randomness");
-    // gui
-    //   .add(debugObject, "randomnessPower", 0, 10, 0.001)
-    //   .onFinishChange(generateGalaxy)
-    //   .name("RandomnessPower");
-    // gui
-    //   .add(debugObject, "rotationSpeed", 0, 1, 0.01)
-    //   .onFinishChange(generateGalaxy)
-    //   .name("Rotation Speed");
-    // gui
-    //   .addColor(debugObject, "innerColor")
-    //   .onFinishChange(generateGalaxy)
-    //   .name("Internal color");
-    // gui
-    //   .addColor(debugObject, "outerColor")
-    //   .onFinishChange(generateGalaxy)
-    //   .name("External color");
-
-    // ===================================
-    // Camera
-    // ===================================
+    
     const camera = new THREE.PerspectiveCamera(
       75,
       sizes.width / sizes.height,

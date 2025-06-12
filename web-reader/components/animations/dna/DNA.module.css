@@ -1,0 +1,108 @@
+.helix {
+  transform: rotateZ(30deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.strand {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0.35em auto;
+
+  --d: calc(var(--i) / var(--total));
+  --color: hsl(calc(-0.05turn + (var(--d) * 0.85turn)), 95%, 75%);
+  --duration: 1.5s;
+  --delay: calc((var(--duration) * -1) + 0.1s * var(--i));
+  animation: var(--duration) cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: var(--delay);
+}
+
+.left,
+.right {
+  animation: inherit;
+  display: grid;
+  grid-template-areas: "layer";
+  align-items: center;
+  width: 7em;
+  > * {
+    grid-area: layer;
+  }
+}
+
+.left {
+  transform: translateZ(0px);
+}
+
+.right {
+  transform: scaleX(-1);
+}
+
+.dot {
+  animation-name: move_dot;
+  animation-duration: calc(var(--duration) * 2);
+  animation-delay: var(--delay);
+  animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  animation-iteration-count: infinite;
+  width: 100%;
+
+  --scale-start: 0.5;
+  --scale-end: 1;
+}
+
+.right .dot {
+  --scale-start: 1;
+  --scale-end: 0.5;
+}
+
+.dot::before {
+  display: block;
+  content: "";
+  border-radius: 50%;
+  width: 1em;
+  height: 1em;
+  background: var(--color);
+  animation-name: scale_dot;
+  animation-duration: calc(var(--duration) * 2);
+  animation-delay: var(--delay);
+  animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  animation-iteration-count: infinite;
+}
+
+@keyframes scale_dot {
+  33% {
+    transform: scale(var(--scale-start));
+  }
+  66% {
+    transform: scale(var(--scale-end));
+  }
+}
+
+@keyframes move_dot {
+  50% {
+    transform: translateX(200%);
+  }
+}
+
+.line {
+  width: calc(100% - 1.5em);
+  height: 0.25em;
+  border-radius: 1em;
+  background: var(--color);
+  margin-left: auto;
+  transform-origin: center right;
+
+  animation-name: scale_line;
+  animation-duration: var(--duration);
+  animation-delay: var(--delay);
+  animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  animation-iteration-count: infinite;
+}
+
+@keyframes scale_line {
+  50% {
+    transform: scaleX(0.1);
+  }
+}

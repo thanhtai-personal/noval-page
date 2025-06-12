@@ -7,7 +7,7 @@ export function Footer() {
   const t = useTranslations("footer");
 
   return (
-    <footer className="w-full bg-transparent z-[5]"
+    <footer className="w-full bg-[#00000099] z-[5]"
       style={{
         backdropFilter: 'blur(10px)',
       }}
@@ -16,7 +16,7 @@ export function Footer() {
         <div className="max-w-[1280px] py-6 mt-12 z-10 mx-auto flex flex-col md:flex-row items-center justify-between gap-4 px-4">
           <div className="flex items-center gap-3">
             <LogoIcon className="w-auto h-16 text-primary" />
-            <span className="text-white font-bold text-lg tracking-wide">Vô ưu các</span>
+            <span className={`text-white font-bold text-lg tracking-wide`}>Vô ưu các</span>
           </div>
           <div className="flex items-center gap-6">
             <NextLink
