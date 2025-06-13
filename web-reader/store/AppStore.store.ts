@@ -22,8 +22,12 @@ export class AppStore {
     this.useFooter = config.useFooter || false;
   }
 
-  toggleAnimationMode() {
-    this.animationMode = !this.animationMode;
+  toggleAnimationMode(value?: boolean) {
+    if (typeof value === "boolean") {
+      this.animationMode = value;
+    } else {
+      this.animationMode = !this.animationMode;
+    }
   }
 
   async fetchProfile() {

@@ -7,7 +7,6 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 
 import GalaxyBackground from "@/components/animations/backgrounds/GalaxyBackground";
-import Sprite from "@/components/animations/sprites/Sprite";
 
 import isLandChain from "@/assets/sprites/islandChain/islandchain.png";
 
@@ -32,10 +31,9 @@ export const BottomSprites = observer(() => {
   }
 
   return (
-    <div className="relative">
-      <div className="absolute bottom-0 right-0 w-full z-0 bg-transparent">
-        <div className="relative w-full h-full z-0 overflow-x-hidden">
-          {/* <Sprite
+    <div className="absolute bottom-0 right-0 w-full z-0 bg-transparent">
+      <div className="relative w-full h-full z-0 overflow-x-hidden">
+        {/* <Sprite
             images={[isLandChain]}
             width={windowSize.width}
             layer={0}
@@ -44,8 +42,7 @@ export const BottomSprites = observer(() => {
               right: 0,
             }}
           /> */}
-          <GalaxyBackground />
-        </div>
+        <GalaxyBackground />
       </div>
     </div>
   );
