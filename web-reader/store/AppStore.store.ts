@@ -10,6 +10,7 @@ export class AppStore {
 
   constructor() {
     makeAutoObservable(this);
+    this.animationMode = Boolean(localStorage.getItem("animationMode") === "true");
     this.fetchProfile();
   }
 
@@ -25,8 +26,11 @@ export class AppStore {
   toggleAnimationMode(value?: boolean) {
     if (typeof value === "boolean") {
       this.animationMode = value;
+      localStorage.setItem("animationMode", String(value));
     } else {
-      this.animationMode = !this.animationMode;
+      const newValue = !this.animationMode;
+      this.animationMode = newValue;
+      localStorage.setItem("animationMode", String(newValue));
     }
   }
 

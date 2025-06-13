@@ -8,6 +8,10 @@ export const useResize = (callback: () => void) => {
   };
 
   useEffect(() => {
+    callback(); // Initial call to set the size on mount
+  }, []);
+
+  useEffect(() => {
     window.addEventListener("resize", handleResize);
     
     return () => {
