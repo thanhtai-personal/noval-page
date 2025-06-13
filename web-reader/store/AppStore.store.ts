@@ -1,6 +1,10 @@
+"use client";
+
 import { makeAutoObservable } from "mobx";
 
 import { ApiInstant } from "@/utils/api";
+
+const localStorage = typeof window !== "undefined" ? window.localStorage : null;
 
 export class AppStore {
   useLayout: boolean = true;
@@ -10,7 +14,7 @@ export class AppStore {
 
   constructor() {
     makeAutoObservable(this);
-    this.animationMode = Boolean(localStorage.getItem("animationMode") === "true");
+    this.animationMode = Boolean(localStorage?.getItem("animationMode") === "true");
     this.fetchProfile();
   }
 
@@ -26,11 +30,11 @@ export class AppStore {
   toggleAnimationMode(value?: boolean) {
     if (typeof value === "boolean") {
       this.animationMode = value;
-      localStorage.setItem("animationMode", String(value));
+      localStorage?.setItem("animationMode", String(value));
     } else {
       const newValue = !this.animationMode;
       this.animationMode = newValue;
-      localStorage.setItem("animationMode", String(newValue));
+      localStorage?.setItem("animationMode", String(newValue));
     }
   }
 
