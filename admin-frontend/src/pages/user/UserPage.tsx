@@ -15,19 +15,22 @@ import { useI18n } from '@/lib/i18n/i18n';
 
 export default function AdminUserPage() {
   const { t } = useI18n();
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState({
+    items: [],
+    total: 0,
+  });
   const [roles, setRoles] = useState([]);
 
   const [filters, setFilters] = useState({
     search: '',
     role: '',
     page: 1,
+    limit: 10,
   });
 
-  const [totalPages, setTotalPages] = useState(1);
 
   const fetchUsers = async () => {
-    const res = await api.get('/user', {
+    const res = await api.get('/users/search', {
       params: {
         search: filters.search,
         role: filters.role,
@@ -35,12 +38,11 @@ export default function AdminUserPage() {
         limit: 10,
       },
     });
-    setUsers(res.data.items);
-    setTotalPages(res.data.totalPages);
+    setUsers(res.data);
   };
 
   const fetchRoles = async () => {
-    const res = await api.get('/role');
+    const res = await api.get('/roles');
     setRoles(res.data);
   };
 
@@ -63,6 +65,8 @@ export default function AdminUserPage() {
     await api.delete(`/user/${id}`);
     fetchUsers();
   };
+
+  const totalPages = Math.ceil(users.total / filters.limit);
 
   return (
     <div className="w-full p-6 max-w-6xl space-y-4">
@@ -103,7 +107,7 @@ export default function AdminUserPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">{t('user.role_all')}</SelectItem>
-            {roles.map((r: any) => (
+            {roles?.map((r: any) => (
               <SelectItem key={r._id} value={r._id}>{r.name}</SelectItem>
             ))}
           </SelectContent>
@@ -121,7 +125,7 @@ export default function AdminUserPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.map((u: any) => (
+          {users.items?.map((u: any) => (
             <TableRow key={u._id}>
               <TableCell>{u.email}</TableCell>
               <TableCell>{u.name}</TableCell>

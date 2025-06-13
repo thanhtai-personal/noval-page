@@ -15,14 +15,14 @@ export class UserController {
   }
 
   @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
-  @Get()
+  @Get('/search')
   findAll(
     @Query('search') search: string,
     @Query('role') role: string,
     @Query('page') page = 1,
     @Query('limit') limit = 10,
   ) {
-    return this.userService.findAll({ search, role, page: +page, limit: +limit });
+    return this.userService.findAll({ search, role, page: page, limit: limit });
   }
 
   @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)

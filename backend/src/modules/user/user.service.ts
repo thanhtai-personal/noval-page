@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '@/schemas/user.schema';
 import { Role } from '@/schemas/role.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 
@@ -38,7 +38,7 @@ export class UserService {
     }
 
     if (role) {
-      query.role = role;
+      query.role = new Types.ObjectId(role);
     }
 
     const total = await this.userModel.countDocuments(query);
@@ -51,7 +51,7 @@ export class UserService {
 
     return {
       items,
-      totalPages: Math.ceil(total / limit),
+      total,
     };
   }
 
