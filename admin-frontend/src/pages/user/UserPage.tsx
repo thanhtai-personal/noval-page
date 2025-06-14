@@ -55,15 +55,25 @@ export default function AdminUserPage() {
   }, [filters]);
 
   const banUser = async (id: string) => {
-    if (!confirm('Cấm người dùng này?')) return;
-    await api.post(`/user/${id}/ban`);
-    fetchUsers();
+    if (!confirm(t('user.isBanned'))) return;
+    try {
+      await api.post(`/users/${id}/ban`);
+      fetchUsers();
+      alert(t('user.bannedSuccess'))
+    } catch (error) {
+      alert(t('user.bannedError'))
+    }
   };
 
   const deleteUser = async (id: string) => {
-    if (!confirm('Xóa người dùng này?')) return;
-    await api.delete(`/user/${id}`);
-    fetchUsers();
+    if (!confirm(t('user.isDelete'))) return;
+    try {
+      await api.delete(`/users/${id}`);
+      fetchUsers();
+      alert(t('user.deleteSuccess'))
+    } catch (error) {
+      alert(t('user.deleteError'))
+    }
   };
 
   const totalPages = Math.ceil(users.total / filters.limit);
@@ -132,7 +142,19 @@ export default function AdminUserPage() {
               <TableCell>{u.role?.name || '—'}</TableCell>
               <TableCell className="space-x-2">
                 <Button size="sm" variant="outline" onClick={() => banUser(u._id)}>{t('user.ban')}</Button>
-                <Button size="sm" variant="outline">{t('user.edit')}</Button>
+                <Drawer>
+                  <DrawerTrigger asChild>
+                    <Button size="sm" variant="outline">{t('user.edit')}</Button>
+                  </DrawerTrigger>
+                  <DrawerContent>
+                    <DrawerHeader>
+                      <DrawerTitle>{t('user.add_title')}</DrawerTitle>
+                    </DrawerHeader>
+                    <div className="p-4">
+                      <UserForm onSuccess={fetchUsers} defaultData={u} />
+                    </div>
+                  </DrawerContent>
+                </Drawer>
                 <Button size="sm" variant="destructive" onClick={() => deleteUser(u._id)}>{t('user.delete')}</Button>
               </TableCell>
             </TableRow>

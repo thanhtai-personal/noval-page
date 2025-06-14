@@ -33,7 +33,7 @@ export function UserForm({
   const [loading, setLoading] = useState(false);
 
   const fetchRoles = async () => {
-    const res = await api.get("/role");
+    const res = await api.get("/roles");
     setRoles(res.data);
   };
 
@@ -50,14 +50,14 @@ export function UserForm({
     setLoading(true);
     try {
       if (mode === "edit") {
-        await api.patch(`/user/${defaultData._id}`, {
+        await api.patch(`/users/${defaultData._id}`, {
           email,
           name,
           role: roleId,
         });
         alert(t("userform.update_success"));
       } else {
-        await api.post("/user", {
+        await api.post("/users", {
           email,
           name,
           password,
@@ -80,7 +80,7 @@ export function UserForm({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 text-black">
       {loading ? (
         <div className="animate-pulse w-full h-10 bg-gray-200 rounded mb-4" />
       ) : (
