@@ -16,7 +16,7 @@ import { sleep } from '@/utils/functions';
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { DEBUG_CONFIG } from '@/utils/constants';
+import { LIMIT_CONFIG } from '@/utils/constants';
 
 const ttvSearchPath = 'https://truyen.tangthuvien.vn/tong-hop?rank=vw&page=';
 
@@ -52,8 +52,8 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       );
 
       if (
-        currentStories.length >= DEBUG_CONFIG.DEMO_STORIES_NUMBER &&
-        DEBUG_CONFIG.ON
+        currentStories.length >= LIMIT_CONFIG.DEMO_STORIES_NUMBER &&
+        LIMIT_CONFIG.ON
       ) {
         // Nếu đang ở chế độ demo, chỉ lấy một số lượng stories nhất định
         this.logData(
@@ -88,7 +88,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       );
 
       for (let p = lastCrawlRecord.currentPage; p <= totalPage; p++) {
-        if (DEBUG_CONFIG.ON && p > DEBUG_CONFIG.DEMO_CRAWL_PAGES) {
+        if (LIMIT_CONFIG.ON && p > LIMIT_CONFIG.DEMO_CRAWL_PAGES) {
           this.logData(`>> DEMO MODE: Stopping at page ${p}`);
           break;
         }
@@ -418,8 +418,8 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
 
       for (const chapterIndex in listChapters) {
         if (
-          DEBUG_CONFIG.ON &&
-          Number(chapterIndex) >= DEBUG_CONFIG.DEMO_CHAPTERS_NUMBER
+          LIMIT_CONFIG.ON &&
+          Number(chapterIndex) >= LIMIT_CONFIG.DEMO_CHAPTERS_NUMBER
         ) {
           this.logData(`>> DEMO MODE: Stopping at chapter ${chapterIndex}`);
           break;

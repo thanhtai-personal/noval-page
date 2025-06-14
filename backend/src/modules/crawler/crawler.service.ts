@@ -14,7 +14,7 @@ import { sleep } from '@/utils/functions';
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { DEBUG_CONFIG } from '@/utils/constants';
+import { LIMIT_CONFIG } from '@/utils/constants';
 
 @Injectable()
 export class CrawlerService {
@@ -72,10 +72,10 @@ export class CrawlerService {
         .populate('source');
 
       for (const storyIndex in allCrawledStories) {
-        if (DEBUG_CONFIG.ON && DEBUG_CONFIG.DEMO_STORIES_NUMBER > 0) {
-          if (Number(storyIndex) >= DEBUG_CONFIG.DEMO_STORIES_NUMBER) {
+        if (LIMIT_CONFIG.ON && LIMIT_CONFIG.DEMO_STORIES_NUMBER > 0) {
+          if (Number(storyIndex) >= LIMIT_CONFIG.DEMO_STORIES_NUMBER) {
             this.logData(
-              `Reached demo limit of ${DEBUG_CONFIG.DEMO_STORIES_NUMBER} stories, skipping further crawls.`,
+              `Reached demo limit of ${LIMIT_CONFIG.DEMO_STORIES_NUMBER} stories, skipping further crawls.`,
               source,
             );
             break;
