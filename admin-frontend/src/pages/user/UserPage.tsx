@@ -65,6 +65,11 @@ export default function AdminUserPage() {
     }
   };
 
+  const unbanUser = async (id: string) => {
+      await api.post(`/users/${id}/unban`);
+      fetchUsers();
+  };
+
   const deleteUser = async (id: string) => {
     if (!confirm(t('user.isDelete'))) return;
     try {
@@ -141,17 +146,19 @@ export default function AdminUserPage() {
               <TableCell>{u.name}</TableCell>
               <TableCell>{u.role?.name || '—'}</TableCell>
               <TableCell className="space-x-2">
-                <Button size="sm" variant="outline" onClick={() => banUser(u._id)}>{t('user.ban')}</Button>
+                {u.banned ? (<Button size="sm" variant="destructive" onClick={() => unbanUser(u._id)}>{t('user.unban')}</Button>) : (
+                  <Button size="sm" variant="outline" onClick={() => banUser(u._id)}>{t('user.ban')}</Button>
+                )}
                 <Drawer>
                   <DrawerTrigger asChild>
                     <Button size="sm" variant="outline">{t('user.edit')}</Button>
                   </DrawerTrigger>
                   <DrawerContent>
                     <DrawerHeader>
-                      <DrawerTitle>{t('user.add_title')}</DrawerTitle>
+                      <DrawerTitle>{t('userform.update')}</DrawerTitle>
                     </DrawerHeader>
                     <div className="p-4">
-                      <UserForm onSuccess={fetchUsers} defaultData={u} />
+                      <UserForm mode='edit' onSuccess={fetchUsers} defaultData={u} />
                     </div>
                   </DrawerContent>
                 </Drawer>

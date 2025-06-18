@@ -46,6 +46,7 @@
   "user.role": "Vai trò",
   "user.action": "Hành động",
   "user.ban": "Cấm",
+  "user.unban": "Bỏ cấm",
   "user.edit": "Sửa",
   "user.delete": "Xóa",
   "user.prev": "Trước",

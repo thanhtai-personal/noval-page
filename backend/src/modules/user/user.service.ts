@@ -81,4 +81,8 @@ export class UserService {
   async ban(id: string) {
     return this.userModel.findByIdAndUpdate(id, { banned: true });
   }
+
+  async unban(id: string) {
+    return this.userModel.findByIdAndUpdate(id, { banned: false });
+  }
 }

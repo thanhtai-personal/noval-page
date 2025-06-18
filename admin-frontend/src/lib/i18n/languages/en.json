@@ -46,6 +46,7 @@
   "user.role": "Role",
   "user.action": "Action",
   "user.ban": "Ban",
+  "user.unban": "Unban",
   "user.edit": "Edit",
   "user.delete": "Delete",
   "user.prev": "Previous",

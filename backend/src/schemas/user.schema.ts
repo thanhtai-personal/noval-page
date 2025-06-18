@@ -12,8 +12,23 @@ export class User extends Document {
   @Prop({ required: true, unique: true })
   email: string;
 
+  @Prop({  })
+  name: string;
+
+  @Prop({ default: false })
+  banned: boolean;
+
   @Prop({ type: Types.ObjectId, ref: 'Role' })
   role: Types.ObjectId;
+
+  @Prop({ type: Types.ObjectId, ref: 'Level' })
+  level?:  Types.ObjectId;
+
+  @Prop({ default: 0 })
+  exp?: number;
+
+  @Prop({ default: 0 })
+  coin?: number;
 
   @Prop()
   refreshToken?: string;

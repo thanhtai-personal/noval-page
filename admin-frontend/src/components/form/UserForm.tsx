@@ -41,7 +41,9 @@ export function UserForm({
     fetchRoles();
   }, []);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!email || !roleId || (mode === "create" && !password)) {
       alert(t("userform.required"));
       return;

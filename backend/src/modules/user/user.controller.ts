@@ -48,4 +48,10 @@ export class UserController {
   ban(@Param('id') id: string) {
     return this.userService.ban(id);
   }
+
+  @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
+  @Post(':id/unban')
+  unban(@Param('id') id: string) {
+    return this.userService.unban(id);
+  }
 }
