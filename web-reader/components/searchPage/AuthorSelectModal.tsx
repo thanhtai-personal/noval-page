@@ -110,7 +110,7 @@ export function AuthorSelectModal({
                   </div>
                 ) : (
                   <div></div>
-                )
+                ),
               )
             )}
           </div>

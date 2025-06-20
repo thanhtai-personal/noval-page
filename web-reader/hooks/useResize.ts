@@ -13,9 +13,9 @@ export const useResize = (callback: () => void) => {
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
-    
+
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, [callback]);
-}
+};

@@ -23,7 +23,6 @@ import { FacebookIcon } from "@/components/default/icons";
 import { LogoIcon } from "@/assets/icons/Logo";
 import { observer } from "mobx-react-lite";
 import { useAppStore } from "@/store/Provider";
-import { Button } from "@heroui/button";
 
 export const Navbar = observer(() => {
   const t = useTranslations("nav");
@@ -50,7 +49,7 @@ export const Navbar = observer(() => {
               <NextLink
                 className={clsx(
                   linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium"
+                  "data-[active=true]:text-primary data-[active=true]:font-medium",
                 )}
                 color="foreground"
                 href={item.href}

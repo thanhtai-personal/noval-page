@@ -2,14 +2,13 @@
 
 import styles from "./galaxybackground.module.css";
 import { useEffect } from "react";
-import * as THREE from 'three';
+import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { observer } from "mobx-react-lite";
 import { isMobile } from "@/utils/funtions";
 import { useAppStore } from "@/store/Provider";
 
 const GalaxyBackground = (props: any) => {
-
   const appStore = useAppStore();
 
   useEffect(() => {
@@ -32,8 +31,9 @@ const GalaxyBackground = (props: any) => {
       height: window.innerHeight,
     };
 
-
-    const canvas = document.querySelector(`#canvas-${props.id}`) as HTMLCanvasElement | null;
+    const canvas = document.querySelector(
+      `#canvas-${props.id}`,
+    ) as HTMLCanvasElement | null;
 
     const scene = new THREE.Scene();
 
@@ -100,13 +100,13 @@ const GalaxyBackground = (props: any) => {
 
       geometry.setAttribute(
         "position",
-        new THREE.BufferAttribute(positions, 3)
+        new THREE.BufferAttribute(positions, 3),
       );
       geometry.setAttribute("aScale", new THREE.BufferAttribute(scales, 1));
       geometry.setAttribute("aColor", new THREE.BufferAttribute(colors, 3));
       geometry.setAttribute(
         "aRandomness",
-        new THREE.BufferAttribute(randomness, 3)
+        new THREE.BufferAttribute(randomness, 3),
       );
 
       material = new THREE.ShaderMaterial({
@@ -188,12 +188,12 @@ const GalaxyBackground = (props: any) => {
     };
 
     generateGalaxy();
-    
+
     const camera = new THREE.PerspectiveCamera(
       75,
       sizes.width / sizes.height,
       0.1,
-      100
+      100,
     );
     camera.position.x = 3;
     camera.position.y = 2;
@@ -256,11 +256,14 @@ const GalaxyBackground = (props: any) => {
   }, [appStore.animationMode, props.id]);
 
   if (isMobile() || appStore.animationMode === false) {
-    return '';
+    return "";
   }
 
   return (
-    <canvas className={`${styles.galaxybg} pointer-events-none`} id={`canvas-${props.id}`} ></canvas>
+    <canvas
+      className={`${styles.galaxybg} pointer-events-none`}
+      id={`canvas-${props.id}`}
+    ></canvas>
   );
 };
 

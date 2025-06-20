@@ -4,11 +4,13 @@ import { useResize } from "@/hooks/useResize";
 import { useAppStore } from "@/store/Provider";
 import { isMobile } from "@/utils/funtions";
 import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import GalaxyBackground from "@/components/animations/backgrounds/GalaxyBackground";
 
-import isLandChain from "@/assets/sprites/islandChain/islandchain.png";
+// import isLandChain from "@/assets/sprites/islandChain/islandchain.png";
+import Model3DContainer from "@/components/3dmodels/3DContainer";
+import { FantasyIsland3DModel } from "@/components/3dmodels/models/FantasyIsland";
 
 export const BottomSprites = observer(() => {
   const appStore = useAppStore();
@@ -42,6 +44,19 @@ export const BottomSprites = observer(() => {
               right: 0,
             }}
           /> */}
+
+
+        <div className=" absolute bottom-[200px] left-0 w-full h-screen z-0 opacity-50">
+          <Model3DContainer
+            camera={{ position: [0, 0, 10], fov: 30 }}
+            ambientLight={{ intensity: 1 }}
+            directionalLight={{ intensity: 1, position: [10, 10, 10] }}
+            // controlled
+            // devTools
+          >
+            <FantasyIsland3DModel rotate scale={0.0038} />
+          </Model3DContainer>
+        </div>
         <GalaxyBackground />
       </div>
     </div>

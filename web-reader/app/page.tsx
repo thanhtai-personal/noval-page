@@ -27,13 +27,13 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       const recommendRes = await ApiInstant.get(
-        "/stories?sort=recommends&limit=8"
+        "/stories?sort=recommends&limit=8",
       );
       const viewRes = await ApiInstant.get("/stories?sort=views&limit=8");
       const voteRes = await ApiInstant.get("/stories?sort=votes&limit=5");
       const likeRes = await ApiInstant.get("/stories?sort=likes&limit=8");
       const chapterRes = await ApiInstant.get(
-        "/stories?sort=totalChapters&limit=8"
+        "/stories?sort=totalChapters&limit=8",
       );
 
       setTopView(viewRes.data?.data || []);
@@ -80,7 +80,7 @@ export default function HomePage() {
               <StoryCard key={story._id} isSlide story={story} />
             ) : (
               <StoryCardSkeleton key={`skeleton-${i}`} />
-            )
+            ),
           )}
         </Slider>
         <FireLine />

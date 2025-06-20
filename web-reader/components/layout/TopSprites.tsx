@@ -63,7 +63,7 @@ export const TopSprites = observer(() => {
           <DNA2 />
         </div>
 
-        <div className="absolute -top-[40px] -left-[50vw] w-full h-full z-0">
+        <div className="absolute -top-[40px] -left-[50vw] w-full h-full z-50">
           <DNA />
         </div>
       </div>

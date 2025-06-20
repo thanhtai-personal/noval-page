@@ -24,7 +24,7 @@ export const AppLayout = observer(({ children }: any) => {
 
         {store.useLayout && <Navbar />}
         <WallPaperBg1>
-          <main className="relative container mx-auto max-w-7xl px-6 flex-grow bg-transparent z-[5]">
+          <main className="relative container mx-auto max-w-7xl lg:pb-[300px] px-6 flex-grow bg-transparent z-[5]">
             {children}
           </main>
         </WallPaperBg1>

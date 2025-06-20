@@ -13,9 +13,7 @@ import { useAppStore } from "@/store/Provider";
 import { isMobile } from "@/utils/funtions";
 import { bgOptions, colorOptions } from "./constants";
 
-export const ChapterPageClient = observer(({
-  chapter,
-}: any) => {
+export const ChapterPageClient = observer(({ chapter }: any) => {
   const router = useRouter();
   const { slug } = useParams();
   const [nextChapter, setNextChapter] = useState<any>(null);
@@ -37,13 +35,12 @@ export const ChapterPageClient = observer(({
     };
   }, []);
 
-
   useEffect(() => {
     if (!chapter) return;
     const fetchNextChapter = async () => {
       try {
         const res = await ApiInstant.get(
-          `/stories/${slug}/chapters/prev-and-next/${chapter.chapterNumber}`
+          `/stories/${slug}/chapters/prev-and-next/${chapter.chapterNumber}`,
         );
 
         setNextChapter(res.data.next || null);

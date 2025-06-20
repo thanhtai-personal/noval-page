@@ -4,9 +4,7 @@ const Neon = ({ children, className, ...props }: any) => {
   return (
     <div className={`${styles.container} ${className}`} {...props}>
       <div className={styles.btnNeon}>
-        <div className="w-full px-3 py-2">
-          {children}
-        </div>
+        <div className="w-full px-3 py-2">{children}</div>
       </div>
     </div>
   );
@@ -16,9 +14,7 @@ const Explosion = ({ children, className, ...props }: any) => {
   return (
     <div className={`${styles.container} ${className}`} {...props}>
       <div className={styles.btnExplosion}>
-        <div className="w-full px-3 py-2">
-          {children}
-        </div>
+        <div className="w-full px-3 py-2">{children}</div>
       </div>
     </div>
   );
@@ -28,9 +24,7 @@ const Liquid = ({ children, className, ...props }: any) => {
   return (
     <div className={`${styles.container} ${className}`} {...props}>
       <div className={styles.btnLiquid}>
-        <div className="w-full px-3 py-2">
-          {children}
-        </div>
+        <div className="w-full px-3 py-2">{children}</div>
       </div>
     </div>
   );
@@ -40,9 +34,7 @@ const Split = ({ children, className, ...props }: any) => {
   return (
     <div className={`${styles.container} ${className}`} {...props}>
       <div className={styles.btnSplit}>
-        <div className="w-full px-3 py-2">
-          {children}
-        </div>
+        <div className="w-full px-3 py-2">{children}</div>
       </div>
     </div>
   );
@@ -52,9 +44,7 @@ const Morph = ({ children, className, ...props }: any) => {
   return (
     <div className={`${styles.container} ${className}`} {...props}>
       <div className={styles.btnMorph}>
-        <div className="w-full px-3 py-2">
-          {children}
-        </div>
+        <div className="w-full px-3 py-2">{children}</div>
       </div>
     </div>
   );
@@ -64,9 +54,7 @@ const Shake = ({ children, className, ...props }: any) => {
   return (
     <div className={`${styles.container} ${className}`} {...props}>
       <div className={styles.btnShake}>
-        <div className="w-full px-3 py-2">
-          {children}
-        </div>
+        <div className="w-full px-3 py-2">{children}</div>
       </div>
     </div>
   );
@@ -76,9 +64,7 @@ const Glitch = ({ children, className, ...props }: any) => {
   return (
     <div className={`${styles.container} ${className}`} {...props}>
       <div className={styles.btnGlitch}>
-        <div className="w-full px-3 py-2">
-          {children}
-        </div>
+        <div className="w-full px-3 py-2">{children}</div>
       </div>
     </div>
   );
@@ -88,9 +74,7 @@ const Lightning = ({ children, className, ...props }: any) => {
   return (
     <div className={`${styles.container} ${className}`} {...props}>
       <div className={styles.btnLightning}>
-        <div className="w-full px-3 py-2">
-          {children}
-        </div>
+        <div className="w-full px-3 py-2">{children}</div>
       </div>
     </div>
   );
@@ -100,9 +84,7 @@ const Pulse = ({ children, className, ...props }: any) => {
   return (
     <div className={`${styles.container} ${className}`} {...props}>
       <div className={styles.btnPulse}>
-        <div className="w-full px-3 py-2">
-          {children}
-        </div>
+        <div className="w-full px-3 py-2">{children}</div>
       </div>
     </div>
   );
@@ -112,9 +94,7 @@ const Blur = ({ children, className, ...props }: any) => {
   return (
     <div className={`${styles.container} ${className}`} {...props}>
       <div className={styles.btnBlur}>
-        <div className="w-full px-3 py-2">
-          {children}
-        </div>
+        <div className="w-full px-3 py-2">{children}</div>
       </div>
     </div>
   );
@@ -176,5 +156,5 @@ export default {
   Lightning,
   Pulse,
   Blur,
-  Example
-}
+  Example,
+};

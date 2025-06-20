@@ -5,11 +5,11 @@ import { notFound } from "next/navigation";
 
 async function getChapter(
   storySlug: string,
-  chapterSlug: string
+  chapterSlug: string,
 ): Promise<any | null> {
   try {
     const res = await ApiInstant.get(
-      `/stories/${storySlug}/chapters/${chapterSlug}`
+      `/stories/${storySlug}/chapters/${chapterSlug}`,
     );
     return res.data || null;
   } catch {

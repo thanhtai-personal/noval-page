@@ -191,7 +191,8 @@
     transform: scale(0.18);
   } */
 
-  70%, 100% {
+  70%,
+  100% {
     transform: scale(1);
   }
 }

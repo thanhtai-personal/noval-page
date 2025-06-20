@@ -51,7 +51,9 @@ export const ThreeDCardHover = observer(({ children, id }: any) => {
         onMouseLeave={handleMouseLeave}
         onMouseMove={handleMouseMove}
       >
-        <div className={`${styles.glowCard} ${styles.animatedGradient} w-full h-full`}>
+        <div
+          className={`${styles.glowCard} ${styles.animatedGradient} w-full h-full`}
+        >
           <div className={`${styles.inner} w-full h-full`}>{children}</div>
         </div>
       </div>

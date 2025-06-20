@@ -14,7 +14,9 @@ export class AppStore {
 
   constructor() {
     makeAutoObservable(this);
-    this.animationMode = Boolean(localStorage?.getItem("animationMode") === "true");
+    this.animationMode = Boolean(
+      localStorage?.getItem("animationMode") === "true",
+    );
     this.fetchProfile();
   }
 

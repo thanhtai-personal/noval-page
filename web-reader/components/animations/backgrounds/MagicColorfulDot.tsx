@@ -63,8 +63,8 @@ const MagicColorfulDot = (props: any) => {
         createPoint(
           Math.random() * c.width,
           Math.random() * c.height,
-          Math.floor(Math.random() * palette.length)
-        )
+          Math.floor(Math.random() * palette.length),
+        ),
       );
     }
 
