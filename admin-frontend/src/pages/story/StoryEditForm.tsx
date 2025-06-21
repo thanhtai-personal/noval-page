@@ -24,9 +24,9 @@ export default function StoryEditForm({
   const { t } = useI18n();
   const [editStory, setEditStory] = useState<any>({ ...story });
   const [tagInput, setTagInput] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const pageSize = 10; // số chương mỗi trang
+  // const pageSize = 10; // số chương mỗi trang
 
   useEffect(() => {
     setEditStory({ ...story });
@@ -68,15 +68,15 @@ export default function StoryEditForm({
   };
 
   // Giả sử editStory.chapters là mảng các chương
-  const sortedChapters = (editStory?.chapters || [])
-    .slice()
-    .sort((a: any, b: any) => b.chapterNumber - a.chapterNumber);
+  // const sortedChapters = (editStory?.chapters || [])
+  //   .slice()
+  //   .sort((a: any, b: any) => b.chapterNumber - a.chapterNumber);
 
-  const totalPages = Math.ceil(sortedChapters.length / pageSize);
-  const pagedChapters = sortedChapters.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+  // const totalPages = Math.ceil(sortedChapters.length / pageSize);
+  // const pagedChapters = sortedChapters.slice(
+  //   (currentPage - 1) * pageSize,
+  //   currentPage * pageSize
+  // );
 
   return (
     <>

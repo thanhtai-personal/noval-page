@@ -9,7 +9,7 @@ import { useI18n } from '@/lib/i18n/i18n';
 
 export const Sidebar = () => {
   const location = useLocation();
-  const { t, locale, setLocale } = useI18n();
+  const { t } = useI18n();
 
   const links = [
     { to: '/stories', label: t('sidebar.stories') },

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
@@ -16,7 +16,6 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import ChapterEditForm, { Chapter } from "./ChapterEditForm";
 
@@ -48,7 +47,7 @@ export default function StoryDetailView({
   const handleEditChapter = (chapter: Chapter) => setEditingChapter(chapter);
   const handleCloseDrawer = () => setEditingChapter(null);
 
-  const handleSaveChapter = async (data: Chapter) => {
+  const handleSaveChapter = async (_data: Chapter) => {
     // TODO: Gọi API cập nhật chương ở đây
     // await updateChapter(data);
     handleCloseDrawer();
