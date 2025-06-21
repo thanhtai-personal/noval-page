@@ -41,17 +41,17 @@ export class AppStore {
   setAnimations(config: AnimationProps) {
     this.animations = {
       ...this.animations,
-      ...config
-    }
+      ...config,
+    };
   }
 
   resetAnimations() {
     this.animations = {
-    useIsland: true,
-    useDNA: true,
-    useUniverseBg: true,
-    useFantasyIsland: true,
-    }
+      useIsland: true,
+      useDNA: true,
+      useUniverseBg: true,
+      useFantasyIsland: true,
+    };
   }
 
   toggleAnimationMode(value?: boolean) {

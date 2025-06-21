@@ -35,41 +35,47 @@ export const TopSprites = observer(() => {
   return (
     <div className="absolute w-full h-full z-[1] bg-transparent">
       <div className="relative w-full h-full z-[1]">
-        {appStore.animations?.useIsland && <>
-          <Sprite
-            images={[islandPng]}
-            width={450}
-            layer={0}
-            position={{
-              top: windowSize.height - 300,
-              left: windowSize.width - 500,
-            }}
-          />
+        {appStore.animations?.useIsland && (
+          <>
+            <Sprite
+              images={[islandPng]}
+              width={450}
+              layer={0}
+              position={{
+                top: windowSize.height - 300,
+                left: windowSize.width - 500,
+              }}
+            />
 
-          <div className="absolute top-[calc(100vh-0px)] left-[calc(50vw-250px)] w-full h-full z-0">
-            <DNA2 />
+            <div className="absolute top-[calc(100vh-0px)] left-[calc(50vw-250px)] w-full h-full z-0">
+              <DNA2 />
+            </div>
+          </>
+        )}
+
+        {appStore.animations?.useIsland && (
+          <>
+            <Sprite
+              images={[islandPng2]}
+              width={450}
+              layer={0}
+              position={{
+                top: windowSize.height + 500,
+                left: 0,
+              }}
+            />
+
+            <div className="absolute top-[calc(100vh+800px)] left-[calc(-50vw+225px)] w-full h-full z-0">
+              <DNA2 />
+            </div>
+          </>
+        )}
+
+        {appStore.animations?.useDNA && (
+          <div className="absolute -top-[40px] -left-[50vw] w-full h-full z-50">
+            <DNA />
           </div>
-        </>}
-
-        {appStore.animations?.useIsland && <>
-          <Sprite
-            images={[islandPng2]}
-            width={450}
-            layer={0}
-            position={{
-              top: windowSize.height + 500,
-              left: 0,
-            }}
-          />
-
-          <div className="absolute top-[calc(100vh+800px)] left-[calc(-50vw+225px)] w-full h-full z-0">
-            <DNA2 />
-          </div>
-        </>}
-
-        {appStore.animations?.useDNA && <div className="absolute -top-[40px] -left-[50vw] w-full h-full z-50">
-          <DNA />
-        </div>}
+        )}
       </div>
     </div>
   );

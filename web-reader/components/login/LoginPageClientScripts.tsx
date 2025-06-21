@@ -5,7 +5,6 @@ import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 
 export const LoginPageClientScripts = observer(() => {
-
   const appStore = useAppStore();
 
   useEffect(() => {
@@ -16,8 +15,8 @@ export const LoginPageClientScripts = observer(() => {
 
     return () => {
       appStore.resetAnimations();
-    }
-  }, [])
+    };
+  }, []);
 
-  return '';
-})
+  return "";
+});

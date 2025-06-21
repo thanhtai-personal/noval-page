@@ -2,18 +2,30 @@ import { useGoogleLogin } from "@react-oauth/google";
 
 export const GoogleLoginButton = ({
   handleLoginSuccess,
-  label
-}: any) => {
-
+  label,
+}: {
+  handleLoginSuccess: (codeResponse: { code: string }) => void;
+  label: string;
+}) => {
   const login = useGoogleLogin({
-    onSuccess: (data: any) => {
-      console.log('login data', data)
-      handleLoginSuccess?.(data);
+    flow: "auth-code", // auth-code flow
+    onSuccess: (codeResponse) => {
+      console.log("Authorization code:", codeResponse.code);
+      handleLoginSuccess(codeResponse); // will send `code` to backend
     },
-    flow: 'auth-code',
+    onError: (error) => {
+      console.error("Google login error:", error);
+    },
   });
 
   return (
-    <a href="" onClick={() => login()}>{label}</a>
-  )
-}
+    <button
+      onClick={(e) => {
+        e.preventDefault();
+        login();
+      }}
+    >
+      {label}
+    </button>
+  );
+};

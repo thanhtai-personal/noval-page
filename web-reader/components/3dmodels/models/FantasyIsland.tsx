@@ -8,7 +8,7 @@ export const FantasyIsland3DModel: React.FC<any> = ({
   rotate = false,
 }: any) => {
   const gltf = useGLTF("models/fantasy_mystical_island.glb");
-  useRotate(rotate)
+  useRotate(rotate);
 
   return <primitive object={gltf.scene} scale={scale} />;
 };

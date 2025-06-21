@@ -3,9 +3,13 @@
 import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Loader } from "./Loader";
-import { GizmoHelper, GizmoViewport, OrbitControls, Text } from "@react-three/drei";
+import {
+  GizmoHelper,
+  GizmoViewport,
+  OrbitControls,
+  Text,
+} from "@react-three/drei";
 import CameraPositionLabel from "./CameraPositionLabel";
-
 
 type Model3DContainerProps = {
   children?: React.ReactNode;
@@ -16,7 +20,7 @@ type Model3DContainerProps = {
   camera: any;
   devTools?: boolean;
   [key: string]: any;
-}
+};
 
 const Model3DContainer: React.FC<any> = ({
   children,
@@ -28,7 +32,6 @@ const Model3DContainer: React.FC<any> = ({
   devTools = false,
   ...props
 }: Model3DContainerProps) => {
-
   return (
     <Canvas {...props}>
       {ambientLight && <ambientLight {...ambientLight} />}
@@ -38,7 +41,10 @@ const Model3DContainer: React.FC<any> = ({
       {devTools && (
         <>
           <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
-            <GizmoViewport axisColors={['red', 'green', 'blue']} labelColor="white" />
+            <GizmoViewport
+              axisColors={["red", "green", "blue"]}
+              labelColor="white"
+            />
           </GizmoHelper>
           <CameraPositionLabel />
         </>

@@ -2,7 +2,6 @@ import { useThree } from "@react-three/fiber";
 import { useRef, useEffect } from "react";
 
 export const useRotate = (rotate?: boolean) => {
-
   const { camera } = useThree();
   const angleRef = useRef(0);
 
@@ -19,4 +18,4 @@ export const useRotate = (rotate?: boolean) => {
     animate();
     return () => cancelAnimationFrame(frameId);
   }, [camera, rotate]);
-}
+};

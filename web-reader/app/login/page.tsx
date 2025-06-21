@@ -9,22 +9,22 @@ import { appStore } from "@/store/AppStore.store";
 import { ApiInstant } from "@/utils/api";
 import { LoginPageClientScripts } from "@/components/login/LoginPageClientScripts";
 
-import styles from "./login.module.css"
+import styles from "./login.module.css";
 import { GoogleLoginButton } from "@/components/login/GoogleLoginButton";
 
 export default function LoginPage() {
   const t = useTranslations("login");
   const router = useRouter();
 
-  const handleLoginSuccess = async (credentialResponse: any) => {
+  const handleLoginSuccess = async (codeResponse: { code: string }) => {
     try {
-      // This will trigger server to set the token in cookies
+      const { code } = codeResponse;
+
       await ApiInstant.post(`/auth/google`, {
-        idToken: credentialResponse.credential,
+        code,
       });
 
-      appStore.fetchProfile();
-
+      await appStore.fetchProfile();
       router.push("/");
     } catch (err) {
       console.error("Login failed", err);
@@ -52,10 +52,13 @@ export default function LoginPage() {
                   onSuccess={handleLoginSuccess}
                 /> */}
 
-                <div className={styles.group} >
+                <div className={styles.group}>
                   {/* <a href="#">Forgot Password</a> */}
                   {/* <a href="#">Sign up</a> */}
-                  <GoogleLoginButton label={t("login_with_google")} handleLoginSuccess={handleLoginSuccess}  />
+                  <GoogleLoginButton
+                    label={t("login_with_google")}
+                    handleLoginSuccess={handleLoginSuccess}
+                  />
                 </div>
               </div>
             </div>

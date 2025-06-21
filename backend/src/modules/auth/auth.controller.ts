@@ -36,7 +36,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const { access_token, refresh_token, user } =
-      await this.authService.loginWithGoogle(dto.idToken);
+      await this.authService.loginWithGoogle(dto.code);
 
     res.cookie('access_token', access_token, {
       httpOnly: true,
