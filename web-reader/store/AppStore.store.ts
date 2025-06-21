@@ -6,17 +6,26 @@ import { ApiInstant } from "@/utils/api";
 
 const localStorage = typeof window !== "undefined" ? window.localStorage : null;
 
+interface AnimationProps {
+  useIsland?: boolean;
+  useDNA?: boolean;
+  useUniverseBg?: boolean;
+  useFantasyIsland?: boolean;
+}
+
 export class AppStore {
   useLayout: boolean = true;
   profile: any = null;
   animationMode: boolean = false;
   useFooter: boolean = true;
+  animations: AnimationProps = {};
 
   constructor() {
     makeAutoObservable(this);
     this.animationMode = Boolean(
       localStorage?.getItem("animationMode") === "true",
     );
+    this.resetAnimations();
     this.fetchProfile();
   }
 
@@ -27,6 +36,22 @@ export class AppStore {
   }) {
     this.useLayout = config.useLayout || false;
     this.useFooter = config.useFooter || false;
+  }
+
+  setAnimations(config: AnimationProps) {
+    this.animations = {
+      ...this.animations,
+      ...config
+    }
+  }
+
+  resetAnimations() {
+    this.animations = {
+    useIsland: true,
+    useDNA: true,
+    useUniverseBg: true,
+    useFantasyIsland: true,
+    }
   }
 
   toggleAnimationMode(value?: boolean) {

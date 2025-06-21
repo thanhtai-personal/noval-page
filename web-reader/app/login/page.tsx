@@ -1,11 +1,16 @@
 "use client";
 
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+// import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { appStore } from "@/store/AppStore.store";
 import { ApiInstant } from "@/utils/api";
+import { LoginPageClientScripts } from "@/components/login/LoginPageClientScripts";
+
+import styles from "./login.module.css"
+import { GoogleLoginButton } from "@/components/login/GoogleLoginButton";
 
 export default function LoginPage() {
   const t = useTranslations("login");
@@ -28,13 +33,33 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-[calc(100vh-150px)] flex items-center justify-center">
+      <LoginPageClientScripts />
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
-        <div className="p-8 rounded shadow">
-          <h1 className="text-xl mb-4">{t("login_with_google")}</h1>
-          <GoogleLogin
-            onError={() => console.error(t("login_error"))}
-            onSuccess={handleLoginSuccess}
-          />
+        <div className="p-8 rounded shadow opacity-70">
+          <div className={styles.box}>
+            <div className={styles.login}>
+              <div className="loginBx flex flex-col justify-center items-center">
+                <h2 className={styles.h2}>
+                  <i className="fa-solid fa-right-to-bracket"></i>
+                  {t("login")}
+                  <i className="fa-solid fa-heart"></i>
+                </h2>
+                {/* <input type="text" placeholder="Username" className={styles.input} />
+                <input type="password" placeholder="Password" className={styles.input} />
+                <input type="submit" value="Sign in" className={styles.input} /> */}
+                {/* <GoogleLogin
+                  onError={() => console.error(t("login_error"))}
+                  onSuccess={handleLoginSuccess}
+                /> */}
+
+                <div className={styles.group} >
+                  {/* <a href="#">Forgot Password</a> */}
+                  {/* <a href="#">Sign up</a> */}
+                  <GoogleLoginButton label={t("login_with_google")} handleLoginSuccess={handleLoginSuccess}  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </GoogleOAuthProvider>
     </div>

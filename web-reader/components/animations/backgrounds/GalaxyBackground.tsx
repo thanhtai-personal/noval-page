@@ -15,7 +15,7 @@ const GalaxyBackground = (props: any) => {
     if (isMobile() || appStore.animationMode === false) return;
 
     const debugObject = {
-      count: 200000,
+      count: 100000,
       size: 15,
       branches: 4,
       radius: 3,
