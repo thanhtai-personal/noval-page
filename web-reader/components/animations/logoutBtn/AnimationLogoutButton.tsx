@@ -128,6 +128,7 @@ export const AnimationLogoutButton = ({
   onLogout,
   label,
   className,
+  title = '',
   ...props
 }: any = {}) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -176,6 +177,7 @@ export const AnimationLogoutButton = ({
     <div className={`${styles.body} ${className}`} {...props}>
       <button
         ref={buttonRef}
+        title={title}
         className={`${styles.logoutButton} ${styles.logoutButton__dark} ${styles.button}`}
       >
         <svg
@@ -224,7 +226,7 @@ export const AnimationLogoutButton = ({
           <path d="M93.4 86.3H58.6c-1.9 0-3.4-1.5-3.4-3.4V17.1c0-1.9 1.5-3.4 3.4-3.4h34.8c1.9 0 3.4 1.5 3.4 3.4v65.8c0 1.9-1.5 3.4-3.4 3.4z" />
           <circle cx="66" cy="50" r="3.7" />
         </svg>
-        <span className={styles.button_text}>{label || "Log Out"}</span>
+        {label && <span className={styles.button_text}>{label}</span>}
       </button>
     </div>
   );

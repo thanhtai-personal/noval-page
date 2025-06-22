@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 
 import { observer } from "mobx-react-lite";
 import { useAppStore } from "@/store/Provider";
+import { useTheme } from "next-themes";
 
 interface ReadItem {
   slug: string;
@@ -21,6 +22,7 @@ function ProfilePage() {
   const [readItems, setReadItems] = useState<ReadItem[]>([]);
   const [page, setPage] = useState(1);
   const appStore = useAppStore();
+  const { theme } = useTheme();
 
   useEffect(() => {
     const items: ReadItem[] = [];
@@ -40,12 +42,13 @@ function ProfilePage() {
     appStore.setAnimations({
       useIsland: false,
       useDNA: false,
+      useUniverseBg: theme === "dark"
     });
 
     return () => {
       appStore.resetAnimations();
     };
-  }, []);
+  }, [theme]);
 
   const totalPages = Math.ceil(readItems.length / PAGE_SIZE);
   const paginated = readItems.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);

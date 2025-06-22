@@ -39,6 +39,7 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
   });
 
   const ComponentWithChildren = Component as unknown as FC<any>;
+  const isDarkMode = !isSelected || isSSR;
 
   return (
     <ComponentWithChildren
@@ -72,7 +73,7 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
           ),
         })}
       >
-        {!isSelected || isSSR ? (
+        {isDarkMode ? (
           <SunFilledIcon size={22} />
         ) : (
           <MoonFilledIcon size={22} />
