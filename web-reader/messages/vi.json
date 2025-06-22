@@ -83,6 +83,8 @@
   },
   "login": {
     "login_with_google": "Đăng nhập bằng Google",
+    "click_to_login": "Nhấn để đăng nhập",
+    "google": "Google",
     "login": "Đăng nhập",
     "login_error": "Đăng nhập thất bại"
   },

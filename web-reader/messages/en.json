@@ -83,7 +83,9 @@
   },
   "login": {
     "login_with_google": "Login with Google",
+    "click_to_login": "Click to login",
     "login": "Login",
+    "google": "Google",
     "login_error": "Login failed"
   },
   "pricing": {
