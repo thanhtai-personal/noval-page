@@ -15,6 +15,7 @@ import { StoryCard } from "@/components/story/StoryCard";
 import { StoryCardSkeleton } from "@/components/story/StoryCardSkeleton";
 import { Fire1 } from "@/components/animations/fires/Fire1";
 import FireLine from "@/components/animations/fires/FireLine";
+import DeadlineLoading from "@/components/common/DeadLineLoading/DeadlineLoading";
 
 export default function HomePage() {
   const t = useTranslations("home");
