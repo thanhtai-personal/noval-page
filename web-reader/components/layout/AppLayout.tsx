@@ -8,6 +8,7 @@ import { useAppStore } from "@/store/Provider";
 import { Footer } from "./footer";
 import { BottomSprites } from "./BottomSprites";
 import { TopSprites } from "./TopSprites";
+import { EntertaimentMenu } from "./EntertaimentMenu";
 
 export const AppLayout = observer(({ children }: any) => {
   const store = useAppStore();
@@ -30,6 +31,9 @@ export const AppLayout = observer(({ children }: any) => {
         </WallPaperBg1>
         {store.useFooter && <Footer />}
       </div>
+      {store.useGameMenu && <div className="absolute bottom-0 right-0 flex justify-center items-center">
+        <EntertaimentMenu />
+      </div>}
     </div>
   );
 });

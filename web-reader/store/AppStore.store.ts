@@ -18,6 +18,7 @@ export class AppStore {
   profile: any = null;
   animationMode: boolean = false;
   useFooter: boolean = true;
+  useGameMenu: boolean = true;
   animations: AnimationProps = {};
 
   constructor() {

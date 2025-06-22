@@ -119,5 +119,10 @@
     "about": "About",
     "contact": "Contact",
     "copyright": "© 2025 Vô Ưu Các. All rights reserved."
+  },
+  "notFound": {
+    "look_like_you_re_lost": "Look like you're lost",
+    "page_not_available": "The page you are looking for not avaible!",
+    "go_to_home": "Go to Home"
   }
 }

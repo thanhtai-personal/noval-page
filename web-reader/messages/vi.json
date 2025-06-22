@@ -119,5 +119,10 @@
     "about": "Giới thiệu",
     "contact": "Liên hệ",
     "copyright": "© 2025 Vô Ưu Các. Tất cả quyền được bảo lưu."
+  },
+  "notFound": {
+    "look_like_you_re_lost": "Có vẻ như bạn đang bị lạc",
+    "page_not_available": "Trang bạn tìm kiếm không tồn tại!",
+    "go_to_home": "Về trang chủ"
   }
 }
