@@ -112,6 +112,7 @@
     "docs": "Documentation",
     "bestStories": "Best Stories",
     "logout": "Logout",
+    "login": "Login",
     "animationMode": "Animation Mode",
     "animationModeDesc": "Enabling this mode will make transitions smoother, but may slow down page loading."
   },

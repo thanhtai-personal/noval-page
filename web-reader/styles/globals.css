@@ -4,3 +4,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.perspective-container {
+  perspective: 800px;
+}
+
+.animation-button-green-appear,
+.animation-button-red-appear {
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+.animation-button-green-appear {
+  background: #808000;
+  border-radius: 8px;
+  animation: rotate_down 0.25s ease-in-out;
+}
+
+.animation-button-red-appear {
+  background: red;
+  border-radius: 8px;
+  animation: rotate_up 0.25s ease-in-out;
+}
+
+@keyframes rotate_down {
+  from {
+    transform: rotateX(0deg);
+  }
+
+  to {
+    transform: rotateX(90deg) translateY(50%);
+  }
+}
+
+@keyframes rotate_up {
+  from {
+    transform: rotateX(0deg);
+  }
+
+  to {
+    transform: rotateX(-90deg) translateY(50%);
+  }
+}

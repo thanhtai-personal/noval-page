@@ -112,6 +112,7 @@
     "docs": "Tài liệu",
     "bestStories": "Truyện hay nhất",
     "logout": "Đăng xuất",
+    "login": "Đăng nhập",
     "animationMode": "Chế độ hoạt hình",
     "animationModeDesc": "Chế độ này sẽ làm cho các hiệu ứng chuyển cảnh mượt mà hơn, nhưng có thể làm chậm tốc độ tải trang."
   },
