@@ -9,9 +9,9 @@ export const useRotate = (rotate?: boolean) => {
     if (!rotate) return;
     let frameId: number;
     const animate = () => {
-      angleRef.current += 0.01;
-      camera.position.x = Math.sin(angleRef.current) * 5;
-      camera.position.z = Math.cos(angleRef.current) * 5;
+      angleRef.current += 0.015;
+      camera.position.setX(Math.sin(angleRef.current) * 5);
+      camera.position.setZ(Math.cos(angleRef.current) * 5);
       camera.lookAt(0, 0, 0);
       frameId = requestAnimationFrame(animate);
     };

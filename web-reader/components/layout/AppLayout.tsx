@@ -14,7 +14,7 @@ export const AppLayout = observer(({ children }: any) => {
 
   return (
     <div className="relative flex flex-col h-screen max-w-[100vw] overflow-x-hidden overflow-y-auto">
-      <div className="relative flex flex-col justify-between w-full min-h-screen">
+      <div className="relative flex flex-col w-full">
         <div className="absolute w-full h-full">
           <div className="relative w-full h-full overflow-hidden">
             <TopSprites />

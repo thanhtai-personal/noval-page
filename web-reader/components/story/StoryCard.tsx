@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
-import { Badge } from "@heroui/badge";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
@@ -57,14 +56,14 @@ export const StoryCard = observer(
               </p>
               <div className="flex flex-wrap gap-1 mt-2">
                 {story.categories.map((cat) => (
-                  <Badge key={cat.slug} color="primary" variant="flat">
+                  <div key={cat.slug} color="primary">
                     {cat.name}
-                  </Badge>
+                  </div>
                 ))}
                 {story.tags.map((tag) => (
-                  <Badge key={tag.name} color="secondary" variant="flat">
+                  <div key={tag.name} color="secondary">
                     {tag.name}
-                  </Badge>
+                  </div>
                 ))}
               </div>
               <div className="mt-2 text-xs text-gray-500 space-y-1">

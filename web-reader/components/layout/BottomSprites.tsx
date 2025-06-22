@@ -8,7 +8,6 @@ import { useState } from "react";
 
 import GalaxyBackground from "@/components/animations/backgrounds/GalaxyBackground";
 
-// import isLandChain from "@/assets/sprites/islandChain/islandchain.png";
 import Model3DContainer from "@/components/3dmodels/3DContainer";
 import { FantasyIsland3DModel } from "@/components/3dmodels/models/FantasyIsland";
 
@@ -41,14 +40,15 @@ export const BottomSprites = observer(() => {
               camera={{ position: [0, 0, 10], fov: 30 }}
               ambientLight={{ intensity: 1 }}
               directionalLight={{ intensity: 1, position: [10, 10, 10] }}
-              // controlled
-              // devTools
+              id="FantasyIsland3DModel-footer"
             >
               <FantasyIsland3DModel rotate scale={0.0038} />
             </Model3DContainer>
           </div>
         )}
-        {appStore.animations.useUniverseBg && <GalaxyBackground />}
+        {appStore.animations.useUniverseBg && (
+          <GalaxyBackground id="GalaxyBackground-footer" />
+        )}
       </div>
     </div>
   );
