@@ -80,6 +80,7 @@ export class AuthService {
         picture: profile.picture,
       });
     } catch (err) {
+      //invalid_client error
       console.error('Google login error', err?.response?.data || err.message);
       throw new UnauthorizedException('Đăng nhập Google thất bại');
     }

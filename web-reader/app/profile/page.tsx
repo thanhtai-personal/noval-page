@@ -7,7 +7,8 @@ import { Avatar } from "@heroui/avatar";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
-import { appStore } from "@/store/AppStore.store";
+import { observer } from "mobx-react-lite";
+import { useAppStore } from "@/store/Provider";
 
 interface ReadItem {
   slug: string;
@@ -15,10 +16,11 @@ interface ReadItem {
 }
 const PAGE_SIZE = 20;
 
-export default function ProfilePage() {
+function ProfilePage() {
   const t = useTranslations("profile");
   const [readItems, setReadItems] = useState<ReadItem[]>([]);
   const [page, setPage] = useState(1);
+  const appStore = useAppStore();
 
   useEffect(() => {
     const items: ReadItem[] = [];
@@ -34,10 +36,19 @@ export default function ProfilePage() {
     setReadItems(items);
   }, []);
 
+  useEffect(() => {
+    appStore.setAnimations({
+      useIsland: false,
+      useDNA: false,
+    });
+
+    return () => {
+      appStore.resetAnimations();
+    };
+  }, []);
+
   const totalPages = Math.ceil(readItems.length / PAGE_SIZE);
   const paginated = readItems.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-
-  console.log("profile", appStore.profile);
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
@@ -87,3 +98,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+export default observer(ProfilePage);
