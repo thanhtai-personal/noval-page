@@ -31,9 +31,11 @@ export const AppLayout = observer(({ children }: any) => {
         </WallPaperBg1>
         {store.useFooter && <Footer />}
       </div>
-      {store.useGameMenu && <div className="absolute bottom-0 right-0 flex justify-center items-center">
-        <EntertaimentMenu />
-      </div>}
+      {store.useGameMenu && (
+        <div className="absolute bottom-0 right-0 flex justify-center items-center">
+          <EntertaimentMenu />
+        </div>
+      )}
     </div>
   );
 });

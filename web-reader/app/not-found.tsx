@@ -4,11 +4,11 @@ import { useTranslations } from "next-intl";
 import { observer } from "mobx-react-lite";
 import { useAppStore } from "@/store/Provider";
 import { useEffect } from "react";
-import styles from "./not-found.module.css"
+import styles from "./not-found.module.css";
 import Link from "next/link";
 
 function NotFoundPage() {
-  const t = useTranslations('notFound');
+  const t = useTranslations("notFound");
   const store = useAppStore();
 
   useEffect(() => {
@@ -21,8 +21,8 @@ function NotFoundPage() {
 
     return () => {
       store.resetAnimations();
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <section className={styles.page_404}>
@@ -34,13 +34,13 @@ function NotFoundPage() {
                 <h1 className="text-center ">404</h1>
               </div>
               <div className={`${styles.contant_box_404} text-black`}>
-                <h3 className="h2">
-                  {t('look_like_you_re_lost')}
-                </h3>
+                <h3 className="h2">{t("look_like_you_re_lost")}</h3>
 
-                <p>{t('page_not_available')}</p>
+                <p>{t("page_not_available")}</p>
 
-                <Link href={"/"} className={styles.link_404}>{t('go_to_home')}</Link>
+                <Link href={"/"} className={styles.link_404}>
+                  {t("go_to_home")}
+                </Link>
               </div>
             </div>
           </div>

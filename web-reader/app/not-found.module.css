@@ -2,11 +2,10 @@
     404 page
 =======================*/
 
-
 .page_404 {
   padding: 40px 0;
   background: #fff;
-  font-family: 'Arvo', serif;
+  font-family: "Arvo", serif;
 }
 
 .page_404 img {
@@ -20,7 +19,6 @@
   min-height: 100vh;
   background-size: 100% 100%;
 }
-
 
 .four_zero_four_bg h1 {
   font-size: 80px;
