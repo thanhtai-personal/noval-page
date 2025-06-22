@@ -5,44 +5,44 @@
 @tailwind components;
 @tailwind utilities;
 
-.perspective-container {
-  perspective: 800px;
+.animation-button-rotate-out {
+  animation: rotateOut 0.35s ease forwards;
+  transform-origin: bottom center;
+  backface-visibility: hidden;
 }
 
-.animation-button-green-appear,
-.animation-button-red-appear {
-  transform-style: preserve-3d;
-  will-change: transform, opacity;
+.animation-button-rotate-in {
+  animation: rotateIn 0.35s ease forwards;
+  transform-origin: bottom center;
+  backface-visibility: hidden;
 }
 
-.animation-button-green-appear {
-  background: #808000;
+.logout-btn {
   border-radius: 8px;
-  animation: rotate_down 0.25s ease-in-out;
 }
 
-.animation-button-red-appear {
-  background: red;
+.login-btn {
   border-radius: 8px;
-  animation: rotate_up 0.25s ease-in-out;
 }
 
-@keyframes rotate_down {
+@keyframes rotateOut {
   from {
     transform: rotateX(0deg);
+    opacity: 1;
   }
-
   to {
-    transform: rotateX(90deg) translateY(50%);
+    transform: rotateX(-90deg);
+    opacity: 0;
   }
 }
 
-@keyframes rotate_up {
+@keyframes rotateIn {
   from {
-    transform: rotateX(0deg);
+    transform: rotateX(-90deg);
+    opacity: 0;
   }
-
   to {
-    transform: rotateX(-90deg) translateY(50%);
+    transform: rotateX(0deg);
+    opacity: 1;
   }
 }
