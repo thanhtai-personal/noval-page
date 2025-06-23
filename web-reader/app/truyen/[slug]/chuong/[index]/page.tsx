@@ -1,7 +1,11 @@
-import { ChapterPageClient } from "@/components/chapter/ChapterDetailPageClient";
 import { ApiInstant } from "@/utils/api";
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
+
+const ChapterPageClient = dynamic(
+  () => import("@/components/chapter/ChapterDetailPageClient")
+);
 
 async function getChapter(
   storySlug: string,

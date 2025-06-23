@@ -1,10 +1,13 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-// import { useTranslations } from "next-intl";
 
 import { ApiInstant } from "@/utils/api";
 import { Story } from "@/types/interfaces/story";
-import { StoryDetailClient } from "@/components/story/StoryDetailClient";
+import dynamic from "next/dynamic";
+
+const StoryDetailClient = dynamic(
+  () => import("@/components/story/StoryDetailClient")
+);
 
 async function fetchStory(slug: string): Promise<any | null> {
   try {

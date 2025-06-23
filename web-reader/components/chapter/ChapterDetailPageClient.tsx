@@ -198,3 +198,5 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
     </div>
   );
 });
+
+export default ChapterPageClient;
