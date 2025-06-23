@@ -23,7 +23,7 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
   const [bgColor, setBgColor] = useState("#fff");
   const [color, setColor] = useState("#000");
   const [brightness, setBrightness] = useState(100);
-  const [content, setContent] = useState(chapter.content)
+  const [content, setContent] = useState(chapter.content);
 
   const appStore = useAppStore();
 
@@ -87,8 +87,10 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
 
   useMarkAsReadTo(async () => {
     try {
-      await ApiInstant.post(`/stories/${slug}/chapters/${chapter.slug}/mark-as-read`)
-    } catch (error) { }
+      await ApiInstant.post(
+        `/stories/${slug}/chapters/${chapter.slug}/mark-as-read`,
+      );
+    } catch (error) {}
   });
 
   const handleNext = () => {
@@ -104,13 +106,13 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
           const htmlText = await response.text();
           const parser = new DOMParser();
           const doc = parser.parseFromString(htmlText, "text/html");
-          const chapterContent = doc.querySelector(".chapter-c-content")?.innerHTML || "";
+          const chapterContent =
+            doc.querySelector(".chapter-c-content")?.innerHTML || "";
           setContent(chapterContent);
-        } catch (error) { }
-      })()
+        } catch (error) {}
+      })();
     }
-  }, [content])
-
+  }, [content]);
 
   if (!chapter) return <p className="p-4">{t("not_found")}</p>;
 
@@ -143,25 +145,29 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
         className="text-xl font-bold text-center"
         style={{ fontSize, color }}
       />
-      {currentContent ? <div
-        dangerouslySetInnerHTML={{
-          __html: currentContent.replace(/Tàng thư viện/gi, "Vô ưu các"),
-        }}
-        className="prose max-w-none whitespace-pre-wrap"
-        style={{ fontSize, color }}
-      /> : <div className="w-full h-screen flex items-center justify-center">
-        <div className="text-center">
-            <p className="mb-2">{t('chapter_loading')}</p>
-          <a
-            href={chapter.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline text-blue-600"
-          >
-            {t('watch_on_source')}
-          </a>
+      {currentContent ? (
+        <div
+          dangerouslySetInnerHTML={{
+            __html: currentContent.replace(/Tàng thư viện/gi, "Vô ưu các"),
+          }}
+          className="prose max-w-none whitespace-pre-wrap"
+          style={{ fontSize, color }}
+        />
+      ) : (
+        <div className="w-full h-screen flex items-center justify-center">
+          <div className="text-center">
+            <p className="mb-2">{t("chapter_loading")}</p>
+            <a
+              href={chapter.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-blue-600"
+            >
+              {t("watch_on_source")}
+            </a>
+          </div>
         </div>
-      </div>}
+      )}
       <div className="flex justify-end md:justify-between mt-10">
         {prevChapter && (
           <Link

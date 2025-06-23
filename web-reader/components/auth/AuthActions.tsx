@@ -16,7 +16,9 @@ import { ProfileIcon } from "@/components/default/icons";
 export const AuthActions = observer(() => {
   const t = useTranslations("nav");
 
-  const [commonClass, showButton] = useEaseInOutAnimationButton(appStore.isLoggedIn);
+  const [commonClass, showButton] = useEaseInOutAnimationButton(
+    appStore.isLoggedIn,
+  );
 
   return (
     <div className="flex gap-2 items-center">

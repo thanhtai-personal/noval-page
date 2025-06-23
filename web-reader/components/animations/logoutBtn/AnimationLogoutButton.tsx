@@ -128,7 +128,7 @@ export const AnimationLogoutButton = ({
   onLogout,
   label,
   className,
-  title = '',
+  title = "",
   ...props
 }: any = {}) => {
   const buttonRef = useRef<HTMLButtonElement>(null);

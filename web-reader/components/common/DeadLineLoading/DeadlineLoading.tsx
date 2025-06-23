@@ -14,7 +14,8 @@ export const DeadlineLoading = () => {
     const deathGroup = document.getElementById("death-group");
     const designerArm = document.getElementById("designer-arm-grop");
 
-    if (progressFill) progressFill.style.animationDuration = `${animationTime}s`;
+    if (progressFill)
+      progressFill.style.animationDuration = `${animationTime}s`;
     if (deathGroup) deathGroup.style.animationDuration = `${animationTime}s`;
 
     const updateDesignerArmAnimation = () => {
@@ -95,7 +96,10 @@ export const DeadlineLoading = () => {
         </svg>
 
         <div className={styles.deadlineDays} ref={deadlineTextRef}>
-          Deadline <span className={styles.day} ref={dayRef}>7</span>{" "}
+          Deadline{" "}
+          <span className={styles.day} ref={dayRef}>
+            7
+          </span>{" "}
           <span className={styles.days}>days</span>
         </div>
       </div>

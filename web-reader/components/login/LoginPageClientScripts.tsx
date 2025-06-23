@@ -13,7 +13,7 @@ export const LoginPageClientScripts = observer(() => {
     appStore.setAnimations({
       useIsland: false,
       useDNA: false,
-      useUniverseBg: theme === "dark"
+      useUniverseBg: theme === "dark",
     });
 
     return () => {

@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect } from "react"
+import { useEffect } from "react";
 
-const MARK_AS_READ_TIME = 10000
+const MARK_AS_READ_TIME = 10000;
 
 export const useMarkAsReadTo = (callback: any) => {
   useEffect(() => {
@@ -12,6 +12,6 @@ export const useMarkAsReadTo = (callback: any) => {
 
     return () => {
       clearTimeout(useMarkAsReadTo);
-    }
+    };
   }, []);
-}
+};

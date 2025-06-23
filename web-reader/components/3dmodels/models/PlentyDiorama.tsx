@@ -34,7 +34,7 @@ export const PlentyDiorama: React.FC<any> = ({
     return () => cancelAnimationFrame(frameId);
   }, [camera, transition]);
 
-  if (error || !gltf?.scene) return '';
+  if (error || !gltf?.scene) return "";
 
   return <primitive object={gltf.scene} scale={scale} />;
 };

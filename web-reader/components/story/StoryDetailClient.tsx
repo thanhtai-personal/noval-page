@@ -16,7 +16,7 @@ export const StoryDetailClient = observer(({ story }: { story: Story }) => {
 
   useMarkAsReadTo(async () => {
     try {
-      await ApiInstant.post(`/stories/${story.slug}/mark-as-read`)
+      await ApiInstant.post(`/stories/${story.slug}/mark-as-read`);
     } catch (error) {}
   });
 
@@ -78,6 +78,6 @@ export const StoryDetailClient = observer(({ story }: { story: Story }) => {
       />
     </section>
   );
-})
+});
 
-export default StoryDetailClient
+export default StoryDetailClient;

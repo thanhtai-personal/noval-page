@@ -31,9 +31,8 @@ export const MagicalHelp: React.FC<any> = ({
     return () => cancelAnimationFrame(frameId);
   }, [camera, transition]);
 
-
   if (error || !gltf?.scene) {
-    return '';
+    return "";
   }
 
   return <primitive object={gltf.scene} scale={scale} />;

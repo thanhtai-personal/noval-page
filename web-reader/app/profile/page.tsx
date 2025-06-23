@@ -42,7 +42,7 @@ function ProfilePage() {
     appStore.setAnimations({
       useIsland: false,
       useDNA: false,
-      useUniverseBg: theme === "dark"
+      useUniverseBg: theme === "dark",
     });
 
     return () => {
@@ -66,17 +66,19 @@ function ProfilePage() {
           </div>
         </div>
 
-        {appStore.profile && <div className="flex flex-col items-end gap-4 ">
-          <div className="flex flex-row items-center">
-            <span>{t('exp')}</span>: {appStore.profile.exp || 0}
+        {appStore.profile && (
+          <div className="flex flex-col items-end gap-4 ">
+            <div className="flex flex-row items-center">
+              <span>{t("exp")}</span>: {appStore.profile.exp || 0}
+            </div>
+            <div className="flex flex-row items-center">
+              <span>{t("level")}</span>: {appStore.profile.level || 1}
+            </div>
+            <div className="flex flex-row items-center">
+              <span>{t("coin")}</span>: {appStore.profile.coin || 0}
+            </div>
           </div>
-          <div className="flex flex-row items-center">
-            <span>{t('level')}</span>: {appStore.profile.level || 1}
-          </div>
-          <div className="flex flex-row items-center">
-            <span>{t('coin')}</span>: {appStore.profile.coin || 0}
-          </div>
-        </div>}
+        )}
       </div>
 
       <Card>

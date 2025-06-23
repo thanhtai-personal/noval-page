@@ -2,7 +2,9 @@ import { useEaseInOutAnimationButton } from "@/hooks/useEaseInOutAnimationButton
 import Cookies from "js-cookie";
 
 export const LanguageButton = () => {
-  const [commonClass, showButton] = useEaseInOutAnimationButton(Cookies.get("NEXT_LOCALE") === "en");
+  const [commonClass, showButton] = useEaseInOutAnimationButton(
+    Cookies.get("NEXT_LOCALE") === "en",
+  );
 
   const handleUpdateLanguage = () => {
     const value = Cookies.get("NEXT_LOCALE") !== "vi";
@@ -32,7 +34,7 @@ export const LanguageButton = () => {
       )}
     </div>
   );
-}
+};
 
 const engFlag = (
   <svg viewBox="0 0 55.2 38.4" xmlns="http://www.w3.org/2000/svg">
