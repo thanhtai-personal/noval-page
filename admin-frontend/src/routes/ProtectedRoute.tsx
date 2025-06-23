@@ -9,7 +9,7 @@ type Props = {
 
 const ProtectedRoute = ({ children }: Props) => {
   const { isAuthenticated, user, loadingAuth } = authStore;
-  const role = user?.role;
+  const role = user?.role?.name;
 
   // ❌ Chưa đăng nhập
   if (!isAuthenticated) {
