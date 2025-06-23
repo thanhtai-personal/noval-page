@@ -21,7 +21,6 @@ import { Roles } from './decorators/roles.decorator';
 import { RoleSlug } from '@/constants/role.enum';
 import { GoogleOAuthGuard } from './guards/google-oauth.guard';
 import { Request, Response } from 'express';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 // @UseGuards(JwtAuthGuard) //But only do this if you haven't already applied JwtAuthGuard globally in main.ts.
 @Controller('auth')
@@ -113,8 +112,8 @@ export class AuthController {
   // 👤 Lấy thông tin người dùng hiện tại
   @Get('me')
   @Roles(RoleSlug.READER, RoleSlug.ADMIN, RoleSlug.SUPER_ADMIN)
-  me(@CurrentUser() user: any) {
-    return user;
+  async getUserInfo(@CurrentUser() user: any) {
+    return await this.authService.getUserInfo(user.userId);
   }
 
   // 📝 Đăng ký tài khoản

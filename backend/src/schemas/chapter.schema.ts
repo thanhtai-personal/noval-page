@@ -9,6 +9,9 @@ export class Chapter extends Document {
   @Prop({ required: true })
   title: string;
 
+  @Prop({ default: 1 })
+  expValue: number;
+
   @Prop({ required: true, unique: true })
   slug: string;
 

@@ -48,6 +48,9 @@ export class Story extends Document {
   @Prop({ default: 0 })
   votes: number;
 
+  @Prop({ default: 1 })
+  expValue: number;
+
   @Prop({ default: false })
   isDetailCrawled: boolean;
 

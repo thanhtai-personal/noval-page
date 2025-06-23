@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@heroui/button";
 import { useTranslations } from "next-intl";
@@ -12,6 +12,7 @@ import { observer } from "mobx-react-lite";
 import { useAppStore } from "@/store/Provider";
 import { isMobile } from "@/utils/funtions";
 import { bgOptions, colorOptions } from "./constants";
+import { useMarkAsReadTo } from "@/hooks/useMarkAsReadTo";
 
 export const ChapterPageClient = observer(({ chapter }: any) => {
   const router = useRouter();
@@ -22,6 +23,7 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
   const [bgColor, setBgColor] = useState("#fff");
   const [color, setColor] = useState("#000");
   const [brightness, setBrightness] = useState(100);
+  const [content, setContent] = useState(chapter.content)
 
   const appStore = useAppStore();
 
@@ -83,12 +85,36 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
     };
   }, []);
 
+  useMarkAsReadTo(async () => {
+    try {
+      await ApiInstant.post(`/stories/${slug}/chapters/${chapter.slug}/mark-as-read`)
+    } catch (error) { }
+  });
+
   const handleNext = () => {
     if (!nextChapter) return;
     router.push(`/truyen/${chapter?.slug}/chuong/${nextChapter?.slug}`);
   };
 
+  useEffect(() => {
+    if (!content) {
+      (async () => {
+        try {
+          const response = await fetch(chapter.url);
+          const htmlText = await response.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(htmlText, "text/html");
+          const chapterContent = doc.querySelector(".chapter-c-content")?.innerHTML || "";
+          setContent(chapterContent);
+        } catch (error) { }
+      })()
+    }
+  }, [content])
+
+
   if (!chapter) return <p className="p-4">{t("not_found")}</p>;
+
+  const currentContent = chapter.content || content;
 
   return (
     <div
@@ -117,23 +143,25 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
         className="text-xl font-bold text-center"
         style={{ fontSize, color }}
       />
-      {chapter.content ? (
-        <div
-          dangerouslySetInnerHTML={{
-            __html: chapter.content?.replace(/Tàng thư viện/gi, "Vô ưu các"),
-          }}
-          className="prose max-w-none whitespace-pre-wrap"
-          style={{ fontSize, color }}
-        />
-      ) : (
-        <div className="w-full h-screen">
-          <iframe
-            title="source-chapter"
-            className="w-full h-full"
-            src={chapter.url}
-          />
+      {currentContent ? <div
+        dangerouslySetInnerHTML={{
+          __html: currentContent.replace(/Tàng thư viện/gi, "Vô ưu các"),
+        }}
+        className="prose max-w-none whitespace-pre-wrap"
+        style={{ fontSize, color }}
+      /> : <div className="w-full h-screen flex items-center justify-center">
+        <div className="text-center">
+            <p className="mb-2">{t('chapter_loading')}</p>
+          <a
+            href={chapter.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline text-blue-600"
+          >
+            {t('watch_on_source')}
+          </a>
         </div>
-      )}
+      </div>}
       <div className="flex justify-end md:justify-between mt-10">
         {prevChapter && (
           <Link

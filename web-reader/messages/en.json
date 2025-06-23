@@ -43,7 +43,9 @@
     "pause_audio": "Pause",
     "resume_audio": "Resume",
     "choose_text_color": "Choose text color {color}",
-    "audio_speed": "Audio speed"
+    "audio_speed": "Audio speed",
+    "chapter_loading": "Chapter is loading",
+    "watch_on_source": "View on source"
   },
   "story": {
     "author": "Author",
@@ -96,7 +98,10 @@
     "read_stories": "Read stories",
     "no_saved": "No stories saved yet.",
     "read_until": "Read up to chapter {index}",
-    "guest": "Guest"
+    "guest": "Guest",
+    "exp": "Exp",
+    "level": "Level",
+    "coin": "Coin"
   },
   "docs": {
     "title": "Documentation"

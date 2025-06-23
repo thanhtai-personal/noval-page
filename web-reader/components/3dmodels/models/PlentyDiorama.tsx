@@ -8,7 +8,16 @@ export const PlentyDiorama: React.FC<any> = ({
   scale = 1,
   transition = false,
 }: any) => {
-  const gltf = useGLTF("models/isle_of_plenty_diorama.glb");
+  let error = false;
+  let gltf: any;
+
+  try {
+    // Try to load the model
+    gltf = useGLTF("models/isle_of_plenty_diorama.glb");
+    // useGLTF.preload && useGLTF.preload("models/isle_of_plenty_diorama.glb");
+  } catch (e) {
+    error = true;
+  }
   const { camera } = useThree();
   const angleRef = useRef(0);
 
@@ -24,6 +33,8 @@ export const PlentyDiorama: React.FC<any> = ({
     animate();
     return () => cancelAnimationFrame(frameId);
   }, [camera, transition]);
+
+  if (error || !gltf?.scene) return '';
 
   return <primitive object={gltf.scene} scale={scale} />;
 };

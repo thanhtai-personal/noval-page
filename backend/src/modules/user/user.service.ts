@@ -67,7 +67,7 @@ export class UserService {
   }
 
   async update(id: string, dto: any) {
-    return this.userModel.findByIdAndUpdate(id, {
+    return await this.userModel.findByIdAndUpdate(id, {
       email: dto.email,
       name: dto.name,
       role: dto.role,
@@ -75,14 +75,14 @@ export class UserService {
   }
 
   async delete(id: string) {
-    return this.userModel.findByIdAndDelete(id);
+    return await this.userModel.findByIdAndDelete(id);
   }
 
   async ban(id: string) {
-    return this.userModel.findByIdAndUpdate(id, { banned: true });
+    return await this.userModel.findByIdAndUpdate(id, { banned: true });
   }
 
   async unban(id: string) {
-    return this.userModel.findByIdAndUpdate(id, { banned: false });
+    return await this.userModel.findByIdAndUpdate(id, { banned: false });
   }
 }

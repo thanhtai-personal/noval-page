@@ -8,6 +8,7 @@ import { Model } from 'mongoose';
 import { User } from '@/schemas/user.schema';
 import { Role } from '@/schemas/role.schema';
 import axios from "axios";
+import { UserDataAndUserResponseMapper } from "./mappers/UserDataAndUserResponseMapper";
 
 // const googleClient = new OAuth2Client();
 
@@ -163,6 +164,14 @@ export class AuthService {
     });
 
     return this.issueTokensAndStore(user);
+  }
+
+  async getUserInfo(id: string) {
+    const user = await this.userModel.findById(id).populate('role');
+    if (!user) {
+      throw new UnauthorizedException('User không tồn tại');
+    }
+    return await (new UserDataAndUserResponseMapper()).map(user);
   }
 
   async forgotPassword(email: string) {

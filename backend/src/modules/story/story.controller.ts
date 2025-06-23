@@ -25,6 +25,13 @@ export class StoryController {
     return story;
   }
 
+  @Roles(RoleSlug.READER)
+  @Post(':slug/mark-as-read')
+  async markAsRead(@Param('slug') slug: string, @CurrentUser('userId') userId: string) {
+    await this.storyService.markAsRead(slug, userId);
+    return { message: 'update success' };
+  }
+
   
   @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
   @Post()

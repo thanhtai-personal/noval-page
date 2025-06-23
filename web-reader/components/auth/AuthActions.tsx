@@ -28,7 +28,7 @@ export const AuthActions = observer(() => {
       {showButton ? (
         <AnimationLogoutButton
           onLogout={() => appStore.logout()}
-           label={t("logout")}
+          label={t("logout")}
           className={`${commonClass} logout-btn bg-red-500`}
         />
       ) : (

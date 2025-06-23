@@ -43,7 +43,9 @@
     "pause_audio": "Tạm dừng",
     "resume_audio": "Tiếp tục",
     "choose_text_color": "Chọn màu chữ {color}",
-    "audio_speed": "Tốc độ đọc"
+    "audio_speed": "Tốc độ đọc",
+    "chapter_loading": "Nội dung chương lỗi",
+    "watch_on_source": "Xem trực tiếp tại nguồn"
   },
   "story": {
     "author": "Tác giả",
@@ -96,7 +98,10 @@
     "read_stories": "Truyện đã đọc",
     "no_saved": "Chưa có truyện nào được lưu.",
     "read_until": "Đọc tới chương {index}",
-    "guest": "Khách"
+    "guest": "Khách",
+    "exp": "Kinh nghiệm",
+    "level": "Cấp",
+    "coin": "Tinh thạch"
   },
   "docs": {
     "title": "Tài liệu"

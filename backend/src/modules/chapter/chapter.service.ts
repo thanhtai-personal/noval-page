@@ -4,12 +4,14 @@ import { Chapter } from '@/schemas/chapter.schema';
 import { Story } from '@/schemas/story.schema';
 import { Model } from 'mongoose';
 import { GetChapterListDto } from './dto/get-chapter-list.dto';
+import { User } from "@/schemas/user.schema";
 
 @Injectable()
 export class ChapterService {
   constructor(
     @InjectModel(Chapter.name) private chapterModel: Model<Chapter>,
     @InjectModel(Story.name) private storyModel: Model<Story>,
+    @InjectModel(User.name) private userModel: Model<User>
   ) {}
 
   async getChapterList(slug: string, query: GetChapterListDto) {
@@ -67,5 +69,26 @@ export class ChapterService {
       story: story._id,
       slug: chapterSlug,
     });
+  }
+
+  async markAsRead(slug, chapterSlug, userId) {
+    try {
+      const story = await this.storyModel.findOne({ slug });
+      const chapter = await this.chapterModel.findOne({ slug: chapterSlug });
+      const user = await this.userModel.findById(userId);
+      const newExp = (user?.exp || 0) + (chapter?.expValue || 1);
+
+      const dataUpdate = { exp: newExp }
+      // if (newExp >= getExpForNextLevel(user.level)) {
+      //  dataUpdate.level = dataUpdate.level + 1
+      // }
+
+      await this.userModel.findByIdAndUpdate(userId, dataUpdate);
+      await this.storyModel.findByIdAndUpdate(story?._id, {
+        views: Number(story?.views || '0') + 1
+      });
+    } catch (error) {
+
+    }
   }
 }

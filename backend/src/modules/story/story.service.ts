@@ -5,10 +5,14 @@ import { Model } from 'mongoose';
 import { GetStoryListDto } from './dto/get-story-list.dto';
 import { slugify } from '@/utils/slugify';
 import { CreateStoryDto } from './dto/create-story.dto';
+import { User } from "@/schemas/user.schema";
 
 @Injectable()
 export class StoryService {
-  constructor(@InjectModel(Story.name) private storyModel: Model<Story>) {}
+  constructor(
+    @InjectModel(Story.name) private storyModel: Model<Story>,
+    @InjectModel(User.name) private userModel: Model<User>
+  ) { }
 
   async getStories(query: GetStoryListDto) {
     const {
@@ -89,7 +93,7 @@ export class StoryService {
   }
 
   async getStoryDetail(slug: string) {
-    return this.storyModel
+    return await this.storyModel
       .findOne({ slug })
       .populate('author', 'name slug')
       .populate('tags', 'name slug')
@@ -97,14 +101,36 @@ export class StoryService {
   }
 
   async createStory(dto: CreateStoryDto, userId: string) {
-    const slug = slugify(dto.title, { lower: true });
+    try {
+      const slug = slugify(dto.title, { lower: true });
 
-    return this.storyModel.create({
-      title: dto.title,
-      description: dto.description,
-      slug,
-      author: dto.authorId,
-      createdBy: userId,
-    });
+      return await this.storyModel.create({
+        title: dto.title,
+        description: dto.description,
+        slug,
+        author: dto.authorId,
+        createdBy: userId,
+      });
+    } catch (error) {}
+  }
+
+  async markAsRead(slug, userId) {
+    try {
+      const story = await this.storyModel.findOne({ slug });
+      const user = await this.userModel.findById(userId);
+      const newExp = (user?.exp || 0) + (story?.expValue || 1);
+
+      const dataUpdate = { exp: newExp }
+      // if (newExp >= getExpForNextLevel(user.level)) {
+      //  dataUpdate.level = dataUpdate.level + 1
+      // }
+
+      await this.userModel.findByIdAndUpdate(userId, dataUpdate);
+      await this.storyModel.findByIdAndUpdate(story?._id, {
+        views: Number(story?.views || '0') + 1
+      });
+    } catch (error) {
+
+    }
   }
 }

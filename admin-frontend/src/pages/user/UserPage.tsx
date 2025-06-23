@@ -130,11 +130,14 @@ export default function AdminUserPage() {
       </div>
 
       {/* Table */}
-      <Table>
+      <Table className="w-full overflow-x-auto">
         <TableHeader>
           <TableRow>
             <TableHead>{t('user.email')}</TableHead>
             <TableHead>{t('user.name')}</TableHead>
+            <TableHead>{t('user.exp')}</TableHead>
+            <TableHead>{t('user.level')}</TableHead>
+            <TableHead>{t('user.coin')}</TableHead>
             <TableHead>{t('user.role')}</TableHead>
             <TableHead>{t('user.action')}</TableHead>
           </TableRow>
@@ -144,8 +147,11 @@ export default function AdminUserPage() {
             <TableRow key={u._id}>
               <TableCell>{u.email}</TableCell>
               <TableCell>{u.name}</TableCell>
+              <TableCell>{u.exp || 0}</TableCell>
+              <TableCell>{u.level || 1}</TableCell>
+              <TableCell>{u.coin || 0}</TableCell>
               <TableCell>{u.role?.name || '—'}</TableCell>
-              <TableCell className="space-x-2">
+              <TableCell className="space-x-2 flex flex-col md:flex-row items-center justify-center md:justify-end">
                 {u.banned ? (<Button size="sm" variant="destructive" onClick={() => unbanUser(u._id)}>{t('user.unban')}</Button>) : (
                   <Button size="sm" variant="outline" onClick={() => banUser(u._id)}>{t('user.ban')}</Button>
                 )}

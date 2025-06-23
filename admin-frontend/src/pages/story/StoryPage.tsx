@@ -136,7 +136,7 @@ export default function AdminStoryPage() {
       </div>
 
       {/* Table */}
-      <Table>
+      <Table className="w-full overflow-x-auto">
         <TableHeader>
           <TableRow>
             <TableHead>#</TableHead>
@@ -159,7 +159,7 @@ export default function AdminStoryPage() {
               </TableCell>
               <TableCell className="text-center">{s.totalChapters || 0}</TableCell>
               <TableCell>{s.source}</TableCell>
-              <TableCell>
+              <TableCell className="flex flex-col md:flex-row items-center justify-center md:justify-end">
                 <div className="flex gap-2 w-full justify-end items-center">
                   <Button size="sm" onClick={() => handleCrawl(s._id)}>Crawl</Button>
                   <Link to={`/stories/${s.slug}`}>

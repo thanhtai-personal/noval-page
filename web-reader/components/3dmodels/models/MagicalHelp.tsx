@@ -8,7 +8,13 @@ export const MagicalHelp: React.FC<any> = ({
   scale = 1,
   transition = false,
 }: any) => {
-  const gltf = useGLTF("models/magical_help.glb");
+  let gltf: any;
+  let error = false;
+  try {
+    gltf = useGLTF("models/magical_help.glb");
+  } catch (e) {
+    error = true;
+  }
   const { camera } = useThree();
   const angleRef = useRef(0);
 
@@ -20,10 +26,15 @@ export const MagicalHelp: React.FC<any> = ({
       camera.position.setZ(Math.sin(angleRef.current) * 5);
       camera.lookAt(0, 0, 0);
       frameId = requestAnimationFrame(animate);
+      return <primitive object={gltf.scene} scale={scale} />;
     };
-    animate();
     return () => cancelAnimationFrame(frameId);
   }, [camera, transition]);
+
+
+  if (error || !gltf?.scene) {
+    return '';
+  }
 
   return <primitive object={gltf.scene} scale={scale} />;
 };

@@ -7,9 +7,18 @@ import { Badge } from "@heroui/badge";
 import { StoryTabs } from "@/components/story/StoryTabs";
 import { LastReadChapter } from "@/components/chapter/LastReadChapter";
 import { Story } from "@/types/interfaces/story";
+import { ApiInstant } from "@/utils/api";
+import { useMarkAsReadTo } from "@/hooks/useMarkAsReadTo";
+import { observer } from "mobx-react-lite";
 
-export function StoryDetailClient({ story }: { story: Story }) {
+export const StoryDetailClient = observer(({ story }: { story: Story }) => {
   const t = useTranslations("story");
+
+  useMarkAsReadTo(async () => {
+    try {
+      await ApiInstant.post(`/stories/${story.slug}/mark-as-read`)
+    } catch (error) {}
+  });
 
   return (
     <section className="container mx-auto px-4 py-6">
@@ -69,4 +78,6 @@ export function StoryDetailClient({ story }: { story: Story }) {
       />
     </section>
   );
-}
+})
+
+export default StoryDetailClient
