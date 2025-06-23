@@ -18,6 +18,7 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import ChapterEditForm, { Chapter } from "./ChapterEditForm";
+import { api } from '@/services/api';
 
 export default function StoryDetailView({
   story,
@@ -47,10 +48,15 @@ export default function StoryDetailView({
   const handleEditChapter = (chapter: Chapter) => setEditingChapter(chapter);
   const handleCloseDrawer = () => setEditingChapter(null);
 
-  const handleSaveChapter = async (_data: Chapter) => {
+  const handleSaveChapter = async ({ slug, ..._data }: Chapter) => {
     // TODO: Gọi API cập nhật chương ở đây
     // await updateChapter(data);
-    handleCloseDrawer();
+    try {
+      await api.patch(`/stories/${story.slug}/chapters/${slug}`, _data);
+      // alert(t("userform.update_success"));
+      handleCloseDrawer();
+    } catch (error) {
+    } finally { }
     // Có thể reload lại danh sách chương nếu cần
   };
 

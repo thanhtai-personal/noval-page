@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ChapterService } from './chapter.service';
 import { GetChapterListDto } from './dto/get-chapter-list.dto';
 import { Public } from "../auth/decorators/public.decorator";
@@ -38,6 +38,17 @@ export class ChapterController {
     @CurrentUser('userId') userId: string
   ) {
     await this.chapterService.markAsRead(slug, chapterSlug, userId);
+    return { message: 'update success' };
+  }
+
+  @Roles(RoleSlug.ADMIN, RoleSlug.SUPER_ADMIN)
+  @Patch(':chapterSlug')
+  async updateChapter(
+    @Body() data: any,
+    @Param('slug') slug: string,
+    @Param('chapterSlug') chapterSlug: string,
+  ) {
+    await this.chapterService.updateChapter(slug, chapterSlug, data);
     return { message: 'update success' };
   }
 

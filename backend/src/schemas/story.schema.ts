@@ -27,8 +27,8 @@ export class Story extends Document {
   @Prop()
   cover: string;
 
-  @Prop()
-  source: string;
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Source' }] })
+  source: Types.ObjectId[];
 
   @Prop()
   url: string;

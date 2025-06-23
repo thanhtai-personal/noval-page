@@ -9,6 +9,7 @@ export type Chapter = {
   chapterNumber: number;
   title: string;
   content: string;
+  slug?: string;
 };
 
 export default function ChapterEditForm({
@@ -24,7 +25,6 @@ export default function ChapterEditForm({
 }) {
   const { t } = useI18n(); // Lấy hàm dịch
   const [editChapter, setEditChapter] = useState<Chapter>(chapter);
-
   const handleChange = (field: keyof Chapter, value: any) => {
     setEditChapter((prev) => ({ ...prev, [field]: value }));
   };
@@ -35,7 +35,7 @@ export default function ChapterEditForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-4 text-black">
       <label className="block mb-1 font-medium">
         {t("chapter.number")}
         <Input

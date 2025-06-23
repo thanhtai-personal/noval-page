@@ -23,7 +23,7 @@ export class CrawlerController {
    * API: Crawl chương mới cho 1 truyện theo ID
    */
   @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
-  @Post('story/:id')
+  @Post('stories/:id')
   async crawlStoryById(@Param('id') storyId: string) {
     this.crawlerService.crawlStoryById(storyId);
     await timeout(1000);

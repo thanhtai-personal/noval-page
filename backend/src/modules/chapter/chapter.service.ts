@@ -12,7 +12,7 @@ export class ChapterService {
     @InjectModel(Chapter.name) private chapterModel: Model<Chapter>,
     @InjectModel(Story.name) private storyModel: Model<Story>,
     @InjectModel(User.name) private userModel: Model<User>
-  ) {}
+  ) { }
 
   async getChapterList(slug: string, query: GetChapterListDto) {
     const { page = 1, limit = 50 } = query;
@@ -87,8 +87,15 @@ export class ChapterService {
       await this.storyModel.findByIdAndUpdate(story?._id, {
         views: Number(story?.views || '0') + 1
       });
-    } catch (error) {
+    } catch (error) {}
+  }
 
-    }
+  async updateChapter(slug, chapterSlug, data: any) {
+    try {
+      await this.chapterModel.findOneAndUpdate(
+        { slug: chapterSlug },
+        data
+      )
+    } catch (error) {}
   }
 }

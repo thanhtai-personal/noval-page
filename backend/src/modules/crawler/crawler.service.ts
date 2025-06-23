@@ -31,13 +31,13 @@ export class CrawlerService {
   ) {}
 
   private getAdapter(source: string): ICrawlerAdapter {
-    switch (source.toLowerCase()) {
+    switch (source?.toLowerCase()) {
       case 'tangthuvien':
         return this.tangthuvien;
       case 'vtruyen':
         return this.vtruyen;
       default:
-        throw new Error(`Unsupported source: ${source}`);
+        return this.tangthuvien;
     }
   }
 
@@ -251,7 +251,11 @@ export class CrawlerService {
       return;
     }
 
-    const source: any = story.source;
+    let source: any = story.source;
+    if (typeof source === 'string') {
+      source = await this.sourceModel.findOne({ _id: source});
+    }
+
     if (!source) {
       this.logger.error(`Source for story ${story.title} not found.`);
       return;
@@ -295,22 +299,22 @@ export class CrawlerService {
 
   private logData(message: string, source: any) {
     const timestamp = new Date().toISOString();
-    const logMessage = `[${timestamp}] ${message}\n`;
+    // const logMessage = `[${timestamp}] ${message}\n`;
 
     this.logger.log(message);
-    this.gateway.sendCrawlInfo(source._id.toString(), message);
+    this.gateway.sendCrawlInfo(typeof source === 'string' ? source : source._id?.toString(), message);
 
-    const logDir = path.join(__dirname, '..', '..', 'logs');
+    // const logDir = path.join(__dirname, '..', '..', 'logs');
 
     // Tạo thư mục logs nếu chưa tồn tại
-    if (!fs.existsSync(logDir)) {
-      fs.mkdirSync(logDir, { recursive: true });
-    }
+    // if (!fs.existsSync(logDir)) {
+    //   fs.mkdirSync(logDir, { recursive: true });
+    // }
 
     // Tạo tên file log dựa trên tên nguồn
-    const logFile = path.join(logDir, `${source.name.replace(/\s+/g, '_')}.md`);
+    // const logFile = path.join(logDir, `${source.name.replace(/\s+/g, '_')}.md`);
 
     // Ghi log vào file .md
-    fs.appendFileSync(logFile, logMessage);
+    // fs.appendFileSync(logFile, logMessage);
   }
 }
