@@ -10,11 +10,10 @@ import { Story } from "@/types/interfaces/story";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { StoriesWithSkeletonLoading } from "@/components/common/utils/StoriesWithSkeletonLoading";
-import { StoryCardSkeleton } from "@/components/story/StoryCardSkeleton";
 import { Fire1Wrapper } from "@/components/animations/fires/Fire1Wrapper";
 import { FireLineWrapper } from "@/components/animations/fires/FireLineWrapper";
-import LazyStoryCard from "@/components/story/LazyStoryCard";
 import LazySlider from "./LazySlider";
+import { StorySection } from "./StorySection";
 
 export default function HomePageContent() {
   const t = useTranslations("home");
@@ -75,75 +74,22 @@ export default function HomePageContent() {
         <FireLineWrapper />
       </div>
 
-      {/* Đề cử nhiều */}
-      <div className="mt-10 md:mt-20">
-        <div className="relative flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold inline-flex items-center">
-            <Fire1Wrapper
-              width={40}
-              height={60}
-              id={"top-truyen-de-cu"}
-              stopColor={"#8a00ff"}
-              strokeColor={"#9fdbf7"}
-              fill1={"#8c0168"}
-              fill2={"#19020f"}
-            />{" "}
-            {t("most_recommended")}
-          </h2>
-          <Link href="/search?sort=recommends">
-            <Button size="sm" variant="light">
-              {t("see_more")}
-            </Button>
-          </Link>
-        </div>
+      <StorySection stories={topRecommend} titleIcon={<Fire1Wrapper
+        width={40}
+        height={60}
+        id={"top-truyen-de-cu"}
+        stopColor={"#8a00ff"}
+        strokeColor={"#9fdbf7"}
+        fill1={"#8c0168"}
+        fill2={"#19020f"}
+      />}
+        title={t("most_recommended")} className="mt-10 md:mt-20" />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <StoriesWithSkeletonLoading stories={topRecommend} />
-        </div>
-      </div>
+      <StorySection stories={topView} title={t("most_viewed")} className="mt-10" />
 
-      {/* Nhiều lượt đọc */}
-      <div className="mt-10">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">📚 {t("most_viewed")}</h2>
-          <Link href="/search?sort=views">
-            <Button size="sm" variant="light">
-              {t("see_more")}
-            </Button>
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <StoriesWithSkeletonLoading stories={topView} />
-        </div>
-      </div>
+      <StorySection stories={topLike} title={t("most_liked")} className="mt-10" />
 
-      <div className="mt-10">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">📚 {t("most_liked")}</h2>
-          <Link href="/search?sort=views">
-            <Button size="sm" variant="light">
-              {t("see_more")}
-            </Button>
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <StoriesWithSkeletonLoading stories={topLike} />
-        </div>
-      </div>
-
-      <div className="mt-10">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">📚 {t("longest")}</h2>
-          <Link href="/search?sort=views">
-            <Button size="sm" variant="light">
-              {t("see_more")}
-            </Button>
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <StoriesWithSkeletonLoading stories={topChapter} />
-        </div>
-      </div>
+      <StorySection stories={topChapter} title={t("longest")} className="mt-10" />
     </section>
   );
 }
