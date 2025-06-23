@@ -1,15 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "@heroui/button";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { ApiInstant } from "@/utils/api";
 import { Story } from "@/types/interfaces/story";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { StoriesWithSkeletonLoading } from "@/components/common/utils/StoriesWithSkeletonLoading";
 import { Fire1Wrapper } from "@/components/animations/fires/Fire1Wrapper";
 import { FireLineWrapper } from "@/components/animations/fires/FireLineWrapper";
 import LazySlider from "./LazySlider";
