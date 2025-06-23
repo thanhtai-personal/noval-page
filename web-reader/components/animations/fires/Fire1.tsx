@@ -91,4 +91,4 @@ export const Fire1 = observer(
   },
 );
 
-export default Fire1
+export default Fire1;

@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 
 const SearchPageClient = dynamic(
-  () => import("@/components/searchPage/SearchPageClient")
+  () => import("@/components/searchPage/SearchPageClient"),
 );
 
 export const metadata = {

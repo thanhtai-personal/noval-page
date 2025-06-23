@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 
 const ChapterPageClient = dynamic(
-  () => import("@/components/chapter/ChapterDetailPageClient")
+  () => import("@/components/chapter/ChapterDetailPageClient"),
 );
 
 async function getChapter(

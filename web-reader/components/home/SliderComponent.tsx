@@ -1,12 +1,8 @@
-import Slider from "react-slick"
-import LazyStoryCard from "@/components/story/LazyStoryCard"
-import { StoryCardSkeleton } from "@/components/story/StoryCardSkeleton"
+import Slider from "react-slick";
+import LazyStoryCard from "@/components/story/LazyStoryCard";
+import { StoryCardSkeleton } from "@/components/story/StoryCardSkeleton";
 
-export const SliderComponent = ({
-  sliderSettings = {},
-  dataList
-}: any) => {
-
+export const SliderComponent = ({ sliderSettings = {}, dataList }: any) => {
   return (
     <Slider {...sliderSettings}>
       {(!dataList || dataList.length === 0
@@ -20,7 +16,7 @@ export const SliderComponent = ({
         ),
       )}
     </Slider>
-  )
-}
+  );
+};
 
-export default SliderComponent
+export default SliderComponent;

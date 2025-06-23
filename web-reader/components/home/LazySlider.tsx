@@ -9,4 +9,4 @@ function LazySlider(props: any = {}) {
   return <div ref={ref}>{inView && <SliderComponent {...props} />}</div>;
 }
 
-export default LazySlider
+export default LazySlider;

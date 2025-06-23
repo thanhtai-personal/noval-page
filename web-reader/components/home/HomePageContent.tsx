@@ -74,22 +74,40 @@ export default function HomePageContent() {
         <FireLineWrapper />
       </div>
 
-      <StorySection stories={topRecommend} titleIcon={<Fire1Wrapper
-        width={40}
-        height={60}
-        id={"top-truyen-de-cu"}
-        stopColor={"#8a00ff"}
-        strokeColor={"#9fdbf7"}
-        fill1={"#8c0168"}
-        fill2={"#19020f"}
-      />}
-        title={t("most_recommended")} className="mt-10 md:mt-20" />
+      <StorySection
+        stories={topRecommend}
+        titleIcon={
+          <Fire1Wrapper
+            width={40}
+            height={60}
+            id={"top-truyen-de-cu"}
+            stopColor={"#8a00ff"}
+            strokeColor={"#9fdbf7"}
+            fill1={"#8c0168"}
+            fill2={"#19020f"}
+          />
+        }
+        title={t("most_recommended")}
+        className="mt-10 md:mt-20"
+      />
 
-      <StorySection stories={topView} title={t("most_viewed")} className="mt-10" />
+      <StorySection
+        stories={topView}
+        title={t("most_viewed")}
+        className="mt-10"
+      />
 
-      <StorySection stories={topLike} title={t("most_liked")} className="mt-10" />
+      <StorySection
+        stories={topLike}
+        title={t("most_liked")}
+        className="mt-10"
+      />
 
-      <StorySection stories={topChapter} title={t("longest")} className="mt-10" />
+      <StorySection
+        stories={topChapter}
+        title={t("longest")}
+        className="mt-10"
+      />
     </section>
   );
 }
