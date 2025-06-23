@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "@heroui/button";
 import Link from "next/link";
-import Slider from "react-slick";
 import { useTranslations } from "next-intl";
 
 import { ApiInstant } from "@/utils/api";
@@ -11,10 +10,11 @@ import { Story } from "@/types/interfaces/story";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { StoriesWithSkeletonLoading } from "@/components/common/utils/StoriesWithSkeletonLoading";
-import { StoryCard } from "@/components/story/StoryCard";
 import { StoryCardSkeleton } from "@/components/story/StoryCardSkeleton";
-import { Fire1 } from "@/components/animations/fires/Fire1";
-import FireLine from "@/components/animations/fires/FireLine";
+import { Fire1Wrapper } from "@/components/animations/fires/Fire1Wrapper";
+import { FireLineWrapper } from "@/components/animations/fires/FireLineWrapper";
+import LazyStoryCard from "@/components/story/LazyStoryCard";
+import LazySlider from "./LazySlider";
 
 export default function HomePageContent() {
   const t = useTranslations("home");
@@ -59,7 +59,7 @@ export default function HomePageContent() {
     <section className="container mx-auto px-4 py-8 space-y-12 overflow-visible">
       {/* Banner Slide */}
       <h1 className="text-3xl font-bold inline-flex items-center">
-        <Fire1
+        <Fire1Wrapper
           width={60}
           height={60}
           id={"top-truyen-de-cu"}
@@ -71,26 +71,15 @@ export default function HomePageContent() {
         {t("top_recommend_title")}
       </h1>
       <div className="relative">
-        <Slider {...sliderSettings}>
-          {(!topVote || topVote.length === 0
-            ? Array.from({ length: 4 })
-            : topVote
-          ).map((story: any, i: number) =>
-            story ? (
-              <StoryCard key={story._id} isSlide story={story} />
-            ) : (
-              <StoryCardSkeleton key={`skeleton-${i}`} />
-            ),
-          )}
-        </Slider>
-        <FireLine />
+        <LazySlider sliderSettings={sliderSettings} dataList={topVote} />
+        <FireLineWrapper />
       </div>
 
       {/* Đề cử nhiều */}
       <div className="mt-10 md:mt-20">
         <div className="relative flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold inline-flex items-center">
-            <Fire1
+            <Fire1Wrapper
               width={40}
               height={60}
               id={"top-truyen-de-cu"}

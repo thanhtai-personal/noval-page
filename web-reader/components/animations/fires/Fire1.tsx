@@ -90,3 +90,5 @@ export const Fire1 = observer(
     );
   },
 );
+
+export default Fire1

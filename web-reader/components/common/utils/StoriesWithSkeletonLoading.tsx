@@ -1,6 +1,6 @@
 "use client";
 
-import { StoryCard } from "../../story/StoryCard";
+import LazyStoryCard from "@/components/story/LazyStoryCard";
 import { StoryCardSkeleton } from "../../story/StoryCardSkeleton";
 
 import { Story } from "@/types/interfaces/story";
@@ -21,7 +21,7 @@ export function StoriesWithSkeletonLoading({
       {(isLoading ? Array.from({ length: skeletonCount }) : stories).map(
         (story: any, i: number) =>
           story ? (
-            <StoryCard key={story._id} isSlide={isSlide} story={story} />
+            <LazyStoryCard key={story._id} isSlide={isSlide} story={story} />
           ) : (
             <StoryCardSkeleton key={`skeleton-${i}`} />
           ),
