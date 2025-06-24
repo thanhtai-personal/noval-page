@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 
 import { ApiInstant } from "@/utils/api";
 import { Story } from "@/types/interfaces/story";
-import LazyStoryPageContent from "./LazyStoryPageContent";
+// import LazyStoryPageContent from "./LazyStoryPageContent";
+import StoryDetailClient from "@/components/story/StoryDetailClient";
 
 async function fetchStory(slug: string): Promise<any | null> {
   try {
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
   };
 }
 
-export const revalidate = 600; // 10 phút
+export const revalidate = 3600; // 1h
 
 export async function generateStaticParams() {
   // Gọi API lấy top 100 truyện nhiều lượt đọc nhất
@@ -47,7 +48,5 @@ export default async function StoryDetailPage({ params }: any) {
     return notFound();
   }
 
-  return <div>
-    <LazyStoryPageContent story={story} />
-  </div>;
+  return <StoryDetailClient story={story} />;
 }
