@@ -49,7 +49,7 @@ export default function HomePageContent() {
     slidesToScroll: 1,
     autoplay: true,
     arrows: false,
-    lazyLoad: 'progressive'
+    lazyLoad: "progressive",
   };
 
   return (

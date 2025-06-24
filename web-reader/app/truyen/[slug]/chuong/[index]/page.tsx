@@ -1,12 +1,7 @@
 import { ApiInstant } from "@/utils/api";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
-
-const ChapterPageClient = dynamic(
-  () => import("@/components/chapter/ChapterDetailPageClient"),
-  { ssr: false }
-);
+import LazyChapterPage from "./LazyChapterPage";
 
 async function getChapter(
   storySlug: string,
@@ -43,7 +38,7 @@ export default async function ChapterDetailPage({ params }: any) {
     const { slug: storySlug, index: chapterSlug } = await params;
     const chapter = await getChapter(storySlug, chapterSlug);
     if (!chapter) return notFound();
-    return <ChapterPageClient chapter={chapter} />;
+    return <LazyChapterPage chapter={chapter} />;
   } catch (error) {
     return notFound();
   }

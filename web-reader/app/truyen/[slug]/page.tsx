@@ -3,12 +3,7 @@ import { notFound } from "next/navigation";
 
 import { ApiInstant } from "@/utils/api";
 import { Story } from "@/types/interfaces/story";
-import dynamic from "next/dynamic";
-
-const StoryDetailClient = dynamic(
-  () => import("@/components/story/StoryDetailClient"),
-  { ssr: false }
-);
+import LazyStoryPageContent from "./LazyStoryPageContent";
 
 async function fetchStory(slug: string): Promise<any | null> {
   try {
@@ -52,5 +47,5 @@ export default async function StoryDetailPage({ params }: any) {
     return notFound();
   }
 
-  return <StoryDetailClient story={story} />;
+  return <LazyStoryPageContent story={story} />;
 }

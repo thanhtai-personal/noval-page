@@ -1,11 +1,5 @@
-import dynamic from "next/dynamic";
-
-const HomePageContent = dynamic(
-  () => import("@/components/home/HomePageContent"),
-  { ssr: false }
-  
-);
+import LazyHomePage from "./LazyHomePage";
 
 export default function HomePage() {
-  return <HomePageContent />;
+  return <LazyHomePage />;
 }

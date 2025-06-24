@@ -6,10 +6,8 @@ const animationTime = 20;
 const days = 7;
 
 export const DeadlineLoading: React.FC<{
-  label?:  string | ReactNode;
-}> = ({
-  label
-}) => {
+  label?: string | ReactNode;
+}> = ({ label }) => {
   const dayRef = useRef<HTMLSpanElement>(null);
   const deadlineTextRef = useRef<HTMLDivElement>(null);
 
@@ -230,9 +228,7 @@ export const DeadlineLoading: React.FC<{
         </g>
       </svg>
 
-      {label && <div className="deadline-days">
-        {label}
-      </div>}
+      {label && <div className="deadline-days">{label}</div>}
     </div>
   );
 };

@@ -1,12 +1,6 @@
 import { Suspense } from "react";
 import { useTranslations } from "next-intl";
-import dynamic from "next/dynamic";
-
-const SearchPageClient = dynamic(
-  () => import("@/components/searchPage/SearchPageClient"),
-  { ssr: false }
-);
-
+import LazySearchPage from "./LazySearchPage";
 export const metadata = {
   title: "Tìm kiếm truyện hay | Vô Ưu Các",
   description:
@@ -24,7 +18,7 @@ export default function Page() {
         </div>
       }
     >
-      <SearchPageClient />
+      <LazySearchPage />
     </Suspense>
   );
 }

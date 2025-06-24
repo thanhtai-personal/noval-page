@@ -54,8 +54,12 @@ export default async function RootLayout({
       >
         <Suspense fallback={<GlobalLoading />}>
           <NextIntlClientProvider locale={locale} messages={messages}>
-            <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_ID!} />
-            <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+            <GoogleAnalytics
+              GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_ID!}
+            />
+            <Providers
+              themeProps={{ attribute: "class", defaultTheme: "dark" }}
+            >
               <AppLayout>{children}</AppLayout>
             </Providers>
           </NextIntlClientProvider>

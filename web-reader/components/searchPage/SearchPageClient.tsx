@@ -65,8 +65,8 @@ const SearchPageClient = observer(() => {
 
     return () => {
       store.resetAnimations();
-    }
-  }, [theme])
+    };
+  }, [theme]);
 
   const handleSearch = async (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
@@ -180,6 +180,6 @@ const SearchPageClient = observer(() => {
       </section>
     </div>
   );
-})
+});
 
-export default SearchPageClient
+export default SearchPageClient;
