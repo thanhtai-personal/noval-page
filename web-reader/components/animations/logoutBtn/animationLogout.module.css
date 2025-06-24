@@ -47,10 +47,6 @@
 
 .logoutButton:hover .door {
   transform: rotateY(20deg);
-  transform-origin: 100% 50%;
-  transform-style: preserve-3d;
-  transition: transform 200ms ease;
-  z-index: 5;
 }
 
 .logoutButton:active::before {

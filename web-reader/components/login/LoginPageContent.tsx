@@ -36,6 +36,8 @@ const LoginPageContent = observer(() => {
     appStore.setAnimations({
       useIsland: false,
       useDNA: false,
+      use3DIsland: false,
+      useFantasyIsland: false,
       useUniverseBg: theme === "dark",
     });
 

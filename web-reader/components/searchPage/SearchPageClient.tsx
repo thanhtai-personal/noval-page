@@ -6,6 +6,7 @@ import { Pagination } from "@heroui/pagination";
 import { Checkbox } from "@heroui/checkbox";
 import { Button } from "@heroui/button";
 import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 
 import { StoriesWithSkeletonLoading } from "../common/utils/StoriesWithSkeletonLoading";
 
@@ -13,6 +14,8 @@ import { AuthorSelectModal } from "./AuthorSelectModal";
 
 import { Story } from "@/types/interfaces/story";
 import { ApiInstant } from "@/utils/api";
+import { observer } from "mobx-react-lite";
+import { useAppStore } from "@/store/Provider";
 
 const ranges = [
   { label: "0 - 300", value: "0-300" },
@@ -21,7 +24,7 @@ const ranges = [
   { label: "> 1000", value: "1000+" },
 ];
 
-export default function SearchPageClient() {
+const SearchPageClient = observer(() => {
   const t = useTranslations("search");
   const params = useSearchParams();
   const [stories, setStories] = useState<Story[]>([]);
@@ -33,6 +36,8 @@ export default function SearchPageClient() {
   const limit = 20;
   const [authorModalOpen, setAuthorModalOpen] = useState(false);
   const [selectedAuthors, setSelectedAuthors] = useState<any[]>([]);
+  const store = useAppStore();
+  const { theme } = useTheme();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,9 +51,22 @@ export default function SearchPageClient() {
       setTags(tagRes.data?.data || []);
       setAuthors(authorRes.data?.data || []);
     };
-
     fetchData();
   }, []);
+
+  useEffect(() => {
+    store.setAnimations({
+      useIsland: false,
+      useDNA: false,
+      use3DIsland: false,
+      useFantasyIsland: false,
+      useUniverseBg: theme === "dark",
+    });
+
+    return () => {
+      store.resetAnimations();
+    }
+  }, [theme])
 
   const handleSearch = async (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
@@ -162,4 +180,6 @@ export default function SearchPageClient() {
       </section>
     </div>
   );
-}
+})
+
+export default SearchPageClient
