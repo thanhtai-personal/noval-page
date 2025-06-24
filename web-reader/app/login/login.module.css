@@ -3,7 +3,6 @@
   inherits: false;
   initial-value: 0deg;
 }
-
 .box {
   font-family: "Poppins", sans-serif;
   position: relative;
@@ -20,6 +19,9 @@
   filter: drop-shadow(0 15px 50px #000);
   border-radius: 20px;
   animation: rotating 4s linear infinite;
+  -webkit-animation: rotating 4s linear infinite;
+  -moz-animation: rotating 4s linear infinite;
+  -o-animation: rotating 4s linear infinite;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,6 +34,30 @@
   }
 
   0% {
+    --a: 360deg;
+  }
+}
+@-webkit-keyframes rotating {
+  0% {
+    --a: 0deg;
+  }
+  100% {
+    --a: 360deg;
+  }
+}
+@-moz-keyframes rotating {
+  0% {
+    --a: 0deg;
+  }
+  100% {
+    --a: 360deg;
+  }
+}
+@-o-keyframes rotating {
+  0% {
+    --a: 0deg;
+  }
+  100% {
     --a: 360deg;
   }
 }
@@ -51,6 +77,10 @@
   );
   filter: drop-shadow(0 15px 50px #000);
   border-radius: 20px;
+  animation: rotating 4s linear infinite;
+  -webkit-animation: rotating 4s linear infinite;
+  -moz-animation: rotating 4s linear infinite;
+  -o-animation: rotating 4s linear infinite;
   animation: rotating 4s linear infinite;
   animation-delay: -1s;
 }

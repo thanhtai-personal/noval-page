@@ -5,10 +5,10 @@ import { useAppStore } from "@/store/Provider";
 import { isMobile } from "@/utils/funtions";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-// import Sprite from "@/components/animations/sprites/Sprite";
+import Sprite from "@/components/animations/sprites/Sprite";
 
-// import islandPng from "@/assets/sprites/island/01.png";
-// import islandPng2 from "@/assets/sprites/island/I01.png";
+import islandPng from "@/assets/sprites/island/01.png";
+import islandPng2 from "@/assets/sprites/island/I01.png";
 import DNA from "@/components/animations/dna/DNA";
 import DNA2 from "@/components/animations/dna/DNA2";
 import Model3DContainer from "@/components/3dmodels/3DContainer";
@@ -39,70 +39,74 @@ export const TopSprites = observer(() => {
     <div className="absolute w-full h-full z-[1] bg-transparent">
       <div className="relative w-full h-full z-[1]">
         {appStore.animations?.useIsland && (
-          <>
-            {/* <Sprite
-              images={[islandPng]}
-              width={450}
-              layer={0}
-              position={{
-                top: windowSize.height - 300,
-                left: windowSize.width - 500,
-              }}
-            /> */}
+          <Sprite
+            images={[islandPng]}
+            width={450}
+            layer={0}
+            position={{
+              top: windowSize.height - 300,
+              left: windowSize.width - 500,
+            }}
+          />
+        )}
 
-            <div className=" absolute left-[calc(100vw-500px)] top-[calc(100vh-400px)] h-screen w-[500px] z-1 opacity-90">
-              <Model3DContainer
-                camera={{ position: [0, 5, 10], fov: 30 }}
-                ambientLight={{ intensity: 1 }}
-                directionalLight={{ intensity: 1, position: [10, 10, 10] }}
-                id="PlentyDiorama"
-              >
-                <PlentyDiorama transition scale={0.0003} />
-              </Model3DContainer>
-            </div>
+        {appStore.animations?.use3DIsland && (
+          <div className=" absolute left-[calc(100vw-500px)] top-[calc(100vh-400px)] h-screen w-[500px] z-1 opacity-90">
+            <Model3DContainer
+              camera={{ position: [0, 5, 10], fov: 30 }}
+              ambientLight={{ intensity: 1 }}
+              directionalLight={{ intensity: 1, position: [10, 10, 10] }}
+              id="PlentyDiorama"
+            >
+              <PlentyDiorama transition scale={0.0003} />
+            </Model3DContainer>
+          </div>
+        )}
 
-            {/* <div className="absolute top-[calc(100vh+60px)] left-[calc(50vw-150px)] w-full h-full z-0">
-              <DNA2 />
-            </div> */}
-          </>
+        {appStore.animations?.useDNA && (
+          <div className="absolute top-[calc(100vh+60px)] left-[calc(50vw-150px)] w-full h-full z-0">
+            <DNA2 />
+          </div>
         )}
 
         {appStore.animations?.useIsland && (
-          <>
-            {/* <Sprite
-              images={[islandPng2]}
-              width={450}
-              layer={0}
-              position={{
-                top: windowSize.height + 500,
-                left: 0,
-              }}
-            /> */}
-
-            <div className=" absolute left-0 top-[calc(100vh+400px)] h-screen w-[450px] z-1 opacity-90">
-              <Model3DContainer
-                camera={{ position: [8, 0, 0], fov: 30 }}
-                ambientLight={{ intensity: 1 }}
-                directionalLight={{ intensity: 1, position: [10, 10, 10] }}
-                id="MagicalHelp"
-                // controlled
-                // devTools
-              >
-                <MagicalHelp transition scale={0.18} />
-              </Model3DContainer>
-            </div>
-
-            {/* <div className="absolute top-[calc(100vh+800px)] left-[calc(-50vw+225px)] w-full h-full z-0">
-              <DNA2 />
-            </div> */}
-          </>
+          <Sprite
+            images={[islandPng2]}
+            width={450}
+            layer={0}
+            position={{
+              top: windowSize.height + 500,
+              left: 0,
+            }}
+          />
         )}
 
-        {/* {appStore.animations?.useDNA && (
+        {appStore.animations?.use3DIsland && (
+          <div className=" absolute left-0 top-[calc(100vh+400px)] h-screen w-[450px] z-1 opacity-90">
+            <Model3DContainer
+              camera={{ position: [8, 0, 0], fov: 30 }}
+              ambientLight={{ intensity: 1 }}
+              directionalLight={{ intensity: 1, position: [10, 10, 10] }}
+              id="MagicalHelp"
+              // controlled
+              // devTools
+            >
+              <MagicalHelp transition scale={0.18} />
+            </Model3DContainer>
+          </div>
+        )}
+
+        {appStore.animations?.useDNA && (
+          <div className="absolute top-[calc(100vh+800px)] left-[calc(-50vw+225px)] w-full h-full z-0">
+            <DNA2 />
+          </div>
+        )}
+
+        {appStore.animations?.useDNA && (
           <div className="absolute -top-[40px] -left-[50vw] w-full h-full z-50">
             <DNA />
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );

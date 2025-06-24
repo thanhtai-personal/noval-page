@@ -59,9 +59,88 @@
       center center;
   }
 }
+@-webkit-keyframes fire {
+  0% {
+    opacity: 0.1;
+    background-position:
+      center 0px,
+      center 0px,
+      50% 100%,
+      center center;
+  }
+  50% {
+    opacity: var(--maxOpacity, 0.5);
+  }
+  100% {
+    opacity: 0.1;
+    background-position:
+      center -500px,
+      center -650px,
+      50% 100%,
+      center center;
+  }
+}
 
 .fireline {
   width: 100%;
   height: 100%;
   overflow: hidden;
+}
+
+/* Cross-browser support for filter */
+.fireline::before {
+  -webkit-filter: brightness(3.7) blur(7px) contrast(6);
+  filter: brightness(3.7) blur(7px) contrast(6);
+}
+
+/* Cross-browser support for box-shadow */
+.fireline::before {
+  -webkit-box-shadow: inset 0 -20px 25px -30px #63bbc5;
+  box-shadow: inset 0 -20px 25px -30px #63bbc5;
+}
+
+/* Cross-browser support for background-blend-mode and mix-blend-mode */
+.fireline::before {
+  background-blend-mode: hard-light, color-dodge, multiply;
+  mix-blend-mode: color-dodge;
+  -webkit-background-blend-mode: hard-light, color-dodge, multiply;
+  -webkit-mix-blend-mode: color-dodge;
+}
+
+/* Cross-browser support for animation */
+.fireline::before {
+  -webkit-animation: fire 2.75s linear infinite;
+  animation: fire 2.75s linear infinite;
+}
+
+/* Cross-browser support for background-size, background-position, background-repeat */
+.fireline::before {
+  -webkit-background-size:
+    100% 100%,
+    100% 100%;
+  background-size:
+    100% 100%,
+    100% 100%;
+  -webkit-background-position:
+    0px 0px,
+    0px 0px,
+    var(--gradientPos);
+  background-position:
+    0px 0px,
+    0px 0px,
+    var(--gradientPos);
+  -webkit-background-repeat: repeat, repeat, repeat, no-repeat;
+  background-repeat: repeat, repeat, repeat, no-repeat;
+}
+
+/* Cross-browser support for position: absolute and inset */
+.fireline::before,
+.fireline::after {
+  position: absolute;
+  inset: 0;
+  /* Fallback for inset */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }

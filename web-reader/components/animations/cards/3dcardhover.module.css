@@ -27,12 +27,35 @@
     hsl(360, var(--saturation), var(--lightness))
   );
   background-repeat: repeat;
+  -webkit-background-repeat: repeat;
+  -moz-background-repeat: repeat;
+  -o-background-repeat: repeat;
+  -ms-background-repeat: repeat;
   animation: gradient 60s linear infinite;
   background-size: var(--bgsize) var(--bgsize);
   width: 100%;
   height: 100%;
 }
-
+@-webkit-keyframes gradient {
+  100% {
+    background-position: var(--bgsize) calc(-1 * var(--bgsize));
+  }
+}
+@-webkit-keyframes reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.15);
+  }
+  70%,
+  100% {
+    transform: scale(1);
+  }
+}
+@-webkit-keyframes dash {
+  to {
+    background-position: 16px;
+  }
+}
 @keyframes gradient {
   100% {
     background-position: var(--bgsize) calc(-1 * var(--bgsize));
@@ -134,8 +157,40 @@
     background: linear-gradient(90deg, var(--gray-700) 50%, transparent 50%);
     background-repeat: repeat-x;
     background-size: 16px;
+    -webkit-background-size: 16px;
+    -moz-background-size: 16px;
+    -o-background-size: 16px;
+    -ms-background-size: 16px;
     animation: dash 2s linear infinite;
     -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      white 3rem,
+      white calc(100% - 3rem),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      white 3rem,
+      white calc(100% - 3rem),
+      transparent 100%
+    );
+    -moz-mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      white 3rem,
+      white calc(100% - 3rem),
+      transparent 100%
+    );
+    -ms-mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      white 3rem,
+      white calc(100% - 3rem),
+      transparent 100%
+    );
+    -o-mask-image: linear-gradient(
       90deg,
       transparent 0%,
       white 3rem,
@@ -156,9 +211,29 @@
 .cardWrapper {
   opacity: 1;
   animation: reveal 2s;
+  -webkit-animation: reveal 2s;
+  -moz-animation: reveal 2s;
+  -o-animation: reveal 2s;
+  -ms-animation: reveal 2s;
   transition: 0.2s;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  -ms-transition: 0.2s;
   transition-timing-function: ease-out;
+  -webkit-transition-timing-function: ease-out;
+  -moz-transition-timing-function: ease-out;
+  -o-transition-timing-function: ease-out;
+  -ms-transition-timing-function: ease-out;
   transform: rotateX(calc((var(--mouse-y, 0.5) - 0.5) * -0.075deg))
+    rotateY(calc((var(--mouse-x, 0.5) - 0.5) * 0.075deg));
+  -webkit-transform: rotateX(calc((var(--mouse-y, 0.5) - 0.5) * -0.075deg))
+    rotateY(calc((var(--mouse-x, 0.5) - 0.5) * 0.075deg));
+  -moz-transform: rotateX(calc((var(--mouse-y, 0.5) - 0.5) * -0.075deg))
+    rotateY(calc((var(--mouse-x, 0.5) - 0.5) * 0.075deg));
+  -ms-transform: rotateX(calc((var(--mouse-y, 0.5) - 0.5) * -0.075deg))
+    rotateY(calc((var(--mouse-x, 0.5) - 0.5) * 0.075deg));
+  -o-transform: rotateX(calc((var(--mouse-y, 0.5) - 0.5) * -0.075deg))
     rotateY(calc((var(--mouse-x, 0.5) - 0.5) * 0.075deg));
 
   &:hover {

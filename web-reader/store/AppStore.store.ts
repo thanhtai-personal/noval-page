@@ -11,6 +11,7 @@ interface AnimationProps {
   useDNA?: boolean;
   useUniverseBg?: boolean;
   useFantasyIsland?: boolean;
+  use3DIsland?: boolean;
 }
 
 export class AppStore {
@@ -48,10 +49,11 @@ export class AppStore {
 
   resetAnimations() {
     this.animations = {
-      useIsland: true,
-      useDNA: true,
+      useIsland: false,
+      useDNA: false,
       useUniverseBg: true,
       useFantasyIsland: true,
+      use3DIsland: false,
     };
   }
 
