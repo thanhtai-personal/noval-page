@@ -33,7 +33,7 @@ export const BottomSprites = observer(() => {
 
   return (
     <div className="absolute bottom-0 right-0 w-full z-0 bg-transparent">
-      <div className="relative w-full h-full z-0 overflow-x-hidden">
+      <div className="relative w-full h-full z-0 overflow-hidden">
         {appStore.animations.useUniverseBg && (
           <GalaxyBackground id="GalaxyBackground-footer" />
         )}
