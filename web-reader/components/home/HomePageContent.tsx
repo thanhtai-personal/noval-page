@@ -5,8 +5,6 @@ import { useTranslations } from "next-intl";
 
 import { ApiInstant } from "@/utils/api";
 import { Story } from "@/types/interfaces/story";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { Fire1Wrapper } from "@/components/animations/fires/Fire1Wrapper";
 import { FireLineWrapper } from "@/components/animations/fires/FireLineWrapper";
 import LazySlider from "./LazySlider";
@@ -45,10 +43,13 @@ export default function HomePageContent() {
   const sliderSettings = {
     dots: false,
     infinite: true,
-    speed: 1250,
+    autoplaySpeed: 5000,
+    speed: 1500,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
+    arrows: false,
+    lazyLoad: 'progressive'
   };
 
   return (

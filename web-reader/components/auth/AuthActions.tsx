@@ -1,8 +1,6 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Button } from "@heroui/button";
-import { useEffect, useState } from "react";
 
 import { LinkWithRedirecting } from "@/components/common/utils/LinkWithRedirecting";
 

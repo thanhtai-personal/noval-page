@@ -34,8 +34,11 @@ export const BottomSprites = observer(() => {
   return (
     <div className="absolute bottom-0 right-0 w-full z-0 bg-transparent">
       <div className="relative w-full h-full z-0 overflow-x-hidden">
+        {appStore.animations.useUniverseBg && (
+          <GalaxyBackground id="GalaxyBackground-footer" />
+        )}
         {appStore.animations.useFantasyIsland && (
-          <div className=" absolute bottom-[200px] left-0 w-full h-screen z-0 opacity-50">
+          <div className=" absolute bottom-0 left-0 w-full h-screen z-0 opacity-50">
             <Model3DContainer
               camera={{ position: [0, 0, 10], fov: 30 }}
               ambientLight={{ intensity: 1 }}
@@ -45,9 +48,6 @@ export const BottomSprites = observer(() => {
               <FantasyIsland3DModel rotate scale={0.0038} />
             </Model3DContainer>
           </div>
-        )}
-        {appStore.animations.useUniverseBg && (
-          <GalaxyBackground id="GalaxyBackground-footer" />
         )}
       </div>
     </div>

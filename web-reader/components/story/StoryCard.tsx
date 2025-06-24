@@ -25,7 +25,14 @@ export const StoryCard = observer(
           className="w-full h-full  rounded-md overflow-hidden"
         >
           <Card
-            className={`w-full h-full ${isSlide ? "bg-[#FFAA0022]" : ""} backdrop:blur-xl`}
+            className={`w-full h-full ${isSlide ? "bg-[#2585f399]" : ""
+              } backdrop:blur-xl`}
+            style={{
+              background:
+                isSlide
+                  ? `linear-gradient(135deg, #2585f399, ${story.cover ? "#fff0" : "#f7b80199"}, #f75c0299)`
+                  : ``,
+            }}
           >
             <CardHeader className="p-0">
               {isSlide ? (
