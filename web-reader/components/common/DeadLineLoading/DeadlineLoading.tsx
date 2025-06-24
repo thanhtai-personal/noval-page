@@ -6,7 +6,7 @@ const animationTime = 20;
 const days = 7;
 
 export const DeadlineLoading: React.FC<{
-  label:  string | ReactNode;
+  label?:  string | ReactNode;
 }> = ({
   label
 }) => {

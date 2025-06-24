@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import "./SideLoading.css";
 
 const SideLoading: React.FC<{
-  label: string | ReactNode
+  label?: string | ReactNode
 }> = ({ label }: any) => {
   return (
     <div className={`side_loader`}>

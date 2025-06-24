@@ -11,6 +11,8 @@ import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { GoogleAnalytics } from "@/lib/analytic";
+import { Suspense } from "react";
+import GlobalLoading from "./loading";
 
 // import { getLocale } from "next-intl/server";
 
@@ -50,12 +52,14 @@ export default async function RootLayout({
           fontSans.variable,
         )}
       >
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_ID!} />
-          <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-            <AppLayout>{children}</AppLayout>
-          </Providers>
-        </NextIntlClientProvider>
+        <Suspense fallback={<GlobalLoading />}>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_ID!} />
+            <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+              <AppLayout>{children}</AppLayout>
+            </Providers>
+          </NextIntlClientProvider>
+        </Suspense>
       </body>
     </html>
   );

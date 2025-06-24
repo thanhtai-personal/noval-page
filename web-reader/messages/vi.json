@@ -1,4 +1,7 @@
 {
+  "global": {
+    "loading": "Đang tải..."
+  },
   "search": {
     "title": "Tìm kiếm truyện hay | Vô Ưu Các",
     "description": "Tìm kiếm truyện tiên hiệp, kiếm hiệp, huyền huyễn hấp dẫn theo từ khóa, thể loại, tác giả hoặc số chương.",

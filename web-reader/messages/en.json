@@ -1,4 +1,7 @@
 {
+  "global": {
+    "loading": "Loading..."
+  },
   "search": {
     "title": "Find great stories | Vo Uu Cac",
     "description": "Search for captivating xianxia, wuxia, and fantasy stories by keyword, genre, author, or chapter count.",
