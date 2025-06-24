@@ -17,7 +17,7 @@ interface AnimationProps {
 export class AppStore {
   useLayout: boolean = true;
   profile: any = null;
-  animationMode: boolean = false;
+  animationMode: boolean = true;
   useFooter: boolean = true;
   useGameMenu: boolean = true;
   animations: AnimationProps = {};
