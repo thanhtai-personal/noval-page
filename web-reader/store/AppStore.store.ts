@@ -24,9 +24,12 @@ export class AppStore {
 
   constructor() {
     makeAutoObservable(this);
-    this.animationMode = Boolean(
-      localStorage?.getItem("animationMode") === "true",
-    );
+    const animMode = localStorage?.getItem("animationMode");
+    if (animMode !== null && animMode !== undefined) {
+      this.animationMode = Boolean(
+        localStorage?.getItem("animationMode") === "true",
+      );
+    }
     this.resetAnimations();
     this.fetchProfile();
   }
