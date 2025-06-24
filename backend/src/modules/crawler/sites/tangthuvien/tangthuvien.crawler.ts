@@ -449,6 +449,10 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
           });
           this.logData(`Created chapter: ${listChapters[chapterIndex].title}`);
         }
+      } else {
+        this.logData(
+          `Ignore chapters by small number of chapters - ${listChapters.length}`,
+        );
       }
 
       await this.storyModel.findOneAndUpdate(
