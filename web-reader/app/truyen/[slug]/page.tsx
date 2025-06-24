@@ -1,13 +1,9 @@
-import { lazy, Suspense } from "react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ApiInstant } from "@/utils/api";
 import { Story } from "@/types/interfaces/story";
-// import DeadlineLoading from "@/components/common/DeadLineLoading/DeadlineLoading";
-// import LazyStoryPageContent from "./LazyStoryPageContent";
-
-const StoryDetailClient = lazy(() => import("@/components/story/StoryDetailClient"));
+import LazyStoryPageContent from "./LazyStoryPageContent";
 
 async function fetchStory(slug: string): Promise<any | null> {
   try {
@@ -28,18 +24,18 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
   };
 }
 
-export const revalidate = 3600; // 1h
+// export const revalidate = 3600; // 1h
 
-export async function generateStaticParams() {
-  // Gọi API lấy top 100 truyện nhiều lượt đọc nhất
-  try {
-    const res = await ApiInstant.get("/stories?limit=100&sort=-views");
-    const stories = res.data || [];
-    return stories.map((story: any) => ({ slug: story.slug }));
-  } catch {
-    return [];
-  }
-}
+// export async function generateStaticParams() {
+//   // Gọi API lấy top 100 truyện nhiều lượt đọc nhất
+//   try {
+//     const res = await ApiInstant.get("/stories?limit=100&sort=-views");
+//     const stories = res.data || [];
+//     return stories.map((story: any) => ({ slug: story.slug }));
+//   } catch {
+//     return [];
+//   }
+// }
 
 export default async function StoryDetailPage({ params }: any) {
   let story: Story;
@@ -51,7 +47,5 @@ export default async function StoryDetailPage({ params }: any) {
     return notFound();
   }
 
-  return <Suspense fallback={<div>loading...</div>}>
-    <StoryDetailClient story={story} />
-  </Suspense>;
+  return <LazyStoryPageContent story={story} />;
 }
