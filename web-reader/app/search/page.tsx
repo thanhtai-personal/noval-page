@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 
 const SearchPageClient = dynamic(
   () => import("@/components/searchPage/SearchPageClient"),
+  { ssr: false }
 );
 
 export const metadata = {

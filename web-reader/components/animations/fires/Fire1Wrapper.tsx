@@ -1,7 +1,9 @@
 import { useInView } from "react-intersection-observer";
 import dynamic from "next/dynamic";
 
-const Fire1 = dynamic(() => import("./Fire1"));
+const Fire1 = dynamic(() => import("./Fire1"), 
+  { ssr: false }
+);
 
 export function Fire1Wrapper(props: any = {}) {
   const { ref, inView } = useInView({ triggerOnce: true });

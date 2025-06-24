@@ -1,5 +1,5 @@
-// Move translation and rendering logic to a client component
 "use client";
+
 import { useTranslations } from "next-intl";
 import React from "react";
 import { Badge } from "@heroui/badge";

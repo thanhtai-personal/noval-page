@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 
 const StoryDetailClient = dynamic(
   () => import("@/components/story/StoryDetailClient"),
+  { ssr: false }
 );
 
 async function fetchStory(slug: string): Promise<any | null> {
