@@ -1,10 +1,13 @@
+import { lazy, Suspense } from "react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ApiInstant } from "@/utils/api";
 import { Story } from "@/types/interfaces/story";
+// import DeadlineLoading from "@/components/common/DeadLineLoading/DeadlineLoading";
 // import LazyStoryPageContent from "./LazyStoryPageContent";
-import StoryDetailClient from "@/components/story/StoryDetailClient";
+
+const StoryDetailClient = lazy(() => import("@/components/story/StoryDetailClient"));
 
 async function fetchStory(slug: string): Promise<any | null> {
   try {
@@ -48,5 +51,7 @@ export default async function StoryDetailPage({ params }: any) {
     return notFound();
   }
 
-  return <StoryDetailClient story={story} />;
+  return <Suspense fallback={<div>loading...</div>}>
+    <StoryDetailClient story={story} />
+  </Suspense>;
 }
