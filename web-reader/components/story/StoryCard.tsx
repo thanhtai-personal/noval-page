@@ -22,10 +22,10 @@ export const StoryCard = observer(
       >
         <WrapperComponent
           id={story._id}
-          className="w-full h-full  rounded-md overflow-hidden"
+          className="w-full h-full rounded-md overflow-hidden"
         >
           <Card
-            className={`w-full h-full ${isSlide ? "bg-[#2585f399]" : ""
+            className={`w-full h-full rounded-[22px] ${isSlide ? "bg-[#2585f399]" : ""
               } backdrop:blur-xl`}
             style={{
               background:
