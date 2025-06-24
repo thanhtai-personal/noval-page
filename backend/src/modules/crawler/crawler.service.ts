@@ -10,10 +10,10 @@ import { VtruyenCrawler } from './sites/vtruyen.crawler';
 import { ICrawlerAdapter } from './sites/interfaces/crawler-adapter.interface';
 import { Source } from '@/schemas/source.schema';
 import { CrawlerGateway } from './crawler.gateway';
-import { sleep } from '@/utils/functions';
+// import { sleep } from '@/utils/functions';
 
-import * as fs from 'fs';
-import * as path from 'path';
+// import * as fs from 'fs';
+// import * as path from 'path';
 import { LIMIT_CONFIG } from '@/utils/constants';
 
 @Injectable()
