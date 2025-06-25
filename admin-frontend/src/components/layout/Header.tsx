@@ -12,8 +12,8 @@ export const Header = observer(() => {
   const navigate = useNavigate();
   const { t, locale, setLocale } = useI18n();
 
-  const handleLogout = () => {
-    authStore.logout();
+  const handleLogout = async () => {
+    await authStore.logout();
     navigate('/login');
   };
 
