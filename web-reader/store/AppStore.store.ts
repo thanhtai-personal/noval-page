@@ -84,6 +84,8 @@ export class AppStore {
   async logout() {
     try {
       await ApiInstant.post("/auth/logout");
+    } catch (error) {
+      console.log("logout error", error);
     } finally {
       this.clear();
     }

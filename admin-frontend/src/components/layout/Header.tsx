@@ -13,8 +13,12 @@ export const Header = observer(() => {
   const { t, locale, setLocale } = useI18n();
 
   const handleLogout = async () => {
-    await authStore.logout();
-    navigate('/login');
+    try {
+      await authStore.logout();
+      navigate('/login');
+    } catch (error) {
+      console.log("failed logout", error)
+    }
   };
 
   const engFlag = (
