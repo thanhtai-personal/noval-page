@@ -25,7 +25,7 @@ import { Request, Response } from 'express';
 // @UseGuards(JwtAuthGuard) //But only do this if you haven't already applied JwtAuthGuard globally in main.ts.
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   // 🔗 Đăng nhập bằng Google
   @Public()
@@ -104,8 +104,14 @@ export class AuthController {
     @CurrentUser('userId') userId: string,
     @Res({ passthrough: true }) res: Response,
   ) {
-    res.clearCookie('access_token');
-    res.clearCookie('refresh_token');
+    res.clearCookie('access_token', {
+      sameSite: 'none',
+      secure: true
+    });
+    res.clearCookie('refresh_token', {
+      sameSite: 'none',
+      secure: true
+    });
     return await this.authService.logout(userId);
   }
 
