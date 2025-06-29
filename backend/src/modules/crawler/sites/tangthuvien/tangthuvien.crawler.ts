@@ -41,6 +41,8 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     @InjectModel(Chapter.name, DBNames.story2) private chapter2Model: Model<Chapter>,
     @InjectModel(Story.name, DBNames.story3) private story3Model: Model<Story>,
     @InjectModel(Chapter.name, DBNames.story3) private chapter3Model: Model<Chapter>,
+    @InjectModel(Story.name, DBNames.story4) private story4Model: Model<Story>,
+    @InjectModel(Chapter.name, DBNames.story4) private chapter4Model: Model<Chapter>,
   ) {
     this.getSource();
   }

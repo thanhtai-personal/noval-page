@@ -23,6 +23,10 @@ import { Role, RoleSchema } from "@/schemas/role.schema";
       { name: Story.name, schema: StorySchema },
     ], DBNames.story3),
     MongooseModule.forFeature([
+      { name: Chapter.name, schema: ChapterSchema },
+      { name: Story.name, schema: StorySchema },
+    ], DBNames.story4),
+    MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Role.name, schema: RoleSchema },
     ], DBNames.ums),

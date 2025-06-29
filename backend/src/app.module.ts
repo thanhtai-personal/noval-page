@@ -35,7 +35,7 @@ import { CrawlerGateway } from "./modules/crawler/crawler.gateway";
 import { BlogModule } from './modules/blog/blog.module';
 import { RolesGuard } from './modules/auth/guards/role.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
-import { DBNames, getDBURIs } from "./utils/database";
+import { DB_STORIES_NAMES, DBNames, getDBURIs } from "./utils/database";
 
 @Module({
   imports: [
@@ -62,6 +62,7 @@ import { DBNames, getDBURIs } from "./utils/database";
         }
       ],
     }),
+
     
     MongooseModule.forRootAsync({
       connectionName: DBNames.ums,
@@ -69,24 +70,12 @@ import { DBNames, getDBURIs } from "./utils/database";
         uri: getDBURIs().UMS,
       }),
     }),
-    MongooseModule.forRootAsync({
-      connectionName: DBNames.story1,
+    ...DB_STORIES_NAMES.map((name, index) => MongooseModule.forRootAsync({
+      connectionName: name,
       useFactory: () => ({
-        uri: getDBURIs().STORIES[0],
+        uri: getDBURIs().STORIES[index],
       }),
-    }),
-    MongooseModule.forRootAsync({
-      connectionName: DBNames.story2,
-      useFactory: () => ({
-        uri: getDBURIs().STORIES[1],
-      }),
-    }),
-    MongooseModule.forRootAsync({
-      connectionName: DBNames.story3,
-      useFactory: () => ({
-        uri: getDBURIs().STORIES[2],
-      }),
-    }),
+    })),
 
     CrawlerModule,
     StoryModule,

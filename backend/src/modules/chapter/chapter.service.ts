@@ -16,6 +16,8 @@ export class ChapterService {
     @InjectModel(Story.name, DBNames.story2) private story2Model: Model<Story>,
     @InjectModel(Chapter.name, DBNames.story3) private chapter3Model: Model<Chapter>,
     @InjectModel(Story.name, DBNames.story3) private story3Model: Model<Story>,
+    @InjectModel(Chapter.name, DBNames.story4) private chapter4Model: Model<Chapter>,
+    @InjectModel(Story.name, DBNames.story4) private story4Model: Model<Story>,
     @InjectModel(User.name, DBNames.ums) private userModel: Model<User>
   ) { }
 

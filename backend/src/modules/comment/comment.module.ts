@@ -26,6 +26,10 @@ import { DBNames } from "@/utils/database";
       { name: Comment.name, schema: CommentSchema },
       { name: Story.name, schema: StorySchema },
     ], DBNames.story3),
+    MongooseModule.forFeature([
+      { name: Comment.name, schema: CommentSchema },
+      { name: Story.name, schema: StorySchema },
+    ], DBNames.story4),
   ],
   controllers: [CommentController],
   providers: [CommentService],

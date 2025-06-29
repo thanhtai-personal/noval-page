@@ -54,6 +54,15 @@ import { Role, RoleSchema } from "@/schemas/role.schema";
       { name: Source.name, schema: SourceSchema },
       { name: CrawlHistory.name, schema: CrawlHistorySchema },
     ], DBNames.story3),
+    MongooseModule.forFeature([
+      { name: Story.name, schema: StorySchema },
+      { name: Chapter.name, schema: ChapterSchema },
+      { name: Author.name, schema: AuthorSchema },
+      { name: Category.name, schema: CategorySchema },
+      { name: Tag.name, schema: TagSchema },
+      { name: Source.name, schema: SourceSchema },
+      { name: CrawlHistory.name, schema: CrawlHistorySchema },
+    ], DBNames.story4),
   ],
   controllers: [CrawlerController],
   providers: [
