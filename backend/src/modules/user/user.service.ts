@@ -5,12 +5,14 @@ import { Role } from '@/schemas/role.schema';
 import { Model, Types } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
+import { Level } from "@/schemas/level.schema";
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     @InjectModel(Role.name) private roleModel: Model<Role>,
+    @InjectModel(Level.name) private levelModel: Model<Level>,
   ) {}
 
   async getUsers() {

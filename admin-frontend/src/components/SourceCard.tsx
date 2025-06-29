@@ -46,6 +46,15 @@ export const SourceCard = ({
     }
   }
 
+  const handleCrawlChaptersContent = async () => {
+    setIsLoading(true);
+    try {
+      await api.post(`/crawler/source/${source._id}/crawl-chapters/content`);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   const toggleExpand = () => {
     setExpanded((prev) => !prev);
   };
@@ -72,6 +81,9 @@ export const SourceCard = ({
           </Button>
           <Button variant="default" onClick={handleCrawlChapters} disabled={isLoading}>
             {isLoading ? "Đang gửi..." : "🚀 Crawl chapters"}
+          </Button>
+          <Button variant="default" onClick={handleCrawlChaptersContent} disabled={isLoading}>
+            {isLoading ? "Đang gửi..." : "🚀 Crawl chapters content"}
           </Button>
           <Button variant="outline" onClick={toggleExpand}>
             {expanded ? "Ẩn" : "Xem thêm"}

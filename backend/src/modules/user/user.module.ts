@@ -5,6 +5,7 @@ import { Role, RoleSchema } from '@/schemas/role.schema';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { Level, LevelSchema } from '@/schemas/level.schema';
+import { DBNames } from "@/utils/dbConfig";
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { Level, LevelSchema } from '@/schemas/level.schema';
       { name: User.name, schema: UserSchema },
       { name: Role.name, schema: RoleSchema },
       { name: Level.name, schema: LevelSchema },
-    ]),
+    ], DBNames.ums),
   ],
   controllers: [UserController],
   providers: [UserService],

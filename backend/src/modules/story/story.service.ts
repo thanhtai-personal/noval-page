@@ -6,12 +6,18 @@ import { GetStoryListDto } from './dto/get-story-list.dto';
 import { slugify } from '@/utils/slugify';
 import { CreateStoryDto } from './dto/create-story.dto';
 import { User } from "@/schemas/user.schema";
+import { DBNames } from "@/utils/dbConfig";
 
 @Injectable()
 export class StoryService {
   constructor(
-    @InjectModel(Story.name) private storyModel: Model<Story>,
-    @InjectModel(User.name) private userModel: Model<User>
+
+    @InjectModel(Story.name, DBNames.story1) private readonly storyModelDB1: Model<Story>,
+    @InjectModel(Story.name, DBNames.story2) private readonly storyModelDB2: Model<Story>,
+    @InjectModel(Story.name, DBNames.story3) private readonly storyModelDB3: Model<Story>,
+
+    @InjectModel(User.name, DBNames.ums) private readonly userModel: Model<User>,
+    
   ) { }
 
   async getStories(query: GetStoryListDto) {
@@ -71,9 +77,9 @@ export class StoryService {
       sortBy = { [sort]: -1 };
     }
 
-    const total = await this.storyModel.countDocuments(filter);
+    const total = await this.storyModelDB1.countDocuments(filter);
 
-    const data = await this.storyModel
+    const data = await this.storyModelDB1
       .find(filter)
       .sort(sortBy)
       .skip((page - 1) * limit)
@@ -92,8 +98,16 @@ export class StoryService {
     };
   }
 
+  async getOne(slug: string) {
+    return await this.storyModelDB1.findOne({ slug })
+  }
+
+  async findByIdAndUpdate(id: string, dataUpdate: Partial<Story>) {
+    return this.storyModelDB1.findByIdAndUpdate(id, dataUpdate);
+  }
+
   async getStoryDetail(slug: string) {
-    return await this.storyModel
+    return await this.storyModelDB1
       .findOne({ slug })
       .populate('author', 'name slug')
       .populate('tags', 'name slug')
@@ -104,7 +118,7 @@ export class StoryService {
     try {
       const slug = slugify(dto.title, { lower: true });
 
-      return await this.storyModel.create({
+      return await this.storyModelDB1.create({
         title: dto.title,
         description: dto.description,
         slug,
@@ -116,7 +130,7 @@ export class StoryService {
 
   async markAsRead(slug, userId) {
     try {
-      const story = await this.storyModel.findOne({ slug });
+      const story = await this.storyModelDB1.findOne({ slug });
       const user = await this.userModel.findById(userId);
       const newExp = (user?.exp || 0) + (story?.expValue || 1);
 
@@ -126,7 +140,7 @@ export class StoryService {
       // }
 
       await this.userModel.findByIdAndUpdate(userId, dataUpdate);
-      await this.storyModel.findByIdAndUpdate(story?._id, {
+      await this.storyModelDB1.findByIdAndUpdate(story?._id, {
         views: Number(story?.views || '0') + 1
       });
     } catch (error) {

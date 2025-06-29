@@ -1,84 +1,50 @@
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule } from "@nestjs/config";
-
-// Schemas
-import { Story, StorySchema } from '@/schemas/story.schema';
-import { Chapter, ChapterSchema } from '@/schemas/chapter.schema';
-import { Author, AuthorSchema } from '@/schemas/author.schema';
-import { Category, CategorySchema } from '@/schemas/category.schema';
-import { Tag, TagSchema } from '@/schemas/tag.schema';
-import { User, UserSchema } from '@/schemas/user.schema';
-import { Role, RoleSchema } from '@/schemas/role.schema';
-import { Comment, CommentSchema } from '@/schemas/comment.schema';
-import { Source, SourceSchema } from "./schemas/source.schema";
+import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 // Modules
 import { CrawlerModule } from '@/modules/crawler/crawler.module';
-import { StoryModule } from "./modules/story/story.module";
-import { ChapterModule } from "./modules/chapter/chapter.module";
-import { AuthorModule } from "./modules/author/author.module";
-import { UserModule } from "./modules/user/user.module";
-import { RoleModule } from "./modules/role/role.module";
-import { CommentModule } from "./modules/comment/comment.module";
-import { CategoryModule } from "./modules/category/category.module";
-import { TagModule } from "./modules/tag/tag.module";
-import { AuthModule } from "./modules/auth/auth.module";
-import { SourceModule } from "./modules/source/source.module";
-
-// Middleware
-import { LoggerMiddleware } from "@/common/middlewares/logger.middleware";
-import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
-import { APP_GUARD } from "@nestjs/core";
-import { ScheduleModule } from "@nestjs/schedule";
-import { CrawlerGateway } from "./modules/crawler/crawler.gateway";
-import { Blog, BlogSchema } from './schemas/blog.schema';
+import { StoryModule } from './modules/story/story.module';
+import { ChapterModule } from './modules/chapter/chapter.module';
+import { AuthorModule } from './modules/author/author.module';
+import { UserModule } from './modules/user/user.module';
+import { RoleModule } from './modules/role/role.module';
+import { CommentModule } from './modules/comment/comment.module';
+import { CategoryModule } from './modules/category/category.module';
+import { TagModule } from './modules/tag/tag.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { SourceModule } from './modules/source/source.module';
 import { BlogModule } from './modules/blog/blog.module';
+import { LevelModule } from './modules/level/level.module';
+
+// Middleware & Gateway & Guards
+import { LoggerMiddleware } from '@/common/middlewares/logger.middleware';
+import { CrawlerGateway } from './modules/crawler/crawler.gateway';
 import { RolesGuard } from './modules/auth/guards/role.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
-import { CrawlHistory, CrawlHistorySchema } from './schemas/crawlHistory.schema';
-import { Level, LevelSchema } from './schemas/level.schema';
+
+// Providers
+import { MongoDBProvider } from './common/database/multi-db.providers';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
+    ConfigModule.forRoot({ isGlobal: true }),
     ScheduleModule.forRoot(),
+
     ThrottlerModule.forRoot({
       throttlers: [
-        {
-          name: 'short',
-          ttl: 60,
-          limit: 10,
-        },
-        {
-          name: 'medium',
-          ttl: 600,
-          limit: 50
-        },
-        {
-          name: 'long',
-          ttl: 6000,
-          limit: 250
-        }
+        { name: 'short', ttl: 60, limit: 10 },
+        { name: 'medium', ttl: 600, limit: 50 },
+        { name: 'long', ttl: 6000, limit: 250 },
       ],
     }),
-    MongooseModule.forRoot(process.env.MONGO_URI!),
-    MongooseModule.forFeature([
-      { name: Story.name, schema: StorySchema },
-      { name: Chapter.name, schema: ChapterSchema },
-      { name: Author.name, schema: AuthorSchema },
-      { name: Category.name, schema: CategorySchema },
-      { name: Tag.name, schema: TagSchema },
-      { name: User.name, schema: UserSchema },
-      { name: Role.name, schema: RoleSchema },
-      { name: Comment.name, schema: CommentSchema },
-      { name: Source.name, schema: SourceSchema },
-      { name: Blog.name, schema: BlogSchema },
-      { name: Level.name, schema: LevelSchema },
-      { name: CrawlHistory.name, schema: CrawlHistorySchema },
-    ]),
+
+    // Kết nối các DB từ MultiDbProviders
+    ...MongoDBProvider,
+
+    // Feature Modules
     CrawlerModule,
     StoryModule,
     ChapterModule,
@@ -90,8 +56,10 @@ import { Level, LevelSchema } from './schemas/level.schema';
     TagModule,
     AuthModule,
     SourceModule,
-    BlogModule 
+    BlogModule,
+    LevelModule,
   ],
+
   providers: [
     {
       provide: APP_GUARD,
@@ -99,7 +67,7 @@ import { Level, LevelSchema } from './schemas/level.schema';
     },
     CrawlerGateway,
     JwtAuthGuard,
-    RolesGuard
+    RolesGuard,
   ],
 })
   

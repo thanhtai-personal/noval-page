@@ -51,6 +51,16 @@ export class CrawlerController {
     await timeout(1000);
     return { message: `Crawl chapters started for source: ${id}` };
   }
+  
+  /**
+   * API: Bắt đầu crawl toàn bộ site
+   */
+  @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
+  @Post('source/:id/crawl-chapters/content')
+  async continueCrawlChapterContent(@Param('id') id: string) {
+    this.crawlerService.crawlChapterContent(id);
+    return { message: `Crawl chapters content started for source: ${id}` };
+  }
 
   @Roles(RoleSlug.SUPER_ADMIN, RoleSlug.ADMIN)
   @Post('source/:id/crawl')

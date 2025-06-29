@@ -9,6 +9,7 @@ import { seedRoles } from './roles.seed';
 import { seedUsers } from './users.seed';
 import { seedSources } from './sources.seed';
 import * as crypto from 'crypto';
+import { DBNames } from "@/utils/dbConfig";
 
 if (
   typeof globalThis.crypto === 'undefined' ||
@@ -22,9 +23,9 @@ if (
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
 
-  const roleModel = app.get(getModelToken(Role.name));
-  const userModel = app.get(getModelToken(User.name));
-  const sourceModel = app.get(getModelToken(Source.name));
+  const roleModel = app.get(getModelToken(Role.name, DBNames.ums));
+  const userModel = app.get(getModelToken(User.name, DBNames.ums));
+  const sourceModel = app.get(getModelToken(Source.name, DBNames.ums));
 
   await seedRoles(roleModel);
   await seedUsers(userModel, roleModel);
