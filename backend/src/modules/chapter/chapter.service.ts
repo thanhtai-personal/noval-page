@@ -5,13 +5,18 @@ import { Story } from '@/schemas/story.schema';
 import { Model } from 'mongoose';
 import { GetChapterListDto } from './dto/get-chapter-list.dto';
 import { User } from "@/schemas/user.schema";
+import { DBNames } from "@/utils/database";
 
 @Injectable()
 export class ChapterService {
   constructor(
-    @InjectModel(Chapter.name) private chapterModel: Model<Chapter>,
-    @InjectModel(Story.name) private storyModel: Model<Story>,
-    @InjectModel(User.name) private userModel: Model<User>
+    @InjectModel(Chapter.name, DBNames.story1) private chapterModel: Model<Chapter>,
+    @InjectModel(Story.name, DBNames.story1) private storyModel: Model<Story>,
+    @InjectModel(Chapter.name, DBNames.story2) private chapter2Model: Model<Chapter>,
+    @InjectModel(Story.name, DBNames.story2) private story2Model: Model<Story>,
+    @InjectModel(Chapter.name, DBNames.story3) private chapter3Model: Model<Chapter>,
+    @InjectModel(Story.name, DBNames.story3) private story3Model: Model<Story>,
+    @InjectModel(User.name, DBNames.ums) private userModel: Model<User>
   ) { }
 
   async getChapterList(slug: string, query: GetChapterListDto) {

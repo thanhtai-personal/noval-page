@@ -9,6 +9,7 @@ import { JwtStrategy } from "./jwt.stragety";
 import { Role, RoleSchema } from "@/schemas/role.schema";
 import { GoogleOAuthGuard } from './guards/google-oauth.guard';
 import { GoogleStrategy } from './strategies/google.strategy';
+import { DBNames } from "@/utils/database";
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { GoogleStrategy } from './strategies/google.strategy';
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Role.name, schema: RoleSchema },
-    ]),
+    ], DBNames.ums),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, GoogleStrategy, GoogleOAuthGuard],

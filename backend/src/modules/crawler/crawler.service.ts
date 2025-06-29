@@ -15,6 +15,7 @@ import { CrawlerGateway } from './crawler.gateway';
 // import * as fs from 'fs';
 // import * as path from 'path';
 import { getLimitConfig } from '@/utils/constants';
+import { DBNames } from "@/utils/database";
 
 @Injectable()
 export class CrawlerService {
@@ -25,9 +26,13 @@ export class CrawlerService {
     private readonly tangthuvien: TangthuvienCrawler,
     private readonly vtruyen: VtruyenCrawler,
     private readonly gateway: CrawlerGateway,
-    @InjectModel(Story.name) private storyModel: Model<Story>,
-    @InjectModel(Chapter.name) private chapterModel: Model<Chapter>,
-    @InjectModel(Source.name) private sourceModel: Model<Source>,
+    @InjectModel(Story.name, DBNames.story1) private storyModel: Model<Story>,
+    @InjectModel(Chapter.name, DBNames.story1) private chapterModel: Model<Chapter>,
+    @InjectModel(Source.name, DBNames.story1) private sourceModel: Model<Source>,
+    @InjectModel(Story.name, DBNames.story2) private story2Model: Model<Story>,
+    @InjectModel(Chapter.name, DBNames.story2) private chapter2Model: Model<Chapter>,
+    @InjectModel(Story.name, DBNames.story3) private story3Model: Model<Story>,
+    @InjectModel(Chapter.name, DBNames.story3) private chapter3Model: Model<Chapter>,
   ) {}
 
   private getAdapter(source: string): ICrawlerAdapter {

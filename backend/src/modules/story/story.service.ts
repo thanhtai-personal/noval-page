@@ -6,12 +6,15 @@ import { GetStoryListDto } from './dto/get-story-list.dto';
 import { slugify } from '@/utils/slugify';
 import { CreateStoryDto } from './dto/create-story.dto';
 import { User } from "@/schemas/user.schema";
+import { DBNames } from "@/utils/database";
 
 @Injectable()
 export class StoryService {
   constructor(
-    @InjectModel(Story.name) private storyModel: Model<Story>,
-    @InjectModel(User.name) private userModel: Model<User>
+    @InjectModel(Story.name, DBNames.story1) private storyModel: Model<Story>,
+    @InjectModel(Story.name, DBNames.story2) private story2Model: Model<Story>,
+    @InjectModel(Story.name, DBNames.story3) private story3Model: Model<Story>,
+    @InjectModel(User.name, DBNames.ums) private userModel: Model<User>
   ) { }
 
   async getStories(query: GetStoryListDto) {

@@ -32,12 +32,10 @@ import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { APP_GUARD } from "@nestjs/core";
 import { ScheduleModule } from "@nestjs/schedule";
 import { CrawlerGateway } from "./modules/crawler/crawler.gateway";
-import { Blog, BlogSchema } from './schemas/blog.schema';
 import { BlogModule } from './modules/blog/blog.module';
 import { RolesGuard } from './modules/auth/guards/role.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
-import { CrawlHistory, CrawlHistorySchema } from './schemas/crawlHistory.schema';
-import { Level, LevelSchema } from './schemas/level.schema';
+import { DBNames, getDBURIs } from "./utils/database";
 
 @Module({
   imports: [
@@ -64,21 +62,32 @@ import { Level, LevelSchema } from './schemas/level.schema';
         }
       ],
     }),
-    MongooseModule.forRoot(process.env.MONGO_URI!),
-    MongooseModule.forFeature([
-      { name: Story.name, schema: StorySchema },
-      { name: Chapter.name, schema: ChapterSchema },
-      { name: Author.name, schema: AuthorSchema },
-      { name: Category.name, schema: CategorySchema },
-      { name: Tag.name, schema: TagSchema },
-      { name: User.name, schema: UserSchema },
-      { name: Role.name, schema: RoleSchema },
-      { name: Comment.name, schema: CommentSchema },
-      { name: Source.name, schema: SourceSchema },
-      { name: Blog.name, schema: BlogSchema },
-      { name: Level.name, schema: LevelSchema },
-      { name: CrawlHistory.name, schema: CrawlHistorySchema },
-    ]),
+    
+    MongooseModule.forRootAsync({
+      connectionName: DBNames.ums,
+      useFactory: () => ({
+        uri: getDBURIs().UMS,
+      }),
+    }),
+    MongooseModule.forRootAsync({
+      connectionName: DBNames.story1,
+      useFactory: () => ({
+        uri: getDBURIs().STORIES[0],
+      }),
+    }),
+    MongooseModule.forRootAsync({
+      connectionName: DBNames.story2,
+      useFactory: () => ({
+        uri: getDBURIs().STORIES[1],
+      }),
+    }),
+    MongooseModule.forRootAsync({
+      connectionName: DBNames.story3,
+      useFactory: () => ({
+        uri: getDBURIs().STORIES[2],
+      }),
+    }),
+
     CrawlerModule,
     StoryModule,
     ChapterModule,

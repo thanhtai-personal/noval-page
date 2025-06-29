@@ -17,6 +17,7 @@ import { sleep } from '@/utils/functions';
 import * as fs from 'fs';
 import * as path from 'path';
 import { getLimitConfig } from '@/utils/constants';
+import { DBNames } from "@/utils/database";
 
 const ttvSearchPath = 'https://truyen.tangthuvien.vn/tong-hop?rank=vw&page=';
 
@@ -27,14 +28,19 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
 
   constructor(
     private readonly gateway: CrawlerGateway,
-    @InjectModel(Source.name) private sourceModel: Model<Source>,
-    @InjectModel(Story.name) private storyModel: Model<Story>,
-    @InjectModel(CrawlHistory.name)
-    private crawlHistoryModel: Model<CrawlHistory>,
-    @InjectModel(Author.name) private authorModel: Model<Author>,
-    @InjectModel(Chapter.name) private chapterModel: Model<Chapter>,
-    @InjectModel(Category.name) private categoryModel: Model<Category>,
-    @InjectModel(Tag.name) private tagModel: Model<Tag>,
+
+    @InjectModel(Source.name, DBNames.story1) private sourceModel: Model<Source>,
+    @InjectModel(Author.name, DBNames.story1) private authorModel: Model<Author>,
+    @InjectModel(Category.name, DBNames.story1) private categoryModel: Model<Category>,
+    @InjectModel(CrawlHistory.name, DBNames.story1) private crawlHistoryModel: Model<Tag>,
+    @InjectModel(Tag.name, DBNames.story1) private tagModel: Model<Tag>,
+
+    @InjectModel(Story.name, DBNames.story1) private storyModel: Model<Story>,
+    @InjectModel(Chapter.name, DBNames.story1) private chapterModel: Model<Chapter>,
+    @InjectModel(Story.name, DBNames.story2) private story2Model: Model<Story>,
+    @InjectModel(Chapter.name, DBNames.story2) private chapter2Model: Model<Chapter>,
+    @InjectModel(Story.name, DBNames.story3) private story3Model: Model<Story>,
+    @InjectModel(Chapter.name, DBNames.story3) private chapter3Model: Model<Chapter>,
   ) {
     this.getSource();
   }
@@ -63,7 +69,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       }
 
       // Lấy record được tạo ra cuối cùng từ crawlHistoryModel
-      const lastCrawlRecord = (await this.crawlHistoryModel
+      const lastCrawlRecord: any = (await this.crawlHistoryModel
         .findOne({ source: this.source._id })
         .sort({ createdAt: -1 })) || {
         source: this.source._id,

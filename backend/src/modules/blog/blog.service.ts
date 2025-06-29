@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Blog } from '@/schemas/blog.schema';
 import { Model } from 'mongoose';
+import { DBNames } from "@/utils/database";
 
 @Injectable()
 export class BlogService {
-  constructor(@InjectModel(Blog.name) private blogModel: Model<Blog>) {}
+  constructor(@InjectModel(Blog.name, DBNames.ums) private blogModel: Model<Blog>) {}
 
   async getBlogs(page = 1, limit = 10, sort = 'views') {
     const total = await this.blogModel.countDocuments();

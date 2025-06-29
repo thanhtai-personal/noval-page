@@ -9,14 +9,15 @@ import { User } from '@/schemas/user.schema';
 import { Role } from '@/schemas/role.schema';
 import axios from "axios";
 import { UserDataAndUserResponseMapper } from "./mappers/UserDataAndUserResponseMapper";
+import { DBNames } from "@/utils/database";
 
 // const googleClient = new OAuth2Client();
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<User>,
-    @InjectModel(Role.name) private readonly roleModel: Model<Role>,
+    @InjectModel(User.name, DBNames.ums) private readonly userModel: Model<User>,
+    @InjectModel(Role.name, DBNames.ums) private readonly roleModel: Model<Role>,
     private readonly jwtService: JwtService,
   ) { }
 

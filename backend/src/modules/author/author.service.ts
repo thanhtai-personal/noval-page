@@ -4,12 +4,13 @@ import { Author } from '@/schemas/author.schema';
 import { Story } from '@/schemas/story.schema';
 import { Model } from 'mongoose';
 import { GetAuthorListDto } from './dto/get-author-list.dto';
+import { DBNames } from "@/utils/database";
 
 @Injectable()
 export class AuthorService {
   constructor(
-    @InjectModel(Author.name) private authorModel: Model<Author>,
-    @InjectModel(Story.name) private storyModel: Model<Story>,
+    @InjectModel(Author.name, DBNames.story1) private authorModel: Model<Author>,
+    @InjectModel(Story.name, DBNames.story1) private storyModel: Model<Story>,
   ) {}
 
   async getAuthorList(query: GetAuthorListDto) {

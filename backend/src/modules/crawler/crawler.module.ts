@@ -17,9 +17,16 @@ import { Tag, TagSchema } from '@/schemas/tag.schema';
 import { Source, SourceSchema } from "@/schemas/source.schema";
 import { CrawlerGateway } from "./crawler.gateway";
 import { CrawlHistory, CrawlHistorySchema } from '@/schemas/crawlHistory.schema';
+import { DBNames } from "@/utils/database";
+import { User, UserSchema } from "@/schemas/user.schema";
+import { Role, RoleSchema } from "@/schemas/role.schema";
 
 @Module({
   imports: [
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: Role.name, schema: RoleSchema },
+    ], DBNames.ums),
     MongooseModule.forFeature([
       { name: Story.name, schema: StorySchema },
       { name: Chapter.name, schema: ChapterSchema },
@@ -28,7 +35,25 @@ import { CrawlHistory, CrawlHistorySchema } from '@/schemas/crawlHistory.schema'
       { name: Tag.name, schema: TagSchema },
       { name: Source.name, schema: SourceSchema },
       { name: CrawlHistory.name, schema: CrawlHistorySchema },
-    ]),
+    ], DBNames.story1),
+    MongooseModule.forFeature([
+      { name: Story.name, schema: StorySchema },
+      { name: Chapter.name, schema: ChapterSchema },
+      { name: Author.name, schema: AuthorSchema },
+      { name: Category.name, schema: CategorySchema },
+      { name: Tag.name, schema: TagSchema },
+      { name: Source.name, schema: SourceSchema },
+      { name: CrawlHistory.name, schema: CrawlHistorySchema },
+    ], DBNames.story2),
+    MongooseModule.forFeature([
+      { name: Story.name, schema: StorySchema },
+      { name: Chapter.name, schema: ChapterSchema },
+      { name: Author.name, schema: AuthorSchema },
+      { name: Category.name, schema: CategorySchema },
+      { name: Tag.name, schema: TagSchema },
+      { name: Source.name, schema: SourceSchema },
+      { name: CrawlHistory.name, schema: CrawlHistorySchema },
+    ], DBNames.story3),
   ],
   controllers: [CrawlerController],
   providers: [
