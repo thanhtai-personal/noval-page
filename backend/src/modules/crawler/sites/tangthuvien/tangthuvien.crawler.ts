@@ -17,7 +17,7 @@ import { sleep } from '@/utils/functions';
 import * as fs from 'fs';
 import * as path from 'path';
 import { getLimitConfig } from '@/utils/constants';
-import { DBNames } from "@/utils/database";
+import { DBNames, switchModelByDBLimit } from "@/utils/database";
 
 const ttvSearchPath = 'https://truyen.tangthuvien.vn/tong-hop?rank=vw&page=';
 
@@ -33,15 +33,11 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     @InjectModel(Author.name, DBNames.story1) private authorModel: Model<Author>,
     @InjectModel(Category.name, DBNames.story1) private categoryModel: Model<Category>,
     @InjectModel(CrawlHistory.name, DBNames.story1) private crawlHistoryModel: Model<Tag>,
-    @InjectModel(Tag.name, DBNames.story1) private tagModel: Model<Tag>,
-
     @InjectModel(Story.name, DBNames.story1) private storyModel: Model<Story>,
-    @InjectModel(Chapter.name, DBNames.story1) private chapterModel: Model<Chapter>,
-    @InjectModel(Story.name, DBNames.story2) private story2Model: Model<Story>,
+
+    //sub db to store chapter
     @InjectModel(Chapter.name, DBNames.story2) private chapter2Model: Model<Chapter>,
-    @InjectModel(Story.name, DBNames.story3) private story3Model: Model<Story>,
     @InjectModel(Chapter.name, DBNames.story3) private chapter3Model: Model<Chapter>,
-    @InjectModel(Story.name, DBNames.story4) private story4Model: Model<Story>,
     @InjectModel(Chapter.name, DBNames.story4) private chapter4Model: Model<Chapter>,
   ) {
     this.getSource();
@@ -450,11 +446,16 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             title: listChapters[chapterIndex].title,
             slug,
           };
-          await this.chapterModel.findOneAndUpdate({ slug }, chapterData, {
-            upsert: true,
-            new: true,
-            setDefaultsOnInsert: true,
-          });
+          try {
+            const chapterModel = await switchModelByDBLimit(this.chapter2Model, this.chapter3Model, this.chapter4Model)
+            await chapterModel.findOneAndUpdate({ slug }, chapterData, {
+              upsert: true,
+              new: true,
+              setDefaultsOnInsert: true,
+            });
+          } catch (error) {
+            this.logData(`All chapter data limited size`);
+          }
           this.logData(`Created chapter: ${listChapters[chapterIndex].title}`);
         }
       } else {
@@ -476,7 +477,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     }
   }
 
-  async getChapterContent(chapter: Chapter) {
+  async getChapterContent(chapterModel: Model<Chapter>, chapter: Chapter) {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     try {
@@ -509,7 +510,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       chapter.title = title;
       chapter.slug = slugify(title);
 
-      await this.chapterModel.findOneAndUpdate(
+      await chapterModel.findOneAndUpdate(
         { slug: chapter.slug },
         chapter,
         {

@@ -21,8 +21,8 @@ export class User extends Document {
   @Prop({ type: Types.ObjectId, ref: 'Role' })
   role: Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: 'Level' })
-  level?:  Types.ObjectId;
+  @Prop({ default: 0 })
+  levelNumber?: number;
 
   @Prop({ default: 0 })
   exp?: number;

@@ -17,4 +17,21 @@ export const DBNames = {
 }
 export const DB_STORIES_NAMES = [DBNames.story1, DBNames.story2, DBNames.story3, DBNames.story4];
 
-export const MAX_DB_SIZE_MB = 110;
+export const MAX_DB_SIZE_MB = 120;
+
+export const switchModelByDBLimit = async (...models: any[]) => {
+  // Check limited size for database to choose which db can use
+  // Assumes each model has a 'db' property with 'stats' method returning { dataSize: number }
+  for (const model of models) {
+    const stats = await model.db.stats();
+    const sizeMB = stats.dataSize / (1024 * 1024);
+    if (sizeMB < MAX_DB_SIZE_MB) {
+      return model;
+    }
+  }
+  throw new Error('All databases have reached the maximum size limit.');
+}
+
+export const getExpForNextLevel = (currentLevel = 0) => {
+  return Math.pow(10, currentLevel + 3); //1000, 10000, 100000,....
+}

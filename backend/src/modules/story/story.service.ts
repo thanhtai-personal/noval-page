@@ -6,7 +6,7 @@ import { GetStoryListDto } from './dto/get-story-list.dto';
 import { slugify } from '@/utils/slugify';
 import { CreateStoryDto } from './dto/create-story.dto';
 import { User } from "@/schemas/user.schema";
-import { DBNames } from "@/utils/database";
+import { DBNames, getExpForNextLevel } from "@/utils/database";
 
 @Injectable()
 export class StoryService {
@@ -115,7 +115,7 @@ export class StoryService {
         author: dto.authorId,
         createdBy: userId,
       });
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async markAsRead(slug, userId) {
@@ -124,10 +124,10 @@ export class StoryService {
       const user = await this.userModel.findById(userId);
       const newExp = (user?.exp || 0) + (story?.expValue || 1);
 
-      const dataUpdate = { exp: newExp }
-      // if (newExp >= getExpForNextLevel(user.level)) {
-      //  dataUpdate.level = dataUpdate.level + 1
-      // }
+      const dataUpdate = { exp: newExp, levelNumber: user?.levelNumber || 0 }
+      if (newExp >= getExpForNextLevel(user?.levelNumber || 0)) {
+        dataUpdate.levelNumber = dataUpdate.levelNumber + 1
+      }
 
       await this.userModel.findByIdAndUpdate(userId, dataUpdate);
       await this.storyModel.findByIdAndUpdate(story?._id, {
