@@ -35,7 +35,7 @@ export const GoogleLoginButton = observer(
             login();
           }}
         >
-          {appStore.animationMode ? (
+          {/* {appStore.animationMode ? (
             <ThunderText
               id="google-thunder-text"
               text={t("google")}
@@ -45,7 +45,8 @@ export const GoogleLoginButton = observer(
             />
           ) : (
             t("login_with_google")
-          )}
+          )} */}
+          {t("login_with_google")}
         </div>
       </div>
     );
