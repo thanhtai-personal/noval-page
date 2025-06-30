@@ -422,42 +422,43 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       );
 
       if (listChapters.length > 350) {
-        // @TODO: remove limit if have a better database
-        for (const chapterIndex in listChapters) {
-          if (
-            getLimitConfig().ON &&
-            Number(chapterIndex) >= getLimitConfig().DEMO_CHAPTERS_NUMBER
-          ) {
-            this.logData(`>> DEMO MODE: Stopping at chapter ${chapterIndex}`);
-            break;
-          }
-          const chapterNumber = Number(chapterIndex) + 1;
-          this.logData(
-            `Processing chapter ${chapterNumber}: ${listChapters[chapterIndex].title}`,
-          );
-          const slug = slugify(
-            listChapters[chapterIndex].title ||
-            `story-${story.title}-chapter-${chapterNumber}`,
-          );
-          this.logData(`Creating chapter slug: ${slug}`);
-          const chapterData = {
-            chapterNumber,
-            story: story._id,
-            url: listChapters[chapterIndex].url,
-            title: listChapters[chapterIndex].title,
-            slug,
-          };
-          try {
-            const chapterModel = await switchModelByDBLimit(this.chapter2Model, this.chapter3Model, this.chapter4Model, this.chapter5Model)
+
+        try {
+          const chapterModel = await switchModelByDBLimit(this.chapter2Model, this.chapter3Model, this.chapter4Model, this.chapter5Model)
+          // @TODO: remove limit if have a better database
+          for (const chapterIndex in listChapters) {
+            if (
+              getLimitConfig().ON &&
+              Number(chapterIndex) >= getLimitConfig().DEMO_CHAPTERS_NUMBER
+            ) {
+              this.logData(`>> DEMO MODE: Stopping at chapter ${chapterIndex}`);
+              break;
+            }
+            const chapterNumber = Number(chapterIndex) + 1;
+            this.logData(
+              `Processing chapter ${chapterNumber}: ${listChapters[chapterIndex].title}`,
+            );
+            const slug = slugify(
+              listChapters[chapterIndex].title ||
+              `story-${story.title}-chapter-${chapterNumber}`,
+            );
+            this.logData(`Creating chapter slug: ${slug}`);
+            const chapterData = {
+              chapterNumber,
+              story: story._id,
+              url: listChapters[chapterIndex].url,
+              title: listChapters[chapterIndex].title,
+              slug,
+            };
             await chapterModel.findOneAndUpdate({ slug }, chapterData, {
               upsert: true,
               new: true,
               setDefaultsOnInsert: true,
             });
-          } catch (error) {
-            this.logData(`All chapter data limited size`);
+            this.logData(`Created chapter: ${listChapters[chapterIndex].title}`);
           }
-          this.logData(`Created chapter: ${listChapters[chapterIndex].title}`);
+        } catch (error) {
+          this.logData(`All chapter data limited size`);
         }
       } else {
         this.logData(
