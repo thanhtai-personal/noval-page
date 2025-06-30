@@ -8,9 +8,6 @@ import { DBNames } from "@/utils/database";
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Category.name, schema: CategorySchema }], DBNames.story1),
-    MongooseModule.forFeature([{ name: Category.name, schema: CategorySchema }], DBNames.story2),
-    MongooseModule.forFeature([{ name: Category.name, schema: CategorySchema }], DBNames.story3),
-    MongooseModule.forFeature([{ name: Category.name, schema: CategorySchema }], DBNames.story4),
   ],
   controllers: [CategoryController],
   providers: [CategoryService],

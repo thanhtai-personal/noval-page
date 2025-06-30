@@ -11,7 +11,7 @@ export class UserDataAndUserResponseMapper {
       exp: userData.exp,
       banned: userData.banned,
       coin: userData.coin,
-      level: userData.level || 1,
+      level: userData.levelNumber || 1,
       username: userData.username,
       role: {
         _id: role?._id,

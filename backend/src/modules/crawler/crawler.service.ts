@@ -32,6 +32,7 @@ export class CrawlerService {
     @InjectModel(Chapter.name, DBNames.story2) private chapter2Model: Model<Chapter>,
     @InjectModel(Chapter.name, DBNames.story3) private chapter3Model: Model<Chapter>,
     @InjectModel(Chapter.name, DBNames.story4) private chapter4Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story5) private chapter5Model: Model<Chapter>,
   ) { }
 
   private getAdapter(source: string): ICrawlerAdapter {
@@ -203,7 +204,7 @@ export class CrawlerService {
         );
 
         try {
-          [this.chapter2Model, this.chapter3Model, this.chapter4Model].forEach(async (chapterModel) => {
+          [this.chapter2Model, this.chapter3Model, this.chapter4Model, this.chapter2Model].forEach(async (chapterModel) => {
             const chapters = await chapterModel.find({
               content: { $exists: false },
               story: story._id,
@@ -282,7 +283,7 @@ export class CrawlerService {
         this.logData(`Crawled chapter list for story: ${story.title}`, source);
       }
 
-      [this.chapter2Model, this.chapter3Model, this.chapter4Model].forEach(async (chapterModel) => {
+      [this.chapter2Model, this.chapter3Model, this.chapter4Model, this.chapter5Model].forEach(async (chapterModel) => {
         const chapters = await chapterModel.find({
           story: story._id,
           content: { $exists: false },

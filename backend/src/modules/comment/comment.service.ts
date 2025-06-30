@@ -11,9 +11,6 @@ export class CommentService {
   constructor(
     @InjectModel(Comment.name, DBNames.story1) private commentModel: Model<Comment>,
     @InjectModel(Story.name, DBNames.story1) private storyModel: Model<Story>,
-    @InjectModel(Story.name, DBNames.story2) private story2Model: Model<Story>,
-    @InjectModel(Story.name, DBNames.story3) private story3Model: Model<Story>,
-    @InjectModel(Story.name, DBNames.story4) private story4Model: Model<Story>,
   ) {}
 
   async getCommentsByStorySlug(slug: string) {

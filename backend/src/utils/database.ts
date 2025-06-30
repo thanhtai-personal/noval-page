@@ -5,6 +5,7 @@ export const getDBURIs = () => ({
     process.env.DB_STORY2_URI!,
     process.env.DB_STORY3_URI!,
     process.env.DB_STORY4_URI!,
+    process.env.DB_STORY5_URI!,
   ],
 })
 
@@ -13,9 +14,10 @@ export const DBNames = {
   story2: 'db_story_2',
   story3: 'db_story_3',
   story4: 'db_story_4',
+  story5: 'db_story_5',
   ums: 'ums',
 }
-export const DB_STORIES_NAMES = [DBNames.story1, DBNames.story2, DBNames.story3, DBNames.story4];
+export const DB_STORIES_NAMES = [DBNames.story1, DBNames.story2, DBNames.story3, DBNames.story4,, DBNames.story5];
 
 export const MAX_DB_SIZE_MB = 120;
 

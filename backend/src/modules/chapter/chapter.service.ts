@@ -14,6 +14,7 @@ export class ChapterService {
     @InjectModel(Chapter.name, DBNames.story2) private chapter2Model: Model<Chapter>,
     @InjectModel(Chapter.name, DBNames.story3) private chapter3Model: Model<Chapter>,
     @InjectModel(Chapter.name, DBNames.story4) private chapter4Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story5) private chapter5Model: Model<Chapter>,
     @InjectModel(User.name, DBNames.ums) private userModel: Model<User>
   ) { }
 
@@ -32,6 +33,11 @@ export class ChapterService {
       if (total === 0) {
         chapterModel = this.chapter4Model;
         total = await chapterModel.countDocuments(filter);
+
+        if (total === 0) {
+          chapterModel = this.chapter5Model;
+          total = await chapterModel.countDocuments(filter);
+        }
       }
     }
 
@@ -72,6 +78,13 @@ export class ChapterService {
         total = await chapterModel.countDocuments({
           story: story._id
         });
+
+        if (total === 0) {
+          chapterModel = this.chapter5Model;
+          total = await chapterModel.countDocuments({
+            story: story._id
+          });
+        }
       }
     }
 
@@ -114,6 +127,13 @@ export class ChapterService {
           story: story._id,
           slug: chapterSlug,
         });
+
+        if (!chapterDetail) {
+          chapterDetail = await this.chapter5Model.findOne({
+            story: story._id,
+            slug: chapterSlug,
+          });
+        }
       }
     }
 
@@ -142,6 +162,13 @@ export class ChapterService {
             story: story._id,
             slug: chapterSlug,
           });
+
+          if (!chapter) {
+            chapter = await this.chapter5Model.findOne({
+              story: story._id,
+              slug: chapterSlug,
+            });
+          }
         }
       }
 
@@ -173,6 +200,11 @@ export class ChapterService {
         { new: false }
       )
       await this.chapter4Model.findOneAndUpdate(
+        { slug: chapterSlug },
+        data,
+        { new: false }
+      )
+      await this.chapter5Model.findOneAndUpdate(
         { slug: chapterSlug },
         data,
         { new: false }

@@ -12,9 +12,6 @@ import { DBNames, getExpForNextLevel } from "@/utils/database";
 export class StoryService {
   constructor(
     @InjectModel(Story.name, DBNames.story1) private storyModel: Model<Story>,
-    @InjectModel(Story.name, DBNames.story2) private story2Model: Model<Story>,
-    @InjectModel(Story.name, DBNames.story3) private story3Model: Model<Story>,
-    @InjectModel(Story.name, DBNames.story4) private story4Model: Model<Story>,
     @InjectModel(User.name, DBNames.ums) private userModel: Model<User>
   ) { }
 

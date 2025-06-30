@@ -39,6 +39,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     @InjectModel(Chapter.name, DBNames.story2) private chapter2Model: Model<Chapter>,
     @InjectModel(Chapter.name, DBNames.story3) private chapter3Model: Model<Chapter>,
     @InjectModel(Chapter.name, DBNames.story4) private chapter4Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story5) private chapter5Model: Model<Chapter>,
   ) {
     this.getSource();
   }
@@ -447,7 +448,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             slug,
           };
           try {
-            const chapterModel = await switchModelByDBLimit(this.chapter2Model, this.chapter3Model, this.chapter4Model)
+            const chapterModel = await switchModelByDBLimit(this.chapter2Model, this.chapter3Model, this.chapter4Model, this.chapter5Model)
             await chapterModel.findOneAndUpdate({ slug }, chapterData, {
               upsert: true,
               new: true,
