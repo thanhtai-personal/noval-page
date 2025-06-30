@@ -17,7 +17,7 @@ export const DBNames = {
   story5: 'db_story_5',
   ums: 'ums',
 }
-export const DB_STORIES_NAMES = [DBNames.story1, DBNames.story2, DBNames.story3, DBNames.story4,, DBNames.story5];
+export const DB_STORIES_NAMES = [DBNames.story1, DBNames.story2, DBNames.story3, DBNames.story4, DBNames.story5];
 
 export const MAX_DB_SIZE_MB = 120;
 
