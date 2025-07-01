@@ -20,6 +20,7 @@ export class AppStore {
   animationMode: boolean = false;
   useFooter: boolean = true;
   useGameMenu: boolean = true;
+  openGameMode: boolean = true;
   animations: AnimationProps = {};
 
   constructor() {

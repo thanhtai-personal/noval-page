@@ -5,22 +5,23 @@ import { useThree } from "@react-three/fiber";
 import { useRef, useEffect, Suspense, ReactNode } from "react";
 import { ModelBox } from "../ModelBox";
 
-useGLTF.preload("/models/isle_of_plenty_diorama.glb");
+useGLTF.preload("/models/xbox_one_game_pad_blue_edition.glb");
 
-type PlentyDioramaProps = {
+type XBoxBlueProps = {
   scale: number;
   transition?: boolean;
   position?: any;
   fallBack?: ReactNode;
 }
 
-export const PlentyDiorama: React.FC<PlentyDioramaProps> = ({
+export const XBoxBlue: React.FC<XBoxBlueProps> = ({
   scale = 1,
   transition = false,
   position = [0, 0, 0],
   fallBack
 }: any) => {
   const { camera } = useThree();
+
   const angleRef = useRef(0);
 
   useEffect(() => {
@@ -28,8 +29,8 @@ export const PlentyDiorama: React.FC<PlentyDioramaProps> = ({
     let frameId: number;
     const animate = () => {
       angleRef.current += 0.03;
-      camera.position.setX(Math.sin(angleRef.current) * 5);
-      camera.lookAt(0, 0, 0);
+      camera.position.setY(Math.sin(angleRef.current) * 1.08);
+      camera.lookAt(1, 0, 0);
       frameId = requestAnimationFrame(animate);
     };
     animate();
@@ -41,7 +42,7 @@ export const PlentyDiorama: React.FC<PlentyDioramaProps> = ({
       <ModelBox
         scale={scale}
         position={position}
-        path={"/models/isle_of_plenty_diorama.glb"}
+        path={"/models/xbox_one_game_pad_blue_edition.glb"}
       />
     </Suspense>
   )

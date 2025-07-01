@@ -12,7 +12,6 @@ import islandPng2 from "@/assets/sprites/island/I01.png";
 import DNA from "@/components/animations/dna/DNA";
 import DNA2 from "@/components/animations/dna/DNA2";
 import Model3DContainer from "@/components/3dmodels/3DContainer";
-import { MagicalHelp } from "@/components/3dmodels/models/MagicalHelp";
 import { PlentyDiorama } from "@/components/3dmodels/models/PlentyDiorama";
 
 export const TopSprites = observer(() => {
@@ -79,21 +78,6 @@ export const TopSprites = observer(() => {
               left: 0,
             }}
           />
-        )}
-
-        {appStore.animations?.use3DIsland && (
-          <div className=" absolute left-0 top-[calc(100vh+400px)] h-screen w-[450px] z-1 opacity-90">
-            <Model3DContainer
-              camera={{ position: [8, 0, 0], fov: 30 }}
-              ambientLight={{ intensity: 1 }}
-              directionalLight={{ intensity: 1, position: [10, 10, 10] }}
-              id="MagicalHelp"
-              // controlled
-              // devTools
-            >
-              <MagicalHelp transition scale={0.18} />
-            </Model3DContainer>
-          </div>
         )}
 
         {appStore.animations?.useDNA && (

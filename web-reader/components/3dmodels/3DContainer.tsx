@@ -19,7 +19,7 @@ type Model3DContainerProps = {
   [key: string]: any;
 };
 
-const Model3DContainer: React.FC<any> = ({
+const Model3DContainer: React.FC<Model3DContainerProps> = ({
   children,
   fallback = <Loader />,
   camera,
