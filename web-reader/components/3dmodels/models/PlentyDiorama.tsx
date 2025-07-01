@@ -1,6 +1,6 @@
 "use client";
 
-import { useGLTF } from "@react-three/drei";
+import { Html, useGLTF } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import { useRef, useEffect, Suspense, ReactNode } from "react";
 import { ModelBox } from "../ModelBox";
@@ -37,7 +37,9 @@ export const PlentyDiorama: React.FC<PlentyDioramaProps> = ({
   }, [camera, transition]);
 
   return (
-    <Suspense fallback={fallBack ?? <span>Loading...</span>}>
+    <Suspense fallback={fallBack ?? <Html center>
+      <div>Loading...</div>
+    </Html>}>
       <ModelBox
         scale={scale}
         position={position}

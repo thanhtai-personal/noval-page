@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader, useGLTF } from "@react-three/drei";
+import { Html, useGLTF } from "@react-three/drei";
 import { Suspense, ReactNode, useEffect, useRef } from "react";
 import { ModelBox } from "../ModelBox";
 import { useThree } from "@react-three/fiber";
@@ -39,7 +39,9 @@ export const FantasyIsland3DModel: React.FC<FantasyIsland3DModelProps> = ({
   }, [camera, rotate]);
 
   return (
-    <Suspense fallback={fallBack ?? <Loader />}>
+    <Suspense fallback={fallBack ?? <Html center>
+      <div>Loading...</div>
+    </Html>}>
       <ModelBox
         scale={scale}
         position={position}

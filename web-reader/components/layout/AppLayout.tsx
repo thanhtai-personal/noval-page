@@ -15,6 +15,7 @@ import { EntertaimentMenu } from "./EntertaimentMenu";
 import Image from "next/image";
 import xboxImageIcon from "@/assets/icons8-gamepad-48.png";
 import { isMobile } from "@/utils/funtions";
+import { Html } from "@react-three/drei";
 
 export const AppLayout = observer(({ children }: any) => {
   const store = useAppStore();
@@ -82,13 +83,15 @@ export const AppLayout = observer(({ children }: any) => {
                   transition
                   scale={3}
                   fallBack={
-                    <Image
-                      alt="click-to-play"
-                      className="cursor-pointer"
-                      src={xboxImageIcon}
-                      width={48}
-                      height={48}
-                    />
+                    <Html center>
+                      <Image
+                        alt="click-to-play"
+                        className="cursor-pointer"
+                        src={xboxImageIcon}
+                        width={48}
+                        height={48}
+                      />
+                    </Html>
                   }
                 />
               </Model3DContainer>
