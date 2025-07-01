@@ -1,9 +1,9 @@
 "use client";
 
-import { useGLTF } from "@react-three/drei";
-import { Suspense, ReactNode } from "react";
+import { Loader, useGLTF } from "@react-three/drei";
+import { Suspense, ReactNode, useEffect, useRef } from "react";
 import { ModelBox } from "../ModelBox";
-import { useRotate } from "../hooks/useRotate";
+import { useThree } from "@react-three/fiber";
 
 useGLTF.preload("/models/fantasy_mystical_island.glb");
 
@@ -20,10 +20,26 @@ export const FantasyIsland3DModel: React.FC<FantasyIsland3DModelProps> = ({
   position = [0, 0, 0],
   fallBack,
 }: any) => {
-  useRotate(rotate);
+
+  const { camera } = useThree();
+  const angleRef = useRef(0);
+
+  useEffect(() => {
+    if (!rotate) return;
+    let frameId: number;
+    const animate = () => {
+      angleRef.current += 0.015;
+      camera.position.setX(Math.sin(angleRef.current) * 5);
+      camera.position.setZ(Math.cos(angleRef.current) * 5);
+      camera.lookAt(0, 0, 0);
+      frameId = requestAnimationFrame(animate);
+    };
+    animate();
+    return () => cancelAnimationFrame(frameId);
+  }, [camera, rotate]);
 
   return (
-    <Suspense fallback={fallBack ?? <span>Loading...</span>}>
+    <Suspense fallback={fallBack ?? <Loader />}>
       <ModelBox
         scale={scale}
         position={position}

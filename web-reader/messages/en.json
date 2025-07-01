@@ -62,7 +62,8 @@
     "intro": "Introduction",
     "not_updated": "Not updated",
     "totalChapters": "Total chapters",
-    "readNow": "Read now"
+    "readNow": "Read now",
+    "loading": "Loading..."
   },
   "about": {
     "title": "About"
