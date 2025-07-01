@@ -33,7 +33,6 @@ export default function BlogPage() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["blogs", page, limit],
     queryFn: () => fetchBlogs(page, limit),
-    keepPreviousData: true, // Giữ dữ liệu cũ khi đổi page, loading mượt hơn
   });
 
   const blogs = data?.data || [];

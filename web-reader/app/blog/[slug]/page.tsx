@@ -1,27 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-
 import { ApiInstant } from "@/utils/api";
 
 export default function BlogDetailPage() {
   const t = useTranslations("blog");
-  const { slug } = useParams();
-  const [blog, setBlog] = useState<any>(null);
+  const { slug } = useParams() as { slug: string };
 
-  useEffect(() => {
-    const fetchBlog = async () => {
-      const res = await ApiInstant.get(`/blogs/${slug}`);
+  // Hàm fetch blog detail
+  const fetchBlog = async (slug: string) => {
+    const res = await ApiInstant.get(`/blogs/${slug}`);
+    return res.data;
+  };
 
-      setBlog(res.data);
-    };
+  // Dùng useQuery, key phụ thuộc slug
+  const { data: blog, isLoading, error } = useQuery({
+    queryKey: ["blog", slug],
+    queryFn: () => fetchBlog(slug),
+    enabled: !!slug, // Chỉ fetch nếu có slug
+  });
 
-    fetchBlog();
-  }, [slug]);
-
-  if (!blog) return <p className="p-4">{t("loading")}</p>;
+  if (isLoading) return <p className="p-4">{t("loading")}</p>;
+  if (error) return <p className="p-4 text-red-500">{t("load_error")}</p>;
+  if (!blog) return null;
 
   return (
     <section className="max-w-3xl mx-auto px-4 py-8 space-y-6">

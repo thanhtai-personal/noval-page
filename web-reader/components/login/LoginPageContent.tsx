@@ -10,6 +10,7 @@ import { observer } from "mobx-react-lite";
 import { useAppStore } from "@/store/Provider";
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
 
 const LoginPageContent = observer(() => {
   const t = useTranslations("login");
@@ -17,19 +18,24 @@ const LoginPageContent = observer(() => {
   const appStore = useAppStore();
   const { theme } = useTheme();
 
-  const handleLoginSuccess = async (codeResponse: { code: string }) => {
-    try {
-      const { code } = codeResponse;
-
-      await ApiInstant.post(`/auth/google`, {
-        code,
-      });
-
+  // Mutation cho login
+  const loginMutation = useMutation({
+    mutationFn: async (code: string) => {
+      await ApiInstant.post(`/auth/google`, { code });
       await appStore.fetchProfile();
+    },
+    onSuccess: () => {
       router.push("/");
-    } catch (err) {
+    },
+    onError: (err) => {
+      // Bạn có thể hiển thị thông báo lỗi ở đây nếu muốn
       console.error("Login failed", err);
-    }
+    },
+  });
+
+  // Xử lý gọi mutation khi Google trả về code
+  const handleLoginSuccess = (codeResponse: { code: string }) => {
+    loginMutation.mutate(codeResponse.code);
   };
 
   useEffect(() => {
@@ -65,6 +71,17 @@ const LoginPageContent = observer(() => {
                     label={t("login_with_google")}
                     handleLoginSuccess={handleLoginSuccess}
                   />
+                  {/* Thêm loading/error UI nếu muốn */}
+                  {loginMutation.isPending && (
+                    <div className="text-center mt-2 text-blue-500">
+                      {t("loading")}
+                    </div>
+                  )}
+                  {loginMutation.isError && (
+                    <div className="text-center mt-2 text-red-500">
+                      {t("login_error") || "Đăng nhập thất bại!"}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

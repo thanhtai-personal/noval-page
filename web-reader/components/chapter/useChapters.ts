@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-
+import { useQuery } from "@tanstack/react-query";
 import { ApiInstant } from "@/utils/api";
 
 interface Chapter {
@@ -9,22 +8,27 @@ interface Chapter {
   slug: string;
 }
 
+async function fetchChapters(storySlug: string): Promise<Chapter[]> {
+  if (!storySlug) return [];
+  const res = await ApiInstant.get(`/stories/${storySlug}/chapters?page=1&limit=1000`);
+  return res.data.data || [];
+}
+
 export function useChapters(storySlug: string) {
-  const [chapters, setChapters] = useState<Chapter[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    data: chapters = [],
+    isLoading: loading,
+    error,
+  } = useQuery({
+    queryKey: ["chapters", storySlug],
+    queryFn: () => fetchChapters(storySlug),
+    enabled: !!storySlug, // chỉ fetch khi có storySlug
+    staleTime: 1000 * 60 * 5, // optional: cache 5 phút
+  });
 
-  useEffect(() => {
-    if (!storySlug) return;
-    setLoading(true);
-    ApiInstant.get(`/stories/${storySlug}/chapters?page=1&limit=1000`)
-      .then((res) => {
-        setChapters(res.data.data || []);
-        setError(null);
-      })
-      .catch((err) => setError("Không thể tải danh sách chương"))
-      .finally(() => setLoading(false));
-  }, [storySlug]);
-
-  return { chapters, loading, error };
+  return {
+    chapters,
+    loading,
+    error: error ? "Không thể tải danh sách chương" : null,
+  };
 }

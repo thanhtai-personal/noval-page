@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+"use client";
+
+import { useState } from "react";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import {
@@ -10,6 +12,7 @@ import {
 } from "@heroui/modal";
 import { Spinner } from "@heroui/spinner";
 import { useTranslations } from "next-intl";
+import { useQuery } from "@tanstack/react-query";
 
 import { ApiInstant } from "@/utils/api";
 import { Checkbox } from "@heroui/checkbox";
@@ -21,6 +24,25 @@ interface AuthorSelectModalProps {
   setSelectedAuthors: (authors: any[]) => void;
 }
 
+const fetchAuthors = async ({
+  keyword,
+  page,
+  pageSize,
+}: {
+  keyword: string;
+  page: number;
+  pageSize: number;
+}) => {
+  const res = await ApiInstant.get("/authors", {
+    params: {
+      keyword,
+      page,
+      limit: pageSize,
+    },
+  });
+  return res.data as { data: any[]; total: number };
+};
+
 export function AuthorSelectModal({
   open,
   onClose,
@@ -31,27 +53,21 @@ export function AuthorSelectModal({
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize] = useState(12);
-  const [authors, setAuthors] = useState<any[]>([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!open) return;
-    setLoading(true);
-    ApiInstant.get("/authors", {
-      params: {
-        keyword: search,
-        page,
-        limit: pageSize,
-      },
-    })
-      .then((res) => {
-        setAuthors(res.data?.data || []);
-        setTotal(res.data?.total || 0);
-      })
-      .finally(() => setLoading(false));
-  }, [search, page, pageSize, open]);
+  // React Query fetch
+  const {
+    data,
+    isLoading,
+    isError,
+  } = useQuery<any>({
+    queryKey: ["authors", search, page, pageSize, open],
+    queryFn: () => fetchAuthors({ keyword: search, page, pageSize }),
+    enabled: open, // chỉ fetch khi modal mở
+    staleTime: 1000 * 60 * 5, // cache 5 phút
+  });
 
+  const authors = data?.data || [];
+  const total = data?.total || 0;
   const totalPages = Math.ceil(total / pageSize);
 
   const toggleSelect = (author: any) => {
@@ -65,6 +81,7 @@ export function AuthorSelectModal({
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setPage(1);
+    // useQuery sẽ tự động fetch lại khi search thay đổi
   };
 
   return (
@@ -86,17 +103,21 @@ export function AuthorSelectModal({
             </Button>
           </form>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4 min-h-[180px]">
-            {loading ? (
+            {isLoading ? (
               <div className="col-span-3 flex justify-center items-center py-8">
                 <Spinner size="md" className="mr-2" />
                 {t("search")}...
+              </div>
+            ) : isError ? (
+              <div className="col-span-3 text-center py-8 text-red-500">
+                {t("no_result")}
               </div>
             ) : authors.length === 0 ? (
               <div className="col-span-3 text-center py-8">
                 {t("no_result")}
               </div>
             ) : (
-              authors.map((author, index) =>
+              authors.map((author: any, index: number) =>
                 author.name ? (
                   <div
                     key={author._id || index}
@@ -104,12 +125,12 @@ export function AuthorSelectModal({
                     onClick={() => toggleSelect(author)}
                     onTouchEnd={() => toggleSelect(author)}
                   >
-                    <Checkbox key={author._id} value={author.slug}>
+                    <Checkbox key={author._id} value={author.slug} checked={!!selectedAuthors.find(a => a._id === author._id)}>
                       {author.name}
                     </Checkbox>
                   </div>
                 ) : (
-                  <div></div>
+                  <div key={index}></div>
                 ),
               )
             )}
