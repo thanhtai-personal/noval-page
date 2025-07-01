@@ -12,15 +12,14 @@ type FantasyIsland3DModelProps = {
   rotate?: boolean;
   position?: any;
   fallBack?: ReactNode;
-}
+};
 
 export const FantasyIsland3DModel: React.FC<FantasyIsland3DModelProps> = ({
   scale = 1,
   rotate = false,
   position = [0, 0, 0],
-  fallBack
+  fallBack,
 }: any) => {
-
   useRotate(rotate);
 
   return (
@@ -31,5 +30,5 @@ export const FantasyIsland3DModel: React.FC<FantasyIsland3DModelProps> = ({
         path={"/models/fantasy_mystical_island.glb"}
       />
     </Suspense>
-  )
+  );
 };

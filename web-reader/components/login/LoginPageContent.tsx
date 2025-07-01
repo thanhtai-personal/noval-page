@@ -73,9 +73,7 @@ const LoginPageContent = observer(() => {
                   />
                   {/* Thêm loading/error UI nếu muốn */}
                   {loginMutation.isPending && (
-                    <div className="text-center mt-2 text-blue-500">
-                      ...
-                    </div>
+                    <div className="text-center mt-2 text-blue-500">...</div>
                   )}
                   {loginMutation.isError && (
                     <div className="text-center mt-2 text-red-500">

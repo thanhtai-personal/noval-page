@@ -12,13 +12,13 @@ type PlentyDioramaProps = {
   transition?: boolean;
   position?: any;
   fallBack?: ReactNode;
-}
+};
 
 export const PlentyDiorama: React.FC<PlentyDioramaProps> = ({
   scale = 1,
   transition = false,
   position = [0, 0, 0],
-  fallBack
+  fallBack,
 }: any) => {
   const { camera } = useThree();
   const angleRef = useRef(0);
@@ -44,5 +44,5 @@ export const PlentyDiorama: React.FC<PlentyDioramaProps> = ({
         path={"/models/isle_of_plenty_diorama.glb"}
       />
     </Suspense>
-  )
+  );
 };

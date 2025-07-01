@@ -12,13 +12,13 @@ type XBoxBlueProps = {
   transition?: boolean;
   position?: any;
   fallBack?: ReactNode;
-}
+};
 
 export const XBoxBlue: React.FC<XBoxBlueProps> = ({
   scale = 1,
   transition = false,
   position = [0, 0, 0],
-  fallBack
+  fallBack,
 }: any) => {
   const { camera } = useThree();
 
@@ -45,5 +45,5 @@ export const XBoxBlue: React.FC<XBoxBlueProps> = ({
         path={"/models/xbox_one_game_pad_blue_edition.glb"}
       />
     </Suspense>
-  )
+  );
 };

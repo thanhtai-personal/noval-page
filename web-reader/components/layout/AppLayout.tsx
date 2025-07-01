@@ -13,7 +13,7 @@ import { BottomSprites } from "./BottomSprites";
 import { TopSprites } from "./TopSprites";
 import { EntertaimentMenu } from "./EntertaimentMenu";
 import Image from "next/image";
-import xboxImageIcon from "@/assets/icons8-gamepad-48.png"
+import xboxImageIcon from "@/assets/icons8-gamepad-48.png";
 
 export const AppLayout = observer(({ children }: any) => {
   const store = useAppStore();
@@ -44,41 +44,52 @@ export const AppLayout = observer(({ children }: any) => {
 
       {store.openGameMode && (
         <div
-          className="fixed cursor-pointer z-50 bottom-0 -right-[140px] p-4 rounded-full overflow-visible" title="play to earn">
-          {store.animationMode ? <div className="">
-            <Model3DContainer
-              camera={{ position: [4, 4, 1], fov: 45 }}
-              ambientLight={{ intensity: 1 }}
-              directionalLight={{ intensity: 1, position: [5, 5, 5] }}
-              id="XboxBlue"
-              fallback={<Image
+          className="fixed cursor-pointer z-50 bottom-0 -right-[140px] p-4 rounded-full overflow-visible"
+          title="play to earn"
+        >
+          {store.animationMode ? (
+            <div className="">
+              <Model3DContainer
+                camera={{ position: [4, 4, 1], fov: 45 }}
+                ambientLight={{ intensity: 1 }}
+                directionalLight={{ intensity: 1, position: [5, 5, 5] }}
+                id="XboxBlue"
+                fallback={
+                  <Image
+                    alt="click-to-play"
+                    className="cursor-pointer"
+                    src={xboxImageIcon}
+                    width={48}
+                    height={48}
+                  />
+                }
+              >
+                <XBoxBlue
+                  transition
+                  scale={3}
+                  fallBack={
+                    <Image
+                      alt="click-to-play"
+                      className="cursor-pointer"
+                      src={xboxImageIcon}
+                      width={48}
+                      height={48}
+                    />
+                  }
+                />
+              </Model3DContainer>
+            </div>
+          ) : (
+            <div>
+              <Image
                 alt="click-to-play"
                 className="cursor-pointer"
                 src={xboxImageIcon}
                 width={48}
                 height={48}
-              />}
-            >
-              <XBoxBlue
-                transition
-                scale={3}
-                fallBack={<Image
-                  alt="click-to-play"
-                  className="cursor-pointer"
-                  src={xboxImageIcon}
-                  width={48}
-                  height={48}
-                />}
               />
-            </Model3DContainer>
-          </div> : <div>
-            <Image
-              alt="click-to-play"
-              className="cursor-pointer"
-              src={xboxImageIcon}
-              width={48}
-              height={48} />
-          </div>}
+            </div>
+          )}
         </div>
       )}
     </div>
