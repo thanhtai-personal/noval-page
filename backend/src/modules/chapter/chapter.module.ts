@@ -38,7 +38,6 @@ import { ChapterContent, ChapterContentSchema } from "@/schemas/chapterContent.s
     ], DBNames.story5),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
-      { name: ChapterContent.name, schema: ChapterContentSchema },
       { name: Role.name, schema: RoleSchema },
     ], DBNames.ums),
   ],
