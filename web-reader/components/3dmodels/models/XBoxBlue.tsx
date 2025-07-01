@@ -29,7 +29,7 @@ export const XBoxBlue: React.FC<XBoxBlueProps> = ({
     let frameId: number;
     const animate = () => {
       angleRef.current += 0.03;
-      camera.position.setY(Math.sin(angleRef.current) * 1.08);
+      camera.position.setY(Math.sin(angleRef.current) * 1.12);
       camera.lookAt(1, 0, 0);
       frameId = requestAnimationFrame(animate);
     };
