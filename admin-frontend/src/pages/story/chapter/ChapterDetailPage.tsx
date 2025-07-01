@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 export default function ChapterDetailPage() {
   const { id, storySlug } = useParams();
   const [chapter, setChapter] = useState<any>(null);
+  const [chapterContent, setChapterContent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,7 +19,17 @@ export default function ChapterDetailPage() {
       }
     }
 
+    async function fetchChapterContent() {
+      try {
+        const res = await api.get(`stories/${storySlug}/chapters/${id}/content`);
+        setChapterContent(res.data);
+      } finally {
+        setLoading(false);
+      }
+    }
+
     fetchChapter();
+    fetchChapterContent();
   }, [id]);
 
   if (loading) return <p className="p-6">Đang tải chương...</p>;
@@ -36,7 +47,7 @@ export default function ChapterDetailPage() {
         <CardContent>
           <div
             className="prose max-w-none"
-            dangerouslySetInnerHTML={{ __html: chapter.content || '<i>(Không có nội dung)</i>' }}
+            dangerouslySetInnerHTML={{ __html: chapterContent.content || '<i>(Không có nội dung)</i>' }}
           />
         </CardContent>
       </Card>

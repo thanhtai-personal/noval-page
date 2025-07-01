@@ -5,7 +5,7 @@ import { Story } from '@/schemas/story.schema';
 import { Model } from 'mongoose';
 import { GetChapterListDto } from './dto/get-chapter-list.dto';
 import { User } from "@/schemas/user.schema";
-import { DBNames, getExpForNextLevel } from "@/utils/database";
+import { DBNames, getExpForNextLevel, switchModelByDBLimit } from "@/utils/database";
 import { ChapterContent } from "@/schemas/chapterContent.schema";
 
 @Injectable()
@@ -130,7 +130,11 @@ export class ChapterService {
         slug: chapterSlug,
       });
       if (chapterDetail) {
-        return chapterDetail;
+        const chapterContent = await this.getChapterContent(storySlug, chapterSlug);
+        return {
+          ...chapterDetail,
+          content: chapterContent?.content,
+        };
       }
     }
 
@@ -190,7 +194,31 @@ export class ChapterService {
         this.chapter5Model,
       ];
       for (const cModel of chapterModels) {
-        await cModel.findOneAndUpdate(filter, data, { new: false });
+        const { content, ...chapterData } = data
+        const updatedChapter = await cModel.findOneAndUpdate(filter, chapterData, { new: false });
+        if (updatedChapter) {
+          const chapterContentModels = [
+            this.chapterContent2Model,
+            this.chapterContent3Model,
+            this.chapterContent4Model,
+            this.chapterContent5Model,
+          ];
+          let updatedChapterContent = null;
+          for (const ccModel of chapterContentModels) {
+            updatedChapterContent = await ccModel.findOneAndUpdate({ chapter: chapterSlug }, {
+              content
+            }, { new: false });
+          }
+          if (!updatedChapterContent) {
+            const chapterContentModel = await switchModelByDBLimit(...chapterContentModels);
+            await chapterContentModel.findOneAndUpdate({ chapter: chapterSlug }, {
+              content
+            }, {
+              new: true
+            });
+          }
+          break;
+        }
       }
     } catch (error) { }
   }
