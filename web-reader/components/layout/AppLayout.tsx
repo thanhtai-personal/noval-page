@@ -44,7 +44,11 @@ export const AppLayout = observer(({ children }: any) => {
 
       {store.openGameMode && (
         <div
-          className="fixed cursor-pointer z-50 bottom-0 -right-[140px] p-4 rounded-full overflow-visible"
+          className={`
+            fixed cursor-pointer z-50 bottom-0 ${
+              store.animationMode ? "-right-[140px]" : "right-2"
+            } p-4 rounded-full overflow-visible
+          `}
           title="play to earn"
         >
           {store.animationMode ? (
