@@ -22,10 +22,11 @@ export const DB_STORIES_NAMES = [DBNames.story1, DBNames.story2, DBNames.story3,
 export const MAX_DB_SIZE_MB = 120;
 
 export const switchModelByDBLimit = async (...models: any[]) => {
-  // Check limited size for database to choose which db can use
-  // Assumes each model has a 'db' property with 'stats' method returning { dataSize: number }
   for (const model of models) {
-    const stats = await model.db.stats();
+    // Lấy native MongoDB Db từ model (Mongoose Model)
+    const nativeDb = model.db?.db; // model.db là connection, .db là native driver
+    if (!nativeDb) throw new Error('Cannot get nativeDb from model.');
+    const stats = await nativeDb.stats();
     const sizeMB = stats.dataSize / (1024 * 1024);
     if (sizeMB < MAX_DB_SIZE_MB) {
       return model;

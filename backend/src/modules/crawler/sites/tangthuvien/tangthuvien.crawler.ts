@@ -457,7 +457,14 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
             });
             this.logData(`Created chapter: ${listChapters[chapterIndex].title}`);
           }
+
+          await this.storyModel.findOneAndUpdate(
+            { slug: story.slug },
+            { isChapterCrawled: listChapters.length < 350 ? false : true },
+            { new: true, upsert: true, setDefaultsOnInsert: true },
+          );
         } catch (error) {
+          console.log("error", error)
           this.logData(`All chapter data limited size`);
         }
       } else {
@@ -465,12 +472,6 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
           `Ignore chapters by small number of chapters - ${listChapters.length}`,
         );
       }
-
-      await this.storyModel.findOneAndUpdate(
-        { slug: story.slug },
-        { isChapterCrawled: listChapters.length < 350 ? false : true },// @TODO: remove limit if have a better database
-        { new: true, upsert: true, setDefaultsOnInsert: true },
-      );
       this.logData(`Updated story ${story.title} with isChapterCrawled true.`);
     } catch (error) {
     } finally {
