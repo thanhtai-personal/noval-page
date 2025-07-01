@@ -24,7 +24,18 @@ declare module "@react-types/shared" {
   }
 }
 
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60, // Tất cả query “fresh” 1 phút
+      refetchOnWindowFocus: false, // Tắt tự refetch khi focus
+      retry: 2, // Retry tối đa 2 lần nếu lỗi
+    },
+    mutations: {
+      retry: 0, // Không retry mutation
+    },
+  },
+});
 
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();

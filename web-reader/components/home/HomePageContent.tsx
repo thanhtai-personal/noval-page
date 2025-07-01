@@ -10,16 +10,19 @@ import { StorySection } from "./StorySection";
 import { ApiInstant } from "@/utils/api";
 import SideLoading from "@/components/common/SideLoading/SideLoading";
 
-const fetchStories = (sort: string, limit: number) => async (): Promise<Story[]> => {
-  const res = await ApiInstant.get(`/stories?sort=${sort}&limit=${limit}`);
-  return res.data?.data || [];
-};
+const fetchStories =
+  (sort: string, limit: number) => async (): Promise<Story[]> => {
+    const res = await ApiInstant.get(`/stories?sort=${sort}&limit=${limit}`);
+    return res.data?.data || [];
+  };
 
 export default function HomePageContent() {
   const t = useTranslations("home");
 
   // Query: top recommend
-  const { data: topRecommend = [], isLoading: loadingRecommend } = useQuery<Story[]>({
+  const { data: topRecommend = [], isLoading: loadingRecommend } = useQuery<
+    Story[]
+  >({
     queryKey: ["stories", "recommend", 8],
     queryFn: fetchStories("recommends", 8),
   });
@@ -43,7 +46,9 @@ export default function HomePageContent() {
   });
 
   // Query: top chapter
-  const { data: topChapter = [], isLoading: loadingChapter } = useQuery<Story[]>({
+  const { data: topChapter = [], isLoading: loadingChapter } = useQuery<
+    Story[]
+  >({
     queryKey: ["stories", "totalChapters", 8],
     queryFn: fetchStories("totalChapters", 8),
   });
@@ -61,7 +66,7 @@ export default function HomePageContent() {
   };
 
   if (loadingVote) {
-    return <SideLoading />
+    return <SideLoading />;
   }
 
   return (

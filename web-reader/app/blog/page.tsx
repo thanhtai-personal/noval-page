@@ -43,9 +43,13 @@ export default function BlogPage() {
       <h1 className="text-3xl font-bold">📝 Blog</h1>
 
       {isLoading ? (
-        <div className="text-center py-8 text-lg text-gray-400">Đang tải...</div>
+        <div className="text-center py-8 text-lg text-gray-400">
+          Đang tải...
+        </div>
       ) : error ? (
-        <div className="text-center text-red-500">Có lỗi xảy ra khi tải blog!</div>
+        <div className="text-center text-red-500">
+          Có lỗi xảy ra khi tải blog!
+        </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {blogs.map((blog) => (

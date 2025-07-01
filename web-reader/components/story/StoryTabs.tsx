@@ -66,9 +66,13 @@ export function StoryTabs({
           <CardBody>
             <h2 className="text-xl font-semibold mb-4">Danh sách chương</h2>
             {isLoading ? (
-              <div className="py-8 text-center text-default-400">Đang tải chương...</div>
+              <div className="py-8 text-center text-default-400">
+                Đang tải chương...
+              </div>
             ) : isError ? (
-              <div className="py-8 text-center text-red-400">Không thể tải chương.</div>
+              <div className="py-8 text-center text-red-400">
+                Không thể tải chương.
+              </div>
             ) : (
               <>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">

@@ -1,1 +1,1 @@
-export const READ_PREFIX = 'read-'
+export const READ_PREFIX = "read-";

@@ -16,7 +16,11 @@ export default function BlogDetailPage() {
   };
 
   // Dùng useQuery, key phụ thuộc slug
-  const { data: blog, isLoading, error } = useQuery({
+  const {
+    data: blog,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["blog", slug],
     queryFn: () => fetchBlog(slug),
     enabled: !!slug, // Chỉ fetch nếu có slug

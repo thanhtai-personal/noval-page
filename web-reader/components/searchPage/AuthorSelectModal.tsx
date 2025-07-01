@@ -55,11 +55,7 @@ export function AuthorSelectModal({
   const [pageSize] = useState(12);
 
   // React Query fetch
-  const {
-    data,
-    isLoading,
-    isError,
-  } = useQuery<any>({
+  const { data, isLoading, isError } = useQuery<any>({
     queryKey: ["authors", search, page, pageSize, open],
     queryFn: () => fetchAuthors({ keyword: search, page, pageSize }),
     enabled: open, // chỉ fetch khi modal mở
@@ -125,7 +121,13 @@ export function AuthorSelectModal({
                     onClick={() => toggleSelect(author)}
                     onTouchEnd={() => toggleSelect(author)}
                   >
-                    <Checkbox key={author._id} value={author.slug} checked={!!selectedAuthors.find(a => a._id === author._id)}>
+                    <Checkbox
+                      key={author._id}
+                      value={author.slug}
+                      checked={
+                        !!selectedAuthors.find((a) => a._id === author._id)
+                      }
+                    >
                       {author.name}
                     </Checkbox>
                   </div>

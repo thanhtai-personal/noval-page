@@ -113,13 +113,10 @@ const SearchPageClient = observer(() => {
       selectedAuthors,
       selectedTags,
       selectedRanges,
-    ]
+    ],
   );
 
-  const {
-    data: storiesData,
-    isLoading: loadingStories,
-  } = useQuery<any>({
+  const { data: storiesData, isLoading: loadingStories } = useQuery<any>({
     queryKey: storiesQueryKey,
     queryFn: () =>
       fetchStories({
@@ -157,21 +154,19 @@ const SearchPageClient = observer(() => {
     setSelectedCategories((prev) =>
       prev.some((c) => c._id === cat._id)
         ? prev.filter((c) => c._id !== cat._id)
-        : [...prev, cat]
+        : [...prev, cat],
     );
   };
   const handleTagCheck = (tag: any) => {
     setSelectedTags((prev) =>
       prev.some((t) => t._id === tag._id)
         ? prev.filter((t) => t._id !== tag._id)
-        : [...prev, tag]
+        : [...prev, tag],
     );
   };
   const handleRangeCheck = (value: string) => {
     setSelectedRanges((prev) =>
-      prev.includes(value)
-        ? prev.filter((v) => v !== value)
-        : [...prev, value]
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
     );
   };
 

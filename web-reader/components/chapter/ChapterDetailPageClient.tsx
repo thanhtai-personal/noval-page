@@ -63,11 +63,7 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
     isLoading: loadingPrevNext,
     error: errorPrevNext,
   } = useQuery({
-    queryKey: [
-      "prev-next-chapter",
-      slug,
-      chapter?.chapterNumber,
-    ],
+    queryKey: ["prev-next-chapter", slug, chapter?.chapterNumber],
     queryFn: () =>
       fetchPrevNextChapter({
         slug,
@@ -132,10 +128,7 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
   };
 
   // Query content nếu không có sẵn
-  const {
-    data: dynamicContent,
-    isLoading: loadingContent,
-  } = useQuery({
+  const { data: dynamicContent, isLoading: loadingContent } = useQuery({
     queryKey: ["chapter-dynamic-content", chapter?.url],
     queryFn: () => fetchChapterContent(chapter.url),
     enabled: !!chapter?.url && !chapter?.content,
@@ -145,7 +138,7 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
   // Ưu tiên content tĩnh, nếu không có thì dùng content động
   const currentContent = useMemo(
     () => chapter.content || dynamicContent || "",
-    [chapter.content, dynamicContent]
+    [chapter.content, dynamicContent],
   );
 
   if (!chapter) return <p className="p-4">{t("not_found")}</p>;
@@ -220,7 +213,9 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
         <Link
           legacyBehavior
           passHref
-          href={nextChapter ? `/truyen/${slug}/chuong/${nextChapter?.slug}` : "#"}
+          href={
+            nextChapter ? `/truyen/${slug}/chuong/${nextChapter?.slug}` : "#"
+          }
         >
           <Button as="a" size="sm" disabled={!nextChapter}>
             {t("next")} →

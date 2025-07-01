@@ -10,7 +10,9 @@ interface Chapter {
 
 async function fetchChapters(storySlug: string): Promise<Chapter[]> {
   if (!storySlug) return [];
-  const res = await ApiInstant.get(`/stories/${storySlug}/chapters?page=1&limit=1000`);
+  const res = await ApiInstant.get(
+    `/stories/${storySlug}/chapters?page=1&limit=1000`,
+  );
   return res.data.data || [];
 }
 

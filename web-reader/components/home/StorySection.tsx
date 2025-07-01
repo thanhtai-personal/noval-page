@@ -3,7 +3,13 @@ import Link from "next/link";
 import { StoriesWithSkeletonLoading } from "../common/utils/StoriesWithSkeletonLoading";
 import { useTranslations } from "next-intl";
 
-export const StorySection = ({ stories, title, className, titleIcon, loading }: any) => {
+export const StorySection = ({
+  stories,
+  title,
+  className,
+  titleIcon,
+  loading,
+}: any) => {
   const t = useTranslations("home");
   return (
     <div className={className}>

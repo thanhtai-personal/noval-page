@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 export function LastReadChapter({ slug }: { slug: string }) {
   const [lastRead, setLastRead] = useState<string | null>(null);
-  const t = useTranslations('profile');
+  const t = useTranslations("profile");
 
   useEffect(() => {
     const saved = localStorage.getItem(`${READ_PREFIX}${slug}`);
@@ -16,7 +16,7 @@ export function LastReadChapter({ slug }: { slug: string }) {
 
   return (
     <p className="text-sm text-blue-600 mt-2">
-      {t('you_have_read_up_to_chapter').replace('{0}', `${lastRead ?? 0}`)}
+      {t("you_have_read_up_to_chapter").replace("{0}", `${lastRead ?? 0}`)}
     </p>
   );
 }
