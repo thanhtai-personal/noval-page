@@ -135,5 +135,9 @@
     "look_like_you_re_lost": "Look like you're lost",
     "page_not_available": "The page you are looking for not avaible!",
     "go_to_home": "Go to Home"
+  },
+  "gameMenu": {
+    "play_to_earn": "Play to earn",
+    "game_list": "Game list"
   }
 }

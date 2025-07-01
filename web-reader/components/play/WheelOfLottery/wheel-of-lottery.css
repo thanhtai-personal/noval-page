@@ -1,0 +1,76 @@
+.wheel-of-lottery .m-game {
+  width: 500px;
+  height: 500px;
+  margin: 100px auto;
+  position: relative;
+}
+.wheel-of-lottery .m-game__wrapper {
+  display: block;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  padding-bottom: 100%;
+  border-radius: 50%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 7s cubic-bezier(0.25, 0.1, 0, 1);
+}
+.wheel-of-lottery .m-game__bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.wheel-of-lottery .m-game__start {
+  display: block;
+  width: 20%;
+  height: 20%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.wheel-of-lottery .m-game__start:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+.wheel-of-lottery .m-game__start img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+  -o-object-position: 50% 50%;
+     object-position: 50% 50%;
+}
+.wheel-of-lottery .m-game__text {
+  width: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  color: #fff;
+  font-size: 24px;
+  transform-origin: 0 50%;
+  padding-left: 3%;
+}
+.wheel-of-lottery .m-game__text:nth-child(1) {
+  transform: translateY(-50%) rotate(-30deg);
+}
+.wheel-of-lottery .m-game__text:nth-child(2) {
+  transform: translateY(-50%) rotate(-90deg);
+}
+.wheel-of-lottery .m-game__text:nth-child(3) {
+  transform: translateY(-50%) rotate(-150deg);
+}
+.wheel-of-lottery .m-game__text:nth-child(4) {
+  transform: translateY(-50%) rotate(-210deg);
+}
+.wheel-of-lottery .m-game__text:nth-child(5) {
+  transform: translateY(-50%) rotate(-270deg);
+}
+.wheel-of-lottery .m-game__text:nth-child(6) {
+  transform: translateY(-50%) rotate(-330deg);
+}

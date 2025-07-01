@@ -16,12 +16,12 @@ import Image from "next/image";
 import xboxImageIcon from "@/assets/icons8-gamepad-48.png";
 import { isMobile } from "@/utils/funtions";
 import { Html } from "@react-three/drei";
+import Link from "next/link";
 
 export const AppLayout = observer(({ children }: any) => {
   const store = useAppStore();
 
   const openGameModal = () => {
-    alert("open game modal")
   }
 
   return (
@@ -61,43 +61,45 @@ export const AppLayout = observer(({ children }: any) => {
           title="play to earn"
         >
           {store.animationMode && !isMobile() ? (
-            <div className="cursor-pointer "
-              onClick={openGameModal}
-            >
-              <Model3DContainer
-                camera={{ position: [3, 0, 3], fov: 45 }}
-                ambientLight={{ intensity: 1 }}
-                directionalLight={{ intensity: 1, position: [5, 5, 5] }}
-                id="XboxBlue"
-                fallback={
-                  <Image
-                    alt="click-to-play"
-                    className="cursor-pointer"
-                    src={xboxImageIcon}
-                    width={48}
-                    height={48}
-                  />
-                }
+            <Link href={"/play"} target="game-play">
+              <div className="cursor-pointer "
+                onClick={openGameModal}
               >
-                <XBoxBlue
-                  transition
-                  scale={3}
-                  fallBack={
-                    <Html center>
-                      <Image
-                        alt="click-to-play"
-                        className="cursor-pointer"
-                        src={xboxImageIcon}
-                        width={48}
-                        height={48}
-                      />
-                    </Html>
+                <Model3DContainer
+                  camera={{ position: [3, 0, 3], fov: 45 }}
+                  ambientLight={{ intensity: 1 }}
+                  directionalLight={{ intensity: 1, position: [5, 5, 5] }}
+                  id="XboxBlue"
+                  fallback={
+                    <Image
+                      alt="click-to-play"
+                      className="cursor-pointer"
+                      src={xboxImageIcon}
+                      width={48}
+                      height={48}
+                    />
                   }
-                />
-              </Model3DContainer>
-            </div>
+                >
+                  <XBoxBlue
+                    transition
+                    scale={3}
+                    fallBack={
+                      <Html center>
+                        <Image
+                          alt="click-to-play"
+                          className="cursor-pointer"
+                          src={xboxImageIcon}
+                          width={48}
+                          height={48}
+                        />
+                      </Html>
+                    }
+                  />
+                </Model3DContainer>
+              </div>
+            </Link>
           ) : (
-            <div>
+            <Link href={"/play"} target="game-play">
               <Image
                 alt="click-to-play"
                 className="cursor-pointer"
@@ -106,7 +108,7 @@ export const AppLayout = observer(({ children }: any) => {
                 width={48}
                 height={48}
               />
-            </div>
+            </Link>
           )}
         </div>
       )}

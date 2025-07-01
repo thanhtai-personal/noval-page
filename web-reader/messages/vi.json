@@ -135,5 +135,9 @@
     "look_like_you_re_lost": "Có vẻ như bạn đang bị lạc",
     "page_not_available": "Trang bạn tìm kiếm không tồn tại!",
     "go_to_home": "Về trang chủ"
+  },
+  "gameMenu": {
+    "play_to_earn": "Chơi trò chơi",
+    "game_list": "Danh sách trò chơi"
   }
 }
