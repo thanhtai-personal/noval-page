@@ -9,10 +9,12 @@ export function StoriesWithSkeletonLoading({
   stories,
   skeletonCount = 4,
   isSlide = false,
+  loading = false
 }: {
   stories: Story[];
   skeletonCount?: number;
   isSlide?: boolean;
+  loading?: boolean;
 }) {
   const isLoading = !stories || stories.length === 0;
 
@@ -20,10 +22,8 @@ export function StoriesWithSkeletonLoading({
     <>
       {(isLoading ? Array.from({ length: skeletonCount }) : stories).map(
         (story: any, i: number) =>
-          story ? (
+          !story || loading ? <StoryCardSkeleton key={`skeleton-${i}`} /> : (
             <LazyStoryCard key={story._id} isSlide={isSlide} story={story} />
-          ) : (
-            <StoryCardSkeleton key={`skeleton-${i}`} />
           ),
       )}
     </>

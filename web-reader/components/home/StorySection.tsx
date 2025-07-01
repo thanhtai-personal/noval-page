@@ -3,7 +3,7 @@ import Link from "next/link";
 import { StoriesWithSkeletonLoading } from "../common/utils/StoriesWithSkeletonLoading";
 import { useTranslations } from "next-intl";
 
-export const StorySection = ({ stories, title, className, titleIcon }: any) => {
+export const StorySection = ({ stories, title, className, titleIcon, loading }: any) => {
   const t = useTranslations("home");
   return (
     <div className={className}>
@@ -18,7 +18,7 @@ export const StorySection = ({ stories, title, className, titleIcon }: any) => {
         </Link>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <StoriesWithSkeletonLoading stories={stories} />
+        <StoriesWithSkeletonLoading stories={stories} loading={loading} />
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import { useTranslations } from "next-intl";
 import { observer } from "mobx-react-lite";
 import { useAppStore } from "@/store/Provider";
 import { useTheme } from "next-themes";
+import { READ_PREFIX } from "@/utils/constants";
 
 interface ReadItem {
   slug: string;
@@ -28,8 +29,8 @@ function ProfilePageContent() {
     const items: ReadItem[] = [];
 
     Object.keys(localStorage).forEach((key) => {
-      if (key?.startsWith("read-")) {
-        const slug = key.replace("read-", "");
+      if (key?.startsWith(READ_PREFIX)) {
+        const slug = key.replace(READ_PREFIX, "");
         const index = localStorage.getItem(key) || "0";
 
         items.push({ slug, index });

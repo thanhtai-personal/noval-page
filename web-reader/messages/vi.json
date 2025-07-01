@@ -104,7 +104,8 @@
     "guest": "Khách",
     "exp": "Kinh nghiệm",
     "level": "Cấp",
-    "coin": "Tinh thạch"
+    "coin": "Tinh thạch",
+    "you_have_read_up_to_chapter": "Bạn đã đọc tới chương {0}"
   },
   "docs": {
     "title": "Tài liệu"

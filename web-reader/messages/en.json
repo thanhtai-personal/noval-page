@@ -104,7 +104,8 @@
     "guest": "Guest",
     "exp": "Exp",
     "level": "Level",
-    "coin": "Coin"
+    "coin": "Coin",
+    "you_have_read_up_to_chapter": "You have read up to chapter {0}"
   },
   "docs": {
     "title": "Documentation"
