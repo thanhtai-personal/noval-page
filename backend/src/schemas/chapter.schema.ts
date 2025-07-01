@@ -15,8 +15,8 @@ export class Chapter extends Document {
   @Prop({ required: true, unique: true })
   slug: string;
 
-  @Prop({ type: String })
-  content: string;
+  @Prop({ type: Types.ObjectId, ref: 'ChapterContent' })
+  content: Types.ObjectId;
 
   @Prop({ required: true })
   chapterNumber: number;

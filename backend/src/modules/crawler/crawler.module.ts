@@ -20,6 +20,7 @@ import { CrawlHistory, CrawlHistorySchema } from '@/schemas/crawlHistory.schema'
 import { DBNames } from "@/utils/database";
 import { User, UserSchema } from "@/schemas/user.schema";
 import { Role, RoleSchema } from "@/schemas/role.schema";
+import { ChapterContent, ChapterContentSchema } from "@/schemas/chapterContent.schema";
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { Role, RoleSchema } from "@/schemas/role.schema";
       { name: Tag.name, schema: TagSchema },
       { name: Source.name, schema: SourceSchema },
       { name: CrawlHistory.name, schema: CrawlHistorySchema },
+      { name: ChapterContent.name, schema: ChapterContentSchema },
     ], DBNames.story1),
     MongooseModule.forFeature([
       { name: Story.name, schema: StorySchema },
@@ -44,6 +46,7 @@ import { Role, RoleSchema } from "@/schemas/role.schema";
       { name: Tag.name, schema: TagSchema },
       { name: Source.name, schema: SourceSchema },
       { name: CrawlHistory.name, schema: CrawlHistorySchema },
+      { name: ChapterContent.name, schema: ChapterContentSchema },
     ], DBNames.story2),
     MongooseModule.forFeature([
       { name: Story.name, schema: StorySchema },
@@ -53,6 +56,7 @@ import { Role, RoleSchema } from "@/schemas/role.schema";
       { name: Tag.name, schema: TagSchema },
       { name: Source.name, schema: SourceSchema },
       { name: CrawlHistory.name, schema: CrawlHistorySchema },
+      { name: ChapterContent.name, schema: ChapterContentSchema },
     ], DBNames.story3),
     MongooseModule.forFeature([
       { name: Story.name, schema: StorySchema },
@@ -62,6 +66,7 @@ import { Role, RoleSchema } from "@/schemas/role.schema";
       { name: Tag.name, schema: TagSchema },
       { name: Source.name, schema: SourceSchema },
       { name: CrawlHistory.name, schema: CrawlHistorySchema },
+      { name: ChapterContent.name, schema: ChapterContentSchema },
     ], DBNames.story4),
     MongooseModule.forFeature([
       { name: Story.name, schema: StorySchema },
@@ -71,6 +76,7 @@ import { Role, RoleSchema } from "@/schemas/role.schema";
       { name: Tag.name, schema: TagSchema },
       { name: Source.name, schema: SourceSchema },
       { name: CrawlHistory.name, schema: CrawlHistorySchema },
+      { name: ChapterContent.name, schema: ChapterContentSchema },
     ], DBNames.story5),
   ],
   controllers: [CrawlerController],

@@ -88,7 +88,7 @@ import { DB_STORIES_NAMES, DBNames, getDBURIs } from "./utils/database";
     TagModule,
     AuthModule,
     SourceModule,
-    BlogModule 
+    BlogModule,
   ],
   providers: [
     {

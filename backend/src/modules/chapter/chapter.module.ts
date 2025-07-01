@@ -7,31 +7,38 @@ import { ChapterService } from './chapter.service';
 import { User, UserSchema } from "@/schemas/user.schema";
 import { DBNames } from "@/utils/database";
 import { Role, RoleSchema } from "@/schemas/role.schema";
+import { ChapterContent, ChapterContentSchema } from "@/schemas/chapterContent.schema";
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Chapter.name, schema: ChapterSchema },
+      { name: ChapterContent.name, schema: ChapterContentSchema },
       { name: Story.name, schema: StorySchema },
     ], DBNames.story1),
     MongooseModule.forFeature([
       { name: Chapter.name, schema: ChapterSchema },
+      { name: ChapterContent.name, schema: ChapterContentSchema },
       { name: Story.name, schema: StorySchema },
     ], DBNames.story2),
     MongooseModule.forFeature([
       { name: Chapter.name, schema: ChapterSchema },
+      { name: ChapterContent.name, schema: ChapterContentSchema },
       { name: Story.name, schema: StorySchema },
     ], DBNames.story3),
     MongooseModule.forFeature([
       { name: Chapter.name, schema: ChapterSchema },
+      { name: ChapterContent.name, schema: ChapterContentSchema },
       { name: Story.name, schema: StorySchema },
     ], DBNames.story4),
     MongooseModule.forFeature([
       { name: Chapter.name, schema: ChapterSchema },
+      { name: ChapterContent.name, schema: ChapterContentSchema },
       { name: Story.name, schema: StorySchema },
     ], DBNames.story5),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
+      { name: ChapterContent.name, schema: ChapterContentSchema },
       { name: Role.name, schema: RoleSchema },
     ], DBNames.ums),
   ],

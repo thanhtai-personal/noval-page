@@ -30,6 +30,16 @@ export class ChapterController {
     return chaptersResponse;
   }
 
+  @Public()
+  @Get(':chapterSlug/content')
+  async getChapterContent(
+    @Param('slug') slug: string,
+    @Param('chapterSlug') chapterSlug: string,
+  ) {
+    const chaptersResponse = await this.chapterService.getChapterContent(slug, chapterSlug);
+    return chaptersResponse;
+  }
+
   @Roles(RoleSlug.READER)
   @Post(':chapterSlug/mark-as-read')
   async markAsRead(

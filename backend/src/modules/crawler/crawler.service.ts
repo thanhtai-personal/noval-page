@@ -27,8 +27,8 @@ export class CrawlerService {
     private readonly vtruyen: VtruyenCrawler,
     private readonly gateway: CrawlerGateway,
     @InjectModel(Story.name, DBNames.story1) private storyModel: Model<Story>,
-    @InjectModel(Chapter.name, DBNames.story1) private chapterModel: Model<Chapter>,
     @InjectModel(Source.name, DBNames.story1) private sourceModel: Model<Source>,
+    @InjectModel(Chapter.name, DBNames.story1) private chapter1Model: Model<Chapter>,
     @InjectModel(Chapter.name, DBNames.story2) private chapter2Model: Model<Chapter>,
     @InjectModel(Chapter.name, DBNames.story3) private chapter3Model: Model<Chapter>,
     @InjectModel(Chapter.name, DBNames.story4) private chapter4Model: Model<Chapter>,
@@ -204,7 +204,8 @@ export class CrawlerService {
         );
 
         try {
-          [this.chapter2Model, this.chapter3Model, this.chapter4Model, this.chapter2Model].forEach(async (chapterModel) => {
+          const chapterModels = [this.chapter1Model, this.chapter2Model, this.chapter3Model, this.chapter4Model, this.chapter2Model];
+          for (const chapterModel of chapterModels) {
             const chapters = await chapterModel.find({
               content: { $exists: false },
               story: story._id,
@@ -234,7 +235,7 @@ export class CrawlerService {
                 source,
               );
             }
-          })
+          }
         } catch (error) {
           this.logData(
             `Error crawling chapters for story ${story.title}: ${error.message}`,

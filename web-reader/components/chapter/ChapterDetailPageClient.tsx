@@ -14,6 +14,7 @@ import { useAppStore } from "@/store/Provider";
 import { isMobile } from "@/utils/funtions";
 import { bgOptions, colorOptions } from "./constants";
 import { useMarkAsReadTo } from "@/hooks/useMarkAsReadTo";
+import SideLoading from "@/components/common/SideLoading/SideLoading";
 
 // Fetch prev/next chapter
 const fetchPrevNextChapter = async ({
@@ -29,13 +30,17 @@ const fetchPrevNextChapter = async ({
   return res.data as { next: any | null; prev: any | null };
 };
 
-// Fetch content dynamic
-const fetchChapterContent = async (url: string): Promise<string> => {
-  const response = await fetch(url);
-  const htmlText = await response.text();
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(htmlText, "text/html");
-  return doc.querySelector(".chapter-c-content")?.innerHTML || "";
+const fetchChapterContent = async ({
+  slug,
+  chapterSlug,
+}: {
+  slug: string;
+  chapterSlug: string;
+}) => {
+  const res = await ApiInstant.get(
+    `/stories/${slug}/chapters/${chapterSlug}/content`,
+  );
+  return res.data;
 };
 
 export const ChapterPageClient = observer(({ chapter }: any) => {
@@ -57,6 +62,21 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
     };
   }, []);
 
+  // Query chapter content
+  const {
+    data: chapterContent,
+    isLoading: loadingChapterContent,
+    error: errorChapterContent,
+  } = useQuery({
+    queryKey: ["chapter-content", slug, chapter?.chapterNumber],
+    queryFn: () =>
+      fetchChapterContent({
+        slug,
+        chapterSlug: chapter.slug,
+      }),
+    enabled: !!slug && !!chapter?.slug,
+  });
+
   // Query prev/next chapter
   const {
     data: prevNextData,
@@ -70,7 +90,6 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
         chapterNumber: chapter.chapterNumber,
       }),
     enabled: !!slug && !!chapter?.chapterNumber,
-    // retry: false,
   });
 
   // SIDE EFFECT ALERT: dùng useEffect để bắt alert khi data hoặc error thay đổi
@@ -119,27 +138,13 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
       await ApiInstant.post(
         `/stories/${slug}/chapters/${chapter.slug}/mark-as-read`,
       );
-    } catch (error) {}
+    } catch (error) { }
   });
 
   const handleNext = () => {
     if (!nextChapter) return;
     router.push(`/truyen/${chapter?.slug}/chuong/${nextChapter?.slug}`);
   };
-
-  // Query content nếu không có sẵn
-  const { data: dynamicContent, isLoading: loadingContent } = useQuery({
-    queryKey: ["chapter-dynamic-content", chapter?.url],
-    queryFn: () => fetchChapterContent(chapter.url),
-    enabled: !!chapter?.url && !chapter?.content,
-    staleTime: 1000 * 60 * 5,
-  });
-
-  // Ưu tiên content tĩnh, nếu không có thì dùng content động
-  const currentContent = useMemo(
-    () => chapter.content || dynamicContent || "",
-    [chapter.content, dynamicContent],
-  );
 
   if (!chapter) return <p className="p-4">{t("not_found")}</p>;
 
@@ -170,15 +175,15 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
         className="text-xl font-bold text-center"
         style={{ fontSize, color }}
       />
-      {currentContent ? (
+      {loadingChapterContent ? <SideLoading /> : chapterContent?.content ? (
         <div
           dangerouslySetInnerHTML={{
-            __html: currentContent.replace(/Tàng thư viện/gi, "Vô ưu các"),
+            __html: chapterContent.content.replace(/Tàng thư viện/gi, "Vô ưu các"),
           }}
           className="prose max-w-none whitespace-pre-wrap"
           style={{ fontSize, color }}
         />
-      ) : loadingContent ? (
+      ) : (
         <div className="w-full h-screen flex items-center justify-center">
           <div className="text-center">
             <p className="mb-2">{t("chapter_loading")}</p>
@@ -192,7 +197,7 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
             </a>
           </div>
         </div>
-      ) : null}
+      )}
       <div className="flex justify-end md:justify-between mt-10">
         {prevChapter && (
           <Link

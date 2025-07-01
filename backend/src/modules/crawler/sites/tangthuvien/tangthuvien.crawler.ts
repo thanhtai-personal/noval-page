@@ -18,6 +18,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { getLimitConfig } from '@/utils/constants';
 import { DBNames, switchModelByDBLimit } from "@/utils/database";
+import { ChapterContent } from "@/schemas/chapterContent.schema";
 
 const ttvSearchPath = 'https://truyen.tangthuvien.vn/tong-hop?rank=vw&page=';
 
@@ -36,10 +37,17 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
     @InjectModel(Story.name, DBNames.story1) private storyModel: Model<Story>,
 
     //sub db to store chapter
+    @InjectModel(Chapter.name, DBNames.story1) private chapter1Model: Model<Chapter>,
     @InjectModel(Chapter.name, DBNames.story2) private chapter2Model: Model<Chapter>,
     @InjectModel(Chapter.name, DBNames.story3) private chapter3Model: Model<Chapter>,
     @InjectModel(Chapter.name, DBNames.story4) private chapter4Model: Model<Chapter>,
     @InjectModel(Chapter.name, DBNames.story5) private chapter5Model: Model<Chapter>,
+
+    //sub db to store chapter content
+    @InjectModel(ChapterContent.name, DBNames.story2) private chapterContent2Model: Model<ChapterContent>,
+    @InjectModel(ChapterContent.name, DBNames.story3) private chapterContent3Model: Model<ChapterContent>,
+    @InjectModel(ChapterContent.name, DBNames.story4) private chapterContent4Model: Model<ChapterContent>,
+    @InjectModel(ChapterContent.name, DBNames.story5) private chapterContent5Model: Model<ChapterContent>,
   ) {
     this.getSource();
   }
@@ -424,7 +432,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       if (listChapters.length > 350) {
 
         try {
-          const chapterModel = await switchModelByDBLimit(this.chapter2Model, this.chapter3Model, this.chapter4Model, this.chapter5Model)
+          const chapterModel = await switchModelByDBLimit(this.chapter1Model, this.chapter2Model, this.chapter3Model, this.chapter4Model, this.chapter5Model)
           // @TODO: remove limit if have a better database
           for (const chapterIndex in listChapters) {
             if (
@@ -509,9 +517,27 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         this.logData(`No title found for chapter: ${chapter.url}`);
         return;
       }
-      chapter.content = content;
       chapter.title = title;
       chapter.slug = slugify(title);
+
+      const contentModel = await switchModelByDBLimit(this.chapterContent2Model, this.chapterContent3Model, this.chapterContent4Model, this.chapterContent5Model);
+
+      const savedContent = await contentModel.findOneAndUpdate(
+        { slug: `content-${chapter.slug}` },
+        {
+          slug: `content-${chapter.slug}`,
+          chapter: chapter.slug,
+          chapterId: chapter._id,
+          content
+        },
+        {
+          new: true,
+          upsert: true,
+          setDefaultsOnInsert: true,
+        },
+      );
+
+      chapter.content = savedContent._id;
 
       await chapterModel.findOneAndUpdate(
         { slug: chapter.slug },
