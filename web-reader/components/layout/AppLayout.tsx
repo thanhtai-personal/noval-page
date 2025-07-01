@@ -14,9 +14,14 @@ import { TopSprites } from "./TopSprites";
 import { EntertaimentMenu } from "./EntertaimentMenu";
 import Image from "next/image";
 import xboxImageIcon from "@/assets/icons8-gamepad-48.png";
+import { isMobile } from "@/utils/funtions";
 
 export const AppLayout = observer(({ children }: any) => {
   const store = useAppStore();
+
+  const openGameModal = () => {
+    alert("open game modal")
+  }
 
   return (
     <div className="relative flex flex-col h-screen max-w-[100vw] overflow-x-hidden overflow-y-auto">
@@ -45,16 +50,21 @@ export const AppLayout = observer(({ children }: any) => {
       {store.openGameMode && (
         <div
           className={`
-            fixed cursor-pointer z-50 bottom-0 ${
-              store.animationMode ? "-right-[140px]" : "right-2"
-            } p-4 rounded-full overflow-visible
+            fixed z-20 bottom-2  bg-orange-500/25 ${store.animationMode ?
+              "-right-[160px] hover:-right-[50px] transition-all duration-300" : "right-6 p-4"
+            } rounded-full backdrop:blur-xl
           `}
+          style={{
+            boxShadow: "0px 0px 4px 3px rgba(247, 92, 2, 0.9)",
+          }}
           title="play to earn"
         >
-          {store.animationMode ? (
-            <div className="">
+          {store.animationMode && !isMobile() ? (
+            <div className="cursor-pointer "
+              onClick={openGameModal}
+            >
               <Model3DContainer
-                camera={{ position: [4, 4, 1], fov: 45 }}
+                camera={{ position: [3, 0, 3], fov: 45 }}
                 ambientLight={{ intensity: 1 }}
                 directionalLight={{ intensity: 1, position: [5, 5, 5] }}
                 id="XboxBlue"
@@ -88,6 +98,7 @@ export const AppLayout = observer(({ children }: any) => {
               <Image
                 alt="click-to-play"
                 className="cursor-pointer"
+                onClick={openGameModal}
                 src={xboxImageIcon}
                 width={48}
                 height={48}
