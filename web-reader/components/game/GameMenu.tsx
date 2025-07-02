@@ -21,13 +21,13 @@ export const GameMenu = ({
     <div className={`game-menu-item cursor-pointer ${inside && "inside"}`} onClick={() => openLotteryModal?.()}
       style={{ animationDelay: '250ms' }}
     >
-      <img width="64" height="64"
+      <img className="w-[32px] h-[32px] md:w-[64px] md:h-[64px]" width="64" height="64"
         src="https://img.icons8.com/external-microdots-premium-microdot-graphic/64/external-lottery-lifestyle-entertainment-vol3-microdots-premium-microdot-graphic.png" alt="external-lottery-lifestyle-entertainment-vol3-microdots-premium-microdot-graphic"
       />
     </div>
     <div className={`game-menu-item ${inside && "inside"}`}>
       <Link href={"/play"} target="game-play">
-        <img width="94" height="94" src="https://img.icons8.com/3d-fluency/94/more.png" alt="more"/>
+        <img  className="w-[32px] h-[32px] md:w-[64px] md:h-[64px]" width="64" height="64" src="https://img.icons8.com/3d-fluency/94/more.png" alt="more"/>
       </Link>
     </div>
   </div >
