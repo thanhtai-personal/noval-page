@@ -3,7 +3,7 @@
 import { TReward, WheelOfLotteryRef } from "@/components/play/WheelOfLottery/WheelOfLottery";
 import { COLORS } from "@/utils/constants";
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useMemo, useState } from "react";
 
 const WheelOfLottery = dynamic(
   () => import("@/components/play/WheelOfLottery/WheelOfLottery"),
@@ -12,14 +12,30 @@ const WheelOfLottery = dynamic(
 
 const ClientRenderWrapper = (props: any) => {
   const wheelRef = React.useRef<WheelOfLotteryRef>(null);
+  const [size, setSize] = useState(1);
 
+  const rewards = useMemo(() => {
+    return REWARDS.filter((_, index) => index < size)
+  }, [size])
 
   return <div className="w-full flex flex-col mt-6">
+    <div className="flex flex-row justify-center items-center gap-4">
+      <span >Select wheel size: </span>
+      <select onChange={(e: any) => {
+        const value: string = e?.target?.value || e as string;
+        setSize(Number(value))
+      }}
+      >
+        {REWARDS.map((rw, index) => (
+          <option key={rw.name} value={index}>{index + 1} colors</option>
+        ))}
+      </select>
+    </div>
     <div className="flex flex-row justify-center items-center gap-4">
       <span >Select winner to test: </span>
       <select onChange={(e: any) => {
         const value: string = e?.target?.value || e as string;
-        const winner = REWARDS.find((r) => r.name === value);
+        const winner = rewards.find((r) => r.name === value);
         winner && wheelRef.current?.setWinner(winner);
       }}
         defaultValue={REWARDS[0].name}
@@ -31,7 +47,7 @@ const ClientRenderWrapper = (props: any) => {
         ))}
       </select>
     </div>
-    <WheelOfLottery ref={wheelRef} rewards={REWARDS} {...props} />
+    <WheelOfLottery ref={wheelRef} rewards={rewards} {...props} />
   </div>;
 };
 
