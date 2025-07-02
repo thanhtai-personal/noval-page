@@ -110,11 +110,11 @@ export const AppLayout = observer(({ children }: any) => {
             // <Link href={"/play"} target="game-play">
             <Image
               alt="click-to-play"
-              className="cursor-pointer"
               onClick={openGameModal}
               src={xboxImageIcon}
               width={48}
               height={48}
+              className="cursor-pointer w-[28px] h-[28px] md:w-[48px] md:h-[48px]"
             />
             // </Link>
           )}
