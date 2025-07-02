@@ -44,8 +44,12 @@ export const WheelOfLottery = () => {
   return (
     <div className="wheel-of-lottery">
       <div className="m-game">
-        <div className="m-game__start"><img src="https://w.ladicdn.com/source/spin-btn1.svg" alt="" /></div>
-        <div className="m-game__wrapper"><img className="m-game__bg" src="https://w.ladicdn.com/source/spin-bg6.svg" alt="" />
+        <div className="m-game__start">
+          <img src="https://w.ladicdn.com/source/spin-btn1.svg" alt=""
+            fetchPriority="high" loading="lazy" /></div>
+        <div className="m-game__wrapper">
+          <img className="m-game__bg" src="https://w.ladicdn.com/source/spin-bg6.svg" alt=""
+            fetchPriority="high" loading="lazy" />
           <div>
             <div className="m-game__text">Phần thưởng 1</div>
             <div className="m-game__text">Phần thưởng 2</div>

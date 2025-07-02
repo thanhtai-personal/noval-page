@@ -63,6 +63,8 @@ export const StoryDetailClient = observer(() => {
           alt={story.title}
           className="w-full max-w-xs object-cover rounded shadow"
           src={story.cover}
+          fetchPriority="high"
+          loading="lazy"
         />
         <div>
           <h1 className="text-3xl font-bold mb-2">{story.title}</h1>

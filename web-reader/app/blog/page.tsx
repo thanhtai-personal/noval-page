@@ -60,6 +60,8 @@ export default function BlogPage() {
                     alt={blog.title}
                     className="w-full h-40 object-cover rounded-t"
                     src={blog.cover}
+                    fetchPriority="high"
+                    loading="lazy"
                   />
                 </CardHeader>
               )}

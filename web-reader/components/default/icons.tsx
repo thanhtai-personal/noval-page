@@ -13,6 +13,8 @@ export const Logo: React.FC<any> = ({
     alt="logo"
     className="w-20 text-default-500"
     src={img01.src}
+    fetchPriority="high"
+    loading="lazy"
     {...props}
   />
 );

@@ -41,6 +41,8 @@ export default function BlogDetailPage() {
           alt={blog.title}
           className="rounded w-full h-auto"
           src={blog.cover}
+          fetchPriority="high"
+          loading="lazy"
         />
       )}
       <div

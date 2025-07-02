@@ -25,9 +25,8 @@ export const StoryCard = observer(
           className="w-full h-full rounded-md overflow-hidden"
         >
           <Card
-            className={`w-full h-full rounded-[22px] ${
-              isSlide ? "bg-[#2585f399]" : ""
-            } backdrop:blur-xl`}
+            className={`w-full h-full rounded-[22px] ${isSlide ? "bg-[#2585f399]" : ""
+              } backdrop:blur-xl`}
             style={{
               background: isSlide
                 ? `linear-gradient(135deg, #2585f399, ${story.cover ? "#fff0" : "#f7b80199"}, #f75c0299)`
@@ -43,12 +42,16 @@ export const StoryCard = observer(
                     boxShadow: "0px 0px 8px 6px rgba(247, 92, 2, 0.3)",
                   }}
                   src={story.cover}
+                  fetchPriority="high"
+                  loading="lazy"
                 />
               ) : (
                 <img
                   alt={story.title}
                   className={`w-full h-48 object-cover rounded-t`}
                   src={story.cover}
+                    fetchPriority="high"
+                    loading="lazy"
                 />
               )}
             </CardHeader>
