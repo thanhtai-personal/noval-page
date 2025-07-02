@@ -12,7 +12,7 @@ const WheelOfLottery = dynamic(
 
 const ClientRenderWrapper = (props: any) => {
   const wheelRef = React.useRef<WheelOfLotteryRef>(null);
-  const [size, setSize] = useState(1);
+  const [size, setSize] = useState(6);
 
   const rewards = useMemo(() => {
     return REWARDS.filter((_, index) => index < size)
@@ -21,7 +21,7 @@ const ClientRenderWrapper = (props: any) => {
   return <div className="w-full flex flex-col mt-6">
     <div className="flex flex-row justify-center items-center gap-4">
       <span >Select wheel size: </span>
-      <select onChange={(e: any) => {
+      <select value={size} onChange={(e: any) => {
         const value: string = e?.target?.value || e as string;
         setSize(Number(value))
       }}

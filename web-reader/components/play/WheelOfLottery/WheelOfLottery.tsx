@@ -2,13 +2,15 @@ import React, { ReactNode, useRef, useImperativeHandle, forwardRef, useState } f
 import spinSvg from "@/assets/spin.svg";
 import Image from "next/image";
 import { COLORS } from "@/utils/constants";
+import { SoundHiddenPlayer } from "@/app/play/sound/SoundHiddenPlayer";
+import { SoundManagerAPI, SoundManagerProvider } from "@/app/play/sound/context/SoundManagerProvider";
 
 export type TReward = {
   render: () => ReactNode;
   name?: string;
 };
 
-const ANIMATION_TIME = 7000;
+const ANIMATION_TIME = 14000;
 const DEFAULT_ROTATE = 75;
 
 export interface WheelOfLotteryRef {
@@ -23,6 +25,7 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const tokenRef = useRef(true);
   const rotateRef = useRef(DEFAULT_ROTATE);
+  const audioRef = useRef<SoundManagerAPI>();
   const [winner, setWinner] = useState<TReward | null>(rewards?.[0]);
 
   useImperativeHandle(ref, () => ({
@@ -33,6 +36,7 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
 
   function handleClick() {
     const hat = wrapperRef.current;
+    audioRef.current?.play();
     if (!tokenRef.current || !hat) return;
     tokenRef.current = false;
     const oldDeg = rotateRef.current;
@@ -58,12 +62,13 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
     
     rotateRef.current = deg;
     hat.style.transform = `rotate(${deg}deg)`;
-    hat.style.transition = "transform 7s cubic-bezier(0.25, 0.1, 0, 1)";
+    hat.style.transition = "transform 14s cubic-bezier(0.25, 0.1, 0, 1)";
 
 
     let toId = setTimeout(() => {
       tokenRef.current = true;
       winner && onWinner?.(winner);
+      audioRef.current?.stop();
       clearTimeout(toId);
     }, ANIMATION_TIME);
   }
@@ -122,9 +127,16 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
           ))}
         </div>
       </div>
+      <SoundManagerProvider autoPlay list={tracks} ref={audioRef as any}>
+        <SoundHiddenPlayer />
+      </SoundManagerProvider>
     </div>
   );
 });
+
+const tracks = [
+  { id: "1", url: "/audio/spinning.wav", title: "spinning", artist: "A", cover: "" },
+];
 
 WheelOfLottery.displayName = "WheelOfLottery";
 
