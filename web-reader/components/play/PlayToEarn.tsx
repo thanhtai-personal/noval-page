@@ -13,10 +13,10 @@ export const PlayToEarn = observer(() => {
 
     return () => {
       store.openGameMode = true;
-    }
-  }, [])
+    };
+  }, []);
 
-  return <div></div>
-})
+  return <div></div>;
+});
 
-export default PlayToEarn
+export default PlayToEarn;

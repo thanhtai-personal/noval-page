@@ -37,9 +37,15 @@ export const PlentyDiorama: React.FC<PlentyDioramaProps> = ({
   }, [camera, transition]);
 
   return (
-    <Suspense fallback={fallBack ?? <Html center>
-      <div>Loading...</div>
-    </Html>}>
+    <Suspense
+      fallback={
+        fallBack ?? (
+          <Html center>
+            <div>Loading...</div>
+          </Html>
+        )
+      }
+    >
       <ModelBox
         scale={scale}
         position={position}

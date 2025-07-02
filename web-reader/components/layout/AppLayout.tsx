@@ -21,8 +21,7 @@ import Link from "next/link";
 export const AppLayout = observer(({ children }: any) => {
   const store = useAppStore();
 
-  const openGameModal = () => {
-  }
+  const openGameModal = () => {};
 
   return (
     <div className="relative flex flex-col h-screen max-w-[100vw] overflow-x-hidden overflow-y-auto">
@@ -51,8 +50,10 @@ export const AppLayout = observer(({ children }: any) => {
       {store.openGameMode && (
         <div
           className={`
-            fixed z-20 bottom-2  bg-orange-500/25 ${store.animationMode ?
-              "-right-[160px] hover:-right-[50px] transition-all duration-300" : "right-6 p-4"
+            fixed z-20 bottom-2  bg-orange-500/25 ${
+              store.animationMode
+                ? "-right-[160px] hover:-right-[50px] transition-all duration-300"
+                : "right-6 p-4"
             } rounded-full backdrop:blur-xl
           `}
           style={{
@@ -62,9 +63,7 @@ export const AppLayout = observer(({ children }: any) => {
         >
           {store.animationMode && !isMobile() ? (
             <Link href={"/play"} target="game-play">
-              <div className="cursor-pointer "
-                onClick={openGameModal}
-              >
+              <div className="cursor-pointer " onClick={openGameModal}>
                 <Model3DContainer
                   camera={{ position: [3, 0, 3], fov: 45 }}
                   ambientLight={{ intensity: 1 }}

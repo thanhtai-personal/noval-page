@@ -3,11 +3,15 @@ import ClientRenderWrapper from "./ClientRenderWrapper";
 import Link from "next/link";
 
 export default function PlayPage() {
-
   const t = useTranslations("gameMenu");
 
   const games = [
-    { id: 1, name: "Wheel of Lottery", description: "Wheel of winner", url: "/play/wheel-of-lottery" },
+    {
+      id: 1,
+      name: "Wheel of Lottery",
+      description: "Wheel of winner",
+      url: "/play/wheel-of-lottery",
+    },
   ];
 
   return (

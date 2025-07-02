@@ -20,7 +20,6 @@ export const FantasyIsland3DModel: React.FC<FantasyIsland3DModelProps> = ({
   position = [0, 0, 0],
   fallBack,
 }: any) => {
-
   const { camera } = useThree();
   const angleRef = useRef(0);
 
@@ -39,9 +38,15 @@ export const FantasyIsland3DModel: React.FC<FantasyIsland3DModelProps> = ({
   }, [camera, rotate]);
 
   return (
-    <Suspense fallback={fallBack ?? <Html center>
-      <div>Loading...</div>
-    </Html>}>
+    <Suspense
+      fallback={
+        fallBack ?? (
+          <Html center>
+            <div>Loading...</div>
+          </Html>
+        )
+      }
+    >
       <ModelBox
         scale={scale}
         position={position}

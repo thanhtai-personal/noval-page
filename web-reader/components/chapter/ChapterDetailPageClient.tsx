@@ -138,7 +138,7 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
       await ApiInstant.post(
         `/stories/${slug}/chapters/${chapter.slug}/mark-as-read`,
       );
-    } catch (error) { }
+    } catch (error) {}
   });
 
   const handleNext = () => {
@@ -175,10 +175,15 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
         className="text-xl font-bold text-center"
         style={{ fontSize, color }}
       />
-      {loadingChapterContent ? <SideLoading /> : chapterContent?.content ? (
+      {loadingChapterContent ? (
+        <SideLoading />
+      ) : chapterContent?.content ? (
         <div
           dangerouslySetInnerHTML={{
-            __html: chapterContent.content.replace(/Tàng thư viện/gi, "Vô ưu các"),
+            __html: chapterContent.content.replace(
+              /Tàng thư viện/gi,
+              "Vô ưu các",
+            ),
           }}
           className="prose max-w-none whitespace-pre-wrap"
           style={{ fontSize, color }}
