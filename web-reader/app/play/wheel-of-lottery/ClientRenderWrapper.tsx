@@ -27,7 +27,7 @@ const ClientRenderWrapper = (props: any) => {
       }}
       >
         {REWARDS.map((rw, index) => (
-          <option key={rw.name} value={index}>{index + 1} colors</option>
+          <option key={rw.name} value={index + 1}>{index + 1} colors</option>
         ))}
       </select>
     </div>
