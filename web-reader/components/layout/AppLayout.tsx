@@ -16,12 +16,18 @@ import Image from "next/image";
 import xboxImageIcon from "@/assets/icons8-gamepad-48.png";
 import { isMobile } from "@/utils/funtions";
 import { Html } from "@react-three/drei";
-import Link from "next/link";
+import { useState } from "react";
+import WheelWrapper from "@/app/play/wheel-of-lottery/ClientRenderWrapper";
+import { GameBox } from "../game/GameBox";
 
 export const AppLayout = observer(({ children }: any) => {
   const store = useAppStore();
 
-  const openGameModal = () => {};
+  const [showingGameMenu, setShowingGameMenu] = useState(false);
+
+  const openGameModal = () => {
+    setShowingGameMenu((prev) => !prev)
+  };
 
   return (
     <div className="relative flex flex-col h-screen max-w-[100vw] overflow-x-hidden overflow-y-auto">
@@ -32,6 +38,10 @@ export const AppLayout = observer(({ children }: any) => {
             <BottomSprites />
           </div>
         </div>
+
+        {showingGameMenu && <GameBox>
+          <WheelWrapper />
+        </GameBox>}
 
         {store.useLayout && <Navbar />}
         <WallPaperBg1>
@@ -50,10 +60,9 @@ export const AppLayout = observer(({ children }: any) => {
       {store.openGameMode && (
         <div
           className={`
-            fixed z-20 bottom-2  bg-orange-500/25 ${
-              store.animationMode
-                ? "-right-[160px] hover:-right-[50px] transition-all duration-300"
-                : "right-6 p-4"
+            fixed z-20 bottom-2  bg-orange-500/25 ${store.animationMode
+              ? "-right-[160px] hover:-right-[50px] transition-all duration-300"
+              : "right-6 p-4"
             } rounded-full backdrop:blur-xl
           `}
           style={{
@@ -62,52 +71,52 @@ export const AppLayout = observer(({ children }: any) => {
           title="play to earn"
         >
           {store.animationMode && !isMobile() ? (
-            <Link href={"/play"} target="game-play">
-              <div className="cursor-pointer " onClick={openGameModal}>
-                <Model3DContainer
-                  camera={{ position: [3, 0, 3], fov: 45 }}
-                  ambientLight={{ intensity: 1 }}
-                  directionalLight={{ intensity: 1, position: [5, 5, 5] }}
-                  id="XboxBlue"
-                  fallback={
-                    <Image
-                      alt="click-to-play"
-                      className="cursor-pointer"
-                      src={xboxImageIcon}
-                      width={48}
-                      height={48}
-                    />
-                  }
-                >
-                  <XBoxBlue
-                    transition
-                    scale={3}
-                    fallBack={
-                      <Html center>
-                        <Image
-                          alt="click-to-play"
-                          className="cursor-pointer"
-                          src={xboxImageIcon}
-                          width={48}
-                          height={48}
-                        />
-                      </Html>
-                    }
+            // <Link href={"/play"} target="game-play">
+            <div className="cursor-pointer " onClick={openGameModal}>
+              <Model3DContainer
+                camera={{ position: [3, 0, 3], fov: 45 }}
+                ambientLight={{ intensity: 1 }}
+                directionalLight={{ intensity: 1, position: [5, 5, 5] }}
+                id="XboxBlue"
+                fallback={
+                  <Image
+                    alt="click-to-play"
+                    className="cursor-pointer"
+                    src={xboxImageIcon}
+                    width={48}
+                    height={48}
                   />
-                </Model3DContainer>
-              </div>
-            </Link>
+                }
+              >
+                <XBoxBlue
+                  transition
+                  scale={3}
+                  fallBack={
+                    <Html center>
+                      <Image
+                        alt="click-to-play"
+                        className="cursor-pointer"
+                        src={xboxImageIcon}
+                        width={48}
+                        height={48}
+                      />
+                    </Html>
+                  }
+                />
+              </Model3DContainer>
+            </div>
+            // </Link>
           ) : (
-            <Link href={"/play"} target="game-play">
-              <Image
-                alt="click-to-play"
-                className="cursor-pointer"
-                onClick={openGameModal}
-                src={xboxImageIcon}
-                width={48}
-                height={48}
-              />
-            </Link>
+            // <Link href={"/play"} target="game-play">
+            <Image
+              alt="click-to-play"
+              className="cursor-pointer"
+              onClick={openGameModal}
+              src={xboxImageIcon}
+              width={48}
+              height={48}
+            />
+            // </Link>
           )}
         </div>
       )}

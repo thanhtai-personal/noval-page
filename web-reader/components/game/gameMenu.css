@@ -1,0 +1,27 @@
+.game-menu-item {
+  animation: icon_appear 800ms ease-in-out;
+  transform: scale(0) translate3d(350px, -150px, 0);
+}
+
+.game-menu-item.inside {
+  transform: scale(1) translate3d(0, 0, 0);
+}
+
+.game-menu-item:hover {
+  transition-duration: 150ms;
+  animation: hover_icon 500ms forwards infinite;
+}
+
+@keyframes hover_icon {
+  50% {
+    opacity: 0.75;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes icon_appear {
+  100% {
+    opacity: 1;
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+}

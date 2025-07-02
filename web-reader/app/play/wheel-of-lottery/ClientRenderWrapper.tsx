@@ -18,36 +18,38 @@ const ClientRenderWrapper = (props: any) => {
     return REWARDS.filter((_, index) => index < size)
   }, [size])
 
-  return <div className="w-full flex flex-col mt-6">
-    <div className="flex flex-row justify-center items-center gap-4">
-      <span >Select wheel size: </span>
-      <select value={size} onChange={(e: any) => {
-        const value: string = e?.target?.value || e as string;
-        setSize(Number(value))
-      }}
-      >
-        {REWARDS.map((rw, index) => (
-          <option key={rw.name} value={index + 1}>{index + 1} colors</option>
-        ))}
-      </select>
-    </div>
-    <div className="flex flex-row justify-center items-center gap-4">
-      <span >Select winner to test: </span>
-      <select onChange={(e: any) => {
-        const value: string = e?.target?.value || e as string;
-        const winner = rewards.find((r) => r.name === value);
-        wheelRef.current?.setWinner(winner);
-      }}
-      >
-        <option key={'random'} value={-1} style={{
-          background: `#FF00FF99`
-        }}>Random</option>
-        {REWARDS.map((rw, index) => (
-          <option key={rw.name} value={rw.name} style={{
-            background: `${COLORS[index]}99`
-          }}>{rw.render()}</option>
-        ))}
-      </select>
+  return <div className="w-full max-h-screen flex flex-col mt-6 gap-4">
+    <div className="flex flex-col p-4 gap-4 bg-slate-500 rounded-lg w-fit mx-auto">
+      <div className="flex flex-row justify-center items-center gap-4">
+        <span >Select wheel size: </span>
+        <select value={size} onChange={(e: any) => {
+          const value: string = e?.target?.value || e as string;
+          setSize(Number(value))
+        }}
+        >
+          {REWARDS.map((rw, index) => (
+            <option key={rw.name} value={index + 1}>{index + 1} colors</option>
+          ))}
+        </select>
+      </div>
+      <div className="flex flex-row justify-center items-center gap-4">
+        <span >Select winner to test: </span>
+        <select onChange={(e: any) => {
+          const value: string = e?.target?.value || e as string;
+          const winner = rewards.find((r) => r.name === value);
+          wheelRef.current?.setWinner(winner);
+        }}
+        >
+          <option key={'random'} value={-1} style={{
+            background: `#FF00FF99`
+          }}>Random</option>
+          {REWARDS.map((rw, index) => (
+            <option key={rw.name} value={rw.name} style={{
+              background: `${COLORS[index]}99`
+            }}>{rw.render()}</option>
+          ))}
+        </select>
+      </div>
     </div>
     <WheelOfLottery ref={wheelRef} rewards={rewards} {...props} />
   </div>;

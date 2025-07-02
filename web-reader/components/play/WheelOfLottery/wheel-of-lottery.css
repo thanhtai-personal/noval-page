@@ -4,6 +4,7 @@
   aspect-ratio: 1/1;
   margin: 4vw auto;
   position: relative;
+  box-shadow: 4px 4px 8px 6px rgba(247, 92, 2, 0.3);
 }
 
 .wheel-of-lottery .m-game__wrapper {
@@ -69,4 +70,11 @@
   transform-origin: 0 50%;
   padding-left: 5%;
   pointer-events: none;
+}
+
+.wheel-of-lottery .shadow-animation .animation-div:nth-child(n) {
+  box-shadow: 4px 4px 8px 6px rgba(247, 92, 2, 0.3);
+  border-radius: 100%;
+  background: transparent;
+  backdrop-filter: blur(4px);
 }
