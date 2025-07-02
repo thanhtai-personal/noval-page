@@ -109,22 +109,15 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
           {rewards.map((reward, idx) => (
             <div
               key={idx}
-              className="absolute left-1/2 top-1/2 w-[36%] text-center text-white font-semibold text-[3.9vw] sm:text-xl select-none drop-shadow-md"
+              className="absolute left-1/2 top-1/2 w-[60%] text-center text-white font-semibold text-[3.9vw] sm:text-xl select-none drop-shadow-md"
               style={{
-                transform: `
-                  translate(-50%,-50%)
-                  rotate(${((idx + 0.5) * (360 / rewards.length))}deg)
-                `,
-                transformOrigin: "50% 50%",
+                transform: `rotate(${270 + ((360 / rewards.length) * idx)}deg)`,
+                transformOrigin: "0 0",
+                paddingLeft: "3%",
                 pointerEvents: "none",
               }}
             >
-              <div style={{
-                transform: `rotate(-${((idx + 0.5) * (360 / rewards.length))}deg)`,
-                width: "100%",
-              }}>
-                {reward.render()}
-              </div>
+              {reward.render()}
             </div>
           ))}
         </div>
