@@ -36,10 +36,12 @@ const ClientRenderWrapper = (props: any) => {
       <select onChange={(e: any) => {
         const value: string = e?.target?.value || e as string;
         const winner = rewards.find((r) => r.name === value);
-        winner && wheelRef.current?.setWinner(winner);
+        wheelRef.current?.setWinner(winner);
       }}
-        defaultValue={REWARDS[0].name}
       >
+        <option key={'random'} value={-1} style={{
+          background: `#FF00FF99`
+        }}>Random</option>
         {REWARDS.map((rw, index) => (
           <option key={rw.name} value={rw.name} style={{
             background: `${COLORS[index]}99`

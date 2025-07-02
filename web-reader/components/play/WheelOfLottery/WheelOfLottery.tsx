@@ -14,7 +14,7 @@ const ANIMATION_TIME = 14000;
 const DEFAULT_ROTATE = 75;
 
 export interface WheelOfLotteryRef {
-  setWinner: (winner: TReward) => void;
+  setWinner: (winner?: TReward) => void;
 }
 
 export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
@@ -26,11 +26,11 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
   const tokenRef = useRef(true);
   const rotateRef = useRef(DEFAULT_ROTATE);
   const audioRef = useRef<SoundManagerAPI>();
-  const [winner, setWinner] = useState<TReward | null>(rewards?.[0]);
+  const [winner, setWinner] = useState<TReward | null>(null);
 
   useImperativeHandle(ref, () => ({
-    setWinner: (w: TReward) => {
-      setWinner(w);
+    setWinner: (w?: TReward) => {
+      setWinner(w ?? null);
     }
   }));
 
@@ -40,7 +40,9 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
     if (!tokenRef.current || !hat) return;
     tokenRef.current = false;
     const oldDeg = rotateRef.current;
-    let deg = Math.floor(Math.random() * 360) + 1080 + oldDeg;
+    
+    const rotateLoopDeg = Math.floor(Math.random() * 25 + 10) * 360;
+    let deg = Math.floor(Math.random() * 360) + rotateLoopDeg + oldDeg;
 
     if (winner) {
       const winnerIndex = rewards.findIndex((r) => r.name === winner.name);
@@ -54,7 +56,6 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
         const winnerDeg = 360 - (partDeg * winnerIndex + randomDeg);
         const deltaDeg = 360 - (oldDeg % 360);
         const resetDeg = oldDeg + deltaDeg; //rotate to 0deg
-        const rotateLoopDeg = Math.floor(Math.random() * 25 + 10) * 360;
         const winnerTickDeg = 90;
         deg = resetDeg + rotateLoopDeg + winnerDeg + winnerTickDeg
       }
