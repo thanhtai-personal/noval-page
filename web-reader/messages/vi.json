@@ -138,6 +138,8 @@
   },
   "gameMenu": {
     "play_to_earn": "Chơi trò chơi",
-    "game_list": "Danh sách trò chơi"
+    "game_list": "Danh sách trò chơi",
+    "more": "Trò chơi khác",
+    "lottery": "Vòng quay giải thưởng"
   }
 }

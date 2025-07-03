@@ -138,6 +138,8 @@
   },
   "gameMenu": {
     "play_to_earn": "Play to earn",
-    "game_list": "Game list"
+    "game_list": "Game list",
+    "more": "More",
+    "lottery": "Lottery"
   }
 }
