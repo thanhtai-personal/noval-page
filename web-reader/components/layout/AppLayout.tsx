@@ -72,7 +72,7 @@ export const AppLayout = observer(({ children }: any) => {
           }}
           title="play to earn"
         >
-          {store.animationMode && !isMobile() ? (
+          {/* {store.animationMode && !isMobile() ? (
             // <Link href={"/play"} target="game-play">
             <div className="cursor-pointer " onClick={openGameModal}>
               <Model3DContainer
@@ -119,7 +119,15 @@ export const AppLayout = observer(({ children }: any) => {
               className="cursor-pointer w-[28px] h-[28px] md:w-[48px] md:h-[48px]"
             />
             // </Link>
-          )}
+          )} */}
+          <Image
+              alt="click-to-play"
+              onClick={openGameModal}
+              src={xboxImageIcon}
+              width={48}
+              height={48}
+              className="cursor-pointer w-[28px] h-[28px] md:w-[48px] md:h-[48px]"
+            />
         </div>
       )}
     </div>

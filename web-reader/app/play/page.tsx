@@ -8,9 +8,12 @@ export default function PlayPage() {
   const games = [
     {
       id: 1,
-      name: "Wheel of Lottery",
-      description: "Wheel of winner",
+      name: t("lottery"),
+      description: t("lottery"),
       url: "/play/wheel-of-lottery",
+      icon: <img className="w-[32px] h-[32px] md:w-[64px] md:h-[64px]" width="64" height="64"
+        src="https://img.icons8.com/external-microdots-premium-microdot-graphic/64/external-lottery-lifestyle-entertainment-vol3-microdots-premium-microdot-graphic.png" alt="external-lottery-lifestyle-entertainment-vol3-microdots-premium-microdot-graphic"
+      />
     },
   ];
 
@@ -20,16 +23,18 @@ export default function PlayPage() {
       <h1 className="text-3xl font-bold">📝 {t("play_to_earn")}</h1>
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">{t("game_list")}</h2>
-        <ul className="space-y-2">
+        <div className="flex flex-wrap gap-4">
           {games.map((game) => (
-            <li key={game.id} className="border rounded p-4 shadow-sm">
+            <div key={game.id} className="border border-solid border-yellow-200/50 rounded-md p-4 shadow-sm">
               <Link href={game.url} target={`game-play-${game.id}`}>
-                <div className="font-medium">{game.name}</div>
-                <div className="text-gray-600">{game.description}</div>
+                <div className="cursor-pointer flex flex-col justify-center items-center gap-2">
+                  {game.icon}
+                  <span className="text-[8px]">{game.name}</span>
+                </div>
               </Link>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </section>
   );
