@@ -19,7 +19,7 @@ export const DBNames = {
 }
 export const DB_STORIES_NAMES = [DBNames.story1, DBNames.story2, DBNames.story3, DBNames.story4, DBNames.story5];
 
-export const MAX_DB_SIZE_MB = 500;
+export const MAX_DB_SIZE_MB = 470;
 
 export const switchModelByDBLimit = async (...models: any[]) => {
   for (const model of models) {
