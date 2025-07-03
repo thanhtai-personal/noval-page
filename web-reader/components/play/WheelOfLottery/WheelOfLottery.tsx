@@ -155,10 +155,10 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
           </div>
         </div>
         {/* selection */}
-          <div className="mt-20 w-full inline-flex justify-center">
-            <div onClick={() => setSize(6)} className="tab cursor-pointer p-4">{t("6_part")}</div>
-            <div onClick={() => setSize(12)} className="tab bg-secondary cursor-pointer p-4">{t("12_part")}</div>
-            <div onClick={() => setSize(16)} className="tab bg-third cursor-pointer p-4">{t("16_part")}</div>
+          <div className="mt-20 w-full inline-flex md:flex-row justify-center">
+            <div onClick={() => setSize(6)} className="md:tab cursor-pointer p-4">{t("6_part")}</div>
+            <div onClick={() => setSize(12)} className="md:tab md:bg-secondary cursor-pointer p-4">{t("12_part")}</div>
+            <div onClick={() => setSize(16)} className="md:tab md:bg-third cursor-pointer p-4">{t("16_part")}</div>
           </div>
       </div>
       <SoundManagerProvider autoPlay list={tracks} ref={audioRef as any}>
