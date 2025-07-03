@@ -1,34 +1,31 @@
 .gb-close-icon {
-  animation: close_icon_appear 500ms ease-in-out;
+  opacity: 0;
+  transform: scale(0) translate3d(350px, -150px, 0);
+  transition-duration: 500ms;
+}
+
+.gb-close-icon.showing {
+  opacity: 0.9;
+  transform: scale(1) translate3d(0, 0, 0);
 }
 
 .gb-close-icon:hover {
-  transform: translateY(-16px);
-  transition-duration: 150ms;
   animation: hover_icon 250ms forwards infinite;
 }
 
 .gb-box {
-  animation: box_appear 800ms ease-in-out;
+  opacity: 0;
+  transform: scale(0) translate3d(-850px, 1550px, 0) rotate3d(0, 0, 1, 600deg);
+  transition-duration: 500ms;
 }
 
-@keyframes box_appear {
-  0% {
-    opacity: 0.1;
-    transform: scale(0.2) translate3d(-850px, 1550px, 0) rotate3d(0, 0, 1, 600deg);
-  }
-}
-
-@keyframes close_icon_appear {
-  0% {
-    opacity: 0.1;
-    transform: scale(0.2) translate3d(350px, -150px, 0);
-  }
+.gb-box.showing {
+  opacity: 1;
+  transform: scale(1) translate3d(0, 0, 0) rotate3d(0, 0, 0, 0);
 }
 
 @keyframes hover_icon {
   50% {
     opacity: 0.85;
-    transform: scale(0.9);
   }
 }

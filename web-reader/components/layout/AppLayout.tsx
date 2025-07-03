@@ -17,7 +17,6 @@ import xboxImageIcon from "@/assets/icons8-gamepad-48.png";
 import { isMobile } from "@/utils/funtions";
 import { Html } from "@react-three/drei";
 import { useState } from "react";
-import WheelWrapper from "@/app/play/wheel-of-lottery/ClientRenderWrapper";
 import { GameBox } from "../game/GameBox";
 
 export const AppLayout = observer(({ children }: any) => {
@@ -39,9 +38,7 @@ export const AppLayout = observer(({ children }: any) => {
           </div>
         </div>
 
-        {showingGameMenu && <GameBox>
-          <WheelWrapper />
-        </GameBox>}
+        <GameBox opened={showingGameMenu} onClose={() => setShowingGameMenu(false)} />
 
         {store.useLayout && <Navbar />}
         <WallPaperBg1>
@@ -63,7 +60,9 @@ export const AppLayout = observer(({ children }: any) => {
             fixed z-20 bottom-2  bg-orange-500/25 ${store.animationMode
               ? "-right-[160px] hover:-right-[50px] transition-all duration-300"
               : "right-6 p-4"
-            } rounded-full backdrop:blur-xl
+          } rounded-full backdrop:blur-xl btn-play-to-earn ${
+            !showingGameMenu && "showing"
+            }
           `}
           style={{
             boxShadow: "0px 0px 4px 3px rgba(247, 92, 2, 0.9)",

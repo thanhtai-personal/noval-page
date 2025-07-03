@@ -331,3 +331,12 @@ template {
     opacity: 1;
   }
 }
+
+.btn-play-to-earn {
+  transform: translate(150px, 150px);
+  transition-duration: 500ms;
+}
+
+.btn-play-to-earn.showing {
+  transform: translate(0, 0);
+}
