@@ -58,7 +58,7 @@ export const PlayerPanel = observer(() => {
       </div>
       <div className="flex md:hidden"></div>
     </> :
-      <div className="p-6 gap-4 flex-col bg-slate-600 h-fit flex justify-center items-center rounded-md">
+      <div className="p-6 gap-4 flex-col bg-slate-600 h-fit hidden md:flex justify-center items-center rounded-md">
         {/* <div>{t("user_info")}</div> */}
         {/* <div className="flex justify-center items-center h-full w-full border-t border-solid border-orange-950"> */}
 
