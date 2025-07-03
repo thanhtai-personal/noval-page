@@ -21,6 +21,7 @@ export class AppStore {
   useFooter: boolean = true;
   useGameMenu: boolean = true;
   openGameMode: boolean = true;
+  showPlayerControl: boolean = false;
   animations: AnimationProps = {};
 
   constructor() {

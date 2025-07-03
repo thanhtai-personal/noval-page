@@ -106,7 +106,10 @@
     "exp": "Exp",
     "level": "Level",
     "coin": "Coin",
-    "you_have_read_up_to_chapter": "You have read up to chapter {0}"
+    "you_have_read_up_to_chapter": "You have read up to chapter {0}",
+    "please_login": "Press to login",
+    "user_info": "Player Information",
+    "loading": "Loading..."
   },
   "docs": {
     "title": "Documentation"
@@ -141,5 +144,10 @@
     "game_list": "Game list",
     "more": "More",
     "lottery": "Lottery"
+  },
+  "wheelOfLottery": {
+    "6_part": "Wheel of 6",
+    "12_part": "Wheel of 12",
+    "16_part": "Wheel of 16"
   }
 }

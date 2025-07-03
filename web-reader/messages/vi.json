@@ -106,7 +106,10 @@
     "exp": "Kinh nghiệm",
     "level": "Cấp",
     "coin": "Tinh thạch",
-    "you_have_read_up_to_chapter": "Bạn đã đọc tới chương {0}"
+    "you_have_read_up_to_chapter": "Bạn đã đọc tới chương {0}",
+    "please_login": "Nhấn để đăng nhập",
+    "user_info": "Thông tin người chơi",
+    "loading": "Đang tải ..."
   },
   "docs": {
     "title": "Tài liệu"
@@ -141,5 +144,10 @@
     "game_list": "Danh sách trò chơi",
     "more": "Trò chơi khác",
     "lottery": "Vòng quay giải thưởng"
+  },
+  "wheelOfLottery": {
+    "6_part": "Vòng quay 6",
+    "12_part": "Vòng quay 12",
+    "16_part": "Vòng quay 16"
   }
 }

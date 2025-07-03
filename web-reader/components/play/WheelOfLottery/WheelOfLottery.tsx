@@ -1,14 +1,16 @@
-import React, { ReactNode, useRef, useImperativeHandle, forwardRef, useState } from "react";
+import React, { ReactNode, useRef, useImperativeHandle, forwardRef, useState, useMemo } from "react";
 import spinSvg from "@/assets/spin.svg";
 import Image from "next/image";
 import { COLORS } from "@/utils/constants";
 import { SoundHiddenPlayer } from "@/app/play/sound/SoundHiddenPlayer";
 import { SoundManagerAPI, SoundManagerProvider } from "@/app/play/sound/context/SoundManagerProvider";
 import "./wheel-of-lottery.css"
+import { useTranslations } from "next-intl";
 
 export type TReward = {
   render: () => ReactNode;
   name?: string;
+  value?: number;
 };
 
 const ANIMATION_TIME = 14000;
@@ -29,6 +31,12 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
   const rotateRef = useRef(DEFAULT_ROTATE);
   const audioRef = useRef<SoundManagerAPI>();
   const [winner, setWinner] = useState<TReward | null>(null);
+  const t = useTranslations("wheelOfLottery");
+  const [size, setSize] = useState(6);
+
+  const currentRewards = useMemo(() => {
+    return rewards.filter((_, index) => index < size)
+  }, [size, rewards])
 
   useImperativeHandle(ref, () => ({
     setWinner: (w?: TReward) => {
@@ -46,10 +54,14 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
     const rotateLoopDeg = Math.floor(Math.random() * 25 + 10) * 360;
     let deg = Math.floor(Math.random() * 360) + rotateLoopDeg + oldDeg;
 
+    let winnerIndex = Math.floor(Math.random() * currentRewards.length);
+
     if (winner) {
-      const winnerIndex = rewards.findIndex((r) => r.name === winner.name);
-      if (winnerIndex >= 0) {
-        const partDeg = 360 / rewards.length;
+      winnerIndex = currentRewards.findIndex((r) => r.name === winner.name);
+    }
+
+    if (winnerIndex >= 0) {
+        const partDeg = 360 / currentRewards.length;
         let randomDeg = Math.floor(partDeg * Math.random());
         if (randomDeg < 5 && partDeg > 10) {
           randomDeg = 7;
@@ -61,7 +73,6 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
         const winnerTickDeg = 90;
         deg = resetDeg + rotateLoopDeg + winnerDeg + winnerTickDeg
       }
-    }
 
     rotateRef.current = deg;
     hat.style.transform = `rotate(${deg}deg)`;
@@ -70,7 +81,7 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
 
     let toId = setTimeout(() => {
       tokenRef.current = true;
-      winner && onWinner?.(winner);
+      winnerIndex && onWinner?.(currentRewards[winnerIndex]);
       shadowRef.current?.classList.remove("shadow-animation");
       audioRef.current?.stop();
       clearTimeout(toId);
@@ -87,9 +98,6 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
           }}
         >
           <div className="animation-div w-full h-full relative flex justify-center items-center">
-            {/* <div className="absolute top-[5%] left-[5%] w-[90%] h-[90%] rounded-full"></div> */}
-            {/* <div className="absolute top-[3%] left-[3%] w-[92%] h-[92%] rounded-full"></div> */}
-            {/* <div className="absolute top-[7%] left-[7%] w-[86%] h-[86%] rounded-full"></div> */}
           </div>
         </div>
         <div className="relative w-full max-w-[400px] sm:max-w-[500px] aspect-square mx-auto">
@@ -119,24 +127,26 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
               className="absolute inset-0 rounded-full"
               style={{
                 background: `conic-gradient(
-                ${rewards
+                ${currentRewards
                     .map(
                       (r, i) =>
-                        `${colors[i % colors.length]} ${((i * 100) / rewards.length).toFixed(2)}% ${(((i + 1) * 100) / rewards.length).toFixed(2)}%`
+                        `${colors[i % colors.length]} ${((i * 100) / currentRewards.length).toFixed(2)}% ${(((i + 1) * 100) / currentRewards.length).toFixed(2)}%`
                     )
                     .join(",\n")}
               )`,
               }}
             ></div>
-            {rewards.map((reward, idx) => (
+            {currentRewards.map((reward, idx) => (
               <div
                 key={idx}
                 className="absolute left-1/2 top-1/2 w-[60%] text-center text-white font-semibold text-[3.9vw] sm:text-xl select-none drop-shadow-md"
                 style={{
-                  transform: `rotate(${270 + ((360 / rewards.length) * idx)}deg)`,
+                  transform: `rotate(${270 + ((360 / currentRewards.length) * idx)
+                    + (180 / currentRewards.length - 8)}deg)`,
                   transformOrigin: "0 0",
                   paddingLeft: "3%",
                   pointerEvents: "none",
+                  fontFamily: "'Courier New', Courier, monospace"
                 }}
               >
                 {reward.render()}
@@ -144,6 +154,12 @@ export const WheelOfLottery = forwardRef<WheelOfLotteryRef, {
             ))}
           </div>
         </div>
+        {/* selection */}
+          <div className="mt-20 w-full inline-flex justify-center">
+            <div onClick={() => setSize(6)} className="tab cursor-pointer p-4">{t("6_part")}</div>
+            <div onClick={() => setSize(12)} className="tab bg-secondary cursor-pointer p-4">{t("12_part")}</div>
+            <div onClick={() => setSize(16)} className="tab bg-third cursor-pointer p-4">{t("16_part")}</div>
+          </div>
       </div>
       <SoundManagerProvider autoPlay list={tracks} ref={audioRef as any}>
         <SoundHiddenPlayer />

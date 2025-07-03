@@ -18,6 +18,7 @@ import { isMobile } from "@/utils/funtions";
 import { Html } from "@react-three/drei";
 import { useState } from "react";
 import { GameBox } from "../game/GameBox";
+import { PlayerPanel } from "../game/PlayerPanel";
 
 export const AppLayout = observer(({ children }: any) => {
   const store = useAppStore();
@@ -53,6 +54,8 @@ export const AppLayout = observer(({ children }: any) => {
           <EntertaimentMenu />
         </div>
       )}
+    
+      {store.openGameMode && <PlayerPanel />}
 
       {store.openGameMode && (
         <div
