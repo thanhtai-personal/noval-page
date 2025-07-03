@@ -9,7 +9,8 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 import { StoreProvider } from "@/store/Provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { SnackbarProvider } from "notistack";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -42,12 +43,19 @@ export function Providers({ children, themeProps }: ProvidersProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <StoreProvider>
-        <HeroUIProvider navigate={router.push}>
-          <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
-        </HeroUIProvider>
-      </StoreProvider>
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      <SnackbarProvider autoHideDuration={3000} maxSnack={5}
+        anchorOrigin={{
+          horizontal: 'center',
+          vertical: 'top' 
+        }}
+      >
+        <StoreProvider>
+          <HeroUIProvider navigate={router.push}>
+            <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
+          </HeroUIProvider>
+        </StoreProvider>
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      </SnackbarProvider>
     </QueryClientProvider>
   );
 }

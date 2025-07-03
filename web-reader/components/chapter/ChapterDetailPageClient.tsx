@@ -15,6 +15,7 @@ import { isMobile } from "@/utils/funtions";
 import { bgOptions, colorOptions } from "./constants";
 import { useMarkAsReadTo } from "@/hooks/useMarkAsReadTo";
 import SideLoading from "@/components/common/SideLoading/SideLoading";
+import { useSnackbar } from "notistack";
 
 // Fetch prev/next chapter
 const fetchPrevNextChapter = async ({
@@ -53,6 +54,7 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
 
   const appStore = useAppStore();
   const t = useTranslations("chapter");
+  const { enqueueSnackbar } = useSnackbar();
 
   // Side effect animation mode
   useEffect(() => {
@@ -95,13 +97,13 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
   // SIDE EFFECT ALERT: dùng useEffect để bắt alert khi data hoặc error thay đổi
   useEffect(() => {
     if (prevNextData && isMobile() && !prevNextData.next) {
-      alert("Không thấy chương tiếp theo. Vui lòng thử lại sau.");
+      enqueueSnackbar("Không thấy chương tiếp theo. Vui lòng thử lại sau.");
     }
   }, [prevNextData]);
 
   useEffect(() => {
     if (errorPrevNext && isMobile()) {
-      alert("Không thể tải chương tiếp theo. Vui lòng thử lại sau.");
+      enqueueSnackbar("Không thể tải chương tiếp theo. Vui lòng thử lại sau.");
     }
   }, [errorPrevNext]);
 
