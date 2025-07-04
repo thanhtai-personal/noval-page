@@ -5,10 +5,11 @@
     "profile": "Hồ sơ"
   },
   "home": {
-    "welcome": "Chào mừng!",
-    "step1Title": "Bước 1: Thử nó",
-    "step2Title": "Bước 2: Tìm kiếm",
-    "step3Title": "Bước 3: Bắt đầu mới"
+    "top_recommend_title": "Top Truyện Đề Cử",
+    "most_recommended": "Truyện Đề Cử Nhiều",
+    "most_viewed": "Truyện Đọc Nhiều",
+    "most_liked": "Truyện Yêu Thích Nhiều",
+    "longest": "Truyện Dài Nhất"
   },
   "search": {
     "title": "Tìm kiếm"

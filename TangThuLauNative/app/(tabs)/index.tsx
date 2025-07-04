@@ -1,71 +1,79 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import { useEffect, useState } from 'react';
 
-import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import StoryItem from '@/components/StoryItem';
+import { API_BASE_URL } from '@/constants/Api';
+import { Story } from '@/types/Story';
 import { useTranslation } from '@/hooks/useTranslation';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
+  const [loading, setLoading] = useState(true);
+  const [topVote, setTopVote] = useState<Story[]>([]);
+  const [topView, setTopView] = useState<Story[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [voteRes, viewRes] = await Promise.all([
+          fetch(`${API_BASE_URL}/stories?sort=votes&limit=5`).then((r) => r.json()),
+          fetch(`${API_BASE_URL}/stories?sort=views&limit=5`).then((r) => r.json()),
+        ]);
+        setTopVote(voteRes.data || []);
+        setTopView(viewRes.data || []);
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <ThemedView style={styles.center}>
+        <ActivityIndicator />
+      </ThemedView>
+    );
+  }
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
       headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
+        <Image source={require('@/assets/images/partial-react-logo.png')} style={styles.reactLogo} />
       }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">{t('home.welcome')}</ThemedText>
-        <HelloWave />
+      <ThemedView>
+        <ThemedText type="subtitle">{t('home.top_recommend_title')}</ThemedText>
+        <FlatList
+          data={topVote}
+          horizontal
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => <StoryItem story={item} />}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingVertical: 8 }}
+        />
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">{t('home.step1Title')}</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">{t('home.step2Title')}</ThemedText>
-        <ThemedText>
-          {`Tap the Search tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">{t('home.step3Title')}</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
+      <ThemedView style={{ marginTop: 16 }}>
+        <ThemedText type="subtitle">{t('home.most_viewed')}</ThemedText>
+        {topView.map((story) => (
+          <StoryItem key={story._id} story={story} style={{ marginBottom: 12, width: '100%' }} />
+        ))}
       </ThemedView>
     </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  center: {
+    flex: 1,
     alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+    justifyContent: 'center',
   },
   reactLogo: {
     height: 178,
