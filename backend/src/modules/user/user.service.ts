@@ -72,7 +72,7 @@ export class UserService {
       email: dto.email,
       name: dto.name,
       role: dto.role,
-    }, { new: true });
+    }, { upsert: true });
   }
 
   async delete(id: string) {
