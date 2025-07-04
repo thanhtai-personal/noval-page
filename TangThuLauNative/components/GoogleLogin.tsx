@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Alert, View, Text } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { useTranslation } from '@/hooks/useTranslation';
 
 // Cấu hình Google Sign-In
 GoogleSignin.configure({
@@ -11,6 +12,7 @@ GoogleSignin.configure({
 } as any);
 
 export default function GoogleLogin() {
+  const { t } = useTranslation();
   const signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
@@ -25,8 +27,8 @@ export default function GoogleLogin() {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ fontSize: 18, marginBottom: 16 }}>Đăng nhập bằng Google</Text>
-      <Button title="Đăng nhập với Google" onPress={signIn} />
+      <Text style={{ fontSize: 18, marginBottom: 16 }}>{t('googleLogin.title')}</Text>
+      <Button title={t('googleLogin.button')} onPress={signIn} />
     </View>
   );
 }

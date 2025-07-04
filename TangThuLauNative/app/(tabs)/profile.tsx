@@ -3,9 +3,15 @@ import { StyleSheet } from 'react-native';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
-import GoogleLogin from "@/components/GoogleLogin";
+import GoogleLogin from '@/components/GoogleLogin';
+import { Button } from 'react-native';
+import { useContext } from 'react';
+import { LanguageContext } from '@/contexts/LanguageContext';
+import { useTranslation } from '@/hooks/useTranslation';
 
-export default function SettingsScreen() {
+export default function ProfileScreen() {
+  const { toggleLanguage } = useContext(LanguageContext);
+  const { t } = useTranslation();
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -17,6 +23,7 @@ export default function SettingsScreen() {
       }>
       <ThemedView style={styles.center}>
         <GoogleLogin />
+        <Button title={t('profile.switchLanguage')} onPress={toggleLanguage} />
       </ThemedView>
     </ParallaxScrollView>
   );
