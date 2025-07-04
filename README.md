@@ -31,11 +31,11 @@
 │   ├── common/             # Middleware, Guards
 │   └── main.ts, app.module.ts
 │
-├── reader-frontend/         # NextJS trang đọc truyện
+├── web-reader/              # NextJS trang đọc truyện
 ├── admin-frontend/          # Vite React trang quản trị
 ├── .env                     # Biến môi trường toàn hệ thống
 ├── docker-compose.yml       # Khởi chạy toàn bộ hệ thống
-└── webtruyen-architecture-updated.png # Sơ đồ hệ thống
+└── webtruyen-architecture.png # Sơ đồ hệ thống
 ```
 
 ---
