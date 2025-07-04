@@ -1,10 +1,11 @@
 import { Image } from 'expo-image';
-import { StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import { StyleSheet, ActivityIndicator, FlatList, TextInput } from 'react-native';
 import { useEffect, useState } from 'react';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useRouter } from 'expo-router';
 import StoryItem from '@/components/StoryItem';
 import { API_BASE_URL } from '@/constants/Api';
 import { Story } from '@/types/Story';
@@ -12,9 +13,11 @@ import { useTranslation } from '@/hooks/useTranslation';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [topVote, setTopVote] = useState<Story[]>([]);
   const [topView, setTopView] = useState<Story[]>([]);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     async function fetchData() {
@@ -48,6 +51,17 @@ export default function HomeScreen() {
       headerImage={
         <Image source={require('@/assets/images/partial-react-logo.png')} style={styles.reactLogo} />
       }>
+      <TextInput
+        placeholder={t('home.search_placeholder')}
+        value={search}
+        onChangeText={setSearch}
+        returnKeyType="search"
+        onSubmitEditing={() => {
+          const q = search.trim();
+          router.push(`/search${q ? `?q=${encodeURIComponent(q)}` : ''}`);
+        }}
+        style={styles.searchInput}
+      />
       <ThemedView>
         <ThemedText type="subtitle">{t('home.top_recommend_title')}</ThemedText>
         <FlatList
@@ -81,5 +95,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+  },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginBottom: 16,
   },
 });
