@@ -44,9 +44,10 @@ export class ChapterService {
     ];
 
     for (const cModel of chapterModels) {
-      total = await chapterModel.countDocuments(filter);
-      if (total === 0) {
+      const count = await cModel.countDocuments(filter);
+      if (count > 0) {
         chapterModel = cModel;
+        total = count;
         break;
       }
     }
@@ -84,10 +85,10 @@ export class ChapterService {
     ];
 
     for (const cModel of chapterModels) {
-      let total = await chapterModel.countDocuments({
-        story: story._id
+      const count = await cModel.countDocuments({
+        story: story._id,
       });
-      if (total === 0) {
+      if (count > 0) {
         chapterModel = cModel;
         break;
       }
