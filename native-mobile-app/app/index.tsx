@@ -13,7 +13,7 @@ const fixedRedirectUri = 'https://auth.expo.io/@vouucac/tangthulau'
 export default function GoogleLoginScreen() {
   const router = useRouter();
   // const redirectUri = AuthSession.makeRedirectUri();
-  
+
   const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
     androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
@@ -50,9 +50,9 @@ export default function GoogleLoginScreen() {
   return (
     <ThemedView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Button
-      title="Đăng nhập với Google"
-      disabled={!request}
-      onPress={() => promptAsync()}
+        title="Đăng nhập với Google"
+        disabled={!request}
+        onPress={() => promptAsync()}
       />
     </ThemedView>
   );
