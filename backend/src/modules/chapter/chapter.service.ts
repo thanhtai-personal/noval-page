@@ -215,7 +215,7 @@ export class ChapterService {
             await chapterContentModel.findOneAndUpdate({ chapter: chapterSlug }, {
               content
             }, {
-              new: true
+              upsert: true
             });
           }
           break;
