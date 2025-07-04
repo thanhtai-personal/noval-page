@@ -9,7 +9,8 @@
     "most_recommended": "Truyện Đề Cử Nhiều",
     "most_viewed": "Truyện Đọc Nhiều",
     "most_liked": "Truyện Yêu Thích Nhiều",
-    "longest": "Truyện Dài Nhất"
+    "longest": "Truyện Dài Nhất",
+    "search_placeholder": "Tìm kiếm truyện..."
   },
   "search": {
     "title": "Tủ sách",

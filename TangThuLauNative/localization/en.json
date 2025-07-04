@@ -9,7 +9,8 @@
     "most_recommended": "Most Recommended Stories",
     "most_viewed": "Most Viewed Stories",
     "most_liked": "Most Liked Stories",
-    "longest": "Longest Stories"
+    "longest": "Longest Stories",
+    "search_placeholder": "Search stories..."
   },
   "search": {
     "title": "Bookshelf",
