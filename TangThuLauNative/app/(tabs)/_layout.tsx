@@ -29,6 +29,13 @@ export default function TabLayout() {
         }),
       }}>
       <Tabs.Screen
+        name="search"
+        options={{
+          title: t('tabs.search'),
+          tabBarIcon: ({ color }) => <IconSymbol size={18} name="book.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="index"
         options={{
           title: t('tabs.home'),
@@ -36,17 +43,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="search"
-        options={{
-          title: t('tabs.search'),
-          tabBarIcon: ({ color }) => <IconSymbol size={18} name="magnifyingglass" color={color} />,
-        }}
-      />
-      <Tabs.Screen
         name="profile"
         options={{
           title: t('tabs.profile'),
-          tabBarIcon: ({ color }) => <IconSymbol size={18} name="person.crop.circle" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={18} name="gearshape.fill" color={color} />,
         }}
       />
     </Tabs>

@@ -1,8 +1,8 @@
 {
   "tabs": {
-    "home": "Home",
-    "search": "Search",
-    "profile": "Profile"
+    "home": "Library",
+    "search": "Bookshelf",
+    "profile": "Account"
   },
   "home": {
     "top_recommend_title": "Top Recommended Stories",
@@ -12,7 +12,7 @@
     "longest": "Longest Stories"
   },
   "search": {
-    "title": "Search"
+    "title": "Bookshelf"
   },
   "profile": {
     "switchLanguage": "Switch Language"
