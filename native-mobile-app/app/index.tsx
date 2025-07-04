@@ -12,10 +12,11 @@ WebBrowser.maybeCompleteAuthSession();
 export default function GoogleLoginScreen() {
   const router = useRouter();
   const redirectUri = AuthSession.makeRedirectUri();
+  
   const [request, response, promptAsync] = Google.useAuthRequest({
-    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID ?? 'YOUR_IOS_CLIENT_ID',
-    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID ?? 'YOUR_ANDROID_CLIENT_ID',
-    webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID ?? 'YOUR_WEB_CLIENT_ID',
+    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
+    webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
     responseType: 'code',
     usePKCE: false,
     redirectUri,
