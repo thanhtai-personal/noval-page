@@ -1,8 +1,8 @@
 {
   "tabs": {
-    "home": "Trang chủ",
-    "search": "Tìm kiếm",
-    "profile": "Hồ sơ"
+    "home": "Thư viện",
+    "search": "Tủ sách",
+    "profile": "Tài khoản"
   },
   "home": {
     "top_recommend_title": "Top Truyện Đề Cử",
@@ -12,7 +12,7 @@
     "longest": "Truyện Dài Nhất"
   },
   "search": {
-    "title": "Tìm kiếm"
+    "title": "Tủ sách"
   },
   "profile": {
     "switchLanguage": "Chuyển ngôn ngữ"
