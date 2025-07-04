@@ -1,0 +1,23 @@
+{
+  "tabs": {
+    "home": "Home",
+    "search": "Search",
+    "profile": "Profile"
+  },
+  "home": {
+    "welcome": "Welcome!",
+    "step1Title": "Step 1: Try it",
+    "step2Title": "Step 2: Search",
+    "step3Title": "Step 3: Get a fresh start"
+  },
+  "search": {
+    "title": "Search"
+  },
+  "profile": {
+    "switchLanguage": "Switch Language"
+  },
+  "googleLogin": {
+    "title": "Sign in with Google",
+    "button": "Login with Google"
+  }
+}

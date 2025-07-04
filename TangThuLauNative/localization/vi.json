@@ -1,0 +1,23 @@
+{
+  "tabs": {
+    "home": "Trang chủ",
+    "search": "Tìm kiếm",
+    "profile": "Hồ sơ"
+  },
+  "home": {
+    "welcome": "Chào mừng!",
+    "step1Title": "Bước 1: Thử nó",
+    "step2Title": "Bước 2: Tìm kiếm",
+    "step3Title": "Bước 3: Bắt đầu mới"
+  },
+  "search": {
+    "title": "Tìm kiếm"
+  },
+  "profile": {
+    "switchLanguage": "Chuyển ngôn ngữ"
+  },
+  "googleLogin": {
+    "title": "Đăng nhập bằng Google",
+    "button": "Đăng nhập với Google"
+  }
+}
