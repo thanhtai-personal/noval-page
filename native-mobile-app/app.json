@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "native-mobile-app",
-    "slug": "native-mobile-app",
+    "name": "Tàng Thư Lâu",
+    "slug": "tangthulau",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -12,6 +12,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.vouucac.tangthulau",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -37,6 +38,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f057fabc-b9af-4b60-87b7-fe588028007e"
+      }
     }
   }
 }
