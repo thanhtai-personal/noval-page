@@ -12,7 +12,8 @@
     "longest": "Truyện Dài Nhất"
   },
   "search": {
-    "title": "Tủ sách"
+    "title": "Tủ sách",
+    "no_history": "Chưa có lịch sử đọc"
   },
   "profile": {
     "switchLanguage": "Chuyển ngôn ngữ"
