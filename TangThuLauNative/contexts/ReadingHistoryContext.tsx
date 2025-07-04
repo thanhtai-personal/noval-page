@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@/utils/asyncStorage';
 import { API_BASE_URL } from '@/constants/Api';
 
 export interface HistoryItem {
