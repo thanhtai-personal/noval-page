@@ -36,6 +36,7 @@ import { BlogModule } from './modules/blog/blog.module';
 import { RolesGuard } from './modules/auth/guards/role.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { DB_STORIES_NAMES, DBNames, getDBURIs } from "./utils/database";
+import { ReadingHistoryModule } from './modules/reading-history/reading-history.module';
 
 @Module({
   imports: [
@@ -87,6 +88,7 @@ import { DB_STORIES_NAMES, DBNames, getDBURIs } from "./utils/database";
     TagModule,
     AuthModule,
     SourceModule,
+    ReadingHistoryModule,
     BlogModule,
   ],
   providers: [

@@ -12,7 +12,8 @@
     "longest": "Longest Stories"
   },
   "search": {
-    "title": "Bookshelf"
+    "title": "Bookshelf",
+    "no_history": "No reading history"
   },
   "profile": {
     "switchLanguage": "Switch Language"
