@@ -1,0 +1,41 @@
+{
+  "project_info": {
+    "project_number": "810010866433",
+    "project_id": "tangthulau-5a5f4"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123456789012:android:abcdef1234567890",
+        "android_client_info": {
+          "package_name": "com.vouucac.tangthulau"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "100906612148-35ds25pm4bl7bcnjv4ghukdahh80qfp8.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "100906612148-35ds25pm4bl7bcnjv4ghukdahh80qfp8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vouucac.tangthulau",
+            "certificate_hash": "53:BE:1A:7A:0E:1C:1B:50:BC:27:97:B5:02:50:07:CF:02:41:95:18"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-Your-API-Key-Here"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
