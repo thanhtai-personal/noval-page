@@ -1,110 +1,34 @@
-import React, { useState } from 'react';
-import { Image } from 'expo-image';
-import { Platform, StyleSheet, TextInput, Button, Alert } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
+import React, { useEffect } from 'react';
+import { Button, Alert, StyleSheet } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+import { useRouter } from 'expo-router';
 import { ThemedView } from '@/components/ThemedView';
 
-export default function HomeScreen() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+WebBrowser.maybeCompleteAuthSession();
 
-  const handleLogin = async () => {
-    if (!username || !password) {
-      Alert.alert('Thông báo', 'Vui lòng nhập đầy đủ thông tin.');
-      return;
+export default function HomeScreen() {
+  const router = useRouter();
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    iosClientId: 'YOUR_IOS_CLIENT_ID',
+    androidClientId: 'YOUR_ANDROID_CLIENT_ID',
+    webClientId: 'YOUR_WEB_CLIENT_ID',
+  });
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const idToken = response.authentication?.idToken;
+      Alert.alert('Google Login', idToken ? 'Token received' : 'No token');
+      router.replace('/(tabs)/explore');
     }
-    setLoading(true);
-    try {
-      const response = await fetch('https://your-api-url/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        // Success: you can save token, navigate, etc.
-        Alert.alert('Đăng nhập thành công', `Chào mừng ${username}!`);
-        // Example: navigation.navigate('Main')
-      } else {
-        // Error from API
-        Alert.alert('Đăng nhập thất bại', data.message || 'Sai tài khoản hoặc mật khẩu!');
-      }
-    } catch (e) {
-      Alert.alert('Lỗi', 'Không thể kết nối máy chủ!');
-    }
-    setLoading(false);
-  };
+  }, [response]);
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <HelloWave />
-        <ThemedText type="title">Đăng nhập</ThemedText>
-      </ThemedView>
-
-      {/* Login Form */}
-      <ThemedView style={styles.formContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Tên đăng nhập"
-          value={username}
-          onChangeText={setUsername}
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Mật khẩu"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-        <Button
-          title={loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
-          onPress={handleLogin}
-          disabled={loading}
-        />
-      </ThemedView>
-    </ParallaxScrollView>
+    <ThemedView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Button title="Đăng nhập với Google" disabled={!request} onPress={() => promptAsync()} />
+    </ThemedView>
   );
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  formContainer: {
-    marginTop: 24,
-    marginBottom: 32,
-    gap: 12,
-    paddingHorizontal: 16,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#999',
-    borderRadius: 6,
-    padding: 12,
-    fontSize: 16,
-    backgroundColor: '#fff',
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+const styles = StyleSheet.create({});
 
