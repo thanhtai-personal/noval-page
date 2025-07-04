@@ -2,14 +2,16 @@ import React, { useEffect } from 'react';
 import { Alert, Button } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import { makeRedirectUri } from 'expo-auth-session';
+import * as AuthSession from 'expo-auth-session';
+import { useRouter } from 'expo-router';
 import { ThemedView } from '@/components/ThemedView';
 import { API_BASE_URL } from '@/constants/Api';
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function GoogleLoginScreen() {
-  const redirectUri = makeRedirectUri();
+  const router = useRouter();
+  const redirectUri = AuthSession.makeRedirectUri({ useProxy: true });
   const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID ?? 'YOUR_IOS_CLIENT_ID',
     androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID ?? 'YOUR_ANDROID_CLIENT_ID',
