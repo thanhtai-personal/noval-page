@@ -1,7 +1,7 @@
 {
   "tabs": {
     "home": "Library",
-    "search": "Bookshelf",
+    "search": "Search",
     "profile": "Account"
   },
   "home": {
@@ -13,8 +13,13 @@
     "search_placeholder": "Search stories..."
   },
   "search": {
-    "title": "Bookshelf",
-    "no_history": "No reading history"
+    "title": "Search",
+    "no_history": "No reading history",
+    "no_result": "No results found",
+    "category": "Category",
+    "author": "Author",
+    "search": "Search",
+    "cancel": "Cancel"
   },
   "profile": {
     "switchLanguage": "Switch Language"

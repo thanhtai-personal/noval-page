@@ -1,7 +1,7 @@
 {
   "tabs": {
     "home": "Thư viện",
-    "search": "Tủ sách",
+    "search": "Tìm kiếm",
     "profile": "Tài khoản"
   },
   "home": {
@@ -13,8 +13,13 @@
     "search_placeholder": "Tìm kiếm truyện..."
   },
   "search": {
-    "title": "Tủ sách",
-    "no_history": "Chưa có lịch sử đọc"
+    "title": "Tìm kiếm",
+    "no_history": "Chưa có lịch sử đọc",
+    "no_result": "Không có kết quả",
+    "category": "Thể loại",
+    "author": "Tác giả",
+    "search": "Tìm kiếm",
+    "cancel": "Hủy"
   },
   "profile": {
     "switchLanguage": "Chuyển ngôn ngữ"
