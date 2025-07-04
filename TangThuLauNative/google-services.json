@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "810010866433",
+    "project_id": "tangthulau-5a5f4",
+    "storage_bucket": "tangthulau-5a5f4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810010866433:android:4a7f015ce182a5de96a100",
+        "android_client_info": {
+          "package_name": "com.vouucac.tangthulau"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "810010866433-kbqfb3kei54sabibo6lvsn6r1ifq0cip.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vouucac.tangthulau",
+            "certificate_hash": "ac32deaa45fd33eef4a8a228f4c2125081429628"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCV81WyfsTFS_Wnk8jbnBj1LzHiKJpBS88"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
