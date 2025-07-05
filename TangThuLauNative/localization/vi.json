@@ -22,7 +22,8 @@
     "cancel": "Hủy"
   },
   "profile": {
-    "switchLanguage": "Chuyển ngôn ngữ"
+    "switchLanguage": "Chuyển ngôn ngữ",
+    "logout": "Đăng xuất"
   },
   "googleLogin": {
     "title": "Đăng nhập bằng Google",

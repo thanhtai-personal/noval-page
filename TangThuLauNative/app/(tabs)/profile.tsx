@@ -8,10 +8,26 @@ import { Button } from 'react-native';
 import { useContext } from 'react';
 import { LanguageContext } from '@/contexts/LanguageContext';
 import { useTranslation } from '@/hooks/useTranslation';
+import { useReadingHistory } from '@/contexts/ReadingHistoryContext';
+import { API_BASE_URL } from '@/constants/Api';
 
 export default function ProfileScreen() {
   const { toggleLanguage } = useContext(LanguageContext);
   const { t } = useTranslation();
+  const { loggedIn, setLoggedIn } = useReadingHistory();
+
+  const logout = async () => {
+    try {
+      await fetch(`${API_BASE_URL}/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      setLoggedIn(false);
+    }
+  };
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -22,7 +38,11 @@ export default function ProfileScreen() {
         />
       }>
       <ThemedView style={styles.center}>
-        <GoogleLogin />
+        {loggedIn ? (
+          <Button title={t('profile.logout')} onPress={logout} />
+        ) : (
+          <GoogleLogin />
+        )}
         <Button title={t('profile.switchLanguage')} onPress={toggleLanguage} />
       </ThemedView>
     </ParallaxScrollView>
