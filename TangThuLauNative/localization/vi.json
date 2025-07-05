@@ -28,5 +28,14 @@
   "googleLogin": {
     "title": "Đăng nhập bằng Google",
     "button": "Đăng nhập với Google"
+  },
+  "notFound": {
+    "title": "Rất tiếc!",
+    "message": "Màn hình này không tồn tại.",
+    "link": "Về trang chủ"
+  },
+  "errors": {
+    "error": "Lỗi",
+    "login_failed": "Lỗi đăng nhập"
   }
 }
