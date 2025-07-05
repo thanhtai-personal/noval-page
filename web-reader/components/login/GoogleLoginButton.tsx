@@ -12,8 +12,8 @@ export const GoogleLoginButton = observer(
     return (
       <div className="flex flex-col w-full">
         <GoogleLogin
-          onError={(error) => {
-            console.error("Google login error:", error);
+          onError={() => {
+            console.error("Google login error:");
           }}
           onSuccess={(credentialResponse) => {
             if (credentialResponse.credential) {
