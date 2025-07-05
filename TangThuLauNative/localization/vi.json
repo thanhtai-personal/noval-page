@@ -29,6 +29,11 @@
     "title": "Đăng nhập bằng Google",
     "button": "Đăng nhập với Google"
   },
+  "chapter": {
+    "list": "Danh sách chương",
+    "sort_asc": "Tăng dần",
+    "sort_desc": "Giảm dần"
+  },
   "notFound": {
     "title": "Rất tiếc!",
     "message": "Màn hình này không tồn tại.",

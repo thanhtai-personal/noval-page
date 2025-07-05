@@ -40,7 +40,7 @@ export class ChapterService {
   ) {}
 
   async getChapterList(slug: string, query: GetChapterListDto) {
-    const { page = 1, limit = 50 } = query;
+    const { page = 1, limit = 50, sort } = query;
     const story = await this.storyModel.findOne({ slug }).select('_id');
     if (!story) return { total: 0, page, limit, data: [] };
 
@@ -65,9 +65,13 @@ export class ChapterService {
       }
     }
 
+    const sortField = sort?.replace(/^-/, '') || 'chapterNumber';
+    const sortOrder = sort?.startsWith('-') ? -1 : 1;
+    const sortBy: any = { [sortField]: sortOrder };
+
     const data = await chapterModel
       .find(filter)
-      .sort({ chapterNumber: 1 })
+      .sort(sortBy)
       .skip((page - 1) * limit)
       .limit(limit)
       .select('title slug chapterNumber')

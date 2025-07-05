@@ -48,7 +48,9 @@
     "choose_text_color": "Chọn màu chữ {color}",
     "audio_speed": "Tốc độ đọc",
     "chapter_loading": "Nội dung chương lỗi",
-    "watch_on_source": "Xem trực tiếp tại nguồn"
+    "watch_on_source": "Xem trực tiếp tại nguồn",
+    "sort_asc": "Tăng dần",
+    "sort_desc": "Giảm dần"
   },
   "story": {
     "author": "Tác giả",

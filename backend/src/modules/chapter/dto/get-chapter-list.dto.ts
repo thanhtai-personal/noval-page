@@ -13,4 +13,7 @@ export class GetChapterListDto {
   @IsNumber()
   @Min(1)
   limit = 50;
+
+  @IsOptional()
+  sort?: string;
 }

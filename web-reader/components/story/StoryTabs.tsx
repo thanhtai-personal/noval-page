@@ -6,6 +6,8 @@ import { Card, CardBody } from "@heroui/card";
 import Link from "next/link";
 import { Pagination } from "@heroui/pagination";
 import { useQuery } from "@tanstack/react-query";
+import { Button } from "@heroui/button";
+import { useTranslations } from "next-intl";
 
 import { ApiInstant } from "@/utils/api";
 
@@ -21,7 +23,9 @@ export function StoryTabs({
   description: string;
 }) {
   const [page, setPage] = useState(1);
+  const [sort, setSort] = useState<'asc' | 'desc'>('asc');
   const limit = 20;
+  const t = useTranslations('chapter');
 
   // Fetch chapters via TanStack Query
   const {
@@ -29,10 +33,11 @@ export function StoryTabs({
     isLoading,
     isError,
   } = useQuery<any>({
-    queryKey: ["story-chapters", storySlug, page, limit],
+    queryKey: ["story-chapters", storySlug, page, limit, sort],
     queryFn: async () => {
+      const sortParam = sort === 'asc' ? 'chapterNumber' : '-chapterNumber';
       const res = await ApiInstant.get(
-        `/stories/${storySlug}/chapters?page=${page}&limit=${limit}`,
+        `/stories/${storySlug}/chapters?page=${page}&limit=${limit}&sort=${sortParam}`,
       );
 
       return res.data;
@@ -65,7 +70,19 @@ export function StoryTabs({
         </Tab>
         <Tab key="chapters" title="Danh sách chương">
           <CardBody>
-            <h2 className="text-xl font-semibold mb-4">Danh sách chương</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold">Danh sách chương</h2>
+              <Button
+                onClick={() => {
+                  setSort((s) => (s === 'asc' ? 'desc' : 'asc'));
+                  setPage(1);
+                }}
+                size="sm"
+                variant="light"
+              >
+                {sort === 'asc' ? t('sort_desc') : t('sort_asc')}
+              </Button>
+            </div>
             {isLoading ? (
               <div className="py-8 text-center text-default-400">
                 Đang tải chương...

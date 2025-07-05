@@ -48,7 +48,9 @@
     "choose_text_color": "Choose text color {color}",
     "audio_speed": "Audio speed",
     "chapter_loading": "Chapter is loading",
-    "watch_on_source": "View on source"
+    "watch_on_source": "View on source",
+    "sort_asc": "Ascending",
+    "sort_desc": "Descending"
   },
   "story": {
     "author": "Author",

@@ -29,6 +29,11 @@
     "title": "Sign in with Google",
     "button": "Login with Google"
   },
+  "chapter": {
+    "list": "Chapters",
+    "sort_asc": "Ascending",
+    "sort_desc": "Descending"
+  },
   "notFound": {
     "title": "Oops!",
     "message": "This screen does not exist.",
