@@ -1,14 +1,13 @@
-import React, { ReactNode, useContext } from 'react';
-import { Provider, MobXProviderContext } from 'mobx-react-lite';
-import { appStore } from './AppStore';
+import { ReactNode, createContext, useContext } from "react";
 
-export const StoreProvider = ({ children }: { children: ReactNode }) => (
-  <Provider appStore={appStore}>{children}</Provider>
-);
+import { appStore, AppStore } from "./AppStore";
 
-export type { AppStore } from './AppStore';
+const StoreContext = createContext<AppStore>(appStore);
 
-export const useAppStore = () => {
-  const { appStore: store } = useContext(MobXProviderContext) as any;
-  return store as typeof appStore;
-};
+export function StoreProvider({ children }: { children: ReactNode }) {
+  return (
+    <StoreContext.Provider value={appStore}>{children}</StoreContext.Provider>
+  );
+}
+
+export const useAppStore = () => useContext(StoreContext);

@@ -16,7 +16,6 @@ interface ContextValue {
   syncWithServer: () => Promise<void>;
   setHistory: React.Dispatch<React.SetStateAction<HistoryItem[]>>;
   loggedIn: boolean;
-  setLoggedIn: (b: boolean) => void;
 }
 
 const STORAGE_KEY = 'reading-history';
@@ -27,18 +26,11 @@ const ReadingHistoryContext = createContext<ContextValue>({
   syncWithServer: async () => {},
   setHistory: () => {},
   loggedIn: false,
-  setLoggedIn: () => {},
 });
 
 export const ReadingHistoryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const { setLoggedIn: setLoggedInStore } = useAppStore();
-
-  const updateLoggedIn = (b: boolean) => {
-    setLoggedIn(b);
-    setLoggedInStore(b);
-  };
+  const appStore = useAppStore();
 
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY).then((val) => {
@@ -57,7 +49,7 @@ export const ReadingHistoryProvider: React.FC<{ children: React.ReactNode }> = (
   };
 
   const syncWithServer = async () => {
-    if (!loggedIn) return;
+    if (!appStore.isLoggedIn) return;
     try {
       await Api.post('/reading-history/sync', { items: history });
       const res = await Api.get('/reading-history');
@@ -78,7 +70,7 @@ export const ReadingHistoryProvider: React.FC<{ children: React.ReactNode }> = (
   };
 
   return (
-    <ReadingHistoryContext.Provider value={{ history, addHistory, syncWithServer, setHistory, loggedIn, setLoggedIn: updateLoggedIn }}>
+    <ReadingHistoryContext.Provider value={{ history, addHistory, syncWithServer, setHistory, loggedIn: appStore.isLoggedIn }}>
       {children}
     </ReadingHistoryContext.Provider>
   );

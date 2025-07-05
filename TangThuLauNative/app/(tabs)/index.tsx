@@ -6,10 +6,9 @@ import { useQuery } from '@tanstack/react-query';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useRouter } from 'expo-router';
+import { Href, useRouter } from 'expo-router';
 import StoryItem from '@/components/StoryItem';
 import { Api } from '@/utils/api';
-import { Story } from '@/types/Story';
 import { useTranslation } from '@/hooks/useTranslation';
 
 export default function HomeScreen() {
@@ -53,7 +52,7 @@ export default function HomeScreen() {
         returnKeyType="search"
         onSubmitEditing={() => {
           const q = search.trim();
-          router.push(`/search${q ? `?q=${encodeURIComponent(q)}` : ''}`);
+          router.push(`/search${q ? `?q=${encodeURIComponent(q)}` : ''}` as Href);
         }}
         style={styles.searchInput}
       />
@@ -70,7 +69,7 @@ export default function HomeScreen() {
       </ThemedView>
       <ThemedView style={{ marginTop: 16 }}>
         <ThemedText type="subtitle">{t('home.most_viewed')}</ThemedText>
-        {topView.map((story) => (
+        {topView.map((story: any) => (
           <StoryItem key={story._id} story={story} style={{ marginBottom: 12, width: '100%' }} />
         ))}
       </ThemedView>

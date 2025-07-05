@@ -6,6 +6,7 @@ import { useReadingHistory } from '@/contexts/ReadingHistoryContext';
 import { Api } from '@/utils/api';
 import { useAppStore } from '@/store/StoreProvider';
 import { envConfig } from "@/constants/env";
+import { observer } from "mobx-react-lite"
 
 // Cấu hình Google Sign-In
 GoogleSignin.configure({
@@ -16,20 +17,18 @@ GoogleSignin.configure({
   offlineAccess: false,
 });
 
-export default function GoogleLogin() {
+export default observer(function GoogleLogin() {
   const { t } = useTranslation();
-  const { setLoggedIn, syncWithServer } = useReadingHistory();
-  const { setLoggedIn: setLoggedInStore } = useAppStore();
+  const { syncWithServer } = useReadingHistory();
+  const appStore = useAppStore();
   const signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo: any = await GoogleSignin.signIn();
-      const { data } = await Api.post('/auth/google', {
+      await Api.post('/auth/google', {
         code: userInfo.idToken,
       });
-
-      setLoggedIn(true);
-      setLoggedInStore(true);
+      await appStore.fetchProfile();
       syncWithServer();
     } catch (error: any) {
       console.error('❌ Lỗi đăng nhập:', error);
@@ -43,4 +42,4 @@ export default function GoogleLogin() {
       <Button title={t('googleLogin.button')} onPress={signIn} />
     </View>
   );
-}
+})
