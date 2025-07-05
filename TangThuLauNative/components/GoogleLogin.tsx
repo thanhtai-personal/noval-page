@@ -9,7 +9,7 @@ import { API_BASE_URL } from '@/constants/Api';
 GoogleSignin.configure({
   webClientId: process.env.GOOGLE_CLIENT_ID_FOR_WEB,
   // @ts-ignore
-  androidClientId: process.env.GOOGLE_CLIENT_ID_FOR_ANDROID,  // Client ID tạo từ Firebase
+  // androidClientId: process.env.GOOGLE_CLIENT_ID_FOR_ANDROID,  // Client ID tạo từ Firebase
   iosClientId: process.env.GOOGLE_CLIENT_ID_FOR_IOS, // Client ID tạo từ Firebase
   offlineAccess: false,
 });
@@ -21,6 +21,7 @@ export default function GoogleLogin() {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo: any = await GoogleSignin.signIn();
+      console.log("userInfo", userInfo)
       const idToken = userInfo.idToken;
 
       if (!idToken) throw new Error('No idToken received');
@@ -39,7 +40,6 @@ export default function GoogleLogin() {
 
       const data = await res.json();
       console.log('✅ Đăng nhập thành công:', data);
-      Alert.alert('Xin chào!', data.user?.name || userInfo.user?.name);
       setLoggedIn(true);
       syncWithServer();
     } catch (error: any) {
