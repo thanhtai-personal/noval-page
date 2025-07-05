@@ -19,7 +19,7 @@ export default observer(function NotFoundScreen() {
       </ThemedView>
     </>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {

@@ -164,7 +164,7 @@ export default observer(function SearchScreen() {
       </Modal>
     </ParallaxScrollView>
   );
-}
+});
 
 const styles = StyleSheet.create({
   headerImage: {

@@ -52,4 +52,4 @@ export default observer(function TabLayout() {
       />
     </Tabs>
   );
-}
+});

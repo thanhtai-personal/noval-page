@@ -76,7 +76,7 @@ export default observer(function HomeScreen() {
       </ThemedView>
     </ParallaxScrollView>
   );
-}
+});
 
 const styles = StyleSheet.create({
   center: {

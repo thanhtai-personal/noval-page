@@ -3,7 +3,7 @@ import { Button, Alert, View, Text } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useReadingHistory } from '@/hooks/useReadingHistory';
-import { Api } from '@/utils/api';
+import { Api, setTokenBearer } from '@/utils/api';
 import { useAppStore } from '@/store/StoreProvider';
 import { envConfig } from "@/constants/env";
 import { observer } from "mobx-react-lite"
@@ -32,7 +32,7 @@ export default observer(function GoogleLogin() {
       const { access_token, user } = res.data || {};
 
       if (access_token) {
-        Api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+        setTokenBearer(access_token)
       }
 
       if (user) {

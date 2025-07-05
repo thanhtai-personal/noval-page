@@ -20,6 +20,10 @@ const processQueue = (error: any, tokenRefreshed: boolean) => {
   failedQueue = [];
 };
 
+export const setTokenBearer = (token: string) => {
+  Api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
+
 Api.interceptors.response.use(
   (response) => response,
   async (error) => {
