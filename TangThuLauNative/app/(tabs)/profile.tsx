@@ -1,25 +1,59 @@
 import { Image } from 'expo-image';
-import { StyleSheet } from 'react-native';
+import { Alert, Button, StyleSheet, View } from 'react-native';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
+import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import GoogleLogin from '@/components/GoogleLogin';
-import { Button } from 'react-native';
 import { useAppStore } from '@/store/StoreProvider';
 import { useTranslation } from '@/hooks/useTranslation';
 import { observer } from 'mobx-react-lite';
 import { useReadingHistory } from '@/hooks/useReadingHistory';
+import { Api, setTokenBearer } from '@/utils/api';
+import { envConfig } from '@/constants/env';
 
 export default observer(function ProfileScreen() {
   const appStore = useAppStore();
   const { t } = useTranslation();
-  const { loggedIn } = useReadingHistory();
+  const { loggedIn, syncWithServer } = useReadingHistory();
+
+  GoogleSignin.configure({
+    webClientId: envConfig.GOOGLE_CLIENT_ID_FOR_WEB,
+    iosClientId: envConfig.GOOGLE_CLIENT_ID_FOR_IOS,
+    offlineAccess: false,
+  });
 
   const logout = async () => {
     try {
       await appStore.auth.logout();
     } catch (e) {
       console.warn(e);
+    }
+  };
+
+  const login = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo: any = await GoogleSignin.signIn();
+      const res = await Api.post('/auth/google', {
+        token: userInfo.data?.idToken,
+      });
+
+      const { access_token, user } = res.data || {};
+
+      if (access_token) {
+        setTokenBearer(access_token);
+      }
+
+      if (user) {
+        appStore.auth.profile = user;
+      } else {
+        await appStore.auth.fetchProfile();
+      }
+      syncWithServer();
+    } catch (error: any) {
+      console.error(`❌ ${t('errors.login_failed')}:`, error);
+      Alert.alert(t('errors.error'), error.message);
     }
   };
   return (
@@ -31,31 +65,46 @@ export default observer(function ProfileScreen() {
           style={styles.reactLogo}
         />
       }>
-      <ThemedView style={styles.center}>
-        {loggedIn ? (
-          <Button title={t('profile.logout')} onPress={logout} />
-        ) : (
-          <GoogleLogin />
+      <ThemedView style={styles.profileInfo}>
+        <ThemedText type="title">
+          {appStore.auth.profile?.name || appStore.auth.profile?.email || 'Guest'}
+        </ThemedText>
+        {appStore.auth.profile?.email && (
+          <ThemedText>{appStore.auth.profile.email}</ThemedText>
         )}
-        <Button title={t('profile.switchLanguage')} onPress={appStore.locale.toggleLanguage} />
       </ThemedView>
+      <View style={styles.menu}>
+        <View style={styles.menuItem}>
+          <Button
+            title={t('profile.switchLanguage')}
+            onPress={appStore.locale.toggleLanguage}
+          />
+        </View>
+        <View style={[styles.menuItem, styles.loginItem]}>
+          {loggedIn ? (
+            <Button title={t('profile.logout')} onPress={logout} color="red" />
+          ) : (
+            <Button title={t('googleLogin.button')} onPress={login} color="green" />
+          )}
+        </View>
+      </View>
     </ParallaxScrollView>
   );
 })
 
 const styles = StyleSheet.create({
-  center: {
+  profileInfo: {
     alignItems: 'center',
-    justifyContent: 'center'
+    marginBottom: 16,
   },
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  menu: {
+    gap: 12,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  menuItem: {},
+  loginItem: {
+    borderTopWidth: 1,
+    borderColor: '#ccc',
+    paddingTop: 12,
   },
   reactLogo: {
     height: 178,
