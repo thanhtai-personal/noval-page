@@ -1,41 +1,36 @@
 import { Image } from 'expo-image';
 import { StyleSheet, ActivityIndicator, FlatList, TextInput } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useRouter } from 'expo-router';
 import StoryItem from '@/components/StoryItem';
-import { API_BASE_URL } from '@/constants/Api';
+import { Api } from '@/utils/api';
 import { Story } from '@/types/Story';
 import { useTranslation } from '@/hooks/useTranslation';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [topVote, setTopVote] = useState<Story[]>([]);
-  const [topView, setTopView] = useState<Story[]>([]);
   const [search, setSearch] = useState('');
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [voteRes, viewRes] = await Promise.all([
-          fetch(`${API_BASE_URL}/stories?sort=votes&limit=5`).then((r) => r.json()),
-          fetch(`${API_BASE_URL}/stories?sort=views&limit=5`).then((r) => r.json()),
-        ]);
-        setTopVote(voteRes.data || []);
-        setTopView(viewRes.data || []);
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
+  const { data: topVote = [], isLoading: loadingVote } = useQuery({
+    queryKey: ['topVote'],
+    queryFn: async () => {
+      const res = await Api.get('/stories', { params: { sort: 'votes', limit: 5 } });
+      return res.data.data || [];
+    },
+  });
+  const { data: topView = [], isLoading: loadingView } = useQuery({
+    queryKey: ['topView'],
+    queryFn: async () => {
+      const res = await Api.get('/stories', { params: { sort: 'views', limit: 5 } });
+      return res.data.data || [];
+    },
+  });
+  const loading = loadingVote || loadingView;
 
   if (loading) {
     return (

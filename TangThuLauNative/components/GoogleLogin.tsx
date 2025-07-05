@@ -3,7 +3,8 @@ import { Button, Alert, View, Text } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useReadingHistory } from '@/contexts/ReadingHistoryContext';
-import { API_BASE_URL } from "@/constants/Api";
+import { Api } from '@/utils/api';
+import { useAppStore } from '@/store/StoreProvider';
 import { envConfig } from "@/constants/env";
 
 // Cấu hình Google Sign-In
@@ -18,27 +19,17 @@ GoogleSignin.configure({
 export default function GoogleLogin() {
   const { t } = useTranslation();
   const { setLoggedIn, syncWithServer } = useReadingHistory();
+  const { setLoggedIn: setLoggedInStore } = useAppStore();
   const signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo: any = await GoogleSignin.signIn();
-      console.log("userInfo",userInfo)
-
-      const res = await fetch(`${API_BASE_URL}/auth/google`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: userInfo.idToken }),
-        credentials: 'include',
+      const { data } = await Api.post('/auth/google', {
+        code: userInfo.idToken,
       });
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || 'Login failed');
-      }
-
-      const data = await res.json();
-      console.log('✅ Đăng nhập thành công:', data);
       setLoggedIn(true);
+      setLoggedInStore(true);
       syncWithServer();
     } catch (error: any) {
       console.error('❌ Lỗi đăng nhập:', error);
