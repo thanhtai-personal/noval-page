@@ -3,19 +3,18 @@ import { Button, Alert, View, Text } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useReadingHistory } from '@/contexts/ReadingHistoryContext';
-import Config from "react-native-config";
 import { API_BASE_URL } from "@/constants/Api";
+import { envConfig } from "@/constants/env";
 
+console.log("envConfig", envConfig)
 // Cấu hình Google Sign-In
 GoogleSignin.configure({
-  webClientId: Config.GOOGLE_CLIENT_ID_FOR_WEB,
+  webClientId: envConfig.GOOGLE_CLIENT_ID_FOR_WEB,
   // @ts-ignore
-  // androidClientId: Config.GOOGLE_CLIENT_ID_FOR_ANDROID,  // Client ID tạo từ Firebase
-  // iosClientId: Config.GOOGLE_CLIENT_ID_FOR_IOS, // Client ID tạo từ Firebase
-  // offlineAccess: false,
+  androidClientId: envConfig.GOOGLE_CLIENT_ID_FOR_ANDROID,
+  iosClientId: envConfig.GOOGLE_CLIENT_ID_FOR_IOS,
+  offlineAccess: false,
 });
-
-console.log("Config", Config)
 
 export default function GoogleLogin() {
   const { t } = useTranslation();

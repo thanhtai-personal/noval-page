@@ -1,3 +1,3 @@
-import Config from "react-native-config";
+import { envConfig } from "./env";
 
-export const API_BASE_URL = Config.API_BASE_URL;
+export const API_BASE_URL = envConfig.API_BASE_URL;

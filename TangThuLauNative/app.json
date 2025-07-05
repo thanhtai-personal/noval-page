@@ -47,6 +47,11 @@
       "eas": {
         "projectId": "9fc5aad3-55ba-4531-9c06-1ab323dc27a2"
       }
-    }
+    },
+    "GOOGLE_CLIENT_ID_FOR_ANDROID": "810010866433-kbqfb3kei54sabibo6lvsn6r1ifq0cip.apps.googleusercontent.com",
+    "GOOGLE_CLIENT_ID_FOR_IOS": "810010866433-kbqfb3kei54sabibo6lvsn6r1ifq0cip.apps.googleusercontent.com",
+    "GOOGLE_CLIENT_ID_FOR_WEB": "810010866433-mt493hv6rhq9bpgj3ashd92r6cblc8is.apps.googleusercontent.com",
+    "API_BASE_URL": "http://localhost:5000",
+    "EXPO_OS": "android"
   }
 }
