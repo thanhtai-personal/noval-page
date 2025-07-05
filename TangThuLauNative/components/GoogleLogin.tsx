@@ -11,7 +11,7 @@ console.log("envConfig", envConfig)
 GoogleSignin.configure({
   webClientId: envConfig.GOOGLE_CLIENT_ID_FOR_WEB,
   // @ts-ignore
-  androidClientId: envConfig.GOOGLE_CLIENT_ID_FOR_ANDROID,
+  // androidClientId: envConfig.GOOGLE_CLIENT_ID_FOR_ANDROID,
   iosClientId: envConfig.GOOGLE_CLIENT_ID_FOR_IOS,
   offlineAccess: false,
 });
