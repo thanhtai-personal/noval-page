@@ -20,8 +20,8 @@ const LoginPageContent = observer(() => {
 
   // Mutation cho login
   const loginMutation = useMutation({
-    mutationFn: async (code: string) => {
-      await ApiInstant.post(`/auth/google`, { token: code });
+    mutationFn: async (idToken: string) => {
+      await ApiInstant.post(`/auth/google`, { token: idToken });
       await appStore.fetchProfile();
     },
     onSuccess: () => {
@@ -34,8 +34,8 @@ const LoginPageContent = observer(() => {
   });
 
   // Xử lý gọi mutation khi Google trả về code
-  const handleLoginSuccess = (codeResponse: { code: string }) => {
-    loginMutation.mutate(codeResponse.code);
+  const handleLoginSuccess = (idToken: string) => {
+    loginMutation.mutate(idToken);
   };
 
   useEffect(() => {
