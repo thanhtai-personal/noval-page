@@ -1,12 +1,18 @@
 import { Suspense } from "react";
+import { headers } from "next/headers";
+import { createTranslator, getMessages } from "next-intl/server";
 import { useTranslations } from "next-intl";
 
 import LazySearchPage from "./LazySearchPage";
-export const metadata = {
-  title: "Tìm kiếm truyện hay | Vô Ưu Các",
-  description:
-    "Tìm kiếm truyện tiên hiệp, kiếm hiệp, huyền huyễn hấp dẫn theo từ khóa, thể loại, tác giả hoặc số chương.",
-};
+export async function generateMetadata() {
+  const locale = headers().get("x-next-intl-locale") || "vi";
+  const messages = await getMessages({ locale });
+  const t = createTranslator({ locale, messages, namespace: "search" });
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
 
 export default function Page() {
   const t = useTranslations("search");
