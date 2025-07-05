@@ -36,7 +36,9 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      "expo-localization",
+      "@react-native-async-storage/async-storage"
     ],
     "experiments": {
       "typedRoutes": true
