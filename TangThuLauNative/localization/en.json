@@ -24,7 +24,10 @@
   },
   "profile": {
     "switchLanguage": "Switch Language",
-    "logout": "Logout"
+    "logout": "Logout",
+    "level": "Level",
+    "coin": "Coin",
+    "role": "Role"
   },
   "googleLogin": {
     "title": "Sign in with Google",

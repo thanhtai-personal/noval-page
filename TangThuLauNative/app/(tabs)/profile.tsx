@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
 import { Alert, Button, StyleSheet, View } from 'react-native';
+import { useEffect } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -16,6 +17,12 @@ export default observer(function ProfileScreen() {
   const appStore = useAppStore();
   const { t } = useTranslation();
   const { loggedIn, syncWithServer } = useReadingHistory();
+
+  useEffect(() => {
+    if (!appStore.auth.profile) {
+      appStore.auth.fetchProfile();
+    }
+  }, []);
 
   GoogleSignin.configure({
     webClientId: envConfig.GOOGLE_CLIENT_ID_FOR_WEB,
@@ -71,6 +78,19 @@ export default observer(function ProfileScreen() {
         </ThemedText>
         {appStore.auth.profile?.email && (
           <ThemedText>{appStore.auth.profile.email}</ThemedText>
+        )}
+        {appStore.auth.profile && (
+          <>
+            <ThemedText>
+              {t('profile.role')}: {appStore.auth.profile.role?.name || appStore.auth.profile.role}
+            </ThemedText>
+            <ThemedText>
+              {t('profile.level')}: {appStore.auth.profile.level}
+            </ThemedText>
+            <ThemedText>
+              {t('profile.coin')}: {appStore.auth.profile.coin}
+            </ThemedText>
+          </>
         )}
       </ThemedView>
       <View style={styles.menu}>
