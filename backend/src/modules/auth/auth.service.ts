@@ -39,7 +39,7 @@ export class AuthService {
     return this.handleGoogleUser({
       email: user.email,
       name: `${user.firstName} ${user.lastName}`,
-      picture: user.picture,
+      picture: user.picture || user.photo,
     });
   }
 
@@ -79,7 +79,7 @@ export class AuthService {
       return this.handleGoogleUser({
         email: profile.email,
         name: profile.name,
-        picture: profile.picture,
+        picture: profile.picture || profile.photo,
       });
     } catch (err) {
       //invalid_client error
@@ -94,7 +94,7 @@ export class AuthService {
     name?: string;
     picture?: string;
   }) {
-    const { email, name } = googleInfo;
+    const { email, name, picture } = googleInfo;
     let user: any = await this.userModel.findOne({ email }).populate('role');
 
     if (!user) {
@@ -102,6 +102,7 @@ export class AuthService {
       user = await this.userModel.create({
         email,
         name,
+        photo: picture,
         password: await bcrypt.hash('google_user', 10),
         role: readerRole?._id,
       });
