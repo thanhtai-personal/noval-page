@@ -6,6 +6,8 @@ export class LocaleStore {
 
   constructor() {
     makeAutoObservable(this);
+    this.setLanguage = this.setLanguage.bind(this);
+    this.toggleLanguage = this.toggleLanguage.bind(this);
   }
 
   setLanguage(lang: 'vi' | 'en') {

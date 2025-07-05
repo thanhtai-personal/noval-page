@@ -14,6 +14,10 @@ export class HistoryStore {
 
   constructor() {
     makeAutoObservable(this);
+    this.setHistory = this.setHistory.bind(this);
+    this.loadHistory = this.loadHistory.bind(this);
+    this.addHistory = this.addHistory.bind(this);
+    this.syncHistoryWithServer = this.syncHistoryWithServer.bind(this);
     this.loadHistory();
   }
 

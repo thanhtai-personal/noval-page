@@ -6,6 +6,8 @@ export class AuthStore {
 
   constructor() {
     makeAutoObservable(this);
+    this.fetchProfile = this.fetchProfile.bind(this);
+    this.clear = this.clear.bind(this);
     this.fetchProfile();
   }
 
