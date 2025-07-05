@@ -45,10 +45,17 @@ export class AuthService {
 
   async loginWithGoogle(token: string) {
     try {
-      const ticket = await googleClient.verifyIdToken({
-        idToken: token,
-        audience: process.env.GOOGLE_CLIENT_ID,
-      });
+      const audiences = process.env.GOOGLE_CLIENT_ID?.split(',')
+        .map((id) => id.trim())
+        .filter(Boolean);
+
+      const verifyOptions: any = { idToken: token };
+      if (audiences && audiences.length > 0) {
+        verifyOptions.audience =
+          audiences.length === 1 ? audiences[0] : audiences;
+      }
+
+      const ticket = await googleClient.verifyIdToken(verifyOptions);
       const payload: any = ticket.getPayload();
 
       if (!payload?.email) {
