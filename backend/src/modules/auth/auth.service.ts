@@ -49,7 +49,7 @@ export class AuthService {
         idToken: token,
         audience: process.env.GOOGLE_CLIENT_ID,
       });
-      const payload = ticket.getPayload();
+      const payload: any = ticket.getPayload();
 
       if (!payload?.email) {
         throw new UnauthorizedException('Không lấy được email từ Google');
@@ -58,7 +58,7 @@ export class AuthService {
       return this.handleGoogleUser({
         email: payload.email,
         name: payload.name,
-        picture: payload.picture || payload.photo,
+        picture: payload.picture,
       });
     } catch (err) {
       console.error('Google login error', err?.response?.data || err.message);
@@ -74,23 +74,18 @@ export class AuthService {
   }) {
     const { email, name, picture } = googleInfo;
     let user: any = await this.userModel.findOne({ email }).populate('role');
-
-    if (!user) {
-      const readerRole = await this.roleModel.findOne({ slug: 'reader' });
-      user = await this.userModel.create({
-        email,
-        name,
-        photo: picture,
-        password: await bcrypt.hash('google_user', 10),
-        role: readerRole?._id,
-      });
-    }
-
-    if (!user.name && name) {
-      user.name = name;
-      await user.save();
-    }
-
+    const readerRole = await this.roleModel.findOne({ slug: 'reader' });
+    user = await this.userModel.findOneAndUpdate({
+      email
+    },{
+      email,
+      name,
+      photo: picture,
+      password: await bcrypt.hash('google_user', 10),
+      role: readerRole?._id,
+    }, {
+      upsert: true
+    });
     return this.issueTokensAndStore(user);
   }
 

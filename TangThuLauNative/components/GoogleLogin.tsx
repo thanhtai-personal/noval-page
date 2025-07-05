@@ -26,7 +26,7 @@ export default observer(function GoogleLogin() {
       await GoogleSignin.hasPlayServices();
       const userInfo: any = await GoogleSignin.signIn();
       await Api.post('/auth/google', {
-        token: userInfo.idToken ?? userInfo.data?.idToken,
+        token: userInfo.data?.idToken,
       });
       await appStore.fetchProfile();
       syncWithServer();

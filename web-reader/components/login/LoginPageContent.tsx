@@ -21,7 +21,7 @@ const LoginPageContent = observer(() => {
   // Mutation cho login
   const loginMutation = useMutation({
     mutationFn: async (code: string) => {
-      await ApiInstant.post(`/auth/google`, { code });
+      await ApiInstant.post(`/auth/google`, { token: code });
       await appStore.fetchProfile();
     },
     onSuccess: () => {
