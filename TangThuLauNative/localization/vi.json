@@ -19,7 +19,8 @@
     "category": "Thể loại",
     "author": "Tác giả",
     "search": "Tìm kiếm",
-    "cancel": "Hủy"
+    "cancel": "Hủy",
+    "search_placeholder": "Tìm kiếm truyện..."
   },
   "profile": {
     "switchLanguage": "Chuyển ngôn ngữ",
