@@ -142,7 +142,7 @@ const SearchPageClient = observer(() => {
   const total: number = storiesData?.total || 0;
 
   useEffect(() => {
-    store.setAnimations({
+    store.ui.setAnimations({
       useIsland: false,
       useDNA: false,
       use3DIsland: false,
@@ -151,7 +151,7 @@ const SearchPageClient = observer(() => {
     });
 
     return () => {
-      store.resetAnimations();
+      store.ui.resetAnimations();
     };
   }, [theme]);
 

@@ -27,7 +27,7 @@ export const GameBox = observer(({ onClose, opened }: any) => {
         }`}
         onClick={() => {
           setOpenLotteryModal(false);
-          store.showPlayerControl = false;
+          store.ui.showPlayerControl = false;
         }}
       >
         <img
@@ -41,7 +41,7 @@ export const GameBox = observer(({ onClose, opened }: any) => {
       <GameMenu
         openLotteryModal={() => {
           setOpenLotteryModal(true);
-          store.showPlayerControl = true;
+          store.ui.showPlayerControl = true;
         }}
         opened={opened}
         onClose={onClose}

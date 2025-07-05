@@ -1,13 +1,13 @@
 import { useAppStore } from '@/store/StoreProvider';
-import { HistoryItem } from '@/store/AppStore';
+import { HistoryItem } from '@/store/HistoryStore';
 
 export function useReadingHistory() {
   const appStore = useAppStore();
   return {
-    history: appStore.history,
-    addHistory: appStore.addHistory.bind(appStore),
-    syncWithServer: appStore.syncHistoryWithServer.bind(appStore),
-    setHistory: appStore.setHistory.bind(appStore),
-    loggedIn: appStore.isLoggedIn,
+    history: appStore.history.history,
+    addHistory: appStore.history.addHistory.bind(appStore.history),
+    syncWithServer: appStore.history.syncHistoryWithServer.bind(appStore.history),
+    setHistory: appStore.history.setHistory.bind(appStore.history),
+    loggedIn: appStore.auth.isLoggedIn,
   };
 }

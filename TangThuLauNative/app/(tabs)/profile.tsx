@@ -17,7 +17,7 @@ export default observer(function ProfileScreen() {
 
   const logout = async () => {
     try {
-      await appStore.logout();
+      await appStore.auth.logout();
     } catch (e) {
       console.warn(e);
     }
@@ -37,7 +37,7 @@ export default observer(function ProfileScreen() {
         ) : (
           <GoogleLogin />
         )}
-        <Button title={t('profile.switchLanguage')} onPress={appStore.toggleLanguage} />
+        <Button title={t('profile.switchLanguage')} onPress={appStore.locale.toggleLanguage} />
       </ThemedView>
     </ParallaxScrollView>
   );

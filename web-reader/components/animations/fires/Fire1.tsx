@@ -15,9 +15,9 @@ export const Fire1 = observer(
     fill2 = "#19020f",
     ...props
   }: any) => {
-    const uiConfig = useAppStore();
+    const store = useAppStore();
 
-    if (isMobile() || !uiConfig.animationMode) {
+    if (isMobile() || !store.ui.animationMode) {
       return "🔥";
     }
 

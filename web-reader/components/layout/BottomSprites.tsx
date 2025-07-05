@@ -26,17 +26,17 @@ export const BottomSprites = observer(() => {
     }
   });
 
-  if (!appStore.animationMode || isMobile()) {
+  if (!appStore.ui.animationMode || isMobile()) {
     return ""; // Do not render if animations are disabled
   }
 
   return (
     <div className="absolute bottom-0 right-0 w-full z-0 bg-transparent">
       <div className="relative w-full h-full z-0 overflow-hidden">
-        {appStore.animations.useUniverseBg && (
+        {appStore.ui.animations.useUniverseBg && (
           <GalaxyBackground id="GalaxyBackground-footer" />
         )}
-        {appStore.animations.useFantasyIsland && (
+        {appStore.ui.animations.useFantasyIsland && (
           <div className=" absolute bottom-0 left-0 w-full h-screen z-0 opacity-50">
             <Model3DContainer
               ambientLight={{ intensity: 1 }}

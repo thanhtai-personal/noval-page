@@ -30,14 +30,14 @@ export const TopSprites = observer(() => {
     }
   });
 
-  if (!appStore.animationMode || isMobile()) {
+  if (!appStore.ui.animationMode || isMobile()) {
     return ""; // Do not render if animations are disabled
   }
 
   return (
     <div className="absolute w-full h-full z-[1] bg-transparent">
       <div className="relative w-full h-full z-[1]">
-        {appStore.animations?.useIsland && (
+        {appStore.ui.animations?.useIsland && (
           <Sprite
             images={[islandPng]}
             layer={0}
@@ -49,7 +49,7 @@ export const TopSprites = observer(() => {
           />
         )}
 
-        {appStore.animations?.use3DIsland && (
+        {appStore.ui.animations?.use3DIsland && (
           <div className=" absolute left-[calc(100vw-500px)] top-[calc(100vh-400px)] h-screen w-[500px] z-1 opacity-90">
             <Model3DContainer
               ambientLight={{ intensity: 1 }}
@@ -62,13 +62,13 @@ export const TopSprites = observer(() => {
           </div>
         )}
 
-        {appStore.animations?.useDNA && (
+        {appStore.ui.animations?.useDNA && (
           <div className="absolute top-[calc(100vh+60px)] left-[calc(50vw-150px)] w-full h-full z-0">
             <DNA2 />
           </div>
         )}
 
-        {appStore.animations?.useIsland && (
+        {appStore.ui.animations?.useIsland && (
           <Sprite
             images={[islandPng2]}
             layer={0}
@@ -80,13 +80,13 @@ export const TopSprites = observer(() => {
           />
         )}
 
-        {appStore.animations?.useDNA && (
+        {appStore.ui.animations?.useDNA && (
           <div className="absolute top-[calc(100vh+800px)] left-[calc(-50vw+225px)] w-full h-full z-0">
             <DNA2 />
           </div>
         )}
 
-        {appStore.animations?.useDNA && (
+        {appStore.ui.animations?.useDNA && (
           <div className="absolute -top-[40px] -left-[50vw] w-full h-full z-50">
             <DNA />
           </div>

@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import { useTranslations } from "next-intl";
 
 import { LinkWithRedirecting } from "@/components/common/utils/LinkWithRedirecting";
-import { appStore } from "@/store/AppStore.store";
+import { appStore } from "@/store";
 import { AnimationLogoutButton } from "@/components/animations/logoutBtn/AnimationLogoutButton";
 import { useEaseInOutAnimationButton } from "@/hooks/useEaseInOutAnimationButton";
 import { ProfileIcon } from "@/components/default/icons";
@@ -14,7 +14,7 @@ export const AuthActions = observer(() => {
   const t = useTranslations("nav");
 
   const [commonClass, showButton] = useEaseInOutAnimationButton(
-    appStore.isLoggedIn,
+    appStore.auth.isLoggedIn,
   );
 
   return (
@@ -28,7 +28,7 @@ export const AuthActions = observer(() => {
         <AnimationLogoutButton
           className={`${commonClass} logout-btn bg-red-500`}
           label={t("logout")}
-          onLogout={async () => await appStore.logout()}
+          onLogout={async () => await appStore.auth.logout()}
         />
       ) : (
         <LinkWithRedirecting

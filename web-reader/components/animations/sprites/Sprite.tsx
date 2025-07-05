@@ -64,7 +64,7 @@ const Sprite = observer(
       };
     }, [draggable]);
 
-    if (!appStore.animationMode || isMobile()) {
+    if (!appStore.ui.animationMode || isMobile()) {
       return ""; // Do not render if animations are disabled
     }
 

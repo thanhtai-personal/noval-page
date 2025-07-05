@@ -71,7 +71,7 @@ export const Navbar = observer(() => {
           <div
             className="cursor-pointer"
             title={t("animationMode")}
-            onClick={() => appStore.toggleAnimationMode()}
+            onClick={() => appStore.ui.toggleAnimationMode()}
           >
             🎬
           </div>

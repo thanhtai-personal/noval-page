@@ -61,10 +61,10 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
 
   // Side effect animation mode
   useEffect(() => {
-    appStore.toggleAnimationMode(false);
+    appStore.ui.toggleAnimationMode(false);
 
     return () => {
-      appStore.toggleAnimationMode(true);
+      appStore.ui.toggleAnimationMode(true);
     };
   }, []);
 

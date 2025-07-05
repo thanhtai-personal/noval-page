@@ -7,7 +7,7 @@ import { useAppStore } from "@/store/Provider";
 const DNA = observer(({ className = "", ...props }: any) => {
   const appStore = useAppStore();
 
-  if (!appStore.animationMode) {
+  if (!appStore.ui.animationMode) {
     return null; // Do not render if animations are disabled
   }
 

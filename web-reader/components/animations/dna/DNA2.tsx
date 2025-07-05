@@ -7,7 +7,7 @@ import { useAppStore } from "@/store/Provider";
 const DNA2 = observer(({ className = "", ...props }: any) => {
   const appStore = useAppStore();
 
-  if (!appStore.animationMode) return null;
+  if (!appStore.ui.animationMode) return null;
 
   const total = 64;
   const dots = Array.from({ length: total }, (_, i) => i + 1);

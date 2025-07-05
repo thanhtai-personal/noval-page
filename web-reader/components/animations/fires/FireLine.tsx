@@ -9,9 +9,9 @@ import { useAppStore } from "@/store/Provider";
 
 export const FireLine = observer(
   ({ id = "fire-line", className, ...props }: any) => {
-    const uiConfig = useAppStore();
+    const store = useAppStore();
 
-    if (isMobile() || !uiConfig.animationMode) return "";
+    if (isMobile() || !store.ui.animationMode) return "";
 
     return (
       <div
