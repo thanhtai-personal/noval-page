@@ -10,8 +10,9 @@ import { Href, useRouter } from 'expo-router';
 import StoryItem from '@/components/StoryItem';
 import { Api } from '@/utils/api';
 import { useTranslation } from '@/hooks/useTranslation';
+import { observer } from 'mobx-react-lite';
 
-export default function HomeScreen() {
+export default observer(function HomeScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const [search, setSearch] = useState('');

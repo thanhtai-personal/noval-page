@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Alert, View, Text } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useTranslation } from '@/hooks/useTranslation';
-import { useReadingHistory } from '@/contexts/ReadingHistoryContext';
+import { useReadingHistory } from '@/hooks/useReadingHistory';
 import { Api } from '@/utils/api';
 import { useAppStore } from '@/store/StoreProvider';
 import { envConfig } from "@/constants/env";

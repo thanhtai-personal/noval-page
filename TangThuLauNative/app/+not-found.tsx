@@ -4,8 +4,9 @@ import { StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useTranslation } from '@/hooks/useTranslation';
+import { observer } from 'mobx-react-lite';
 
-export default function NotFoundScreen() {
+export default observer(function NotFoundScreen() {
   const { t } = useTranslation();
   return (
     <>

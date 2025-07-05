@@ -1,11 +1,10 @@
-import { useContext } from 'react';
+import { useAppStore } from '@/store/StoreProvider';
 import i18n from '@/localization/i18n';
-import { LanguageContext } from '@/contexts/LanguageContext';
 
 export function useTranslation() {
-  const { language } = useContext(LanguageContext);
+  const appStore = useAppStore();
   return {
     t: (key: string, config?: i18n.TranslateOptions) => i18n.t(key, config),
-    language,
+    language: appStore.language,
   };
 }

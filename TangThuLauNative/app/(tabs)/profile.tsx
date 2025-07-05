@@ -5,15 +5,13 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
 import GoogleLogin from '@/components/GoogleLogin';
 import { Button } from 'react-native';
-import { useContext } from 'react';
-import { LanguageContext } from '@/contexts/LanguageContext';
+import { useAppStore } from '@/store/StoreProvider';
 import { useTranslation } from '@/hooks/useTranslation';
-import { useReadingHistory } from '@/contexts/ReadingHistoryContext';
-import { appStore } from "@/store/AppStore";
-import { observer } from "mobx-react-lite";
+import { observer } from 'mobx-react-lite';
+import { useReadingHistory } from '@/hooks/useReadingHistory';
 
 export default observer(function ProfileScreen() {
-  const { toggleLanguage } = useContext(LanguageContext);
+  const appStore = useAppStore();
   const { t } = useTranslation();
   const { loggedIn } = useReadingHistory();
 
@@ -39,7 +37,7 @@ export default observer(function ProfileScreen() {
         ) : (
           <GoogleLogin />
         )}
-        <Button title={t('profile.switchLanguage')} onPress={toggleLanguage} />
+        <Button title={t('profile.switchLanguage')} onPress={appStore.toggleLanguage} />
       </ThemedView>
     </ParallaxScrollView>
   );
