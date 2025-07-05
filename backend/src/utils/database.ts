@@ -19,7 +19,7 @@ export const DBNames = {
 }
 export const DB_STORIES_NAMES = [DBNames.story1, DBNames.story2, DBNames.story3, DBNames.story4, DBNames.story5];
 
-export const MAX_DB_SIZE_MB = 470;
+export const MAX_DB_SIZE_MB = 400;
 
 export const switchModelByDBLimit = async (...models: any[]) => {
   for (const model of models) {
@@ -28,6 +28,7 @@ export const switchModelByDBLimit = async (...models: any[]) => {
     if (!nativeDb) throw new Error('Cannot get nativeDb from model.');
     const stats = await nativeDb.stats();
     const sizeMB = stats.dataSize / (1024 * 1024);
+    console.log("sizeMB", sizeMB)
     if (sizeMB < MAX_DB_SIZE_MB) {
       return model;
     }
