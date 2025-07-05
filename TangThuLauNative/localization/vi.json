@@ -23,8 +23,11 @@
     "search_placeholder": "Tìm kiếm truyện..."
   },
   "profile": {
-    "switchLanguage": "Chuyển ngôn ngữ",
-    "logout": "Đăng xuất"
+    "switchLanguage": "Tiếng Anh",
+    "logout": "Đăng xuất",
+    "level": "Cấp",
+    "coin": "Xu",
+    "role": "Vai trò"
   },
   "googleLogin": {
     "title": "Đăng nhập bằng Google",

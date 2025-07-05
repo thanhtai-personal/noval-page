@@ -23,8 +23,11 @@
     "search_placeholder": "Search stories..."
   },
   "profile": {
-    "switchLanguage": "Switch Language",
-    "logout": "Logout"
+    "switchLanguage": "Vietnamese",
+    "logout": "Logout",
+    "level": "Level",
+    "coin": "Coin",
+    "role": "Role"
   },
   "googleLogin": {
     "title": "Sign in with Google",

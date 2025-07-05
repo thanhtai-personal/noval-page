@@ -233,6 +233,7 @@ export class AuthService {
       user: {
         _id: user._id,
         name: user.name,
+        photo: user.photo,
         email: user.email,
         role: payload.role,
       },

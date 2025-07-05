@@ -8,6 +8,7 @@ export class UserDataAndUserResponseMapper {
     return {
       email: userData.email,
       name: userData.name,
+      photo: userData.photo,
       exp: userData.exp,
       banned: userData.banned,
       coin: userData.coin,
