@@ -1,45 +1,26 @@
-import Config from "react-native-config";
+import Config from 'react-native-config';
 import Constants from 'expo-constants';
 
-// @ts-ignore
-let config = Config;
-console.log("config 0", config)
+// Try to read values from react-native-config first
+let config: any = Config;
 
-if (!config?.API_BASE_URL && Config.getConstants) {
-  // @ts-ignore
-  config = typeof Config.getConstants === 'function' ? Config.getConstants?.() : Config;
+if (!config?.API_BASE_URL && typeof Config.getConstants === 'function') {
+  config = Config.getConstants();
 }
-console.log("config 1", config)
+
+// Fallback to expo constants (development or Expo Go)
+if (!config?.API_BASE_URL) {
+  const expoConstants =
+    // @ts-ignore - some of these fields are private
+    Constants.expoConfig ?? Constants?.manifest2 ?? Constants.manifest;
+
+  if (expoConstants) {
+    config = (expoConstants as any).extra ?? expoConstants;
+  }
+}
 
 if (!config?.API_BASE_URL) {
-  // @ts-ignore
-  config = Constants.__unsafeNoWarnManifest2?.extra
-}
-console.log("config 2", config)
-
-if (!config?.API_BASE_URL) {
-  // @ts-ignore
-  config = Constants.__unsafeNoWarnManifest?.extra
-}
-console.log("config 3", config)
-
-if (!config?.API_BASE_URL) {
-  // @ts-ignore
-  config = Constants.expoConfig?.extra
-}
-console.log("config 4", config)
-
-if (!config?.API_BASE_URL) {
-  // @ts-ignore
-  config = Constants.manifest?.extra
-}
-console.log("config 5", config)
-
-
-if (!config?.API_BASE_URL) {
-  config = {}
+  config = {};
 }
 
-console.log("config 6", config)
-
-export const envConfig = config
+export const envConfig = config;
