@@ -1,14 +1,19 @@
 import { Image } from 'expo-image';
-import { View, Text, StyleSheet, ViewStyle } from 'react-native';
+import { View, Text, StyleSheet, ViewStyle, TouchableOpacity } from 'react-native';
+import { useRouter, Href } from 'expo-router';
 import { Story } from '@/types/Story';
 
 export default function StoryItem({ story, style }: { story: Story; style?: ViewStyle }) {
+  const router = useRouter();
   return (
-    <View style={[styles.container, style]}>
+    <TouchableOpacity
+      onPress={() => router.push(`/story/${story.slug}` as Href)}
+      style={[styles.container, style]}
+    >
       <Image source={{ uri: story.cover }} style={styles.cover} contentFit="cover" />
       <Text style={styles.title} numberOfLines={1}>{story.title}</Text>
       <Text style={styles.author} numberOfLines={1}>{story.author?.name}</Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 

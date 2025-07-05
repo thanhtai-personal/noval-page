@@ -28,5 +28,10 @@
   "googleLogin": {
     "title": "Đăng nhập bằng Google",
     "button": "Đăng nhập với Google"
+  },
+  "chapter": {
+    "list": "Danh sách chương",
+    "sort_asc": "Tăng dần",
+    "sort_desc": "Giảm dần"
   }
 }
