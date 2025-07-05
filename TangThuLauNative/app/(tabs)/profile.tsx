@@ -68,11 +68,18 @@ export default observer(function ProfileScreen() {
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
       headerImage={
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
+          source={
+            appStore.auth.profile?.photo
+              ? { uri: appStore.auth.profile.photo }
+              : require('@/assets/images/partial-react-logo.png')
+          }
           style={styles.reactLogo}
         />
       }>
       <ThemedView style={styles.profileInfo}>
+        {appStore.auth.profile?.photo && (
+          <Image source={{ uri: appStore.auth.profile.photo }} style={styles.avatar} />
+        )}
         <ThemedText type="title">
           {appStore.auth.profile?.name || appStore.auth.profile?.email || 'Guest'}
         </ThemedText>
@@ -125,6 +132,13 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: '#ccc',
     paddingTop: 12,
+  },
+  avatar: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginBottom: 12,
+    backgroundColor: '#ccc',
   },
   reactLogo: {
     height: 178,
