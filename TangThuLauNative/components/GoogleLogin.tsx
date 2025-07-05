@@ -21,17 +21,17 @@ export default function GoogleLogin() {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo: any = await GoogleSignin.signIn();
+      console.log("userInfo", userInfo)
 
       // In some environments idToken may be undefined after sign in.
       // Fetch tokens explicitly to ensure we get a valid idToken
-      const { idToken } = await GoogleSignin.getTokens();
-
-      if (!idToken) throw new Error('No idToken received');
+      const tokenData = await GoogleSignin.getTokens();
+      console.log("tokenData", tokenData)
 
       const res = await fetch(`${API_BASE_URL}/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: idToken, data: userInfo.data }),
+        body: JSON.stringify({ code: tokenData.idToken, data: userInfo.data }),
         credentials: 'include',
       });
 
