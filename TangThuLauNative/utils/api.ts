@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const Api = axios.create({
   baseURL: API_BASE_URL,
-  // withCredentials: true,
+  withCredentials: true,
 });
 
 let isRefreshing = false;

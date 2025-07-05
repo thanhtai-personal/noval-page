@@ -25,10 +25,21 @@ export default observer(function GoogleLogin() {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo: any = await GoogleSignin.signIn();
-      await Api.post('/auth/google', {
+      const res = await Api.post('/auth/google', {
         token: userInfo.data?.idToken,
       });
-      await appStore.fetchProfile();
+
+      const { access_token, user } = res.data || {};
+
+      if (access_token) {
+        Api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+      }
+
+      if (user) {
+        appStore.profile = user;
+      } else {
+        await appStore.fetchProfile();
+      }
       syncWithServer();
     } catch (error: any) {
       console.error('❌ Lỗi đăng nhập:', error);
