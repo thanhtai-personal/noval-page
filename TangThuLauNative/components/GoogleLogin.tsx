@@ -3,15 +3,15 @@ import { Button, Alert, View, Text } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useReadingHistory } from '@/contexts/ReadingHistoryContext';
-import { API_BASE_URL } from '@/constants/Api';
+import Config from "react-native-config";
 
 // Cấu hình Google Sign-In
 GoogleSignin.configure({
-  webClientId: process.env.GOOGLE_CLIENT_ID_FOR_WEB,
+  webClientId: Config.GOOGLE_CLIENT_ID_FOR_WEB,
   // @ts-ignore
-  // androidClientId: process.env.GOOGLE_CLIENT_ID_FOR_ANDROID,  // Client ID tạo từ Firebase
-  iosClientId: process.env.GOOGLE_CLIENT_ID_FOR_IOS, // Client ID tạo từ Firebase
-  offlineAccess: false,
+  // androidClientId: Config.GOOGLE_CLIENT_ID_FOR_ANDROID,  // Client ID tạo từ Firebase
+  // iosClientId: Config.GOOGLE_CLIENT_ID_FOR_IOS, // Client ID tạo từ Firebase
+  // offlineAccess: false,
 });
 
 export default function GoogleLogin() {
@@ -21,17 +21,11 @@ export default function GoogleLogin() {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo: any = await GoogleSignin.signIn();
-      console.log("userInfo", userInfo)
 
-      // In some environments idToken may be undefined after sign in.
-      // Fetch tokens explicitly to ensure we get a valid idToken
-      const tokenData = await GoogleSignin.getTokens();
-      console.log("tokenData", tokenData)
-
-      const res = await fetch(`${API_BASE_URL}/auth/google`, {
+      const res = await fetch(`${Config.API_BASE_URL}/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: tokenData.idToken, data: userInfo.data }),
+        body: JSON.stringify({ code: userInfo.idToken, data: userInfo.data }),
         credentials: 'include',
       });
 
