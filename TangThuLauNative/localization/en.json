@@ -33,5 +33,14 @@
     "list": "Chapters",
     "sort_asc": "Ascending",
     "sort_desc": "Descending"
+  },
+  "notFound": {
+    "title": "Oops!",
+    "message": "This screen does not exist.",
+    "link": "Go to home screen!"
+  },
+  "errors": {
+    "error": "Error",
+    "login_failed": "Login failed"
   }
 }

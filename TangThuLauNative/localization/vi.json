@@ -33,5 +33,14 @@
     "list": "Danh sách chương",
     "sort_asc": "Tăng dần",
     "sort_desc": "Giảm dần"
+  },
+  "notFound": {
+    "title": "Rất tiếc!",
+    "message": "Màn hình này không tồn tại.",
+    "link": "Về trang chủ"
+  },
+  "errors": {
+    "error": "Lỗi",
+    "login_failed": "Lỗi đăng nhập"
   }
 }
