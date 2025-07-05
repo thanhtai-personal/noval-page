@@ -7,11 +7,11 @@ import { Model } from 'mongoose';
 
 import { User } from '@/schemas/user.schema';
 import { Role } from '@/schemas/role.schema';
-import axios from "axios";
-import { UserDataAndUserResponseMapper } from "./mappers/UserDataAndUserResponseMapper";
-import { DBNames } from "@/utils/database";
+import { OAuth2Client } from 'google-auth-library';
+import { UserDataAndUserResponseMapper } from './mappers/UserDataAndUserResponseMapper';
+import { DBNames } from '@/utils/database';
 
-// const googleClient = new OAuth2Client();
+const googleClient = new OAuth2Client();
 
 @Injectable()
 export class AuthService {
@@ -43,46 +43,24 @@ export class AuthService {
     });
   }
 
-  async loginWithGoogle(code: string) {
+  async loginWithGoogle(token: string) {
     try {
-      const tokenRes = await axios.post('https://oauth2.googleapis.com/token', {
-        code,
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: 'postmessage',
-        grant_type: 'authorization_code',
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const ticket = await googleClient.verifyIdToken({
+        idToken: token,
+        audience: process.env.GOOGLE_CLIENT_ID,
       });
+      const payload = ticket.getPayload();
 
-      const { id_token, access_token } = tokenRes.data;
-
-      if (!id_token || !access_token) {
-        throw new UnauthorizedException('Không nhận được token từ Google');
-      }
-
-      // Step 2: Get user info from Google
-      const profileRes = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      });
-
-      const profile = profileRes.data;
-
-      if (!profile?.email) {
+      if (!payload?.email) {
         throw new UnauthorizedException('Không lấy được email từ Google');
       }
 
       return this.handleGoogleUser({
-        email: profile.email,
-        name: profile.name,
-        picture: profile.picture || profile.photo,
+        email: payload.email,
+        name: payload.name,
+        picture: payload.picture || payload.photo,
       });
     } catch (err) {
-      //invalid_client error
       console.error('Google login error', err?.response?.data || err.message);
       throw new UnauthorizedException('Đăng nhập Google thất bại');
     }
