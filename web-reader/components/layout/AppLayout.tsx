@@ -26,7 +26,7 @@ export const AppLayout = observer(({ children }: any) => {
   const [showingGameMenu, setShowingGameMenu] = useState(false);
 
   const openGameModal = () => {
-    setShowingGameMenu((prev) => !prev)
+    setShowingGameMenu((prev) => !prev);
   };
 
   return (
@@ -39,7 +39,10 @@ export const AppLayout = observer(({ children }: any) => {
           </div>
         </div>
 
-        <GameBox opened={showingGameMenu} onClose={() => setShowingGameMenu(false)} />
+        <GameBox
+          opened={showingGameMenu}
+          onClose={() => setShowingGameMenu(false)}
+        />
 
         {store.useLayout && <Navbar />}
         <WallPaperBg1>
@@ -54,17 +57,18 @@ export const AppLayout = observer(({ children }: any) => {
           <EntertaimentMenu />
         </div>
       )}
-    
+
       {store.openGameMode && <PlayerPanel />}
 
       {store.openGameMode && (
         <div
           className={`
-            fixed z-20 bottom-2  bg-orange-500/25 ${store.animationMode
-              ? "-right-[160px] hover:-right-[50px] transition-all duration-300"
-              : "right-6 p-4"
-          } rounded-full backdrop:blur-xl btn-play-to-earn ${
-            !showingGameMenu && "showing"
+            fixed z-20 bottom-2  bg-orange-500/25 ${
+              store.animationMode
+                ? "-right-[160px] hover:-right-[50px] transition-all duration-300"
+                : "right-6 p-4"
+            } rounded-full backdrop:blur-xl btn-play-to-earn ${
+              !showingGameMenu && "showing"
             }
           `}
           style={{
@@ -121,13 +125,13 @@ export const AppLayout = observer(({ children }: any) => {
             // </Link>
           )} */}
           <Image
-              alt="click-to-play"
-              onClick={openGameModal}
-              src={xboxImageIcon}
-              width={48}
-              height={48}
-              className="cursor-pointer w-[28px] h-[28px] md:w-[48px] md:h-[48px]"
-            />
+            alt="click-to-play"
+            onClick={openGameModal}
+            src={xboxImageIcon}
+            width={48}
+            height={48}
+            className="cursor-pointer w-[28px] h-[28px] md:w-[48px] md:h-[48px]"
+          />
         </div>
       )}
     </div>

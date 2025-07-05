@@ -17,7 +17,9 @@ export function LastReadChapter({ slug }: { slug: string }) {
   return (
     <div>
       <p className="text-sm text-blue-600 mt-2">
-        {(t("you_have_read_up_to_chapter") || "Bạn đã đọc tới chương {0}").replace("{0}", `${lastRead ?? 0}`)}
+        {(
+          t("you_have_read_up_to_chapter") || "Bạn đã đọc tới chương {0}"
+        ).replace("{0}", `${lastRead ?? 0}`)}
       </p>
     </div>
   );

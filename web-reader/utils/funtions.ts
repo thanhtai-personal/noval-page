@@ -3,11 +3,8 @@ export const isMobile = () =>
     navigator.userAgent,
   );
 
-const NAMES = [
-  "Nô lệ"
-]
+const NAMES = ["Nô lệ"];
 
 export const getLevelName = (level: number = 0) => {
-
-  return NAMES[level-1]
-}
+  return NAMES[level - 1];
+};

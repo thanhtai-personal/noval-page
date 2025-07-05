@@ -51,7 +51,7 @@ const LoginPageContent = observer(() => {
       appStore.resetAnimations();
     };
   }, [theme]);
-  
+
   return (
     <div className="min-h-[calc(100vh-150px)] flex items-center justify-center">
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
@@ -66,15 +66,11 @@ const LoginPageContent = observer(() => {
             </div>
             <div className={`${styles.login}`}>
               <div className="loginBx flex flex-col justify-center items-center">
-                <div className={styles.group}>
+                <div className={`${styles.group} flex flex-col`}>
                   <GoogleLoginButton
                     label={t("login_with_google")}
                     handleLoginSuccess={handleLoginSuccess}
                   />
-                  {/* Thêm loading/error UI nếu muốn */}
-                  {loginMutation.isPending && (
-                    <div className="text-center mt-2 text-blue-500">...</div>
-                  )}
                   {loginMutation.isError && (
                     <div className="text-center mt-2 text-red-500">
                       {t("login_error") || "Đăng nhập thất bại!"}

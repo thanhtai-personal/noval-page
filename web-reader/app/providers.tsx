@@ -43,10 +43,12 @@ export function Providers({ children, themeProps }: ProvidersProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SnackbarProvider autoHideDuration={3000} maxSnack={5}
+      <SnackbarProvider
+        autoHideDuration={3000}
+        maxSnack={5}
         anchorOrigin={{
-          horizontal: 'center',
-          vertical: 'top' 
+          horizontal: "center",
+          vertical: "top",
         }}
       >
         <StoreProvider>

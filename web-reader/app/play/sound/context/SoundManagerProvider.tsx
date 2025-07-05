@@ -35,7 +35,8 @@ const SoundManagerContext = createContext<SoundManagerAPI | null>(null);
 
 export function useSoundManager() {
   const ctx = useContext(SoundManagerContext);
-  if (!ctx) throw new Error("useSoundManager must be used within SoundManagerProvider");
+  if (!ctx)
+    throw new Error("useSoundManager must be used within SoundManagerProvider");
   return ctx;
 }
 
@@ -47,29 +48,23 @@ type Props = {
 };
 
 export const SoundManagerProvider = forwardRef<SoundManagerAPI, Props>(
-  (
-    {
-      list,
-      children,
-      autoPlay = false,
-      initialIndex = 0,
-    },
-    ref
-  ) => {
+  ({ list, children, autoPlay = false, initialIndex = 0 }, ref) => {
     const [currentIndex, setCurrentIndex] = useState(initialIndex);
     const [isPlaying, setIsPlaying] = useState(autoPlay);
-    const [current, setCurrent] = useState<SoundTrack | null>(list[initialIndex] || null);
+    const [current, setCurrent] = useState<SoundTrack | null>(
+      list[initialIndex] || null,
+    );
 
     // Mảng chứa tất cả audio preload
     const audioArrRef = useRef<HTMLAudioElement[]>([]);
 
     // Preload lại khi list đổi
     useEffect(() => {
-      audioArrRef.current.forEach(a => {
+      audioArrRef.current.forEach((a) => {
         a.pause();
         a.src = "";
       });
-      audioArrRef.current = list.map(track => {
+      audioArrRef.current = list.map((track) => {
         const audio = new Audio(track.url);
         audio.preload = "auto";
         audio.load();
@@ -151,7 +146,12 @@ export const SoundManagerProvider = forwardRef<SoundManagerAPI, Props>(
     }));
 
     const value: SoundManagerAPI = {
-      play, pause, stop, next, prev, seek,
+      play,
+      pause,
+      stop,
+      next,
+      prev,
+      seek,
       isPlaying,
       current,
       list,
@@ -165,7 +165,7 @@ export const SoundManagerProvider = forwardRef<SoundManagerAPI, Props>(
         {children}
       </SoundManagerContext.Provider>
     );
-  }
+  },
 );
 
 SoundManagerProvider.displayName = "SoundManagerProvider";

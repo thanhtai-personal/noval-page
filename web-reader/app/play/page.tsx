@@ -11,9 +11,15 @@ export default function PlayPage() {
       name: t("lottery"),
       description: t("lottery"),
       url: "/play/wheel-of-lottery",
-      icon: <img className="w-[32px] h-[32px] md:w-[64px] md:h-[64px]" width="64" height="64"
-        src="https://img.icons8.com/external-microdots-premium-microdot-graphic/64/external-lottery-lifestyle-entertainment-vol3-microdots-premium-microdot-graphic.png" alt="external-lottery-lifestyle-entertainment-vol3-microdots-premium-microdot-graphic"
-      />
+      icon: (
+        <img
+          className="w-[32px] h-[32px] md:w-[64px] md:h-[64px]"
+          width="64"
+          height="64"
+          src="https://img.icons8.com/external-microdots-premium-microdot-graphic/64/external-lottery-lifestyle-entertainment-vol3-microdots-premium-microdot-graphic.png"
+          alt="external-lottery-lifestyle-entertainment-vol3-microdots-premium-microdot-graphic"
+        />
+      ),
     },
   ];
 
@@ -25,7 +31,10 @@ export default function PlayPage() {
         <h2 className="text-xl font-semibold">{t("game_list")}</h2>
         <div className="flex flex-wrap gap-4">
           {games.map((game) => (
-            <div key={game.id} className="border border-solid border-yellow-200/50 rounded-md p-4 shadow-sm">
+            <div
+              key={game.id}
+              className="border border-solid border-yellow-200/50 rounded-md p-4 shadow-sm"
+            >
               <Link href={game.url} target={`game-play-${game.id}`}>
                 <div className="cursor-pointer flex flex-col justify-center items-center gap-2">
                   {game.icon}
