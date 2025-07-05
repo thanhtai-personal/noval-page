@@ -169,17 +169,20 @@ export const DropdownMenuTrigger = React.forwardRef<
       "data-state": context.open ? "open" : "closed",
     }
 
-    return React.cloneElement(
-      children,
-      context.getReferenceProps({
-        ref,
-        ...props,
-        ...(typeof children.props === "object" ? children.props : {}),
-        "aria-expanded": context.open,
-        "aria-haspopup": "menu" as const,
-        ...dataAttributes,
-      })
-    )
+    const clonedProps = context.getReferenceProps({
+      ref,
+      ...props,
+      ...(typeof children.props === "object" ? children.props : {}),
+      "aria-expanded": context.open,
+      "aria-haspopup": "menu" as const,
+      ...dataAttributes,
+    })
+
+    if (children.type === React.Fragment) {
+      return <span {...clonedProps}>{children.props.children}</span>
+    }
+
+    return React.cloneElement(children, clonedProps)
   }
 
   return (
@@ -336,6 +339,14 @@ export const DropdownMenuItem = React.forwardRef<
           handleSelect(event as unknown as React.MouseEvent<HTMLDivElement>)
           childProps.onClick?.(event)
         },
+      }
+
+      if (children.type === React.Fragment) {
+        return (
+          <span {...mergedProps} {...eventHandlers}>
+            {children.props.children}
+          </span>
+        )
       }
 
       return React.cloneElement(children, {

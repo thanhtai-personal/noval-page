@@ -173,15 +173,19 @@ const PopoverTrigger = React.forwardRef<HTMLElement, TriggerElementProps>(
     const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef])
 
     if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(
-        children,
-        context.getReferenceProps({
-          ref,
-          ...props,
-          ...(children.props as any),
-          "data-state": context.open ? "open" : "closed",
-        })
-      )
+      const clonedProps = context.getReferenceProps({
+        ref,
+        ...props,
+        ...(children.props as any),
+        "data-state": context.open ? "open" : "closed",
+      })
+
+      // Wrap React.Fragment children to avoid passing invalid props
+      if (children.type === React.Fragment) {
+        return <span {...clonedProps}>{children.props.children}</span>
+      }
+
+      return React.cloneElement(children, clonedProps)
     }
 
     return (

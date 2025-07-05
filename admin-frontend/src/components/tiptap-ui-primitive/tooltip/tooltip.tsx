@@ -171,6 +171,17 @@ export const TooltipTrigger = React.forwardRef<
       "data-tooltip-state": context.open ? "open" : "closed",
     }
 
+    // Avoid passing props to React.Fragment which only accepts key and children
+    if (children.type === React.Fragment) {
+      return (
+        <span
+          {...context.getReferenceProps({ ref, ...props, ...dataAttributes })}
+        >
+          {children.props.children}
+        </span>
+      )
+    }
+
     return React.cloneElement(
       children,
       context.getReferenceProps({
