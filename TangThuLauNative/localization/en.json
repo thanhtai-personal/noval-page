@@ -22,7 +22,8 @@
     "cancel": "Cancel"
   },
   "profile": {
-    "switchLanguage": "Switch Language"
+    "switchLanguage": "Switch Language",
+    "logout": "Logout"
   },
   "googleLogin": {
     "title": "Sign in with Google",
