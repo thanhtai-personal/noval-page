@@ -200,6 +200,26 @@ export class AuthService {
     }
   }
 
+  async changePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string,
+  ) {
+    const user = await this.userModel.findById(userId);
+    if (!user) throw new UnauthorizedException('User không tồn tại');
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) throw new UnauthorizedException('Mật khẩu hiện tại không đúng');
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    await this.userModel.findByIdAndUpdate(userId, {
+      password: hashed,
+      refreshToken: null,
+    });
+
+    return { message: 'Đổi mật khẩu thành công' };
+  }
+
   private buildPayload(user: any) {
     return {
       sub: user._id.toString(),

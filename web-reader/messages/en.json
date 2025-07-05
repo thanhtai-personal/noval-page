@@ -111,6 +111,12 @@
     "user_info": "Player Information",
     "loading": "Loading..."
   },
+  "changePassword": {
+    "title": "Change password",
+    "current_password": "Current password",
+    "new_password": "New password",
+    "submit": "Change"
+  },
   "docs": {
     "title": "Documentation"
   },

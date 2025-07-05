@@ -111,6 +111,12 @@
     "user_info": "Thông tin người chơi",
     "loading": "Đang tải ..."
   },
+  "changePassword": {
+    "title": "Đổi mật khẩu",
+    "current_password": "Mật khẩu hiện tại",
+    "new_password": "Mật khẩu mới",
+    "submit": "Đổi"
+  },
   "docs": {
     "title": "Tài liệu"
   },

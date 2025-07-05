@@ -29,6 +29,12 @@
     "coin": "Xu",
     "role": "Vai trò"
   },
+  "changePassword": {
+    "title": "Đổi mật khẩu",
+    "current_password": "Mật khẩu hiện tại",
+    "new_password": "Mật khẩu mới",
+    "submit": "Đổi"
+  },
   "googleLogin": {
     "title": "Đăng nhập bằng Google",
     "button": "Đăng nhập với Google"

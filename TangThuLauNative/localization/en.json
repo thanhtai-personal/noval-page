@@ -29,6 +29,12 @@
     "coin": "Coin",
     "role": "Role"
   },
+  "changePassword": {
+    "title": "Change password",
+    "current_password": "Current password",
+    "new_password": "New password",
+    "submit": "Change"
+  },
   "googleLogin": {
     "title": "Sign in with Google",
     "button": "Login with Google"
