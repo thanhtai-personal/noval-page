@@ -16,8 +16,9 @@ export const StoryCard = observer(
     const WrapperComponent = isSlide ? "div" : ThreeDCardHover;
 
     return (
-      <div
+      <Link
         key={story._id}
+        href={`/truyen/${story.slug}`}
         className="grid w-full h-full place-items-center rounded-md"
       >
         <WrapperComponent
@@ -91,13 +92,13 @@ export const StoryCard = observer(
               </div>
             </CardBody>
             <CardFooter>
-              <Link href={`/truyen/${story.slug}`}>
+              <div className="mx-auto">
                 <NeonButtons.Lightning>{t("readNow")}</NeonButtons.Lightning>
-              </Link>
+              </div>
             </CardFooter>
           </Card>
         </WrapperComponent>
-      </div>
+      </Link>
     );
   },
 );
