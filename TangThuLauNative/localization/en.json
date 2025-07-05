@@ -19,7 +19,8 @@
     "category": "Category",
     "author": "Author",
     "search": "Search",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "search_placeholder": "Search stories..."
   },
   "profile": {
     "switchLanguage": "Switch Language",

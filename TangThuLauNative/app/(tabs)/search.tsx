@@ -77,7 +77,7 @@ export default function SearchScreen() {
       }>
       <ThemedView style={styles.form}>
         <TextInput
-          placeholder={t('home.search_placeholder')}
+          placeholder={t('search.search_placeholder')}
           value={keyword}
           onChangeText={setKeyword}
           style={styles.input}
