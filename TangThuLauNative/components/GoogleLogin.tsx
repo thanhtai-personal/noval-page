@@ -7,10 +7,11 @@ import { useReadingHistory } from '@/contexts/ReadingHistoryContext';
 // Cấu hình Google Sign-In
 GoogleSignin.configure({
   webClientId: process.env.GOOGLE_CLIENT_ID_FOR_WEB,
+  // @ts-ignore
   androidClientId: process.env.GOOGLE_CLIENT_ID_FOR_ANDROID,  // Client ID tạo từ Firebase
   iosClientId: process.env.GOOGLE_CLIENT_ID_FOR_IOS, // Client ID tạo từ Firebase
   offlineAccess: false,
-} as any);
+});
 
 export default function GoogleLogin() {
   const { t } = useTranslation();
@@ -20,7 +21,7 @@ export default function GoogleLogin() {
       await GoogleSignin.hasPlayServices();
       const userInfo: any = await GoogleSignin.signIn();
       console.log('✅ Đăng nhập thành công:', userInfo);
-      Alert.alert('Xin chào!', userInfo.user.name);
+      Alert.alert('Xin chào!', userInfo.data?.user?.name);
       setLoggedIn(true);
       syncWithServer();
     } catch (error: any) {
