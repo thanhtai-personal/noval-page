@@ -5,6 +5,7 @@ import Constants from 'expo-constants';
 let config: any = Config;
 
 if (!config?.API_BASE_URL && typeof Config.getConstants === 'function') {
+  // @ts-ignore
   config = Config.getConstants();
 }
 
@@ -17,6 +18,10 @@ if (!config?.API_BASE_URL) {
   if (expoConstants) {
     config = (expoConstants as any).extra ?? expoConstants;
   }
+}
+
+if (!config?.API_BASE_URL) {
+  config = process.env;
 }
 
 if (!config?.API_BASE_URL) {

@@ -6,7 +6,6 @@ import { useReadingHistory } from '@/contexts/ReadingHistoryContext';
 import { API_BASE_URL } from "@/constants/Api";
 import { envConfig } from "@/constants/env";
 
-console.log("envConfig", envConfig)
 // Cấu hình Google Sign-In
 GoogleSignin.configure({
   webClientId: envConfig.GOOGLE_CLIENT_ID_FOR_WEB,
@@ -23,11 +22,12 @@ export default function GoogleLogin() {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo: any = await GoogleSignin.signIn();
+      console.log("userInfo",userInfo)
 
       const res = await fetch(`${API_BASE_URL}/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: userInfo.idToken, data: userInfo.data }),
+        body: JSON.stringify({ code: userInfo.idToken }),
         credentials: 'include',
       });
 
