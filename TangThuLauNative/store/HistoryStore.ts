@@ -1,4 +1,3 @@
-"use client";
 import { Api } from "@/utils/api";
 import AsyncStorage from "@/utils/asyncStorage";
 import { makeAutoObservable } from "mobx";

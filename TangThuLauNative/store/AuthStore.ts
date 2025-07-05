@@ -1,4 +1,3 @@
-"use client";
 import { Api } from "@/utils/api";
 import { makeAutoObservable } from "mobx";
 

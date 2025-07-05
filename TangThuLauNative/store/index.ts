@@ -1,4 +1,3 @@
-"use client";
 import { AuthStore } from "./AuthStore";
 import { HistoryStore } from "./HistoryStore";
 import { LocaleStore } from "./LocaleStore";
