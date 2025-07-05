@@ -28,5 +28,14 @@
   "googleLogin": {
     "title": "Sign in with Google",
     "button": "Login with Google"
+  },
+  "notFound": {
+    "title": "Oops!",
+    "message": "This screen does not exist.",
+    "link": "Go to home screen!"
+  },
+  "errors": {
+    "error": "Error",
+    "login_failed": "Login failed"
   }
 }

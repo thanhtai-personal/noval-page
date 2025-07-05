@@ -42,8 +42,8 @@ export default observer(function GoogleLogin() {
       }
       syncWithServer();
     } catch (error: any) {
-      console.error('❌ Lỗi đăng nhập:', error);
-      Alert.alert('Lỗi', error.message);
+      console.error(`❌ ${t('errors.login_failed')}:`, error);
+      Alert.alert(t('errors.error'), error.message);
     }
   };
 
