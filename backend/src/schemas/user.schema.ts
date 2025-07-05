@@ -13,6 +13,9 @@ export class User extends Document {
   email: string;
 
   @Prop({  })
+  photo: string;
+
+  @Prop({  })
   name: string;
 
   @Prop({ default: false })
