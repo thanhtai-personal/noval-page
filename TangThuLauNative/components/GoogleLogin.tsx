@@ -3,6 +3,7 @@ import { Button, Alert, View, Text } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useReadingHistory } from '@/contexts/ReadingHistoryContext';
+import { API_BASE_URL } from '@/constants/Api';
 
 // Cấu hình Google Sign-In
 GoogleSignin.configure({
@@ -20,8 +21,25 @@ export default function GoogleLogin() {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo: any = await GoogleSignin.signIn();
-      console.log('✅ Đăng nhập thành công:', userInfo);
-      Alert.alert('Xin chào!', userInfo.data?.user?.name);
+      const idToken = userInfo.idToken;
+
+      if (!idToken) throw new Error('No idToken received');
+
+      const res = await fetch(`${API_BASE_URL}/auth/google`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: idToken }),
+        credentials: 'include',
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.message || 'Login failed');
+      }
+
+      const data = await res.json();
+      console.log('✅ Đăng nhập thành công:', data);
+      Alert.alert('Xin chào!', data.user?.name || userInfo.user?.name);
       setLoggedIn(true);
       syncWithServer();
     } catch (error: any) {
