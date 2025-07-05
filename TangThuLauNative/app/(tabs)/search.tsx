@@ -14,6 +14,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useTranslation } from '@/hooks/useTranslation';
+import { observer } from 'mobx-react-lite';
 import { Api } from '@/utils/api';
 import StoryItem from '@/components/StoryItem';
 import { Story } from '@/types/Story';
@@ -21,7 +22,7 @@ import { Story } from '@/types/Story';
 interface Category { _id: string; name: string }
 interface Author { _id: string; name: string }
 
-export default function SearchScreen() {
+export default observer(function SearchScreen() {
   const { t } = useTranslation();
 
   const [keyword, setKeyword] = useState('');

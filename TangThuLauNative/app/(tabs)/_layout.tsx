@@ -8,8 +8,9 @@ import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useTranslation } from '@/hooks/useTranslation';
+import { observer } from 'mobx-react-lite';
 
-export default function TabLayout() {
+export default observer(function TabLayout() {
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
 

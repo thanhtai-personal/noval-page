@@ -6,8 +6,6 @@ import 'react-native-reanimated';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { LanguageProvider } from '@/contexts/LanguageContext';
-import { ReadingHistoryProvider } from '@/contexts/ReadingHistoryContext';
 import { StoreProvider } from '@/store/StoreProvider';
 
 export default function RootLayout() {
@@ -25,17 +23,13 @@ export default function RootLayout() {
   return (
     <StoreProvider>
       <QueryClientProvider client={queryClient}>
-        <LanguageProvider>
-          <ReadingHistoryProvider>
-            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-              <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="+not-found" />
-              </Stack>
-              <StatusBar style="auto" />
-            </ThemeProvider>
-          </ReadingHistoryProvider>
-        </LanguageProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+        </ThemeProvider>
       </QueryClientProvider>
     </StoreProvider>
   );
