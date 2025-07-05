@@ -1,14 +1,22 @@
-import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ChapterService } from './chapter.service';
 import { GetChapterListDto } from './dto/get-chapter-list.dto';
-import { Public } from "../auth/decorators/public.decorator";
-import { RoleSlug } from "@/constants/role.enum";
-import { CurrentUser } from "../auth/decorators/current-user.decorator";
-import { Roles } from "../auth/decorators/roles.decorator";
+import { Public } from '../auth/decorators/public.decorator';
+import { RoleSlug } from '@/constants/role.enum';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @Controller('stories/:slug/chapters')
 export class ChapterController {
-  constructor(private readonly chapterService: ChapterService) { }
+  constructor(private readonly chapterService: ChapterService) {}
 
   @Public()
   @Get()
@@ -16,7 +24,10 @@ export class ChapterController {
     @Param('slug') slug: string,
     @Query() query: GetChapterListDto,
   ) {
-    const chaptersResponse = await this.chapterService.getChapterList(slug, query);
+    const chaptersResponse = await this.chapterService.getChapterList(
+      slug,
+      query,
+    );
     return chaptersResponse;
   }
 
@@ -26,7 +37,10 @@ export class ChapterController {
     @Param('slug') slug: string,
     @Param('chapterSlug') chapterSlug: string,
   ) {
-    const chaptersResponse = await this.chapterService.getChapterDetail(slug, chapterSlug);
+    const chaptersResponse = await this.chapterService.getChapterDetail(
+      slug,
+      chapterSlug,
+    );
     return chaptersResponse;
   }
 
@@ -36,7 +50,10 @@ export class ChapterController {
     @Param('slug') slug: string,
     @Param('chapterSlug') chapterSlug: string,
   ) {
-    const chaptersResponse = await this.chapterService.getChapterContent(slug, chapterSlug);
+    const chaptersResponse = await this.chapterService.getChapterContent(
+      slug,
+      chapterSlug,
+    );
     return chaptersResponse;
   }
 
@@ -45,7 +62,7 @@ export class ChapterController {
   async markAsRead(
     @Param('slug') slug: string,
     @Param('chapterSlug') chapterSlug: string,
-    @CurrentUser('userId') userId: string
+    @CurrentUser('userId') userId: string,
   ) {
     await this.chapterService.markAsRead(slug, chapterSlug, userId);
     return { message: 'update success' };
@@ -68,7 +85,10 @@ export class ChapterController {
     @Param('slug') slug: string,
     @Param('chapterNumber') chapterNumber: number,
   ) {
-    const chaptersResponse = await this.chapterService.getPrevAndNext(slug, chapterNumber);
+    const chaptersResponse = await this.chapterService.getPrevAndNext(
+      slug,
+      chapterNumber,
+    );
     return chaptersResponse;
   }
 }

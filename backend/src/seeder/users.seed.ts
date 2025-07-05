@@ -6,7 +6,10 @@ import { RoleSlug } from '@/constants/role.enum';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 
-export async function seedUsers(userModel: Model<User>, roleModel: Model<Role>) {
+export async function seedUsers(
+  userModel: Model<User>,
+  roleModel: Model<Role>,
+) {
   const passwordMap = {
     [RoleSlug.SUPER_ADMIN]: process.env.SEED_SUPERADMIN_PASSWORD || '123456',
     [RoleSlug.ADMIN]: process.env.SEED_ADMIN_PASSWORD || '123456',

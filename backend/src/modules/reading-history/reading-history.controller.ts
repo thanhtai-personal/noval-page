@@ -19,7 +19,7 @@ export class ReadingHistoryController {
   @Post('sync')
   async syncHistory(
     @CurrentUser('userId') userId: string,
-    @Body() dto: SyncReadingHistoryDto
+    @Body() dto: SyncReadingHistoryDto,
   ) {
     await this.service.syncHistory(userId, dto.items || []);
     return this.service.getHistory(userId);

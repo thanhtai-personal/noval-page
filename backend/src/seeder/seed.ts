@@ -9,7 +9,7 @@ import { seedRoles } from './roles.seed';
 import { seedUsers } from './users.seed';
 import { seedSources } from './sources.seed';
 import * as crypto from 'crypto';
-import { DBNames } from "@/utils/database";
+import { DBNames } from '@/utils/database';
 
 if (
   typeof globalThis.crypto === 'undefined' ||

@@ -1,13 +1,16 @@
 // src/modules/crawler/sites/interfaces/crawler-adapter.interface.ts
 
-import { Chapter } from "@/schemas/chapter.schema";
-import { Story } from "@/schemas/story.schema";
-import { Model } from "mongoose";
+import { Chapter } from '@/schemas/chapter.schema';
+import { Story } from '@/schemas/story.schema';
+import { Model } from 'mongoose';
 
 export interface ICrawlerAdapter {
   getAllStoryOverview(): Promise<void>;
   getListChapters(story: Story): Promise<void>;
-  getChapterContent(chapterModel: Model<Chapter>, chapter: Chapter): Promise<void>;
+  getChapterContent(
+    chapterModel: Model<Chapter>,
+    chapter: Chapter,
+  ): Promise<void>;
   getStoryDetail(story: Story, reUpdate?: boolean): Promise<void>;
 }
 export interface ICrawlerAdapterConstructor {

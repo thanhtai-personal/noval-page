@@ -4,12 +4,13 @@ import { Comment } from '@/schemas/comment.schema';
 import { Story } from '@/schemas/story.schema';
 import { Model } from 'mongoose';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { DBNames } from "@/utils/database";
+import { DBNames } from '@/utils/database';
 
 @Injectable()
 export class CommentService {
   constructor(
-    @InjectModel(Comment.name, DBNames.story1) private commentModel: Model<Comment>,
+    @InjectModel(Comment.name, DBNames.story1)
+    private commentModel: Model<Comment>,
     @InjectModel(Story.name, DBNames.story1) private storyModel: Model<Story>,
   ) {}
 

@@ -13,4 +13,5 @@ export class ReadingHistory extends Document {
   chapter: number;
 }
 
-export const ReadingHistorySchema = SchemaFactory.createForClass(ReadingHistory);
+export const ReadingHistorySchema =
+  SchemaFactory.createForClass(ReadingHistory);

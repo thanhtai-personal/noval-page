@@ -1,8 +1,17 @@
-import { Controller, Get, Post, Body, Delete, Param, Patch, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Delete,
+  Param,
+  Patch,
+  Query,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Roles } from "../auth/decorators/roles.decorator";
-import { RoleSlug } from "@/constants/role.enum";
+import { Roles } from '../auth/decorators/roles.decorator';
+import { RoleSlug } from '@/constants/role.enum';
 
 @Controller('users')
 export class UserController {

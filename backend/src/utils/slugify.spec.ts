@@ -6,6 +6,8 @@ describe('slugify', () => {
   });
 
   it('should preserve case when lower is false', () => {
-    expect(slugify('Xin Chào Hà Nội!', { lower: false })).toBe('Xin-Chao-Ha-Noi');
+    expect(slugify('Xin Chào Hà Nội!', { lower: false })).toBe(
+      'Xin-Chao-Ha-Noi',
+    );
   });
 });

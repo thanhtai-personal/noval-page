@@ -8,12 +8,13 @@ export class ChapterContent extends Document {
 
   @Prop({ default: '' })
   content: string;
-  
-  @Prop({ })
+
+  @Prop({})
   chapter: string;
 
   @Prop({ type: Types.ObjectId, ref: 'Chapter' })
   chapterId: Types.ObjectId;
 }
 
-export const ChapterContentSchema = SchemaFactory.createForClass(ChapterContent);
+export const ChapterContentSchema =
+  SchemaFactory.createForClass(ChapterContent);

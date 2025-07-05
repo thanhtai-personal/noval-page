@@ -4,9 +4,13 @@ import { Chapter } from '@/schemas/chapter.schema';
 import { Story } from '@/schemas/story.schema';
 import { Model } from 'mongoose';
 import { GetChapterListDto } from './dto/get-chapter-list.dto';
-import { User } from "@/schemas/user.schema";
-import { DBNames, getExpForNextLevel, switchModelByDBLimit } from "@/utils/database";
-import { ChapterContent } from "@/schemas/chapterContent.schema";
+import { User } from '@/schemas/user.schema';
+import {
+  DBNames,
+  getExpForNextLevel,
+  switchModelByDBLimit,
+} from '@/utils/database';
+import { ChapterContent } from '@/schemas/chapterContent.schema';
 
 @Injectable()
 export class ChapterService {
@@ -14,17 +18,26 @@ export class ChapterService {
     @InjectModel(Story.name, DBNames.story1) private storyModel: Model<Story>,
     @InjectModel(User.name, DBNames.ums) private userModel: Model<User>,
 
-    @InjectModel(Chapter.name, DBNames.story1) private chapter1Model: Model<Chapter>,
-    @InjectModel(Chapter.name, DBNames.story2) private chapter2Model: Model<Chapter>,
-    @InjectModel(Chapter.name, DBNames.story3) private chapter3Model: Model<Chapter>,
-    @InjectModel(Chapter.name, DBNames.story4) private chapter4Model: Model<Chapter>,
-    @InjectModel(Chapter.name, DBNames.story5) private chapter5Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story1)
+    private chapter1Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story2)
+    private chapter2Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story3)
+    private chapter3Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story4)
+    private chapter4Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story5)
+    private chapter5Model: Model<Chapter>,
 
-    @InjectModel(ChapterContent.name, DBNames.story2) private chapterContent2Model: Model<ChapterContent>,
-    @InjectModel(ChapterContent.name, DBNames.story3) private chapterContent3Model: Model<ChapterContent>,
-    @InjectModel(ChapterContent.name, DBNames.story4) private chapterContent4Model: Model<ChapterContent>,
-    @InjectModel(ChapterContent.name, DBNames.story5) private chapterContent5Model: Model<ChapterContent>,
-  ) { }
+    @InjectModel(ChapterContent.name, DBNames.story2)
+    private chapterContent2Model: Model<ChapterContent>,
+    @InjectModel(ChapterContent.name, DBNames.story3)
+    private chapterContent3Model: Model<ChapterContent>,
+    @InjectModel(ChapterContent.name, DBNames.story4)
+    private chapterContent4Model: Model<ChapterContent>,
+    @InjectModel(ChapterContent.name, DBNames.story5)
+    private chapterContent5Model: Model<ChapterContent>,
+  ) {}
 
   async getChapterList(slug: string, query: GetChapterListDto) {
     const { page = 1, limit = 50 } = query;
@@ -94,7 +107,6 @@ export class ChapterService {
       }
     }
 
-
     const prev = await chapterModel.findOne({
       story: story._id,
       chapterNumber: Number(chapterNumber) - 1,
@@ -131,7 +143,10 @@ export class ChapterService {
         slug: chapterSlug,
       });
       if (chapterDetail) {
-        const chapterContent = await this.getChapterContent(storySlug, chapterSlug);
+        const chapterContent = await this.getChapterContent(
+          storySlug,
+          chapterSlug,
+        );
         return {
           ...chapterDetail,
           content: chapterContent?.content,
@@ -163,7 +178,9 @@ export class ChapterService {
 
       if (!chapter) return null;
 
-      const user = await this.userModel.findById(userId).select('exp levelNumber');
+      const user = await this.userModel
+        .findById(userId)
+        .select('exp levelNumber');
       if (!user) return null;
 
       const currentExp = user.exp || 0;
@@ -175,8 +192,13 @@ export class ChapterService {
         newLevel += 1;
       }
 
-      await this.userModel.findByIdAndUpdate(userId, { exp: newExp, levelNumber: newLevel });
-      await this.storyModel.findByIdAndUpdate(story._id, { views: (story.views || 0) + 1 });
+      await this.userModel.findByIdAndUpdate(userId, {
+        exp: newExp,
+        levelNumber: newLevel,
+      });
+      await this.storyModel.findByIdAndUpdate(story._id, {
+        views: (story.views || 0) + 1,
+      });
     } catch (error) {
       // Optionally log error
     }
@@ -195,8 +217,12 @@ export class ChapterService {
         this.chapter5Model,
       ];
       for (const cModel of chapterModels) {
-        const { content, ...chapterData } = data
-        const updatedChapter = await cModel.findOneAndUpdate(filter, chapterData, { new: false });
+        const { content, ...chapterData } = data;
+        const updatedChapter = await cModel.findOneAndUpdate(
+          filter,
+          chapterData,
+          { new: false },
+        );
         if (updatedChapter) {
           const chapterContentModels = [
             this.chapterContent2Model,
@@ -206,22 +232,32 @@ export class ChapterService {
           ];
           let updatedChapterContent = null;
           for (const ccModel of chapterContentModels) {
-            updatedChapterContent = await ccModel.findOneAndUpdate({ chapter: chapterSlug }, {
-              content
-            }, { new: false });
+            updatedChapterContent = await ccModel.findOneAndUpdate(
+              { chapter: chapterSlug },
+              {
+                content,
+              },
+              { new: false },
+            );
           }
           if (!updatedChapterContent) {
-            const chapterContentModel = await switchModelByDBLimit(...chapterContentModels);
-            await chapterContentModel.findOneAndUpdate({ chapter: chapterSlug }, {
-              content
-            }, {
-              upsert: true
-            });
+            const chapterContentModel = await switchModelByDBLimit(
+              ...chapterContentModels,
+            );
+            await chapterContentModel.findOneAndUpdate(
+              { chapter: chapterSlug },
+              {
+                content,
+              },
+              {
+                upsert: true,
+              },
+            );
           }
           break;
         }
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   async getChapterContent(storySlug: string, chapterSlug: string) {

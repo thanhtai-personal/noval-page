@@ -1,6 +1,6 @@
-import { Controller, Get } from "@nestjs/common";
-import { CategoryService } from "./category.service";
-import { Public } from "../auth/decorators/public.decorator";
+import { Controller, Get } from '@nestjs/common';
+import { CategoryService } from './category.service';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('categories')
 export class CategoryController {

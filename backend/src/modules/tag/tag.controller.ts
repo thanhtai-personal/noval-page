@@ -1,6 +1,6 @@
-import { Controller, Get } from "@nestjs/common";
-import { TagService } from "./tag.service";
-import { Public } from "../auth/decorators/public.decorator";
+import { Controller, Get } from '@nestjs/common';
+import { TagService } from './tag.service';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('tags')
 export class TagController {
@@ -12,4 +12,3 @@ export class TagController {
     return await this.tagService.getAll();
   }
 }
-

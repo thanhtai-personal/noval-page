@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { RoleService } from './role.service';
-import { RoleSlug } from "@/constants/role.enum";
-import { Roles } from "../auth/decorators/roles.decorator";
+import { RoleSlug } from '@/constants/role.enum';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @Controller('roles')
 export class RoleController {

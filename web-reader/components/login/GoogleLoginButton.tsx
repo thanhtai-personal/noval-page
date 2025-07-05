@@ -17,7 +17,6 @@ export const GoogleLoginButton = observer(
           }}
           onSuccess={(credentialResponse) => {
             if (credentialResponse.credential) {
-              console.log("ID token:", credentialResponse.credential);
               handleLoginSuccess(credentialResponse.credential);
             }
           }}

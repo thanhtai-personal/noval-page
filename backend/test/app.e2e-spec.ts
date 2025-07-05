@@ -30,12 +30,19 @@ describe('AppController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
 
-    userModel = moduleFixture.get<Model<User>>(getModelToken(User.name, DBNames.ums));
-    roleModel = moduleFixture.get<Model<Role>>(getModelToken(Role.name, DBNames.ums));
+    userModel = moduleFixture.get<Model<User>>(
+      getModelToken(User.name, DBNames.ums),
+    );
+    roleModel = moduleFixture.get<Model<Role>>(
+      getModelToken(Role.name, DBNames.ums),
+    );
 
     let readerRole = await roleModel.findOne({ slug: RoleSlug.READER });
     if (!readerRole) {
-      readerRole = await roleModel.create({ slug: RoleSlug.READER, name: 'Reader' });
+      readerRole = await roleModel.create({
+        slug: RoleSlug.READER,
+        name: 'Reader',
+      });
     }
 
     const hashed = await bcrypt.hash(testUser.password, 10);

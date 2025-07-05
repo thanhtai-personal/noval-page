@@ -16,10 +16,12 @@ const googleClient = new OAuth2Client();
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name, DBNames.ums) private readonly userModel: Model<User>,
-    @InjectModel(Role.name, DBNames.ums) private readonly roleModel: Model<Role>,
+    @InjectModel(User.name, DBNames.ums)
+    private readonly userModel: Model<User>,
+    @InjectModel(Role.name, DBNames.ums)
+    private readonly roleModel: Model<Role>,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   async login(email: string, password: string) {
     if (password === 'google_user') {
@@ -66,7 +68,6 @@ export class AuthService {
     }
   }
 
-
   private async handleGoogleUser(googleInfo: {
     email: string;
     name?: string;
@@ -75,17 +76,21 @@ export class AuthService {
     const { email, name, picture } = googleInfo;
     let user: any = await this.userModel.findOne({ email }).populate('role');
     const readerRole = await this.roleModel.findOne({ slug: 'reader' });
-    user = await this.userModel.findOneAndUpdate({
-      email
-    },{
-      email,
-      name,
-      photo: picture,
-      password: await bcrypt.hash('google_user', 10),
-      role: readerRole?._id,
-    }, {
-      upsert: true
-    });
+    user = await this.userModel.findOneAndUpdate(
+      {
+        email,
+      },
+      {
+        email,
+        name,
+        photo: picture,
+        password: await bcrypt.hash('google_user', 10),
+        role: readerRole?._id,
+      },
+      {
+        upsert: true,
+      },
+    );
     return this.issueTokensAndStore(user);
   }
 
@@ -97,7 +102,9 @@ export class AuthService {
 
       const user = await this.userModel.findById(payload.sub).populate('role');
       if (!user || !user.refreshToken) {
-        throw new UnauthorizedException('User không tồn tại hoặc chưa lưu refresh token');
+        throw new UnauthorizedException(
+          'User không tồn tại hoặc chưa lưu refresh token',
+        );
       }
 
       const isMatch = await bcrypt.compare(refreshToken, user.refreshToken);
@@ -147,7 +154,7 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('User không tồn tại');
     }
-    return await (new UserDataAndUserResponseMapper()).map(user);
+    return await new UserDataAndUserResponseMapper().map(user);
   }
 
   async forgotPassword(email: string) {
@@ -165,7 +172,9 @@ export class AuthService {
       secret: process.env.JWT_PASSWORD_SECRET || 'pwResetSecret',
     });
 
-    console.log(`🔐 Link reset: https://your-domain/reset-password?token=${token}`);
+    console.log(
+      `🔐 Link reset: https://your-domain/reset-password?token=${token}`,
+    );
     return { message: 'Liên kết đặt lại mật khẩu đã được gửi (mock)' };
   }
 
@@ -195,7 +204,8 @@ export class AuthService {
     return {
       sub: user._id.toString(),
       email: user.email,
-      role: typeof user.role === 'object' ? user.role?.slug : user.role || 'Reader',
+      role:
+        typeof user.role === 'object' ? user.role?.slug : user.role || 'Reader',
     };
   }
 

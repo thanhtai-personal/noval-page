@@ -5,7 +5,7 @@ import { Role } from '@/schemas/role.schema';
 import { Model, Types } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
-import { DBNames } from "@/utils/database";
+import { DBNames } from '@/utils/database';
 
 @Injectable()
 export class UserService {
@@ -68,11 +68,15 @@ export class UserService {
   }
 
   async update(id: string, dto: any) {
-    return await this.userModel.findByIdAndUpdate(id, {
-      email: dto.email,
-      name: dto.name,
-      role: dto.role,
-    }, { upsert: true });
+    return await this.userModel.findByIdAndUpdate(
+      id,
+      {
+        email: dto.email,
+        name: dto.name,
+        role: dto.role,
+      },
+      { upsert: true },
+    );
   }
 
   async delete(id: string) {

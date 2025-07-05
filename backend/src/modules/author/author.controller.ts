@@ -1,7 +1,13 @@
-import { Controller, Get, Param, Query, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+  NotFoundException,
+} from '@nestjs/common';
 import { AuthorService } from './author.service';
 import { GetAuthorListDto } from './dto/get-author-list.dto';
-import { Public } from "../auth/decorators/public.decorator";
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('authors')
 export class AuthorController {
@@ -12,7 +18,7 @@ export class AuthorController {
   async getAuthorList(@Query() query: GetAuthorListDto) {
     return await this.authorService.getAuthorList(query);
   }
-  
+
   @Public()
   @Get(':slug')
   async getAuthorDetail(@Param('slug') slug: string) {

@@ -7,7 +7,7 @@ export const getDBURIs = () => ({
     process.env.DB_STORY4_URI!,
     process.env.DB_STORY5_URI!,
   ],
-})
+});
 
 export const DBNames = {
   story1: 'db_story_1',
@@ -16,8 +16,14 @@ export const DBNames = {
   story4: 'db_story_4',
   story5: 'db_story_5',
   ums: 'ums',
-}
-export const DB_STORIES_NAMES = [DBNames.story1, DBNames.story2, DBNames.story3, DBNames.story4, DBNames.story5];
+};
+export const DB_STORIES_NAMES = [
+  DBNames.story1,
+  DBNames.story2,
+  DBNames.story3,
+  DBNames.story4,
+  DBNames.story5,
+];
 
 export const MAX_DB_SIZE_MB = 400;
 
@@ -28,14 +34,14 @@ export const switchModelByDBLimit = async (...models: any[]) => {
     if (!nativeDb) throw new Error('Cannot get nativeDb from model.');
     const stats = await nativeDb.stats();
     const sizeMB = stats.dataSize / (1024 * 1024);
-    console.log("sizeMB", sizeMB)
+    console.log('sizeMB', sizeMB);
     if (sizeMB < MAX_DB_SIZE_MB) {
       return model;
     }
   }
   throw new Error('All databases have reached the maximum size limit.');
-}
+};
 
 export const getExpForNextLevel = (currentLevel = 0) => {
   return Math.pow(10, currentLevel + 3); //1000, 10000, 100000,....
-}
+};

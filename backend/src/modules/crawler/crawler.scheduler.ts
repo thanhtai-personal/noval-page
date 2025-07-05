@@ -7,12 +7,14 @@ import { CrawlerService } from './crawler.service';
 export class CrawlerScheduler {
   private readonly logger = new Logger(CrawlerScheduler.name);
 
-  constructor(private readonly crawlerService: CrawlerService) { }
+  constructor(private readonly crawlerService: CrawlerService) {}
 
   // 🕛 Tự động chạy mỗi ngày lúc 00:00
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async handleMidnightCrawl() {
-    this.logger.log('🌙 Cronjob 00:00: Bắt đầu crawl truyện mới hoặc chưa hoàn tất...');
+    this.logger.log(
+      '🌙 Cronjob 00:00: Bắt đầu crawl truyện mới hoặc chưa hoàn tất...',
+    );
 
     const sources = ['tangthuvien', 'vtruyen'];
 

@@ -47,14 +47,17 @@ export class ReadingHistoryService {
       .sort({ updatedAt: -1 });
   }
 
-  async syncHistory(userId: string, items: { storySlug: string; chapter: number }[]) {
+  async syncHistory(
+    userId: string,
+    items: { storySlug: string; chapter: number }[],
+  ) {
     for (const item of items) {
       const story = await this.findStoryBySlug(item.storySlug);
       if (!story) continue;
       await this.historyModel.updateOne(
         { user: userId, story: story._id },
         { chapter: item.chapter, updatedAt: new Date() },
-        { upsert: true }
+        { upsert: true },
       );
     }
   }

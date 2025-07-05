@@ -3,7 +3,7 @@ import { Document, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class User extends Document {
-  @Prop({ })
+  @Prop({})
   username: string;
 
   @Prop({ required: true })
@@ -12,10 +12,10 @@ export class User extends Document {
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({  })
+  @Prop({})
   photo: string;
 
-  @Prop({  })
+  @Prop({})
   name: string;
 
   @Prop({ default: false })

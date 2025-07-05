@@ -10,7 +10,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) => {
           const token = req?.cookies?.['access_token'];
-          console.log('access_token', req?.cookies?.['access_token'])
+          console.log('access_token', req?.cookies?.['access_token']);
           return token;
         },
         ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    console.log('token decoded', payload)
+    console.log('token decoded', payload);
     return { userId: payload.sub, email: payload.email, role: payload.role };
   }
 }

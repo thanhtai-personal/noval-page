@@ -17,8 +17,8 @@ import { sleep } from '@/utils/functions';
 import * as fs from 'fs';
 import * as path from 'path';
 import { getLimitConfig } from '@/utils/constants';
-import { DBNames, switchModelByDBLimit } from "@/utils/database";
-import { ChapterContent } from "@/schemas/chapterContent.schema";
+import { DBNames, switchModelByDBLimit } from '@/utils/database';
+import { ChapterContent } from '@/schemas/chapterContent.schema';
 
 const ttvSearchPath = 'https://truyen.tangthuvien.vn/tong-hop?rank=vw&page=';
 
@@ -30,24 +30,37 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
   constructor(
     private readonly gateway: CrawlerGateway,
 
-    @InjectModel(Source.name, DBNames.story1) private sourceModel: Model<Source>,
-    @InjectModel(Author.name, DBNames.story1) private authorModel: Model<Author>,
-    @InjectModel(Category.name, DBNames.story1) private categoryModel: Model<Category>,
-    @InjectModel(CrawlHistory.name, DBNames.story1) private crawlHistoryModel: Model<Tag>,
+    @InjectModel(Source.name, DBNames.story1)
+    private sourceModel: Model<Source>,
+    @InjectModel(Author.name, DBNames.story1)
+    private authorModel: Model<Author>,
+    @InjectModel(Category.name, DBNames.story1)
+    private categoryModel: Model<Category>,
+    @InjectModel(CrawlHistory.name, DBNames.story1)
+    private crawlHistoryModel: Model<Tag>,
     @InjectModel(Story.name, DBNames.story1) private storyModel: Model<Story>,
 
     //sub db to store chapter
-    @InjectModel(Chapter.name, DBNames.story1) private chapter1Model: Model<Chapter>,
-    @InjectModel(Chapter.name, DBNames.story2) private chapter2Model: Model<Chapter>,
-    @InjectModel(Chapter.name, DBNames.story3) private chapter3Model: Model<Chapter>,
-    @InjectModel(Chapter.name, DBNames.story4) private chapter4Model: Model<Chapter>,
-    @InjectModel(Chapter.name, DBNames.story5) private chapter5Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story1)
+    private chapter1Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story2)
+    private chapter2Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story3)
+    private chapter3Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story4)
+    private chapter4Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story5)
+    private chapter5Model: Model<Chapter>,
 
     //sub db to store chapter content
-    @InjectModel(ChapterContent.name, DBNames.story2) private chapterContent2Model: Model<ChapterContent>,
-    @InjectModel(ChapterContent.name, DBNames.story3) private chapterContent3Model: Model<ChapterContent>,
-    @InjectModel(ChapterContent.name, DBNames.story4) private chapterContent4Model: Model<ChapterContent>,
-    @InjectModel(ChapterContent.name, DBNames.story5) private chapterContent5Model: Model<ChapterContent>,
+    @InjectModel(ChapterContent.name, DBNames.story2)
+    private chapterContent2Model: Model<ChapterContent>,
+    @InjectModel(ChapterContent.name, DBNames.story3)
+    private chapterContent3Model: Model<ChapterContent>,
+    @InjectModel(ChapterContent.name, DBNames.story4)
+    private chapterContent4Model: Model<ChapterContent>,
+    @InjectModel(ChapterContent.name, DBNames.story5)
+    private chapterContent5Model: Model<ChapterContent>,
   ) {
     this.getSource();
   }
@@ -94,7 +107,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
         lastCrawlRecord.totalPage ||
         parseInt(
           new URLSearchParams(new URL(lastPageUrl as any).search).get('page') ||
-          '1',
+            '1',
         );
       this.logData(
         `>> Total pages to crawl: ${totalPage} (Current page: ${lastCrawlRecord.currentPage})`,
@@ -432,7 +445,13 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       // if (listChapters.length > 350) {
 
       try {
-        const chapterModel = await switchModelByDBLimit(this.chapter1Model, this.chapter2Model, this.chapter3Model, this.chapter4Model, this.chapter5Model)
+        const chapterModel = await switchModelByDBLimit(
+          this.chapter1Model,
+          this.chapter2Model,
+          this.chapter3Model,
+          this.chapter4Model,
+          this.chapter5Model,
+        );
         // @TODO: remove limit if have a better database
         for (const chapterIndex in listChapters) {
           if (
@@ -448,7 +467,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
           );
           const slug = slugify(
             listChapters[chapterIndex].title ||
-            `story-${story.title}-chapter-${chapterNumber}`,
+              `story-${story.title}-chapter-${chapterNumber}`,
           );
           this.logData(`Creating chapter slug: ${slug}`);
           const chapterData = {
@@ -472,7 +491,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
           { new: true, upsert: true, setDefaultsOnInsert: true },
         );
       } catch (error) {
-        console.log("error", error)
+        console.log('error', error);
         this.logData(`All chapter data limited size`);
       }
       // } else {
@@ -520,7 +539,12 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
       chapter.title = title;
       chapter.slug = slugify(title);
 
-      const contentModel = await switchModelByDBLimit(this.chapterContent2Model, this.chapterContent3Model, this.chapterContent4Model, this.chapterContent5Model);
+      const contentModel = await switchModelByDBLimit(
+        this.chapterContent2Model,
+        this.chapterContent3Model,
+        this.chapterContent4Model,
+        this.chapterContent5Model,
+      );
 
       const savedContent = await contentModel.findOneAndUpdate(
         { slug: `content-${chapter.slug}` },
@@ -528,7 +552,7 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
           slug: `content-${chapter.slug}`,
           chapter: chapter.slug,
           chapterId: chapter._id,
-          content
+          content,
         },
         {
           new: true,
@@ -539,15 +563,11 @@ export class TangthuvienCrawler implements ICrawlerAdapter {
 
       chapter.content = savedContent._id;
 
-      await chapterModel.findOneAndUpdate(
-        { slug: chapter.slug },
-        chapter,
-        {
-          new: true,
-          upsert: true,
-          setDefaultsOnInsert: true,
-        },
-      );
+      await chapterModel.findOneAndUpdate({ slug: chapter.slug }, chapter, {
+        new: true,
+        upsert: true,
+        setDefaultsOnInsert: true,
+      });
 
       this.logData(`Updated chapter content: ${chapter.title}`);
     } catch (error) {

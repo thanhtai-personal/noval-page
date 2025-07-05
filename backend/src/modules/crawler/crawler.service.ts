@@ -15,7 +15,7 @@ import { CrawlerGateway } from './crawler.gateway';
 // import * as fs from 'fs';
 // import * as path from 'path';
 import { getLimitConfig } from '@/utils/constants';
-import { DBNames } from "@/utils/database";
+import { DBNames } from '@/utils/database';
 
 @Injectable()
 export class CrawlerService {
@@ -27,13 +27,19 @@ export class CrawlerService {
     private readonly vtruyen: VtruyenCrawler,
     private readonly gateway: CrawlerGateway,
     @InjectModel(Story.name, DBNames.story1) private storyModel: Model<Story>,
-    @InjectModel(Source.name, DBNames.story1) private sourceModel: Model<Source>,
-    @InjectModel(Chapter.name, DBNames.story1) private chapter1Model: Model<Chapter>,
-    @InjectModel(Chapter.name, DBNames.story2) private chapter2Model: Model<Chapter>,
-    @InjectModel(Chapter.name, DBNames.story3) private chapter3Model: Model<Chapter>,
-    @InjectModel(Chapter.name, DBNames.story4) private chapter4Model: Model<Chapter>,
-    @InjectModel(Chapter.name, DBNames.story5) private chapter5Model: Model<Chapter>,
-  ) { }
+    @InjectModel(Source.name, DBNames.story1)
+    private sourceModel: Model<Source>,
+    @InjectModel(Chapter.name, DBNames.story1)
+    private chapter1Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story2)
+    private chapter2Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story3)
+    private chapter3Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story4)
+    private chapter4Model: Model<Chapter>,
+    @InjectModel(Chapter.name, DBNames.story5)
+    private chapter5Model: Model<Chapter>,
+  ) {}
 
   private getAdapter(source: string): ICrawlerAdapter {
     switch (source?.toLowerCase()) {
@@ -204,12 +210,21 @@ export class CrawlerService {
         );
 
         try {
-          const chapterModels = [this.chapter1Model, this.chapter2Model, this.chapter3Model, this.chapter4Model, this.chapter2Model];
+          const chapterModels = [
+            this.chapter1Model,
+            this.chapter2Model,
+            this.chapter3Model,
+            this.chapter4Model,
+            this.chapter2Model,
+          ];
           for (const chapterModel of chapterModels) {
-            const chapters = await chapterModel.find({
-              content: { $exists: false },
-              story: story._id,
-            }).sort({ chapterNumber: 1 }) || [];
+            const chapters =
+              (await chapterModel
+                .find({
+                  content: { $exists: false },
+                  story: story._id,
+                })
+                .sort({ chapterNumber: 1 })) || [];
 
             this.logData(
               `Found ${chapters.length} chapters to crawl content of ${story.title}.`,
@@ -284,11 +299,17 @@ export class CrawlerService {
         this.logData(`Crawled chapter list for story: ${story.title}`, source);
       }
 
-      [this.chapter2Model, this.chapter3Model, this.chapter4Model, this.chapter5Model].forEach(async (chapterModel) => {
-        const chapters = await chapterModel.find({
-          story: story._id,
-          content: { $exists: false },
-        }) || [];
+      [
+        this.chapter2Model,
+        this.chapter3Model,
+        this.chapter4Model,
+        this.chapter5Model,
+      ].forEach(async (chapterModel) => {
+        const chapters =
+          (await chapterModel.find({
+            story: story._id,
+            content: { $exists: false },
+          })) || [];
 
         for (const chapter of chapters) {
           if (chapter.content) continue; // Skip if content already exists
@@ -297,7 +318,7 @@ export class CrawlerService {
           await adapter.getChapterContent(chapterModel, chapter);
           this.logData(`Crawled content for chapter: ${chapter.title}`, source);
         }
-      })
+      });
 
       this.logData(`Completed crawling for story: ${story.title}`, source);
     } catch (error) {
@@ -306,14 +327,17 @@ export class CrawlerService {
     }
   }
 
-  async crawlNewStoriesOnly(sourceName: string) { }
+  async crawlNewStoriesOnly(sourceName: string) {}
 
   private logData(message: string, source: any) {
     const timestamp = new Date().toISOString();
     // const logMessage = `[${timestamp}] ${message}\n`;
 
     this.logger.log(message);
-    this.gateway.sendCrawlInfo(typeof source === 'string' ? source : source._id?.toString(), message);
+    this.gateway.sendCrawlInfo(
+      typeof source === 'string' ? source : source._id?.toString(),
+      message,
+    );
 
     // const logDir = path.join(__dirname, '..', '..', 'logs');
 
