@@ -9,23 +9,19 @@ import { useContext } from 'react';
 import { LanguageContext } from '@/contexts/LanguageContext';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useReadingHistory } from '@/contexts/ReadingHistoryContext';
-import { Api } from '@/utils/api';
-import { useAppStore } from '@/store/StoreProvider';
+import { appStore } from "@/store/AppStore";
+import { observer } from "mobx-react-lite";
 
-export default function ProfileScreen() {
+export default observer(function ProfileScreen() {
   const { toggleLanguage } = useContext(LanguageContext);
   const { t } = useTranslation();
-  const { loggedIn, setLoggedIn } = useReadingHistory();
-  const { setLoggedIn: setLoggedInStore } = useAppStore();
+  const { loggedIn } = useReadingHistory();
 
   const logout = async () => {
     try {
-      await Api.post('/auth/logout');
+      await appStore.logout();
     } catch (e) {
       console.warn(e);
-    } finally {
-      setLoggedIn(false);
-      setLoggedInStore(false);
     }
   };
   return (
@@ -47,7 +43,7 @@ export default function ProfileScreen() {
       </ThemedView>
     </ParallaxScrollView>
   );
-}
+})
 
 const styles = StyleSheet.create({
   center: {

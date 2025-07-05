@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@/utils/asyncStorage';
 import { Api } from '@/utils/api';
 import { useAppStore } from '@/store/StoreProvider';
+import { observer } from "mobx-react-lite";
 
 export interface HistoryItem {
   storySlug: string;
@@ -28,7 +29,7 @@ const ReadingHistoryContext = createContext<ContextValue>({
   loggedIn: false,
 });
 
-export const ReadingHistoryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const ReadingHistoryProvider: React.FC<{ children: React.ReactNode }> = observer(({ children }) => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const appStore = useAppStore();
 
@@ -74,6 +75,6 @@ export const ReadingHistoryProvider: React.FC<{ children: React.ReactNode }> = (
       {children}
     </ReadingHistoryContext.Provider>
   );
-};
+});
 
 export const useReadingHistory = () => useContext(ReadingHistoryContext);
