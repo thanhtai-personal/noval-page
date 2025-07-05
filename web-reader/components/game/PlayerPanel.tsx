@@ -49,15 +49,15 @@ export const PlayerPanel = observer(() => {
               </div>
               <div className="flex w-full flex-col bg-slate-500 rounded-md p-4">
                 <div className="font-bold text-red-700 text-center">
-                  {getLevelName(store.auth.profile.level)}
+                  {getLevelName(store.auth.profile?.level ?? 0)}
                 </div>
                 <div className="mt-2 font-bold text-gray-950 inline-flex justify-between items-center w-full px-4">
                   <div>{t("exp")}:</div>
-                  <div>{store.auth.profile.exp}</div>
+                  <div>{store.auth.profile?.exp ?? 0}</div>
                 </div>
                 <div className="font-bold text-gray-950 inline-flex justify-between items-center w-full px-4">
                   <div>{t("coin")}:</div>
-                  <div>{store.auth.profile.coin}</div>
+                  <div>{store.auth.profile?.coin ?? 0}</div>
                 </div>
               </div>
             </div>

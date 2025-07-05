@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
 import { Alert, Button, StyleSheet, View } from 'react-native';
+import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
@@ -16,6 +17,7 @@ import { envConfig } from '@/constants/env';
 export default observer(function ProfileScreen() {
   const appStore = useAppStore();
   const { t } = useTranslation();
+  const router = useRouter();
   const { loggedIn, syncWithServer } = useReadingHistory();
 
   useEffect(() => {
@@ -92,10 +94,10 @@ export default observer(function ProfileScreen() {
               {t('profile.role')}: {appStore.auth.profile.role?.name || appStore.auth.profile.role}
             </ThemedText>
             <ThemedText>
-              {t('profile.level')}: {appStore.auth.profile.level}
+              {t('profile.level')}: {appStore.auth.profile?.level ?? 0}
             </ThemedText>
             <ThemedText>
-              {t('profile.coin')}: {appStore.auth.profile.coin}
+              {t('profile.coin')}: {appStore.auth.profile?.coin ?? 0}
             </ThemedText>
           </>
         )}
@@ -107,6 +109,14 @@ export default observer(function ProfileScreen() {
             onPress={appStore.locale.toggleLanguage}
           />
         </View>
+        {loggedIn && (
+          <View style={styles.menuItem}>
+            <Button
+              title={t('changePassword.title')}
+              onPress={() => router.push('/change-password')}
+            />
+          </View>
+        )}
         <View style={[styles.menuItem, styles.loginItem]}>
           {loggedIn ? (
             <Button title={t('profile.logout')} onPress={logout} color="red" />

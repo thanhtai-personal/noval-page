@@ -20,6 +20,7 @@ const PAGE_SIZE = 20;
 
 function ProfilePageContent() {
   const t = useTranslations("profile");
+  const tChange = useTranslations("changePassword");
   const [readItems, setReadItems] = useState<ReadItem[]>([]);
   const [page, setPage] = useState(1);
   const appStore = useAppStore();
@@ -70,15 +71,26 @@ function ProfilePageContent() {
         {appStore.auth.profile && (
           <div className="flex flex-col items-end gap-4 ">
             <div className="flex flex-row items-center">
-              <span>{t("exp")}</span>: {appStore.auth.profile.exp || 0}
+              <span>{t("exp")}</span>:{" "}
+              {appStore.auth.profile?.exp ?? 0}
             </div>
             <div className="flex flex-row items-center">
-              <span>{t("level")}</span>: {appStore.auth.profile.level || 1}
+              <span>{t("level")}</span>:{" "}
+              {appStore.auth.profile?.level ?? 0}
             </div>
             <div className="flex flex-row items-center">
-              <span>{t("coin")}</span>: {appStore.auth.profile.coin || 0}
+              <span>{t("coin")}</span>:{" "}
+              {appStore.auth.profile?.coin ?? 0}
             </div>
           </div>
+        )}
+        {appStore.auth.profile && (
+          <Link
+            href="/profile/change-password"
+            className="text-sm text-blue-600 underline"
+          >
+            {tChange("title")}
+          </Link>
         )}
       </div>
 
