@@ -11,7 +11,8 @@
     "lint": "expo lint",
     "dev": "npx expo start --dev-client",
     "build:dev": "eas build -p android --profile development --clear-cache",
-    "build": "eas build -p android --profile preview --clear-cache"
+    "build": "eas build -p android --profile preview --clear-cache",
+    "start:dev": "npm run build:dev && npm run dev"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
@@ -44,7 +45,7 @@
     "react-native-webview": "13.13.5",
     "expo-dev-client": "~5.2.4",
     "i18n-js": "^3.9.2",
-    "@react-native-async-storage/async-storage": "^1.18.2"
+    "@react-native-async-storage/async-storage": "2.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
