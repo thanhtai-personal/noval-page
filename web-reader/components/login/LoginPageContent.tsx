@@ -51,7 +51,7 @@ const LoginPageContent = observer(() => {
       appStore.resetAnimations();
     };
   }, [theme]);
-
+  
   return (
     <div className="min-h-[calc(100vh-150px)] flex items-center justify-center">
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
