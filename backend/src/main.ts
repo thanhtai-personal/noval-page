@@ -49,7 +49,6 @@ async function bootstrap() {
   const reflector = app.get(Reflector);
   app.useGlobalGuards(new JwtAuthGuard(reflector), new RolesGuard(reflector));
   app.useGlobalInterceptors(new LoggerInterceptor());
-
-  await app.listen(process.env.PORT || 8000);
+  await app.listen(process.env.PORT || 5000, '0.0.0.0');
 }
 bootstrap();
