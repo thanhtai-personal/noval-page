@@ -1,12 +1,9 @@
 "use client";
-
 import { makeAutoObservable } from "mobx";
-
-import { ApiInstant } from "@/utils/api";
 
 const localStorage = typeof window !== "undefined" ? window.localStorage : null;
 
-interface AnimationProps {
+export interface AnimationProps {
   useIsland?: boolean;
   useDNA?: boolean;
   useUniverseBg?: boolean;
@@ -14,34 +11,25 @@ interface AnimationProps {
   use3DIsland?: boolean;
 }
 
-export class AppStore {
-  useLayout: boolean = true;
-  profile: any = null;
-  animationMode: boolean = false;
-  useFooter: boolean = true;
-  useGameMenu: boolean = true;
-  openGameMode: boolean = true;
-  showPlayerControl: boolean = false;
-  animations: AnimationProps = {};
+export class UIStore {
+  useLayout = true;
+  animationMode = false;
+  useFooter = true;
+  useGameMenu = true;
+  openGameMode = true;
+  showPlayerControl = false;
+  animations: AnimationProps = {} as AnimationProps;
 
   constructor() {
     makeAutoObservable(this);
     const animMode = localStorage?.getItem("animationMode");
-
     if (animMode !== null && animMode !== undefined) {
-      this.animationMode = Boolean(
-        localStorage?.getItem("animationMode") === "true",
-      );
+      this.animationMode = localStorage?.getItem("animationMode") === "true";
     }
     this.resetAnimations();
-    this.fetchProfile();
   }
 
-  setConfig(config: {
-    useLayout?: boolean;
-    useFooter?: boolean;
-    animationMode?: boolean;
-  }) {
+  setConfig(config: { useLayout?: boolean; useFooter?: boolean }) {
     this.useLayout = config.useLayout || false;
     this.useFooter = config.useFooter || false;
   }
@@ -69,40 +57,8 @@ export class AppStore {
       localStorage?.setItem("animationMode", String(value));
     } else {
       const newValue = !this.animationMode;
-
       this.animationMode = newValue;
       localStorage?.setItem("animationMode", String(newValue));
     }
   }
-
-  async fetchProfile() {
-    try {
-      const res = await ApiInstant.get("/auth/me");
-
-      this.profile = res.data;
-    } catch {
-      this.clear();
-    }
-  }
-
-  async logout() {
-    try {
-      await ApiInstant.post("/auth/logout");
-    } catch (error) {
-      console.log("logout error", error);
-    } finally {
-      this.clear();
-    }
-  }
-
-  get isLoggedIn() {
-    return !!this.profile;
-  }
-
-  clear() {
-    this.useLayout = true;
-    this.profile = null;
-  }
 }
-
-export const appStore = new AppStore();

@@ -14,7 +14,7 @@ function NotFoundPage() {
   const store = useAppStore();
 
   useEffect(() => {
-    store.setAnimations({
+    store.ui.setAnimations({
       useIsland: false,
       useDNA: false,
       useFantasyIsland: false,
@@ -22,7 +22,7 @@ function NotFoundPage() {
     });
 
     return () => {
-      store.resetAnimations();
+      store.ui.resetAnimations();
     };
   }, []);
 

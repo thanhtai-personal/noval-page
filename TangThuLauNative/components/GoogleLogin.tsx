@@ -36,9 +36,9 @@ export default observer(function GoogleLogin() {
       }
 
       if (user) {
-        appStore.profile = user;
+        appStore.auth.profile = user;
       } else {
-        await appStore.fetchProfile();
+        await appStore.auth.fetchProfile();
       }
       syncWithServer();
     } catch (error: any) {

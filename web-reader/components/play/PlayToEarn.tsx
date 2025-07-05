@@ -10,10 +10,10 @@ export const PlayToEarn = observer(() => {
   const store = useAppStore();
 
   useEffect(() => {
-    store.openGameMode = false;
+    store.ui.openGameMode = false;
 
     return () => {
-      store.openGameMode = true;
+      store.ui.openGameMode = true;
     };
   }, []);
 

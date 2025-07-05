@@ -41,7 +41,7 @@ export const ThreeDCardHover = observer(({ children, id }: any) => {
     });
   }
 
-  if (!appStore.animationMode) {
+  if (!appStore.ui.animationMode) {
     return children;
   }
 

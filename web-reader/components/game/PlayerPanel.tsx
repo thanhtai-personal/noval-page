@@ -18,9 +18,9 @@ export const PlayerPanel = observer(() => {
 
   return (
     <div
-      className={`fixed z-10 left-10 top-20 h-screen flex flex-col justify-start player-control ${store.showPlayerControl && "showing"}`}
+      className={`fixed z-10 left-10 top-20 h-screen flex flex-col justify-start player-control ${store.ui.showPlayerControl && "showing"}`}
     >
-      {store.isLoggedIn ? (
+      {store.auth.isLoggedIn ? (
         <>
           <div className={`hidden md:flex flex-col`}>
             <div className="flex flex-col justify-center items-center  rounded-md p-0 backdrop-blur-sm bg-slate-100/10 rounded-t-full">
@@ -49,15 +49,15 @@ export const PlayerPanel = observer(() => {
               </div>
               <div className="flex w-full flex-col bg-slate-500 rounded-md p-4">
                 <div className="font-bold text-red-700 text-center">
-                  {getLevelName(store.profile.level)}
+                  {getLevelName(store.auth.profile.level)}
                 </div>
                 <div className="mt-2 font-bold text-gray-950 inline-flex justify-between items-center w-full px-4">
                   <div>{t("exp")}:</div>
-                  <div>{store.profile.exp}</div>
+                  <div>{store.auth.profile.exp}</div>
                 </div>
                 <div className="font-bold text-gray-950 inline-flex justify-between items-center w-full px-4">
                   <div>{t("coin")}:</div>
-                  <div>{store.profile.coin}</div>
+                  <div>{store.auth.profile.coin}</div>
                 </div>
               </div>
             </div>

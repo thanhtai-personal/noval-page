@@ -12,7 +12,7 @@ const MagicColorfulDot = (props: any) => {
   const appStore = useAppStore();
 
   useEffect(() => {
-    if (isMobile() || appStore.animationMode === false) return;
+    if (isMobile() || appStore.ui.animationMode === false) return;
 
     const c: any = document.querySelector(`#canvas-${props.id}`);
 
@@ -207,9 +207,9 @@ const MagicColorfulDot = (props: any) => {
     });
 
     animate(0);
-  }, [appStore.animationMode, props.id]);
+  }, [appStore.ui.animationMode, props.id]);
 
-  if (isMobile() || appStore.animationMode === false) {
+  if (isMobile() || appStore.ui.animationMode === false) {
     return "";
   }
 

@@ -40,7 +40,7 @@ const LoginPageContent = observer(() => {
   };
 
   useEffect(() => {
-    appStore.setAnimations({
+    appStore.ui.setAnimations({
       useIsland: false,
       useDNA: false,
       use3DIsland: false,
@@ -49,7 +49,7 @@ const LoginPageContent = observer(() => {
     });
 
     return () => {
-      appStore.resetAnimations();
+      appStore.ui.resetAnimations();
     };
   }, [theme]);
 

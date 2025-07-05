@@ -55,13 +55,13 @@ export const AppLayout = observer(({ children }: any) => {
         </div>
       )}
 
-      {store.openGameMode && <PlayerPanel />}
+      {store.ui.openGameMode && <PlayerPanel />}
 
-      {store.openGameMode && (
+      {store.ui.openGameMode && (
         <div
           className={`
             fixed z-20 bottom-2  bg-orange-500/25 ${
-              store.animationMode
+              store.ui.animationMode
                 ? "-right-[160px] hover:-right-[50px] transition-all duration-300"
                 : "right-6 p-4"
             } rounded-full backdrop:blur-xl btn-play-to-earn ${

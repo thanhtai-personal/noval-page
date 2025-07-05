@@ -14,7 +14,7 @@ const GalaxyBackground = (props: any) => {
   const appStore = useAppStore();
 
   useEffect(() => {
-    if (isMobile() || appStore.animationMode === false) return;
+    if (isMobile() || appStore.ui.animationMode === false) return;
 
     const debugObject = {
       count: 100000,
@@ -260,9 +260,9 @@ const GalaxyBackground = (props: any) => {
       renderer.setSize(sizes.width, sizes.height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     });
-  }, [appStore.animationMode, props.id]);
+  }, [appStore.ui.animationMode, props.id]);
 
-  if (isMobile() || appStore.animationMode === false) {
+  if (isMobile() || appStore.ui.animationMode === false) {
     return "";
   }
 

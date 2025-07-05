@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext } from "react";
 
-import { appStore, AppStore } from "./AppStore";
+import { appStore, AppStore } from "./index";
 
 const StoreContext = createContext<AppStore>(appStore);
 
