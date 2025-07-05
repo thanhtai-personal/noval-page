@@ -4,6 +4,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useReadingHistory } from '@/contexts/ReadingHistoryContext';
 import Config from "react-native-config";
+import { API_BASE_URL } from "@/constants/Api";
 
 // Cấu hình Google Sign-In
 GoogleSignin.configure({
@@ -14,6 +15,8 @@ GoogleSignin.configure({
   // offlineAccess: false,
 });
 
+console.log("Config", Config)
+
 export default function GoogleLogin() {
   const { t } = useTranslation();
   const { setLoggedIn, syncWithServer } = useReadingHistory();
@@ -22,7 +25,7 @@ export default function GoogleLogin() {
       await GoogleSignin.hasPlayServices();
       const userInfo: any = await GoogleSignin.signIn();
 
-      const res = await fetch(`${Config.API_BASE_URL}/auth/google`, {
+      const res = await fetch(`${API_BASE_URL}/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: userInfo.idToken, data: userInfo.data }),
