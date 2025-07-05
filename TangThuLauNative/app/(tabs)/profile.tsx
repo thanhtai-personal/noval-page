@@ -9,23 +9,23 @@ import { useContext } from 'react';
 import { LanguageContext } from '@/contexts/LanguageContext';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useReadingHistory } from '@/contexts/ReadingHistoryContext';
-import { API_BASE_URL } from '@/constants/Api';
+import { Api } from '@/utils/api';
+import { useAppStore } from '@/store/StoreProvider';
 
 export default function ProfileScreen() {
   const { toggleLanguage } = useContext(LanguageContext);
   const { t } = useTranslation();
   const { loggedIn, setLoggedIn } = useReadingHistory();
+  const { setLoggedIn: setLoggedInStore } = useAppStore();
 
   const logout = async () => {
     try {
-      await fetch(`${API_BASE_URL}/auth/logout`, {
-        method: 'POST',
-        credentials: 'include',
-      });
+      await Api.post('/auth/logout');
     } catch (e) {
       console.warn(e);
     } finally {
       setLoggedIn(false);
+      setLoggedInStore(false);
     }
   };
   return (

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@/utils/asyncStorage';
-import { API_BASE_URL } from '@/constants/Api';
+import { Api } from '@/utils/api';
+import { useAppStore } from '@/store/StoreProvider';
 
 export interface HistoryItem {
   storySlug: string;
@@ -32,6 +33,12 @@ const ReadingHistoryContext = createContext<ContextValue>({
 export const ReadingHistoryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [loggedIn, setLoggedIn] = useState(false);
+  const { setLoggedIn: setLoggedInStore } = useAppStore();
+
+  const updateLoggedIn = (b: boolean) => {
+    setLoggedIn(b);
+    setLoggedInStore(b);
+  };
 
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY).then((val) => {
@@ -52,21 +59,18 @@ export const ReadingHistoryProvider: React.FC<{ children: React.ReactNode }> = (
   const syncWithServer = async () => {
     if (!loggedIn) return;
     try {
-      await fetch(`${API_BASE_URL}/reading-history/sync`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: history }),
-        credentials: 'include',
-      });
-      const res = await fetch(`${API_BASE_URL}/reading-history`, { credentials: 'include' });
-      const data = await res.json();
+      await Api.post('/reading-history/sync', { items: history });
+      const res = await Api.get('/reading-history');
+      const data = res.data;
       if (Array.isArray(data)) {
-        await save(data.map((d: any) => ({
-          storySlug: d.story.slug,
-          storyTitle: d.story.title,
-          cover: d.story.cover,
-          chapter: d.chapter,
-        })));
+        await save(
+          data.map((d: any) => ({
+            storySlug: d.story.slug,
+            storyTitle: d.story.title,
+            cover: d.story.cover,
+            chapter: d.chapter,
+          }))
+        );
       }
     } catch (e) {
       console.warn(e);
@@ -74,7 +78,7 @@ export const ReadingHistoryProvider: React.FC<{ children: React.ReactNode }> = (
   };
 
   return (
-    <ReadingHistoryContext.Provider value={{ history, addHistory, syncWithServer, setHistory, loggedIn, setLoggedIn }}>
+    <ReadingHistoryContext.Provider value={{ history, addHistory, syncWithServer, setHistory, loggedIn, setLoggedIn: updateLoggedIn }}>
       {children}
     </ReadingHistoryContext.Provider>
   );

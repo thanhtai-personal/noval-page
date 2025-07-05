@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import {
   ActivityIndicator,
   FlatList,
@@ -13,7 +14,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useTranslation } from '@/hooks/useTranslation';
-import { API_BASE_URL } from '@/constants/Api';
+import { Api } from '@/utils/api';
 import StoryItem from '@/components/StoryItem';
 import { Story } from '@/types/Story';
 
@@ -24,26 +25,26 @@ export default function SearchScreen() {
   const { t } = useTranslation();
 
   const [keyword, setKeyword] = useState('');
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [authors, setAuthors] = useState<Author[]>([]);
+  const { data: categories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const res = await Api.get('/categories');
+      return res.data || [];
+    },
+  });
+  const { data: authors = [] } = useQuery({
+    queryKey: ['authors'],
+    queryFn: async () => {
+      const res = await Api.get('/authors');
+      return res.data.data || [];
+    },
+  });
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [selectedAuthor, setSelectedAuthor] = useState<Author | null>(null);
   const [categoryModal, setCategoryModal] = useState(false);
   const [authorModal, setAuthorModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<Story[]>([]);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/categories`)
-      .then((r) => r.json())
-      .then((d) => setCategories(d || []))
-      .catch(console.warn);
-
-    fetch(`${API_BASE_URL}/authors`)
-      .then((r) => r.json())
-      .then((d) => setAuthors(d.data || []))
-      .catch(console.warn);
-  }, []);
 
   const search = async () => {
     try {
@@ -52,9 +53,8 @@ export default function SearchScreen() {
       if (keyword) params.append('keyword', keyword);
       if (selectedCategory) params.append('categories', selectedCategory.name);
       if (selectedAuthor) params.append('author', selectedAuthor._id);
-      const res = await fetch(`${API_BASE_URL}/stories?${params.toString()}`);
-      const data = await res.json();
-      setResults(data.data || []);
+      const res = await Api.get(`/stories?${params.toString()}`);
+      setResults(res.data.data || []);
     } catch (e) {
       console.warn(e);
     } finally {
