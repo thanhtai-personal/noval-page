@@ -12,14 +12,14 @@ export const GoogleLoginButton = observer(
     return (
       <div className="flex flex-col w-full">
         <GoogleLogin
+          onError={(error) => {
+            console.error("Google login error:", error);
+          }}
           onSuccess={(credentialResponse) => {
             if (credentialResponse.credential) {
               console.log("ID token:", credentialResponse.credential);
               handleLoginSuccess(credentialResponse.credential);
             }
-          }}
-          onError={(error) => {
-            console.error("Google login error:", error);
           }}
         />
       </div>

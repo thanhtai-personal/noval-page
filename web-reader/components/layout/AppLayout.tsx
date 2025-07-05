@@ -1,24 +1,21 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
+import Image from "next/image";
+import { useState } from "react";
 
-import { Navbar } from "@/components/layout/navbar";
-import WallPaperBg1 from "@/components/animations/backgrounds/WallpaperBg1";
-import Model3DContainer from "@/components/3dmodels/3DContainer";
-import { XBoxBlue } from "@/components/3dmodels/models/XBoxBlue";
-import { useAppStore } from "@/store/Provider";
+import { GameBox } from "../game/GameBox";
+import { PlayerPanel } from "../game/PlayerPanel";
 
 import { Footer } from "./footer";
 import { BottomSprites } from "./BottomSprites";
 import { TopSprites } from "./TopSprites";
 import { EntertaimentMenu } from "./EntertaimentMenu";
-import Image from "next/image";
+
+import { Navbar } from "@/components/layout/navbar";
+import WallPaperBg1 from "@/components/animations/backgrounds/WallpaperBg1";
+import { useAppStore } from "@/store/Provider";
 import xboxImageIcon from "@/assets/icons8-gamepad-48.png";
-import { isMobile } from "@/utils/funtions";
-import { Html } from "@react-three/drei";
-import { useState } from "react";
-import { GameBox } from "../game/GameBox";
-import { PlayerPanel } from "../game/PlayerPanel";
 
 export const AppLayout = observer(({ children }: any) => {
   const store = useAppStore();
@@ -126,11 +123,11 @@ export const AppLayout = observer(({ children }: any) => {
           )} */}
           <Image
             alt="click-to-play"
-            onClick={openGameModal}
+            className="cursor-pointer w-[28px] h-[28px] md:w-[48px] md:h-[48px]"
+            height={48}
             src={xboxImageIcon}
             width={48}
-            height={48}
-            className="cursor-pointer w-[28px] h-[28px] md:w-[48px] md:h-[48px]"
+            onClick={openGameModal}
           />
         </div>
       )}

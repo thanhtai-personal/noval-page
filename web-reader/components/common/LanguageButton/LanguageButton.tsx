@@ -1,5 +1,6 @@
-import { useEaseInOutAnimationButton } from "@/hooks/useEaseInOutAnimationButton";
 import Cookies from "js-cookie";
+
+import { useEaseInOutAnimationButton } from "@/hooks/useEaseInOutAnimationButton";
 
 export const LanguageButton = () => {
   const [commonClass, showButton] = useEaseInOutAnimationButton(

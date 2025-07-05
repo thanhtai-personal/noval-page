@@ -1,21 +1,22 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@heroui/button";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { observer } from "mobx-react-lite";
+import { useSnackbar } from "notistack";
+
+import { bgOptions, colorOptions } from "./constants";
 
 import { ApiInstant } from "@/utils/api";
 import { ReadingSettings } from "@/components/chapter/ReadingSettings";
-import { observer } from "mobx-react-lite";
 import { useAppStore } from "@/store/Provider";
 import { isMobile } from "@/utils/funtions";
-import { bgOptions, colorOptions } from "./constants";
 import { useMarkAsReadTo } from "@/hooks/useMarkAsReadTo";
 import SideLoading from "@/components/common/SideLoading/SideLoading";
-import { useSnackbar } from "notistack";
 
 // Fetch prev/next chapter
 const fetchPrevNextChapter = async ({
@@ -28,6 +29,7 @@ const fetchPrevNextChapter = async ({
   const res = await ApiInstant.get(
     `/stories/${slug}/chapters/prev-and-next/${chapterNumber}`,
   );
+
   return res.data as { next: any | null; prev: any | null };
 };
 
@@ -41,6 +43,7 @@ const fetchChapterContent = async ({
   const res = await ApiInstant.get(
     `/stories/${slug}/chapters/${chapterSlug}/content`,
   );
+
   return res.data;
 };
 
@@ -59,6 +62,7 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
   // Side effect animation mode
   useEffect(() => {
     appStore.toggleAnimationMode(false);
+
     return () => {
       appStore.toggleAnimationMode(true);
     };
@@ -122,6 +126,7 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
     const handleTouchEnd = (e: TouchEvent) => {
       touchEndX = e.changedTouches[0].screenX;
       const dx = touchEndX - touchStartX;
+
       if (dx < -100) handleNext();
     };
 
@@ -132,7 +137,6 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchend", handleTouchEnd);
     };
-    // eslint-disable-next-line
   }, [nextChapter]);
 
   useMarkAsReadTo(async () => {
@@ -195,10 +199,10 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
           <div className="text-center">
             <p className="mb-2">{t("chapter_loading")}</p>
             <a
-              href={chapter.url}
-              target="_blank"
-              rel="noopener noreferrer"
               className="underline text-blue-600"
+              href={chapter.url}
+              rel="noopener noreferrer"
+              target="_blank"
             >
               {t("watch_on_source")}
             </a>
@@ -229,7 +233,7 @@ export const ChapterPageClient = observer(({ chapter }: any) => {
             nextChapter ? `/truyen/${slug}/chuong/${nextChapter?.slug}` : "#"
           }
         >
-          <Button as="a" size="sm" disabled={!nextChapter}>
+          <Button as="a" disabled={!nextChapter} size="sm">
             {t("next")} →
           </Button>
         </Link>

@@ -1,8 +1,9 @@
 "use client";
 
-import { useAppStore } from "@/store/Provider";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
+
+import { useAppStore } from "@/store/Provider";
 
 // Game menu
 export const PlayToEarn = observer(() => {
@@ -16,7 +17,7 @@ export const PlayToEarn = observer(() => {
     };
   }, []);
 
-  return <div></div>;
+  return <div />;
 });
 
 export default PlayToEarn;

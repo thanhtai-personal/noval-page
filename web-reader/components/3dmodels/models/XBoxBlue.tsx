@@ -3,6 +3,7 @@
 import { useGLTF } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import { useRef, useEffect, Suspense, ReactNode } from "react";
+
 import { ModelBox } from "../ModelBox";
 
 useGLTF.preload("/models/xbox_one_game_pad_blue_edition.glb");
@@ -33,16 +34,18 @@ export const XBoxBlue: React.FC<XBoxBlueProps> = ({
       camera.lookAt(1, 0, 0);
       frameId = requestAnimationFrame(animate);
     };
+
     animate();
+
     return () => cancelAnimationFrame(frameId);
   }, [camera, transition]);
 
   return (
     <Suspense fallback={fallBack ?? <span>Loading...</span>}>
       <ModelBox
-        scale={scale}
-        position={position}
         path={"/models/xbox_one_game_pad_blue_edition.glb"}
+        position={position}
+        scale={scale}
       />
     </Suspense>
   );

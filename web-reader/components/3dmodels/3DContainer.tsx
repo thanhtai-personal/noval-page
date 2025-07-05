@@ -2,8 +2,9 @@
 
 import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Loader } from "./Loader";
 import { GizmoHelper, GizmoViewport, OrbitControls } from "@react-three/drei";
+
+import { Loader } from "./Loader";
 import CameraPositionLabel from "./CameraPositionLabel";
 import { CameraSetup } from "./CameraSetup";
 

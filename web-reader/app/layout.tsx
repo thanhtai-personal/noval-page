@@ -4,15 +4,15 @@ import clsx from "clsx";
 import { NextIntlClientProvider } from "next-intl";
 import { headers } from "next/headers";
 import { getMessages } from "next-intl/server";
+import { Suspense } from "react";
 
 import { Providers } from "./providers";
+import GlobalLoading from "./loading";
 
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { GoogleAnalytics } from "@/lib/analytic";
-import { Suspense } from "react";
-import GlobalLoading from "./loading";
 
 // import { getLocale } from "next-intl/server";
 

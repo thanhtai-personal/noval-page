@@ -1,16 +1,18 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { useAppStore } from "@/store/Provider";
 import gsap from "gsap";
 
 import styles from "./3dcardhover.module.css";
+
+import { useAppStore } from "@/store/Provider";
 
 export const ThreeDCardHover = observer(({ children, id }: any) => {
   const appStore = useAppStore();
 
   function handleMouseMove(e: any) {
     const wrapper = document.getElementById(`card-wrapper-${id}`);
+
     if (!wrapper) return;
 
     const bounds = wrapper.getBoundingClientRect();
@@ -29,6 +31,7 @@ export const ThreeDCardHover = observer(({ children, id }: any) => {
 
   function handleMouseLeave() {
     const wrapper = document.getElementById(`card-wrapper-${id}`);
+
     if (!wrapper) return;
 
     gsap.to(wrapper, {

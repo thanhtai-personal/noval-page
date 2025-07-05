@@ -39,11 +39,13 @@ export class ThunderMachine {
     this.canvas.addEventListener("click", (e) => {
       const x = e.clientX;
       const y = e.clientY;
+
       this.thunder.push(new Thunder({ x, y }, this.w, this.h));
       this.particles.push(new Particles({ x, y }, this.w, this.h));
     });
 
     let cb: ReturnType<typeof setTimeout>;
+
     if (this.input) {
       this.input.addEventListener("keyup", (e) => {
         clearTimeout(cb);

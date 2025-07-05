@@ -1,5 +1,6 @@
-import DeadlineLoading from "@/components/common/DeadLineLoading/DeadlineLoading";
 import { useTranslations } from "next-intl";
+
+import DeadlineLoading from "@/components/common/DeadLineLoading/DeadlineLoading";
 
 export default function GlobalLoading() {
   const t = useTranslations("global");

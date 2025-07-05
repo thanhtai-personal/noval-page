@@ -47,9 +47,11 @@ export class Thunder {
     ctx.shadowColor = this.glow;
     ctx.moveTo(this.x, this.y);
     let prev = { x: this.x, y: this.y };
+
     this.segments.forEach((s) => {
       const x = prev.x + Math.cos(s.direct) * s.length;
       const y = prev.y + Math.sin(s.direct) * s.length;
+
       prev = { x, y };
       ctx.lineTo(x, y);
     });
@@ -65,6 +67,7 @@ export class Thunder {
       this.y,
       strength,
     );
+
     light.addColorStop(0, "rgba(250, 200, 50, 0.6)");
     light.addColorStop(0.1, "rgba(250, 200, 50, 0.2)");
     light.addColorStop(0.4, "rgba(250, 200, 50, 0.06)");

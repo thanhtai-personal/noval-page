@@ -1,9 +1,10 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import LazyStoryPageContent from "./LazyStoryPageContent";
+
 import { ApiInstant } from "@/utils/api";
 import { Story } from "@/types/interfaces/story";
-import LazyStoryPageContent from "./LazyStoryPageContent";
 
 async function fetchStory(slug: string): Promise<any | null> {
   try {

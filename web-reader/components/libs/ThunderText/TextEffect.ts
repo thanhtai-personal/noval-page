@@ -54,6 +54,7 @@ export class TextEffect {
   setup(options: Partial<OptionsProps>) {
     const pool = document.createElement("canvas");
     const buffer = pool.getContext("2d")!;
+
     pool.width = this.w;
     buffer.fillStyle = "#000000";
     buffer.fillRect(0, 0, pool.width, pool.height);
@@ -97,19 +98,23 @@ export class TextEffect {
   update() {
     if (this.options.index >= this.options.bound.width) {
       this.options.index = 0;
+
       return;
     }
 
     const data = this.options.data.data;
+
     for (
       let i = this.options.index * 4;
       i < data.length;
       i += 4 * this.options.data.width
     ) {
       const bitmap = data[i] + data[i + 1] + data[i + 2] + data[i + 3];
+
       if (bitmap > 255 && Math.random() > 0.96) {
         const x = this.options.x + this.options.index;
         const y = this.options.y + i / this.options.bound.width / 4;
+
         this.thunder.push(new Thunder({ x, y }));
         if (Math.random() > 0.5)
           this.particles.push(new Particles({ x, y }, this.w, this.h));

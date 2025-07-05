@@ -1,12 +1,12 @@
 "use client";
 
+import { observer } from "mobx-react-lite";
+import { useState } from "react";
+
 import { useResize } from "@/hooks/useResize";
 import { useAppStore } from "@/store/Provider";
 import { isMobile } from "@/utils/funtions";
-import { observer } from "mobx-react-lite";
-import { useState } from "react";
 import Sprite from "@/components/animations/sprites/Sprite";
-
 import islandPng from "@/assets/sprites/island/01.png";
 import islandPng2 from "@/assets/sprites/island/I01.png";
 import DNA from "@/components/animations/dna/DNA";
@@ -40,20 +40,20 @@ export const TopSprites = observer(() => {
         {appStore.animations?.useIsland && (
           <Sprite
             images={[islandPng]}
-            width={450}
             layer={0}
             position={{
               top: windowSize.height - 300,
               left: windowSize.width - 500,
             }}
+            width={450}
           />
         )}
 
         {appStore.animations?.use3DIsland && (
           <div className=" absolute left-[calc(100vw-500px)] top-[calc(100vh-400px)] h-screen w-[500px] z-1 opacity-90">
             <Model3DContainer
-              camera={{ position: [0, 5, 10], fov: 30 }}
               ambientLight={{ intensity: 1 }}
+              camera={{ position: [0, 5, 10], fov: 30 }}
               directionalLight={{ intensity: 1, position: [10, 10, 10] }}
               id="PlentyDiorama"
             >
@@ -71,12 +71,12 @@ export const TopSprites = observer(() => {
         {appStore.animations?.useIsland && (
           <Sprite
             images={[islandPng2]}
-            width={450}
             layer={0}
             position={{
               top: windowSize.height + 500,
               left: 0,
             }}
+            width={450}
           />
         )}
 

@@ -1,7 +1,9 @@
-import { Story } from "@/types/interfaces/story";
+import { useInView } from "react-intersection-observer";
+
 import { StoryCard } from "./StoryCard";
 import { StoryCardSkeleton } from "./StoryCardSkeleton";
-import { useInView } from "react-intersection-observer";
+
+import { Story } from "@/types/interfaces/story";
 
 function LazyStoryCard({
   story,
@@ -11,10 +13,11 @@ function LazyStoryCard({
   isSlide?: boolean;
 }) {
   const { ref, inView } = useInView({ triggerOnce: true });
+
   return (
     <div ref={ref}>
       {inView ? (
-        <StoryCard story={story} isSlide={isSlide} />
+        <StoryCard isSlide={isSlide} story={story} />
       ) : (
         <StoryCardSkeleton />
       )}

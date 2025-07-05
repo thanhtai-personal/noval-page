@@ -6,11 +6,11 @@ import * as React from "react";
 import { HeroUIProvider } from "@heroui/system";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-
-import { StoreProvider } from "@/store/Provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { SnackbarProvider } from "notistack";
+
+import { StoreProvider } from "@/store/Provider";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -44,12 +44,12 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <SnackbarProvider
-        autoHideDuration={3000}
-        maxSnack={5}
         anchorOrigin={{
           horizontal: "center",
           vertical: "top",
         }}
+        autoHideDuration={3000}
+        maxSnack={5}
       >
         <StoreProvider>
           <HeroUIProvider navigate={router.push}>

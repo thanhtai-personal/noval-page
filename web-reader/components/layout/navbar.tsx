@@ -11,6 +11,7 @@ import { link as linkStyles } from "@heroui/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
+import { observer } from "mobx-react-lite";
 
 import { AuthActions } from "../auth/AuthActions";
 import { SearchBox } from "../common/searchInput/SearchInput";
@@ -20,7 +21,6 @@ import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/common/utils/theme-switch";
 import { FacebookIcon } from "@/components/default/icons";
 import { LogoIcon } from "@/assets/icons/Logo";
-import { observer } from "mobx-react-lite";
 import { useAppStore } from "@/store/Provider";
 import { LanguageButton } from "@/components/common/LanguageButton/LanguageButton";
 
@@ -70,8 +70,8 @@ export const Navbar = observer(() => {
 
           <div
             className="cursor-pointer"
-            onClick={() => appStore.toggleAnimationMode()}
             title={t("animationMode")}
+            onClick={() => appStore.toggleAnimationMode()}
           >
             🎬
           </div>

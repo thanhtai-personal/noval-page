@@ -1,5 +1,7 @@
 import { observer } from "mobx-react-lite";
+
 import styles from "./DNA.module.css";
+
 import { useAppStore } from "@/store/Provider";
 
 const DNA = observer(({ className = "", ...props }: any) => {
@@ -25,12 +27,12 @@ const DNA = observer(({ className = "", ...props }: any) => {
           style={{ "--i": i } as React.CSSProperties}
         >
           <div className={`${styles.left} left`}>
-            <div className={`${styles.dot} dot`}></div>
-            <div className={`${styles.line} line`}></div>
+            <div className={`${styles.dot} dot`} />
+            <div className={`${styles.line} line`} />
           </div>
           <div className={`${styles.right} right`}>
-            <div className={`${styles.dot} dot`}></div>
-            <div className={`${styles.line} line`}></div>
+            <div className={`${styles.dot} dot`} />
+            <div className={`${styles.line} line`} />
           </div>
         </div>
       ))}

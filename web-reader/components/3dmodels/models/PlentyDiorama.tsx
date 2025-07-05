@@ -3,6 +3,7 @@
 import { Html, useGLTF } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import { useRef, useEffect, Suspense, ReactNode } from "react";
+
 import { ModelBox } from "../ModelBox";
 
 useGLTF.preload("/models/isle_of_plenty_diorama.glb");
@@ -32,7 +33,9 @@ export const PlentyDiorama: React.FC<PlentyDioramaProps> = ({
       camera.lookAt(0, 0, 0);
       frameId = requestAnimationFrame(animate);
     };
+
     animate();
+
     return () => cancelAnimationFrame(frameId);
   }, [camera, transition]);
 
@@ -47,9 +50,9 @@ export const PlentyDiorama: React.FC<PlentyDioramaProps> = ({
       }
     >
       <ModelBox
-        scale={scale}
-        position={position}
         path={"/models/isle_of_plenty_diorama.glb"}
+        position={position}
+        scale={scale}
       />
     </Suspense>
   );

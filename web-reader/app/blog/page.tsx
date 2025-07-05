@@ -6,6 +6,7 @@ import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import { Button } from "@heroui/button";
 import { Pagination } from "@heroui/pagination";
 import Link from "next/link";
+
 import { ApiInstant } from "@/utils/api";
 
 interface Blog {
@@ -24,6 +25,7 @@ const fetchBlogs = async (page: number, limit: number) => {
   const res = await ApiInstant.get("/blogs", {
     params: { page, limit, sort: "views" },
   });
+
   return res.data as { data: Blog[]; total: number };
 };
 
@@ -59,9 +61,9 @@ export default function BlogPage() {
                   <img
                     alt={blog.title}
                     className="w-full h-40 object-cover rounded-t"
-                    src={blog.cover}
                     fetchPriority="high"
                     loading="lazy"
+                    src={blog.cover}
                   />
                 </CardHeader>
               )}

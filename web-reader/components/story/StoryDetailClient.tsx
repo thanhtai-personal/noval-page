@@ -4,12 +4,13 @@ import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import React from "react";
 import { Badge } from "@heroui/badge";
+import { observer } from "mobx-react-lite";
+import { useQuery } from "@tanstack/react-query";
+
 import { StoryTabs } from "@/components/story/StoryTabs";
 import { LastReadChapter } from "@/components/chapter/LastReadChapter";
 import { ApiInstant } from "@/utils/api";
 import { useMarkAsReadTo } from "@/hooks/useMarkAsReadTo";
-import { observer } from "mobx-react-lite";
-import { useQuery } from "@tanstack/react-query";
 
 export const StoryDetailClient = observer(() => {
   const t = useTranslations("story");
@@ -24,6 +25,7 @@ export const StoryDetailClient = observer(() => {
     queryKey: ["story-detail", slug],
     queryFn: async () => {
       const res = await ApiInstant.get(`/stories/${slug}`);
+
       return res.data;
     },
     enabled: !!slug,
@@ -62,9 +64,9 @@ export const StoryDetailClient = observer(() => {
         <img
           alt={story.title}
           className="w-full max-w-xs object-cover rounded shadow"
-          src={story.cover}
           fetchPriority="high"
           loading="lazy"
+          src={story.cover}
         />
         <div>
           <h1 className="text-3xl font-bold mb-2">{story.title}</h1>

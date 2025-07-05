@@ -6,14 +6,16 @@ import React, {
   useState,
   useMemo,
 } from "react";
-import spinSvg from "@/assets/spin.svg";
 import Image from "next/image";
+
+import spinSvg from "@/assets/spin.svg";
 import { COLORS } from "@/utils/constants";
 import { SoundHiddenPlayer } from "@/app/play/sound/SoundHiddenPlayer";
 import {
   SoundManagerAPI,
   SoundManagerProvider,
 } from "@/app/play/sound/context/SoundManagerProvider";
+
 import "./wheel-of-lottery.css";
 import { useTranslations } from "next-intl";
 
@@ -59,6 +61,7 @@ export const WheelOfLottery = forwardRef<
 
   function handleClick() {
     const hat = wrapperRef.current;
+
     audioRef.current?.play();
     if (!tokenRef.current || !hat) return;
     tokenRef.current = false;
@@ -76,6 +79,7 @@ export const WheelOfLottery = forwardRef<
     if (winnerIndex >= 0) {
       const partDeg = 360 / currentRewards.length;
       let randomDeg = Math.floor(partDeg * Math.random());
+
       if (randomDeg < 5 && partDeg > 10) {
         randomDeg = 7;
       }
@@ -84,6 +88,7 @@ export const WheelOfLottery = forwardRef<
       const deltaDeg = 360 - (oldDeg % 360);
       const resetDeg = oldDeg + deltaDeg; //rotate to 0deg
       const winnerTickDeg = 90;
+
       deg = resetDeg + rotateLoopDeg + winnerDeg + winnerTickDeg;
     }
 
@@ -105,36 +110,36 @@ export const WheelOfLottery = forwardRef<
     <div className="flex flex-col items-center justify-center wheel-of-lottery">
       <div className="relative w-full max-w-[400px] sm:max-w-[500px] aspect-square mx-auto">
         <div
-          className="absolute inset-0 rounded-full w-full h-full z-0"
           ref={shadowRef}
+          className="absolute inset-0 rounded-full w-full h-full z-0"
           style={{
             boxShadow: "4px 4px 8px 6px rgba(247, 92, 2, 0.3)",
           }}
         >
-          <div className="animation-div w-full h-full relative flex justify-center items-center"></div>
+          <div className="animation-div w-full h-full relative flex justify-center items-center" />
         </div>
         <div className="relative w-full max-w-[400px] sm:max-w-[500px] aspect-square mx-auto">
           {/* Spin Button */}
           <button
+            className="absolute z-10 left-1/2 top-1/2 w-[22%] h-[22%] -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
             id="wheel-start-btn"
             onClick={handleClick}
-            className="absolute z-10 left-1/2 top-1/2 w-[22%] h-[22%] -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
           >
             <Image
               alt="click-to-start"
               className="cursor-pointer"
+              height={90}
               src={spinSvg}
               width={90}
-              height={90}
             />
           </button>
           {/* Wheel */}
           <div
             ref={wrapperRef}
+            className="relative w-full h-full rounded-full shadow-xl bg-background transition-transform duration-[7s] ease-[cubic-bezier(0.25,0.1,0,1)]"
             style={{
               transform: `rotate(${DEFAULT_ROTATE}deg)`,
             }}
-            className="relative w-full h-full rounded-full shadow-xl bg-background transition-transform duration-[7s] ease-[cubic-bezier(0.25,0.1,0,1)]"
           >
             <div
               className="absolute inset-0 rounded-full"
@@ -148,7 +153,7 @@ export const WheelOfLottery = forwardRef<
                   .join(",\n")}
               )`,
               }}
-            ></div>
+            />
             {currentRewards.map((reward, idx) => (
               <div
                 key={idx}
@@ -172,24 +177,24 @@ export const WheelOfLottery = forwardRef<
         </div>
         {/* selection */}
         <div className="mt-20 w-full inline-flex flex-col md:flex-row justify-center">
-          <div onClick={() => setSize(6)} className="tab cursor-pointer p-4">
+          <div className="tab cursor-pointer p-4" onClick={() => setSize(6)}>
             {t("6_part")}
           </div>
           <div
-            onClick={() => setSize(12)}
             className="tab bg-secondary cursor-pointer p-4"
+            onClick={() => setSize(12)}
           >
             {t("12_part")}
           </div>
           <div
-            onClick={() => setSize(16)}
             className="tab bg-third cursor-pointer p-4"
+            onClick={() => setSize(16)}
           >
             {t("16_part")}
           </div>
         </div>
       </div>
-      <SoundManagerProvider autoPlay list={tracks} ref={audioRef as any}>
+      <SoundManagerProvider ref={audioRef as any} autoPlay list={tracks}>
         <SoundHiddenPlayer />
       </SoundManagerProvider>
     </div>

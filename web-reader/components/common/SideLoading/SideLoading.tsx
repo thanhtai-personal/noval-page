@@ -131,7 +131,7 @@ const Bar = () => (
             "--depth": seg.depth,
           } as React.CSSProperties
         }
-      ></div>
+      />
     ))}
   </div>
 );

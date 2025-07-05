@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { useTranslations } from "next-intl";
+
 import LazySearchPage from "./LazySearchPage";
 export const metadata = {
   title: "Tìm kiếm truyện hay | Vô Ưu Các",

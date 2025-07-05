@@ -2,10 +2,12 @@
 
 import { useTranslations } from "next-intl";
 import { observer } from "mobx-react-lite";
-import { useAppStore } from "@/store/Provider";
 import { useEffect } from "react";
-import styles from "./not-found.module.css";
 import Link from "next/link";
+
+import styles from "./not-found.module.css";
+
+import { useAppStore } from "@/store/Provider";
 
 function NotFoundPage() {
   const t = useTranslations("notFound");
@@ -38,7 +40,7 @@ function NotFoundPage() {
 
                 <p>{t("page_not_available")}</p>
 
-                <Link href={"/"} className={styles.link_404}>
+                <Link className={styles.link_404} href={"/"}>
                   {t("go_to_home")}
                 </Link>
               </div>

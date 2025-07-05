@@ -2,17 +2,20 @@
 
 import { useTranslations } from "next-intl";
 import { useQuery } from "@tanstack/react-query";
+
+import LazySlider from "./LazySlider";
+import { StorySection } from "./StorySection";
+
 import { Story } from "@/types/interfaces/story";
 import { Fire1Wrapper } from "@/components/animations/fires/Fire1Wrapper";
 import { FireLineWrapper } from "@/components/animations/fires/FireLineWrapper";
-import LazySlider from "./LazySlider";
-import { StorySection } from "./StorySection";
 import { ApiInstant } from "@/utils/api";
 import SideLoading from "@/components/common/SideLoading/SideLoading";
 
 const fetchStories =
   (sort: string, limit: number) => async (): Promise<Story[]> => {
     const res = await ApiInstant.get(`/stories?sort=${sort}&limit=${limit}`);
+
     return res.data?.data || [];
   };
 
@@ -74,58 +77,58 @@ export default function HomePageContent() {
       {/* Banner Slide */}
       <h1 className="text-3xl font-bold inline-flex items-center">
         <Fire1Wrapper
-          width={60}
+          fill1={"#8c0168"}
+          fill2={"#19020f"}
           height={60}
           id={"top-truyen-de-cu"}
           stopColor={"#8a00ff"}
           strokeColor={"#9fdbf7"}
-          fill1={"#8c0168"}
-          fill2={"#19020f"}
+          width={60}
         />{" "}
         {t("top_recommend_title")}
       </h1>
       <div className="relative">
-        <LazySlider sliderSettings={sliderSettings} dataList={topVote} />
+        <LazySlider dataList={topVote} sliderSettings={sliderSettings} />
         <FireLineWrapper />
       </div>
 
       <StorySection
-        stories={topRecommend}
+        className="mt-10 md:mt-20"
         loading={loadingRecommend}
+        stories={topRecommend}
+        title={t("most_recommended")}
         titleIcon={
           <Fire1Wrapper
-            width={40}
+            fill1={"#8c0168"}
+            fill2={"#19020f"}
             height={60}
             id={"top-truyen-de-cu"}
             stopColor={"#8a00ff"}
             strokeColor={"#9fdbf7"}
-            fill1={"#8c0168"}
-            fill2={"#19020f"}
+            width={40}
           />
         }
-        title={t("most_recommended")}
-        className="mt-10 md:mt-20"
       />
 
       <StorySection
-        stories={topView}
+        className="mt-10"
         loading={loadingView}
+        stories={topView}
         title={t("most_viewed")}
-        className="mt-10"
       />
 
       <StorySection
-        stories={topLike}
+        className="mt-10"
         loading={loadingLike}
+        stories={topLike}
         title={t("most_liked")}
-        className="mt-10"
       />
 
       <StorySection
-        stories={topChapter}
-        loading={loadingChapter}
-        title={t("longest")}
         className="mt-10"
+        loading={loadingChapter}
+        stories={topChapter}
+        title={t("longest")}
       />
     </section>
   );

@@ -3,6 +3,7 @@
 import { useGLTF } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import { useRef, useEffect, Suspense, ReactNode } from "react";
+
 import { ModelBox } from "../ModelBox";
 
 useGLTF.preload("/models/runaway_kid.glb");
@@ -35,16 +36,18 @@ export const RunawayKid: React.FC<RunawayKidProps> = ({
       camera.lookAt(0, 0, 0);
       frameId = requestAnimationFrame(animate);
     };
+
     animate();
+
     return () => cancelAnimationFrame(frameId);
   }, [camera, transition]);
 
   return (
     <Suspense fallback={fallBack ?? <span>Loading...</span>}>
       <ModelBox
-        scale={scale}
-        position={position}
         path={"/models/runaway_kid.glb"}
+        position={position}
+        scale={scale}
       />
     </Suspense>
   );

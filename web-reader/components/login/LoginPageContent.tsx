@@ -3,14 +3,15 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ApiInstant } from "@/utils/api";
-import styles from "@/app/login/login.module.css";
-import { GoogleLoginButton } from "@/components/login/GoogleLoginButton";
 import { observer } from "mobx-react-lite";
-import { useAppStore } from "@/store/Provider";
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
+
+import { ApiInstant } from "@/utils/api";
+import styles from "@/app/login/login.module.css";
+import { GoogleLoginButton } from "@/components/login/GoogleLoginButton";
+import { useAppStore } from "@/store/Provider";
 
 const LoginPageContent = observer(() => {
   const t = useTranslations("login");
@@ -59,17 +60,17 @@ const LoginPageContent = observer(() => {
           <div className={`${styles.box} relative`}>
             <div className="absolute w-full top-0 left-0 z-10 flex justify-center items-center pt-4">
               <h2 className={styles.h2}>
-                <i className="fa-solid fa-right-to-bracket"></i>
+                <i className="fa-solid fa-right-to-bracket" />
                 {t("click_to_login")}
-                <i className="fa-solid fa-heart"></i>
+                <i className="fa-solid fa-heart" />
               </h2>
             </div>
             <div className={`${styles.login}`}>
               <div className="loginBx flex flex-col justify-center items-center">
                 <div className={`${styles.group} flex flex-col`}>
                   <GoogleLoginButton
-                    label={t("login_with_google")}
                     handleLoginSuccess={handleLoginSuccess}
+                    label={t("login_with_google")}
                   />
                   {loginMutation.isError && (
                     <div className="text-center mt-2 text-red-500">

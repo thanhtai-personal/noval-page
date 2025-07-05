@@ -1,10 +1,12 @@
 "use client";
 
-import styles from "./galaxybackground.module.css";
 import { useEffect } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { observer } from "mobx-react-lite";
+
+import styles from "./galaxybackground.module.css";
+
 import { isMobile } from "@/utils/funtions";
 import { useAppStore } from "@/store/Provider";
 
@@ -75,6 +77,7 @@ const GalaxyBackground = (props: any) => {
         scales[i] = Math.random();
 
         const pointColor = innerColor.clone();
+
         pointColor.lerp(outerColor, randomRadius / debugObject.radius);
 
         colors[i3] = pointColor.r;
@@ -195,6 +198,7 @@ const GalaxyBackground = (props: any) => {
       0.1,
       100,
     );
+
     camera.position.x = 3;
     camera.position.y = 2;
     camera.position.z = 1;
@@ -202,6 +206,7 @@ const GalaxyBackground = (props: any) => {
     scene.add(camera);
 
     const controls = new OrbitControls(camera, canvas);
+
     controls.enableDamping = true;
     controls.dampingFactor = 0.07;
     controls.rotateSpeed = 0.03;
@@ -211,11 +216,13 @@ const GalaxyBackground = (props: any) => {
     // ===================================
     if (!canvas) {
       console.error(`Canvas element with id canvas-${props.id} not found.`);
+
       return;
     }
     const renderer = new THREE.WebGLRenderer({
       canvas: canvas,
     });
+
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
@@ -263,7 +270,7 @@ const GalaxyBackground = (props: any) => {
     <canvas
       className={`${styles.galaxybg} pointer-events-none`}
       id={`canvas-${props.id}`}
-    ></canvas>
+    />
   );
 };
 

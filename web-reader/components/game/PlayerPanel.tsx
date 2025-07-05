@@ -2,13 +2,14 @@
 
 import "./player-control.css";
 
-import { useAppStore } from "@/store/Provider";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { Html } from "@react-three/drei";
+
 import { RunawayKid } from "@/components/3dmodels/models/RunawayKid";
 import Model3DContainer from "@/components/3dmodels/3DContainer";
-import { Html } from "@react-three/drei";
+import { useAppStore } from "@/store/Provider";
 import { getLevelName } from "@/utils/funtions";
 
 export const PlayerPanel = observer(() => {
@@ -25,24 +26,24 @@ export const PlayerPanel = observer(() => {
             <div className="flex flex-col justify-center items-center  rounded-md p-0 backdrop-blur-sm bg-slate-100/10 rounded-t-full">
               <div style={{ transform: "translateY(70px)" }}>
                 <Model3DContainer
-                  camera={{ position: [3, 0, 3], fov: 90 }}
                   ambientLight={{ intensity: 3 }}
+                  camera={{ position: [3, 0, 3], fov: 90 }}
                   directionalLight={{ intensity: 2, position: [2, 2, 2] }}
-                  id="XboxBlue"
                   fallback={
                     <Html center>
                       <div>{t("loading")}</div>
                     </Html>
                   }
+                  id="XboxBlue"
                 >
                   <RunawayKid
                     transition
-                    scale={0.6}
                     fallBack={
                       <Html center>
                         <div>{t("loading")}</div>
                       </Html>
                     }
+                    scale={0.6}
                   />
                 </Model3DContainer>
               </div>
@@ -61,7 +62,7 @@ export const PlayerPanel = observer(() => {
               </div>
             </div>
           </div>
-          <div className="flex md:hidden"></div>
+          <div className="flex md:hidden" />
         </>
       ) : (
         <div className="p-6 gap-4 flex-col bg-slate-600 h-fit hidden md:flex justify-center items-center rounded-md">
@@ -71,10 +72,10 @@ export const PlayerPanel = observer(() => {
           <Link href={"/login"}>
             <div className="flex flex-col justify-center items-center">
               <img
-                width="64"
+                alt="fraud"
                 height="64"
                 src="https://img.icons8.com/glyph-neue/64/fraud.png"
-                alt="fraud"
+                width="64"
               />
               {t("please_login")}
             </div>

@@ -1,8 +1,10 @@
 "use client";
 
-import styles from "./MagicColorfulDot.module.css";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
+
+import styles from "./MagicColorfulDot.module.css";
+
 import { isMobile } from "@/utils/funtions";
 import { useAppStore } from "@/store/Provider";
 
@@ -13,6 +15,7 @@ const MagicColorfulDot = (props: any) => {
     if (isMobile() || appStore.animationMode === false) return;
 
     const c: any = document.querySelector(`#canvas-${props.id}`);
+
     if (!c) return;
 
     const ctx = c.getContext("2d");
@@ -105,6 +108,7 @@ const MagicColorfulDot = (props: any) => {
     function getAngle(cx: any, cy: any, ex: any, ey: any) {
       const dy = ey - cy;
       const dx = ex - cx;
+
       return Math.atan2(dy, dx); // range (-PI, PI]
     }
 
@@ -139,6 +143,7 @@ const MagicColorfulDot = (props: any) => {
           if (isRPressed) {
             // Attraction vers la souris
             const attractionForce = 0.3; // Intensité de l'attraction
+
             point.vx += Math.cos(angleToMouse) * attractionForce;
             point.vy += Math.sin(angleToMouse) * attractionForce;
           }
@@ -146,6 +151,7 @@ const MagicColorfulDot = (props: any) => {
           if (isTPressed) {
             // Répulsion depuis la souris
             const repulsionForce = 0.5; // Intensité de la répulsion
+
             point.vx += Math.cos(angleToMouse + Math.PI) * repulsionForce;
             point.vy += Math.sin(angleToMouse + Math.PI) * repulsionForce;
           }
@@ -207,9 +213,7 @@ const MagicColorfulDot = (props: any) => {
     return "";
   }
 
-  return (
-    <canvas className={styles.galaxybg} id={`canvas-${props.id}`}></canvas>
-  );
+  return <canvas className={styles.galaxybg} id={`canvas-${props.id}`} />;
 };
 
 export default observer(MagicColorfulDot);

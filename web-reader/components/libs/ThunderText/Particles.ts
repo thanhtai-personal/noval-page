@@ -5,6 +5,7 @@ export class Particles {
 
   constructor(options: any = {}, w: number, h: number) {
     const max = options.max || Math.round(Math.random() * 10 + 10);
+
     this.sparks = [...new Array(max)].map(() => new Spark(options, w, h));
   }
 

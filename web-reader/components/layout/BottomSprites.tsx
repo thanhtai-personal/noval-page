@@ -1,13 +1,12 @@
 "use client";
 
-import { useResize } from "@/hooks/useResize";
-import { useAppStore } from "@/store/Provider";
-import { isMobile } from "@/utils/funtions";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 
+import { useResize } from "@/hooks/useResize";
+import { useAppStore } from "@/store/Provider";
+import { isMobile } from "@/utils/funtions";
 import GalaxyBackground from "@/components/animations/backgrounds/GalaxyBackground";
-
 import Model3DContainer from "@/components/3dmodels/3DContainer";
 import { FantasyIsland3DModel } from "@/components/3dmodels/models/FantasyIsland";
 
@@ -40,8 +39,8 @@ export const BottomSprites = observer(() => {
         {appStore.animations.useFantasyIsland && (
           <div className=" absolute bottom-0 left-0 w-full h-screen z-0 opacity-50">
             <Model3DContainer
-              camera={{ position: [0, 0, 10], fov: 30 }}
               ambientLight={{ intensity: 1 }}
+              camera={{ position: [0, 0, 10], fov: 30 }}
               directionalLight={{ intensity: 1, position: [10, 10, 10] }}
               id="FantasyIsland3DModel-footer"
             >

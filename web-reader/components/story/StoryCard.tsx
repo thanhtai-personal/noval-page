@@ -3,9 +3,9 @@
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { observer } from "mobx-react-lite";
 
 import { Story } from "@/types/interfaces/story";
-import { observer } from "mobx-react-lite";
 import ThreeDCardHover from "@/components/animations/cards/3DCardHover";
 import NeonButtons from "@/components/animations/buttons/NeonButtons";
 
@@ -21,8 +21,8 @@ export const StoryCard = observer(
         className="grid w-full h-full place-items-center rounded-md"
       >
         <WrapperComponent
-          id={story._id}
           className="w-full h-full rounded-md overflow-hidden"
+          id={story._id}
         >
           <Card
             className={`w-full h-full rounded-[22px] ${
@@ -39,20 +39,20 @@ export const StoryCard = observer(
                 <img
                   alt={story.title}
                   className={`w-auto mt-2 h-[calc(100vh/2.8)] object-cover rounded-t mx-auto rounded-md`}
+                  fetchPriority="high"
+                  loading="lazy"
+                  src={story.cover}
                   style={{
                     boxShadow: "0px 0px 8px 6px rgba(247, 92, 2, 0.3)",
                   }}
-                  src={story.cover}
-                  fetchPriority="high"
-                  loading="lazy"
                 />
               ) : (
                 <img
                   alt={story.title}
                   className={`w-full h-48 object-cover rounded-t`}
-                  src={story.cover}
                   fetchPriority="high"
                   loading="lazy"
+                  src={story.cover}
                 />
               )}
             </CardHeader>

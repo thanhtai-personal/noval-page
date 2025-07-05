@@ -1,4 +1,5 @@
 import Slider from "react-slick";
+
 import LazyStoryCard from "@/components/story/LazyStoryCard";
 import { StoryCardSkeleton } from "@/components/story/StoryCardSkeleton";
 import "slick-carousel/slick/slick.css";

@@ -8,12 +8,14 @@ import { Button } from "@heroui/button";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useQuery } from "@tanstack/react-query";
+import { observer } from "mobx-react-lite";
 
 import { StoriesWithSkeletonLoading } from "../common/utils/StoriesWithSkeletonLoading";
+
 import { AuthorSelectModal } from "./AuthorSelectModal";
+
 import { Story } from "@/types/interfaces/story";
 import { ApiInstant } from "@/utils/api";
-import { observer } from "mobx-react-lite";
 import { useAppStore } from "@/store/Provider";
 
 const ranges = [
@@ -26,14 +28,17 @@ const ranges = [
 // Fetch API helpers
 const fetchCategories = async () => {
   const res = await ApiInstant.get("/categories");
+
   return res.data || [];
 };
 const fetchTags = async () => {
   const res = await ApiInstant.get("/tags");
+
   return res.data?.data || [];
 };
 const fetchAuthors = async () => {
   const res = await ApiInstant.get("/authors");
+
   return res.data?.data || [];
 };
 const fetchStories = async ({
@@ -56,6 +61,7 @@ const fetchStories = async ({
       tags: tags.map((t: any) => t._id).join(","),
     },
   });
+
   return res.data;
 };
 
@@ -188,8 +194,8 @@ const SearchPageClient = observer(() => {
             categories.map((cat: any) => (
               <Checkbox
                 key={cat._id}
-                value={cat.slug}
                 checked={!!selectedCategories.find((c) => c._id === cat._id)}
+                value={cat.slug}
                 onChange={() => handleCategoryCheck(cat)}
               >
                 {cat.name}
@@ -228,8 +234,8 @@ const SearchPageClient = observer(() => {
             tags.map((tag: any) => (
               <Checkbox
                 key={tag._id}
-                value={tag._id}
                 checked={!!selectedTags.find((t) => t._id === tag._id)}
+                value={tag._id}
                 onChange={() => handleTagCheck(tag)}
               >
                 {tag.name}
@@ -242,8 +248,8 @@ const SearchPageClient = observer(() => {
           {ranges.map((r) => (
             <Checkbox
               key={r.value}
-              value={r.value}
               checked={selectedRanges.includes(r.value)}
+              value={r.value}
               onChange={() => handleRangeCheck(r.value)}
             >
               {r.label}

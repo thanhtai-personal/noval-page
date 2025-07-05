@@ -12,11 +12,11 @@ export const GameMenu = ({ openLotteryModal, onClose, opened }: any) => {
         onClick={() => openLotteryModal?.()}
       >
         <img
+          alt="external-lottery-lifestyle-entertainment-vol3-microdots-premium-microdot-graphic"
           className="w-[32px] h-[32px] md:w-[64px] md:h-[64px]"
-          width="64"
           height="64"
           src="https://img.icons8.com/external-microdots-premium-microdot-graphic/64/external-lottery-lifestyle-entertainment-vol3-microdots-premium-microdot-graphic.png"
-          alt="external-lottery-lifestyle-entertainment-vol3-microdots-premium-microdot-graphic"
+          width="64"
         />
         <span className="text-[8px]">{t("lottery")}</span>
       </div>
@@ -25,20 +25,20 @@ export const GameMenu = ({ openLotteryModal, onClose, opened }: any) => {
       >
         <Link href={"/play"} target="game-play">
           <img
-            width="64"
+            alt="share-3"
             height="64"
             src="https://img.icons8.com/arcade/64/share-3.png"
-            alt="share-3"
+            width="64"
           />
         </Link>
         <span className="text-[8px]">{t("more")}</span>
       </div>
-      <div onClick={() => onClose?.()} className={`${opened && "inside"}`}>
+      <div className={`${opened && "inside"}`} onClick={() => onClose?.()}>
         <img
-          width="100"
+          alt="delete-sign"
           height="100"
           src="https://img.icons8.com/keek/100/delete-sign.png"
-          alt="delete-sign"
+          width="100"
         />
       </div>
     </div>

@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+
 import { ApiInstant } from "@/utils/api";
 
 export default function BlogDetailPage() {
@@ -12,6 +13,7 @@ export default function BlogDetailPage() {
   // Hàm fetch blog detail
   const fetchBlog = async (slug: string) => {
     const res = await ApiInstant.get(`/blogs/${slug}`);
+
     return res.data;
   };
 
@@ -40,9 +42,9 @@ export default function BlogDetailPage() {
         <img
           alt={blog.title}
           className="rounded w-full h-auto"
-          src={blog.cover}
           fetchPriority="high"
           loading="lazy"
+          src={blog.cover}
         />
       )}
       <div

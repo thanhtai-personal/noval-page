@@ -1,5 +1,7 @@
 import { observer } from "mobx-react-lite";
+
 import styles from "./DNA2.module.css";
+
 import { useAppStore } from "@/store/Provider";
 
 const DNA2 = observer(({ className = "", ...props }: any) => {
@@ -13,7 +15,7 @@ const DNA2 = observer(({ className = "", ...props }: any) => {
   return (
     <div className={`${styles.dots} ${className}`} {...props}>
       {dots.map((i) => (
-        <div key={i} className={styles.dots__dot}></div>
+        <div key={i} className={styles.dots__dot} />
       ))}
     </div>
   );

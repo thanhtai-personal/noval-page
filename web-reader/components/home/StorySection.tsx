@@ -1,7 +1,8 @@
 import { Button } from "@heroui/button";
 import Link from "next/link";
-import { StoriesWithSkeletonLoading } from "../common/utils/StoriesWithSkeletonLoading";
 import { useTranslations } from "next-intl";
+
+import { StoriesWithSkeletonLoading } from "../common/utils/StoriesWithSkeletonLoading";
 
 export const StorySection = ({
   stories,
@@ -11,6 +12,7 @@ export const StorySection = ({
   loading,
 }: any) => {
   const t = useTranslations("home");
+
   return (
     <div className={className}>
       <div className="flex justify-between items-center mb-4">
@@ -24,7 +26,7 @@ export const StorySection = ({
         </Link>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <StoriesWithSkeletonLoading stories={stories} loading={loading} />
+        <StoriesWithSkeletonLoading loading={loading} stories={stories} />
       </div>
     </div>
   );

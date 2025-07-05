@@ -1,13 +1,14 @@
 "use client";
 
+import dynamic from "next/dynamic";
+import { useSnackbar } from "notistack";
+import React from "react";
+
+import { REWARDS } from "@/utils/constants";
 import {
   TReward,
   WheelOfLotteryRef,
 } from "@/components/play/WheelOfLottery/WheelOfLottery";
-import { REWARDS } from "@/utils/constants";
-import dynamic from "next/dynamic";
-import { useSnackbar } from "notistack";
-import React from "react";
 
 const WheelOfLottery = dynamic(
   () => import("@/components/play/WheelOfLottery/WheelOfLottery"),

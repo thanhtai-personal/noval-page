@@ -1,8 +1,9 @@
 "use client";
 
-import { READ_PREFIX } from "@/utils/constants";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+
+import { READ_PREFIX } from "@/utils/constants";
 
 export function LastReadChapter({ slug }: { slug: string }) {
   const [lastRead, setLastRead] = useState<string | null>(null);

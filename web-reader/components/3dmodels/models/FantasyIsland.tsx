@@ -2,8 +2,9 @@
 
 import { Html, useGLTF } from "@react-three/drei";
 import { Suspense, ReactNode, useEffect, useRef } from "react";
-import { ModelBox } from "../ModelBox";
 import { useThree } from "@react-three/fiber";
+
+import { ModelBox } from "../ModelBox";
 
 useGLTF.preload("/models/fantasy_mystical_island.glb");
 
@@ -33,7 +34,9 @@ export const FantasyIsland3DModel: React.FC<FantasyIsland3DModelProps> = ({
       camera.lookAt(0, 0, 0);
       frameId = requestAnimationFrame(animate);
     };
+
     animate();
+
     return () => cancelAnimationFrame(frameId);
   }, [camera, rotate]);
 
@@ -48,9 +51,9 @@ export const FantasyIsland3DModel: React.FC<FantasyIsland3DModelProps> = ({
       }
     >
       <ModelBox
-        scale={scale}
-        position={position}
         path={"/models/fantasy_mystical_island.glb"}
+        position={position}
+        scale={scale}
       />
     </Suspense>
   );

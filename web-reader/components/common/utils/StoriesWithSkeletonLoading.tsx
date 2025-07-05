@@ -1,8 +1,8 @@
 "use client";
 
-import LazyStoryCard from "@/components/story/LazyStoryCard";
 import { StoryCardSkeleton } from "../../story/StoryCardSkeleton";
 
+import LazyStoryCard from "@/components/story/LazyStoryCard";
 import { Story } from "@/types/interfaces/story";
 
 export function StoriesWithSkeletonLoading({

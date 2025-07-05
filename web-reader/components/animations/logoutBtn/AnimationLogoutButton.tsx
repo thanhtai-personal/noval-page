@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+
 import styles from "./animationLogout.module.css";
 
 const logoutButtonStates: Record<string, Record<string, string>> = {
@@ -90,6 +91,7 @@ const logoutButtonStates: Record<string, Record<string, string>> = {
 
 const updateButtonState = (button: HTMLElement, state: string) => {
   const style = logoutButtonStates[state];
+
   if (style) {
     (button as any).state = state;
     for (const key in style) {
@@ -136,6 +138,7 @@ export const AnimationLogoutButton = ({
   useEffect(() => {
     const button = buttonRef.current;
     let to: any;
+
     if (!button) return;
 
     (button as any).state = "default";
@@ -177,8 +180,8 @@ export const AnimationLogoutButton = ({
     <div className={`${styles.body} ${className}`} {...props}>
       <button
         ref={buttonRef}
-        title={title}
         className={`${styles.logoutButton} ${styles.logoutButton__dark} ${styles.button}`}
+        title={title}
       >
         <svg
           className={`${styles.doorway} ${styles.svg}`}

@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, Tab } from "@heroui/tabs";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Card, CardBody } from "@heroui/card";
 import Link from "next/link";
 import { Pagination } from "@heroui/pagination";
@@ -34,6 +34,7 @@ export function StoryTabs({
       const res = await ApiInstant.get(
         `/stories/${storySlug}/chapters?page=${page}&limit=${limit}`,
       );
+
       return res.data;
     },
     enabled: !!storySlug,

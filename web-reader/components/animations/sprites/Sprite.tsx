@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { observer } from "mobx-react-lite";
+
 import { useAppStore } from "@/store/Provider";
 import { isMobile } from "@/utils/funtions";
 
@@ -46,6 +47,7 @@ const Sprite = observer(
 
       const onDragStart = (e: DragEvent) => {
         const rect = (e.target as HTMLElement).getBoundingClientRect();
+
         e.dataTransfer?.setData(
           "text/plain",
           JSON.stringify({
@@ -82,8 +84,8 @@ const Sprite = observer(
         }}
       >
         <Image
-          src={images[currentIndex]}
           alt={`Sprite ${currentIndex}`}
+          src={images[currentIndex]}
           width={width} // specify dimensions or make it responsive
         />
       </div>

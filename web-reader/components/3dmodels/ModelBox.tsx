@@ -5,5 +5,6 @@ export const ModelBox: React.FC<{ path: string; [key: string]: any }> = ({
   ...props
 }) => {
   const { scene } = useGLTF(path);
+
   return <primitive object={scene} {...props} />;
 };

@@ -13,6 +13,7 @@ export const useEaseInOutAnimationButton = (configValue?: boolean) => {
       setShowButton(configValue);
       setAnimationState("in");
     }, 300); // match animation duration
+
     return () => clearTimeout(timeout);
   }, [configValue]);
 

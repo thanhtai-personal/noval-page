@@ -13,9 +13,9 @@ import {
 import { Spinner } from "@heroui/spinner";
 import { useTranslations } from "next-intl";
 import { useQuery } from "@tanstack/react-query";
+import { Checkbox } from "@heroui/checkbox";
 
 import { ApiInstant } from "@/utils/api";
-import { Checkbox } from "@heroui/checkbox";
 
 interface AuthorSelectModalProps {
   open: boolean;
@@ -40,6 +40,7 @@ const fetchAuthors = async ({
       limit: pageSize,
     },
   });
+
   return res.data as { data: any[]; total: number };
 };
 
@@ -81,7 +82,7 @@ export function AuthorSelectModal({
   };
 
   return (
-    <Modal isOpen={open} onClose={onClose} size="5xl">
+    <Modal isOpen={open} size="5xl" onClose={onClose}>
       <ModalContent>
         <ModalHeader>
           <span className="text-lg font-bold">{t("choose_author")}</span>
@@ -89,10 +90,10 @@ export function AuthorSelectModal({
         <ModalBody>
           <form className="mb-4 flex gap-2" onSubmit={handleSearch}>
             <Input
+              className="w-full"
               placeholder={t("author") + "..."}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full"
             />
             <Button size="sm" type="submit">
               {t("search")}
@@ -101,7 +102,7 @@ export function AuthorSelectModal({
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4 min-h-[180px]">
             {isLoading ? (
               <div className="col-span-3 flex justify-center items-center py-8">
-                <Spinner size="md" className="mr-2" />
+                <Spinner className="mr-2" size="md" />
                 {t("search")}...
               </div>
             ) : isError ? (
@@ -123,16 +124,16 @@ export function AuthorSelectModal({
                   >
                     <Checkbox
                       key={author._id}
-                      value={author.slug}
                       checked={
                         !!selectedAuthors.find((a) => a._id === author._id)
                       }
+                      value={author.slug}
                     >
                       {author.name}
                     </Checkbox>
                   </div>
                 ) : (
-                  <div key={index}></div>
+                  <div key={index} />
                 ),
               )
             )}

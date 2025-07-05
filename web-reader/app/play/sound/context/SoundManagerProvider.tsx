@@ -35,8 +35,10 @@ const SoundManagerContext = createContext<SoundManagerAPI | null>(null);
 
 export function useSoundManager() {
   const ctx = useContext(SoundManagerContext);
+
   if (!ctx)
     throw new Error("useSoundManager must be used within SoundManagerProvider");
+
   return ctx;
 }
 
@@ -66,8 +68,10 @@ export const SoundManagerProvider = forwardRef<SoundManagerAPI, Props>(
       });
       audioArrRef.current = list.map((track) => {
         const audio = new Audio(track.url);
+
         audio.preload = "auto";
         audio.load();
+
         return audio;
       });
       setCurrent(list[initialIndex] || null);
@@ -88,6 +92,7 @@ export const SoundManagerProvider = forwardRef<SoundManagerAPI, Props>(
       });
 
       const audio = audioArrRef.current[currentIndex];
+
       if (!audio) return;
 
       audio.onended = () => next();
@@ -99,7 +104,6 @@ export const SoundManagerProvider = forwardRef<SoundManagerAPI, Props>(
       } else {
         audio.pause();
       }
-      // eslint-disable-next-line
     }, [currentIndex, isPlaying, list]);
 
     function play(idx?: number) {
@@ -116,6 +120,7 @@ export const SoundManagerProvider = forwardRef<SoundManagerAPI, Props>(
     function stop() {
       setIsPlaying(false);
       const audio = audioArrRef.current[currentIndex];
+
       if (audio) audio.currentTime = 0;
     }
     function next() {
@@ -128,6 +133,7 @@ export const SoundManagerProvider = forwardRef<SoundManagerAPI, Props>(
     }
     function seek(sec: number) {
       const audio = audioArrRef.current[currentIndex];
+
       if (audio) audio.currentTime = sec;
     }
 

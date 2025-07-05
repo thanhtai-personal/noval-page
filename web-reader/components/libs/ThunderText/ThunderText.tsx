@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
+
 import styles from "./thunderText.module.css";
 import { ThunderMachine } from "./ThunderMachine";
 
@@ -19,6 +20,7 @@ export const ThunderText = ({
   useEffect(() => {
     if (!machineRef.current) {
       const instance = new ThunderMachine(id, `input-${id}`, width, height);
+
       instance.execute("");
       machineRef.current = instance;
     }
@@ -42,12 +44,12 @@ export const ThunderText = ({
         {useInput && (
           <input
             id={`input-${id}`}
-            type="text"
             maxLength={maxLength}
             placeholder={placeholder}
+            type="text"
           />
         )}
-        <canvas id={id}></canvas>
+        <canvas id={id} />
       </div>
     </div>
   );

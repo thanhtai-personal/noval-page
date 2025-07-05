@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
-import ClientRenderWrapper from "./ClientRenderWrapper";
 import Link from "next/link";
+
+import ClientRenderWrapper from "./ClientRenderWrapper";
 
 export default function PlayPage() {
   const t = useTranslations("gameMenu");
@@ -13,11 +14,11 @@ export default function PlayPage() {
       url: "/play/wheel-of-lottery",
       icon: (
         <img
+          alt="external-lottery-lifestyle-entertainment-vol3-microdots-premium-microdot-graphic"
           className="w-[32px] h-[32px] md:w-[64px] md:h-[64px]"
-          width="64"
           height="64"
           src="https://img.icons8.com/external-microdots-premium-microdot-graphic/64/external-lottery-lifestyle-entertainment-vol3-microdots-premium-microdot-graphic.png"
-          alt="external-lottery-lifestyle-entertainment-vol3-microdots-premium-microdot-graphic"
+          width="64"
         />
       ),
     },

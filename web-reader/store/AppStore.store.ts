@@ -27,6 +27,7 @@ export class AppStore {
   constructor() {
     makeAutoObservable(this);
     const animMode = localStorage?.getItem("animationMode");
+
     if (animMode !== null && animMode !== undefined) {
       this.animationMode = Boolean(
         localStorage?.getItem("animationMode") === "true",
@@ -68,6 +69,7 @@ export class AppStore {
       localStorage?.setItem("animationMode", String(value));
     } else {
       const newValue = !this.animationMode;
+
       this.animationMode = newValue;
       localStorage?.setItem("animationMode", String(newValue));
     }

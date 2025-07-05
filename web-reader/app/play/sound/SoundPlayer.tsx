@@ -3,15 +3,17 @@ import { useSoundManager } from "./context/SoundManagerProvider";
 export function SoundPlayerUI() {
   const { current, isPlaying, play, pause, stop, next, prev, currentIndex } =
     useSoundManager();
+
   if (!current) return null;
+
   return (
     <div className="flex gap-2 items-center p-3 bg-gray-200 rounded shadow">
       <img
-        src={current.cover}
         alt=""
-        width={48}
         height={48}
+        src={current.cover}
         style={{ borderRadius: 8 }}
+        width={48}
       />
       <div>
         <div className="font-bold">{current.title}</div>

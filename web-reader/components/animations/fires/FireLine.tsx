@@ -1,8 +1,10 @@
 "use client";
 
 import { isMobile } from "@/utils/funtions";
+
 import "./fireline.css";
 import { observer } from "mobx-react-lite";
+
 import { useAppStore } from "@/store/Provider";
 
 export const FireLine = observer(
@@ -13,10 +15,10 @@ export const FireLine = observer(
 
     return (
       <div
-        id={id}
         className={`${className} fireline w-full h-full pointer-events-none`}
+        id={id}
         {...props}
-      ></div>
+      />
     );
   },
 );
